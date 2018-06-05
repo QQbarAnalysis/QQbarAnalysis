@@ -96,6 +96,8 @@ namespace QQbarProcessor
 	  int _nRun ;
 
 	} ;
+
+  /*
 	bool sortByBtag(RecoJet *lhs, RecoJet *rhs) {return lhs->GetBTag() > rhs->GetBTag(); }
 	bool sortByCostheta(RecoJet *lhs, RecoJet *rhs) 
 	{
@@ -104,7 +106,7 @@ namespace QQbarProcessor
 	bool sortByEnergy(EVENT::ReconstructedParticle *lhs, EVENT::ReconstructedParticle *rhs) 
 	{
 	  	return std::abs(lhs->getEnergy()) >  std::abs(rhs->getEnergy()); 
-	}
+		}*/
 		
 } /* TTbarAnalisys */
 

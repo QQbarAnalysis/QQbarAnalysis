@@ -58,16 +58,21 @@ namespace QQbarProcessor
 	  static  float getChargeBalance(RecoJet * jet);
 	  static std::string intToStr(int * number);
 
-	  /*  bool sortByBtag(RecoJet *lhs, RecoJet *rhs) {return lhs->GetBTag() > rhs->GetBTag(); }
-	  bool sortByCostheta(RecoJet *lhs, RecoJet *rhs) 
+	  static bool sortByBtag(RecoJet *lhs, RecoJet *rhs) 
+	  {
+	    return lhs->GetBTag() > rhs->GetBTag(); 
+	  }
+
+	  static bool sortByCostheta(RecoJet *lhs, RecoJet *rhs)
 	  {
 	    return std::abs(lhs->GetCostheta()) >  std::abs(rhs->GetCostheta()); 
 	  }
-	  bool sortByEnergy(EVENT::ReconstructedParticle *lhs, EVENT::ReconstructedParticle *rhs) 
+
+	  static bool sortByEnergy(EVENT::ReconstructedParticle *lhs, EVENT::ReconstructedParticle *rhs) 
 	  {
 	    return std::abs(lhs->getEnergy()) >  std::abs(rhs->getEnergy()); 
-	    }*/
-
+	  }
+	  
 
 	private:
 	  

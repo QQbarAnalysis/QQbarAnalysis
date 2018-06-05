@@ -120,7 +120,7 @@ namespace QQbarProcessor
 	vector < MCParticle * > mcbs = AnalyseGeneratorBBBar(opera);
 	VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
 	vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
-	//std::sort(jets->begin(), jets->end(), sortByBtag);
+	std::sort(jets->begin(), jets->end(), QQbarTools::sortByBtag);
 
 	if (jets->size() != 2 ) return;
 
