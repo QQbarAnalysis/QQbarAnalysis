@@ -41,7 +41,7 @@ namespace QQbarProcessor
   }
 
 
-  vector< MCParticle * > BBbarAnalysis::AnalyseGeneratorBBBar(QQBarMCOperator & opera)
+  vector< MCParticle * > BBbarAnalysis::AnalyseGeneratorBBBar(QQbarMCOperator & opera)
   {
     vector <MCParticle *> genfinalstate;// = opera.GetPairParticles(5);
     for (unsigned int i = 5; i > 0; i--) 
@@ -116,7 +116,7 @@ namespace QQbarProcessor
 	LCCollection * mccol = evt->getCollection(_MCColName);
 	//LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName);
 	LCCollection * pfocol = evt->getCollection(_colName);
-	QQBarMCOperator opera(mccol);
+	QQbarMCOperator opera(mccol);
 	vector < MCParticle * > mcbs = AnalyseGeneratorBBBar(opera);
 	VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
 	vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);

@@ -52,7 +52,7 @@ namespace QQbarProcessor
     _GammaTSigmaparameter = 0.05;
   }
 	
-  vector< MCParticle * > TTbarAnalysis::AnalyseGenerator(QQBarMCOperator & opera)
+  vector< MCParticle * > TTbarAnalysis::AnalyseGenerator(QQbarMCOperator & opera)
   {
     std::vector< EVENT::MCParticle * > mctops = opera.GetTopPairParticles(_stats._MCTopBangle, _stats._MCTopcosWb);
 
@@ -143,7 +143,7 @@ namespace QQbarProcessor
 	LCCollection * jetrelcol = evt->getCollection(_JetsRelColName);
 	LCCollection * mccol = evt->getCollection(_MCColName);
 	//LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName);
-	QQBarMCOperator opera(mccol);
+	QQbarMCOperator opera(mccol);
 	VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
 	vector < MCParticle * > mctops = AnalyseGenerator(opera);
 	vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
@@ -829,7 +829,7 @@ namespace QQbarProcessor
 	LCCollection * jetrelcol = evt->getCollection(_JetsRelColName);
 	LCCollection * mccol = evt->getCollection(_MCColName);
 	//LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName);
-	QQBarMCOperator opera(mccol);
+	QQbarMCOperator opera(mccol);
 	VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
 	vector < MCParticle * > mctops = AnalyseGenerator(opera);
 	vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);

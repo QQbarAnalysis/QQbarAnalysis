@@ -1,4 +1,4 @@
-#include "QQBarMCOperator.hh"
+#include "QQbarMCOperator.hh"
 using std::vector;
 using std::string;
 using EVENT::LCCollection;
@@ -6,13 +6,13 @@ using EVENT::MCParticle;
 using IMPL::MCParticleImpl;
 namespace QQbarProcessor
 {
-	QQBarMCOperator:: QQBarMCOperator (LCCollection * col)
+	QQbarMCOperator:: QQbarMCOperator (LCCollection * col)
 	{
 		myCollection = col;
 		myNeutrino = NULL;
 	}
 	//DO NOT USE THAT ON T-QUARKS!!!
-	vector< MCParticle * > QQBarMCOperator::GetPairParticles(int pdg)
+	vector< MCParticle * > QQbarMCOperator::GetPairParticles(int pdg)
 	{
 		pdg = abs(pdg);
 		vector< MCParticle * > pair;
@@ -45,7 +45,7 @@ namespace QQbarProcessor
 		}
 		return pair;
 	}
-	vector< MCParticle * > QQBarMCOperator::GetTopPairParticles(float & topBangle, float & topcosWb)
+	vector< MCParticle * > QQbarMCOperator::GetTopPairParticles(float & topBangle, float & topcosWb)
 	{
 		vector< MCParticle * > pair;
 		MCParticle * b = FindParticle(5);
@@ -100,11 +100,11 @@ namespace QQbarProcessor
 		pair.push_back(topbar);
 		return pair;
 	}
-	vector< MCParticle * > QQBarMCOperator::GetBquarkPair()
+	vector< MCParticle * > QQbarMCOperator::GetBquarkPair()
 	{
 		return myBquarkPair;
 	}
-	MCParticle * QQBarMCOperator::CombineParticles(EVENT::MCParticle * b, EVENT::MCParticle * w)
+	MCParticle * QQbarMCOperator::CombineParticles(EVENT::MCParticle * b, EVENT::MCParticle * w)
 	{
 		MCParticleImpl * result = new MCParticleImpl();
 		double energy = b->getEnergy() + w->getEnergy();
@@ -123,7 +123,7 @@ namespace QQbarProcessor
 		result->setPDG(pdg);
 		return result;
 	}
-	vector <MCParticle *> QQBarMCOperator::GetFinalStateBkg()
+	vector <MCParticle *> QQbarMCOperator::GetFinalStateBkg()
 	{
 		vector <MCParticle *> result;
 		/*for (unsigned int i = 0; i < 4; i++) 
@@ -151,7 +151,7 @@ namespace QQbarProcessor
 		}
 		return result;
 	}
-	vector <MCParticle *> QQBarMCOperator::GetFinalState()
+	vector <MCParticle *> QQbarMCOperator::GetFinalState()
 	{
 		vector <MCParticle *> result;
 		MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(2) );
@@ -178,7 +178,7 @@ namespace QQbarProcessor
 		}
 		return result;
 	}
-	MCParticle * QQBarMCOperator::FindParticle(int pdg)
+	MCParticle * QQbarMCOperator::FindParticle(int pdg)
 	{
 		int number = myCollection->getNumberOfElements();
 		MCParticle * result = NULL;
@@ -197,7 +197,7 @@ namespace QQbarProcessor
 		}
 		return result;
 	}
-	MCParticle * QQBarMCOperator::GetNeutrino()
+	MCParticle * QQbarMCOperator::GetNeutrino()
 	{
 		return myNeutrino;
 	}

@@ -23,7 +23,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include "QQbarTools.hh"
-#include "QQBarMCOperator.hh"
+#include "QQbarMCOperator.hh"
 
 using namespace lcio ;
 using namespace marlin ;
@@ -43,7 +43,7 @@ namespace QQbarProcessor
 	  //METHODS
 	  
 	  void Init(std::string _hfilename, float masscut) ;
-	  std::vector< MCParticle * > AnalyseGeneratorBBBar(QQBarMCOperator & opera);
+	  std::vector< MCParticle * > AnalyseGeneratorBBBar(QQbarMCOperator & opera);
 	  void AnalyseBBBar(LCEvent * evt, 
 			    std::string _colName ,
 			    std::string _JetsColName ,

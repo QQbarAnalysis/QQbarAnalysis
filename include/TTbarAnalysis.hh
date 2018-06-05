@@ -23,7 +23,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include "QQbarTools.hh"
-#include "QQBarMCOperator.hh"
+#include "QQbarMCOperator.hh"
 
 using namespace lcio ;
 using namespace marlin ;
@@ -44,7 +44,7 @@ namespace QQbarProcessor
 	  //Main functions
 	  void Init(std::string _hfilename, int type, float masscut) ;
 
-	  std::vector< EVENT::MCParticle * > AnalyseGenerator(QQBarMCOperator & opera);
+	  std::vector< EVENT::MCParticle * > AnalyseGenerator(QQbarMCOperator & opera);
 	  void AnalyseTTbarSemiLeptonic(LCEvent * evt,
 					std::string _colName ,
 					std::string _MCColName ,
