@@ -22,14 +22,8 @@
 #include <string>
 #include <TFile.h>
 #include <TTree.h>
-//#include "MathOperator.hh"
 #include "QQbarTools.hh"
-//#include "ClusteringOperator.hh"
-//#include "VertexChargeOperator.hh"
 #include "QQBarMCOperator.hh"
-//#include "TopQuark.hh"
-//#include "RecoJet.hh"
-//#include "TreeWriter.hh"
 
 using namespace lcio ;
 using namespace marlin ;
@@ -58,13 +52,15 @@ namespace QQbarProcessor
 			    std::string _IsoLeptonColName ,
 			    std::string _colRelName  ) ;
 
-	  void ComputeCharge(std::vector< RecoJet * > *jets, VertexChargeOperator & vtxOperator);
-	  void MatchB(std::vector<RecoJet*> * bjets, std::vector< MCParticle * > & mcbs, LCCollection * mcvtxcol);
 	  void ClearVariables();
 	  void End();
     
 		    
 	private:
+
+	  void ComputeCharge(std::vector< RecoJet * > *jets, VertexChargeOperator & vtxOperator);
+	  void MatchB(std::vector<RecoJet*> * bjets, std::vector< MCParticle * > & mcbs, LCCollection * mcvtxcol);
+
 	  float _massCutparameter;
 	  float _lowBTagCutparameter;
 	  float _highBTagCutparameter;
