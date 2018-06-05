@@ -3,7 +3,7 @@
 #include <vector>
 #ifndef _TreeEntry_hh
 #define _TreeEntry_hh
-namespace TTBarAnalysis 
+namespace QQbarProcessor 
 {
 	template <class T> class TreeEntry 
 	{
@@ -37,5 +37,5 @@ namespace TTBarAnalysis
 		//	Private methods
 		//
 	};
-} /* TTBarAnalysis */
+} /* QQbarProcessor */
 #endif

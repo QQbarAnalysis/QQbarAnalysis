@@ -94,18 +94,18 @@ namespace QQbarProcessor
     // Initialize sum
     switch(_analysisType)
       {
-      // case TTBarSemileptonic:
-      // 	writer.InitializeStatsTree(_hTree, _stats);
-      // 	std::cout << "Initialize TTBarSemileptonicTree, _analysisType= " << _analysisType << "\n";
-      // 	break;
+      case TTbarSemileptonic:
+	std::cout << "Initialize TTbarSemileptonicTree, _analysisType= " << _analysisType << "\n";
+	_ttbaranalysis.Init(_hfilename,0, _massCutparameter);
+       	break;
       case BBbar:
 	std::cout << "Initialize BBarTree, _analysisType= " << _analysisType << "\n";
 	_bbbaranalysis.Init(_hfilename, _massCutparameter);
 	break;
-      // case TTBarHadronic:
-      // 	writer.InitializeStatsHadronicTree(_hTree, _stats);
-      // 	std::cout << "Initialize TTBarHadronicTree, _analysisType= " << _analysisType << "\n";
-      // 	break;
+      case TTbarHadronic:
+	std::cout << "Initialize TTbarHadronicTree, _analysisType= " << _analysisType << "\n";
+	_ttbaranalysis.Init(_hfilename,1, _massCutparameter);
+       	break;
       }
 
   }
@@ -118,10 +118,18 @@ namespace QQbarProcessor
   {
     switch(_analysisType)
       {
-      // case TTBarSemileptonic:
-      // 	TTbarAnalysis ttbarAnalysis;
-      // 	ttbarAnalysis.AnalyseTTBarSemiLeptonic(evt);
-      // 	break;
+      case TTbarSemileptonic:
+       	_ttbaranalysis.AnalyseTTbarSemiLeptonic(evt,
+						_colName ,
+						_MCColName ,
+						_JetsColName ,
+						_JetsRelColName ,
+						_JetsVtxColName ,
+						_IsoLeptonColName,
+						_MCVtxColName ,
+						_colRelName);
+       	break;
+
       case BBbar:
 	_bbbaranalysis.AnalyseBBBar(evt,
 				    _colName ,
@@ -131,12 +139,19 @@ namespace QQbarProcessor
 				    _IsoLeptonColName ,
 				    _colRelName);
 	break;
-      // case TTBarHadronic:
-      // 	TTbarAnalysis ttbarAnalysis;
-      // 	ttbarAnalysis.AnalyseTTBarHadronic(evt);
-      // 	break;
+
+      case TTbarHadronic:
+	_ttbaranalysis.AnalyseTTbarHadronic(evt,
+					    _colName ,
+					    _MCColName ,
+					    _JetsColName ,
+					    _JetsRelColName ,
+					    _JetsVtxColName ,
+					    _IsoLeptonColName,
+					    _MCVtxColName ,
+					    _colRelName);
+       	break;
       }
-    //AnalyseTTBarSemiLeptonic(evt);
   }
 
   void QQbarProcessor::check( LCEvent * evt ) 
@@ -149,14 +164,19 @@ namespace QQbarProcessor
 
     switch(_analysisType)
       {
+
+      case TTbarSemileptonic:
+	_ttbaranalysis.End();
+	break;
+
       case BBbar:
-	std::cout << "End BBarTree, _analysisType= " << _analysisType << "\n";
 	_bbbaranalysis.End();
 	break;
+	
+      case TTbarHadronic:
+	_ttbaranalysis.End();
+	break;
       }
-    //    _hSumTree->Fill();
-    // _hfile->Write();
-    //   _hfile->Close();
   }
-
+  
 }

@@ -329,6 +329,51 @@ namespace QQbarProcessor
       }
     return e_c / e;
   }
+
+  std::vector< RecoJet * > * QQbarTools::getBTagJets(std::vector< RecoJet * > * alljets, std::vector< RecoJet * > * wjets)
+  {
+    vector< RecoJet * > * result = new vector< RecoJet * >();
+    if (!wjets) 
+      {
+        std::cout << "Wjets are NULL!\n";
+        return result;
+      }
+    if (alljets->size() < 4) 
+      {
+        return result;
+      }
+    //vector<RecoJet>
+    std::cout << "Before sorting:\n";
+    for (unsigned int i = 0; i < alljets->size(); i++) 
+      {
+        RecoJet * jet = alljets->at(i);
+        std::cout << "\tB tag: " << jet->GetBTag()  << "\n";
+        /*if (jet->GetBTag() > _lowBTagCutparameter) 
+          {
+          result->push_back(jet);
+          }
+          else 
+          {
+          wjets->push_back(jet);
+          }*/
+      }
+    std::sort(alljets->begin(), alljets->end(), sortByBtag);
+    std::cout << "After sorting:\n";
+    for (unsigned int i = 0; i < alljets->size(); i++) 
+      {
+        RecoJet * jet = alljets->at(i);
+        std::cout << "\tB tag: " << jet->GetBTag()  << "\n";
+
+      }
+    result->push_back(alljets->at(0));
+    result->push_back(alljets->at(1));
+    for (unsigned int i = 2; i < alljets->size(); i++) 
+      {
+        wjets->push_back(alljets->at(i));
+      }
+    return result;
+  }
+
     
 
 }

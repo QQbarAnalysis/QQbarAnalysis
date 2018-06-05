@@ -57,6 +57,7 @@ namespace QQbarProcessor
 	  static std::vector<float> getThrust(std::vector<float> & thrust, LCCollection * pfos);
 	  static  float getChargeBalance(RecoJet * jet);
 	  static std::string intToStr(int * number);
+	  static std::vector< RecoJet * > * getBTagJets(std::vector< RecoJet * > * alljets, std::vector< RecoJet * > * wjets);
 
 	  static bool sortByBtag(RecoJet *lhs, RecoJet *rhs) 
 	  {

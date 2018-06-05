@@ -20,16 +20,9 @@
 #include <TFile.h>
 #include <TTree.h>
 
-//#include "MathOperator.hh"
-//#include "ClusteringOperator.hh"
-//#include "VertexChargeOperator.hh"
-//#include "QQBarMCOperator.hh"
-//#include "TopQuark.hh"
-//#include "RecoJet.hh"
-//#include "TreeWriter.hh"
-//#include "TreeStructures.hh"
 #include "BBbarAnalysis.hh"
-//#include "QQbarTools.hh"
+#include "TTbarAnalysis.hh"
+
 
 using namespace lcio ;
 using namespace marlin ;
@@ -39,8 +32,8 @@ namespace QQbarProcessor
 {
 	enum ANALYSIS_TYPE
 	{
-		TTBarSemileptonic = 0,
-		TTBarHadronic = 1,
+		TTbarSemileptonic = 0,
+		TTbarHadronic = 1,
 		BBbar = 2
 	};
 	class QQbarProcessor : public Processor 
@@ -75,6 +68,8 @@ namespace QQbarProcessor
 	  virtual void end() ;
 
 	  BBbarAnalysis _bbbaranalysis;
+          TTbarAnalysis _ttbaranalysis;
+
 	  
 	  /** Input collection name.
 	   */
@@ -96,17 +91,6 @@ namespace QQbarProcessor
 	  int _nRun ;
 
 	} ;
-
-  /*
-	bool sortByBtag(RecoJet *lhs, RecoJet *rhs) {return lhs->GetBTag() > rhs->GetBTag(); }
-	bool sortByCostheta(RecoJet *lhs, RecoJet *rhs) 
-	{
-	  	return std::abs(lhs->GetCostheta()) >  std::abs(rhs->GetCostheta()); 
-	}
-	bool sortByEnergy(EVENT::ReconstructedParticle *lhs, EVENT::ReconstructedParticle *rhs) 
-	{
-	  	return std::abs(lhs->getEnergy()) >  std::abs(rhs->getEnergy()); 
-		}*/
 		
 } /* TTbarAnalisys */
 
