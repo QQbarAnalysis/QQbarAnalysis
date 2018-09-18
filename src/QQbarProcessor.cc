@@ -49,15 +49,19 @@ namespace QQbarProcessor
 			     "Name of the Jet collection"  ,
 			     _JetsColName ,
 			     std::string("FinalJets")
-			     //std::string("RecoveredJets")
 			     );
     registerInputCollection( LCIO::LCRELATION,
 			     "JetRelCollectionName" , 
 			     "Name of the PrimaryVertex collection"  ,
 			     _JetsRelColName ,
 			     std::string("FinalJets_rel")
-			     //std::string("RecoveredJets_rel")
 			     );
+		registerInputCollection( LCIO::VERTEX,
+			"GenVtxCollectionName" , 
+			"Name of the PrimaryVertex collection"  ,
+			_MCVtxColName ,
+			std::string("MCVertex")
+		);
     registerInputCollection( LCIO::MCPARTICLE,
 			     "MCCollectionName" , 
 			     "Name of the MC collection"  ,
