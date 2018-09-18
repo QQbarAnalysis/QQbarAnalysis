@@ -151,7 +151,6 @@ namespace QQbarProcessor
 					    _JetsColName ,
 					    _JetsRelColName ,
 					    _JetsVtxColName ,
-					    _IsoLeptonColName,
 					    _MCVtxColName ,
 					    _colRelName);
        	break;
