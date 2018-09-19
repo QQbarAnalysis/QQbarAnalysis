@@ -33,7 +33,7 @@ namespace QQbarProcessor
 
     
     if(type==0) writer.InitializeStatsTree(_hTree, _stats);
-    else if(type==2) writer.InitializeStatsHadronicTree(_hTree, _stats);
+    else if(type==1) writer.InitializeStatsHadronicTree(_hTree, _stats);
     
     _massCutparameter=masscut;
 
@@ -817,7 +817,6 @@ namespace QQbarProcessor
 						 std::string _JetsColName ,
 						 std::string _JetsRelColName ,
 						 std::string _JetsVtxColName ,
-						 std::string _IsoLeptonColName,
 						 std::string _MCVtxColName ,
 						 std::string _colRelName
 						 )

@@ -61,7 +61,6 @@ namespace QQbarProcessor
 					std::string _JetsColName ,
 					std::string _JetsRelColName ,
 					std::string _JetsVtxColName ,
-					std::string _IsoLeptonColName,
 					std::string _MCVtxColName ,
 					std::string _colRelName
 					);
