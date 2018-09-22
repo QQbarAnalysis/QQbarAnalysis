@@ -66,8 +66,8 @@ namespace QQbarProcessor
 				MCParticle * topbar = mctops[1];
 				vector<float> direction = MathOperator::getDirection(top->getMomentum());
 				vector<float> directionbar = MathOperator::getDirection(topbar->getMomentum());
-				_stats._MCTopmass = top->QQbarTools::getMass();
-				_stats._MCTopBarmass = topbar->QQbarTools::getMass();
+				_stats._MCTopmass = top->getMass();
+				_stats._MCTopBarmass = topbar->getMass();
 				_stats._MCTopmomentum = MathOperator::getModule(top->getMomentum());
 				_stats._MCTopBarmomentum = MathOperator::getModule(topbar->getMomentum());
 				_stats._MCTopcostheta = std::cos( MathOperator::getAngles(direction)[1] );
@@ -130,7 +130,6 @@ namespace QQbarProcessor
 						std::string _MCColName ,
 						std::string _JetsColName ,
 						std::string _JetsRelColName ,
-						std::string _JetsVtxColName ,
 						std::string _IsoLeptonColName,
 						std::string _MCVtxColName ,
 						std::string _colRelName
@@ -155,7 +154,7 @@ namespace QQbarProcessor
 						LCCollection * jetrelcol = evt->getCollection(_JetsRelColName);
 						LCCollection * mccol = evt->getCollection(_MCColName);
 						//LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName);
-						QQBarMCOperator opera(mccol);
+						QQbarMCOperator opera(mccol);
 						VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
 						vector < MCParticle * > mctops = AnalyseGenerator(opera);
 						vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
@@ -251,10 +250,10 @@ namespace QQbarProcessor
 						  {
 						  topLeptonic = new TopQuark(bjets->at(1));
 						  }*/
-						_stats._W1mass = wHadronic->QQbarTools::getMass();
+						_stats._W1mass = wHadronic->getMass();
 						_stats._W1momentum = MathOperator::getModule(wHadronic->getMomentum());
 						_stats._W2momentum = MathOperator::getModule(wLeptonic->getMomentum());
-						_stats._Top1mass = topHadronic->QQbarTools::getMass();
+						_stats._Top1mass = topHadronic->getMass();
 						_stats._Top1energy = topHadronic->getEnergy();
 						_stats._chiHad = getChi2(topHadronic);
 						float momentum[3];
@@ -271,7 +270,7 @@ namespace QQbarProcessor
 						ComputeChargeTVCM(topHadronic, topLeptonic, vtxOperator);
 
 						DecideOnAsymmetry(topHadronic, topLeptonic);
-						if (_stats._methodUsed && wHadronic->QQbarTools::getMass() < 110 && topHadronic->QQbarTools::getMass() < 200) 
+						if (_stats._methodUsed && wHadronic->getMass() < 110 && topHadronic->getMass() < 200) 
 						{
 								_summary._nAfterMassCuts++;
 						}
@@ -315,7 +314,7 @@ namespace QQbarProcessor
 						//std::cout << "\tq: " <<  kaons2[i]->getCharge() << " p: " << MathOperator::getModule(kaons2[i]->getMomentum()) <<"\n";
 				}
 		}
-		void TTBarProcessor::test(TopQuark * top, TopQuark * top2, vector< RecoJet * > * bjets, vector< RecoJet * > * wjets, ReconstructedParticle * lepton)
+		void TTbarAnalysis::test(TopQuark * top, TopQuark * top2, vector< RecoJet * > * bjets, vector< RecoJet * > * wjets, ReconstructedParticle * lepton)
 		{	
 				_stats._totalEnergy = top->getEnergy() + top2->getEnergy();
 				_stats._missedEnergy = 2*_EBeamparameter - _stats._totalEnergy;
@@ -345,7 +344,7 @@ namespace QQbarProcessor
 				_stats._chiTop2E = std::pow(_stats._Top2energy - _EBeamparameter , 2) / std::pow( _EBeamSigmaparameter, 2); 
 				_stats._chiGammaT2 = std::pow( _stats._Top2gamma - _GammaTparameter, 2) / std::pow( _GammaTSigmaparameter, 2); 
 		}
-		void TTBarProcessor::ComputeCharge(TopQuark * top1, TopQuark * top2)
+		void TTbarAnalysis::ComputeCharge(TopQuark * top1, TopQuark * top2)
 		{
 				//Top hadronic
 				_stats._qCostheta[0] = -2.;
@@ -356,8 +355,8 @@ namespace QQbarProcessor
 				_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction)[1] );
 				_stats._Top1bntracks = top1->GetNumberOfVertexParticles();
 				_stats._Top1btag = top1->GetBTag();
-				_stats._Top1gamma = top1->getEnergy()/top1->QQbarTools::getMass();
-				_stats._W1gamma = top1->GetW()->getEnergy()/top1->GetW()->QQbarTools::getMass();
+				_stats._Top1gamma = top1->getEnergy()/top1->getMass();
+				_stats._W1gamma = top1->GetW()->getEnergy()/top1->GetW()->getMass();
 				float Top1nvtx = top1->GetNumberOfVertices();
 				vector<float> bdirection = MathOperator::getDirection(top1->GetB()->getMomentum());
 				// no abs
@@ -429,7 +428,7 @@ namespace QQbarProcessor
 				}
 				bool useLepton = (_ePolarization > 0)? false : true; //Lepton by default
 		}
-		void TTBarProcessor::DecideOnAsymmetry(TopQuark * top1, TopQuark * top2)
+		void TTbarAnalysis::DecideOnAsymmetry(TopQuark * top1, TopQuark * top2)
 		{
 				//Print
 
@@ -446,7 +445,7 @@ namespace QQbarProcessor
 
 				vector<float> direction = MathOperator::getDirection(top1->getMomentum());
 				float costheta =  std::cos( MathOperator::getAngles(direction)[1] );
-				//float m = top1->QQbarTools::getMass();
+				//float m = top1->getMass();
 				//float e = top1->getEnergy();
 				float btagcut = 0.8;
 				float pcut = 25.;
@@ -767,7 +766,7 @@ namespace QQbarProcessor
 						LCCollection * jetrelcol = evt->getCollection(_JetsRelColName);
 						LCCollection * mccol = evt->getCollection(_MCColName);
 						LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName);
-						QQBarMCOperator opera(mccol);
+						QQbarMCOperator opera(mccol);
 						VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
 						vector < MCParticle * > mctops = AnalyseGenerator(opera);
 						vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
@@ -779,7 +778,7 @@ namespace QQbarProcessor
 								return;	
 						}
 						_summary._nAfterBtagCuts++;
-						vector< RecoJet * > * wbosons = formW(wjets);
+						vector< TopQuark * > * wbosons = formW(bjets,wjets);
 						vector< TopQuark * > * tops = composeTops(bjets,wbosons);
 						_hTree->Fill();
 						ClearVariables();
@@ -789,7 +788,7 @@ namespace QQbarProcessor
 						std::cout << e.what() <<"\n";
 				}
 		}
-		vector< TopQuark * > * TTBarProcessor::composeTops(vector< RecoJet * > * bjets, vector< RecoJet * > * wjets)
+		vector< TopQuark * > * TTbarAnalysis::composeTops(vector< RecoJet * > * bjets, vector< TopQuark * > * wjets)
 		{
 				vector< TopQuark * > * result = new vector< TopQuark * > ();
 				TopQuark * candidateb0w0 = new TopQuark(bjets->at(0), wjets->at(0));
@@ -806,22 +805,22 @@ namespace QQbarProcessor
 				{
 						result->push_back(candidateb0w0);
 						result->push_back(candidateb1w1);
-						_stats._Top1mass = candidateb0w0->QQbarTools::getMass();
-						_stats._Top2mass = candidateb1w1->QQbarTools::getMass();
+						_stats._Top1mass = candidateb0w0->getMass();
+						_stats._Top2mass = candidateb1w1->getMass();
 				}
 				else 
 				{
 						result->push_back(candidateb0w1);
 						result->push_back(candidateb1w0);
-						_stats._Top1mass = candidateb0w1->QQbarTools::getMass();
-						_stats._Top2mass = candidateb1w0->QQbarTools::getMass();
+						_stats._Top1mass = candidateb0w1->getMass();
+						_stats._Top2mass = candidateb1w0->getMass();
 				}
 				std::cout << "Chi2: " << chi01 << " " << chi10 << "\n";
 				return result;
 
 
 		}
-		vector< RecoJet * > * TTBarProcessor::formW(vector< RecoJet * > * wjets)
+		vector< TopQuark * > * TTbarAnalysis::formW(vector< RecoJet * > * bjets,vector< RecoJet * > * wjets)
 		{
 				vector< TopQuark * > * result = new vector< TopQuark * > ();
 				TopQuark * candidateb0w0 = new TopQuark(bjets->at(0), wjets->at(0));
@@ -838,15 +837,15 @@ namespace QQbarProcessor
 				{
 						result->push_back(candidateb0w0);
 						result->push_back(candidateb1w1);
-						_stats._Top1mass = candidateb0w0->QQbarTools::getMass();
-						_stats._Top2mass = candidateb1w1->QQbarTools::getMass();
+						_stats._Top1mass = candidateb0w0->getMass();
+						_stats._Top2mass = candidateb1w1->getMass();
 				}
 				else 
 				{
 						result->push_back(candidateb0w1);
 						result->push_back(candidateb1w0);
-						_stats._Top1mass = candidateb0w1->QQbarTools::getMass();
-						_stats._Top2mass = candidateb1w0->QQbarTools::getMass();
+						_stats._Top1mass = candidateb0w1->getMass();
+						_stats._Top2mass = candidateb1w0->getMass();
 				}
 				std::cout << "Chi2: " << chi01 << " " << chi10 << "\n";
 				return result;
@@ -854,10 +853,10 @@ namespace QQbarProcessor
 
 		}
 
-		float TTbarAnalysis::getChi2(TopQuark * canditate )
+		float TTbarAnalysis::getChi2(TopQuark * candidate )
 		{
 				float pT = MathOperator::getModule(candidate->getMomentum());
-				float mT = candidate->QQbarTools::getMass();
+				float mT = candidate->getMass();
 				float ET = candidate->getEnergy();
 				float pB = MathOperator::getModule(candidate->GetB()->getMomentum());
 				float beta = pT / ET;
@@ -939,7 +938,7 @@ namespace QQbarProcessor
 
 		}
 
-		void TTBarProcessor::Match(vector< MCParticle * > & mctops,vector< MCParticle * > &  mcbs, vector< MCParticle * > & mcws, TopQuark * topHadronic,  TopQuark * top2)
+		void TTbarAnalysis::Match(vector< MCParticle * > & mctops,vector< MCParticle * > &  mcbs, vector< MCParticle * > & mcws, TopQuark * topHadronic,  TopQuark * top2)
 		{
 				_stats._Top1truthAngle = 4.0;
 				float charge = 0.0;
@@ -995,7 +994,7 @@ namespace QQbarProcessor
 				}
 		}
 
-		void TTBarProcessor::MatchB(vector<RecoJet*> * bjets, vector< MCParticle * > & mcbs, LCCollection * mcvtxcol)
+		void TTbarAnalysis::MatchB(vector<RecoJet*> * bjets, vector< MCParticle * > & mcbs, LCCollection * mcvtxcol)
 		{
 				float charge = 0.0;
 				float angle = 4.0;
@@ -1070,7 +1069,7 @@ namespace QQbarProcessor
 						bjets->at(1)->__SetMCOscillation(_stats._MCBOscillation);
 				}
 		}
-		void TTBarProcessor::MatchB(std::vector< EVENT::MCParticle * > & mcbs, TopQuark * topHadronic, TopQuark * top2, LCCollection * mcvtxcol)
+		void TTbarAnalysis::MatchB(std::vector< EVENT::MCParticle * > & mcbs, TopQuark * topHadronic, TopQuark * top2, LCCollection * mcvtxcol)
 		{
 				float charge = 0.0;
 				float angle = 4.0;
@@ -1142,7 +1141,7 @@ namespace QQbarProcessor
 		}
 
 
-		vector<int>  TTBarProcessor::getOpposite(int icandidate, int jcandidate)
+		vector<int>  TTbarAnalysis::getOpposite(int icandidate, int jcandidate)
 		{
 				vector<int> result;
 				int kcandidate = -1;
