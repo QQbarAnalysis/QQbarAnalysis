@@ -1,3 +1,0 @@
-/users/ilc/okugawa/QQbarAnalysis/lib/libQQbarProcessor.so.0.1.0
-/users/ilc/okugawa/QQbarAnalysis/lib/libQQbarProcessor.so.0.1
-/users/ilc/okugawa/QQbarAnalysis/lib/libQQbarProcessor.so
