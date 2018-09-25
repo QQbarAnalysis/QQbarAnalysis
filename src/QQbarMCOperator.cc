@@ -92,6 +92,8 @@ namespace QQbarProcessor
 		}
 		myBquarkPair.push_back(b);
 		myBquarkPair.push_back(bbar);
+		myWPair.push_back(wplus);
+		myWPair.push_back(wminus);
 		MCParticle * top = CombineParticles(b, wplus);
 		topBangle = MathOperator::getAngle(top->getMomentum(), b->getMomentum());
 		MCParticle * topbar = CombineParticles(bbar, wminus);
@@ -99,6 +101,10 @@ namespace QQbarProcessor
 		pair.push_back(top);
 		pair.push_back(topbar);
 		return pair;
+	}
+	vector< MCParticle * > QQbarMCOperator::GetWPair()
+	{
+		return myWPair;
 	}
 	vector< MCParticle * > QQbarMCOperator::GetBquarkPair()
 	{
@@ -200,5 +206,33 @@ namespace QQbarProcessor
 	MCParticle * QQbarMCOperator::GetNeutrino()
 	{
 		return myNeutrino;
+	}
+	MCParticle * QQbarMCOperator::GetTauLepton()
+	{
+		MCParticle * tau = FindParticle(15);
+		MCParticle * taubar = FindParticle(-15);
+		MCParticle * particle = (tau)? tau : taubar;
+		if (!particle) 
+		{
+			return NULL;
+		}
+		MCParticle * result = NULL;
+		if (particle->getDaughters().size() == 1 && abs(particle->getDaughters()[0]->getPDG()) == 15) 
+		{
+			particle = particle->getDaughters()[0];
+		}
+		if (particle->getDaughters().size() == 3) 
+		{
+			for (unsigned int i = 0; i < particle->getDaughters().size(); i++) 
+			{
+				if (abs(particle->getDaughters()[i]->getPDG()) == 13) 
+				{
+					std::cout << "Particle tau found!\n";
+					result = particle->getDaughters()[i];
+					break;
+				}
+			}
+		}
+		return result;
 	}
 }

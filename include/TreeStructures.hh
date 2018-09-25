@@ -57,6 +57,7 @@ namespace QQbarProcessor
 		int _B2charge;
 		float _maxPhotonEnergy;
 		float _maxPhotonCostheta;
+		float _maxPhotonAngle;
 		float _Sphericity;
 		float _Thrust;
 		float _B1Y;
@@ -65,10 +66,15 @@ namespace QQbarProcessor
 		float _kaonMomentum;
 		float _ZZMass1;
 		float _ZZMass2;
+		float _SumCos;
+		float _ThrustCos;
 
 		int _mctag;
 		int _recotag;
+		float _hadMass;
+		float _bProduct;
 		float _W1mass;
+		float _W1gamma;
 		float _W1momentum;
 		float _W1costheta;
 		float _W2mass;
@@ -76,6 +82,7 @@ namespace QQbarProcessor
 		float _W2costheta;
 		int _Top1bcharge;
 		float _Top1btag;
+		float _Top1gamma;
 		float _Top1bmomentum;
 		int _Top1bntracks;
 		float _Top1mass;
@@ -85,6 +92,7 @@ namespace QQbarProcessor
 		float _Top1costheta;
 		float _Top1bcostheta;
 		float _Top1cosWb;
+		float _Top1pstarb;
 		float _Top1truthAngle;
 		int _Top1Vtx;
 		int _Top1Kaon;
@@ -99,6 +107,8 @@ namespace QQbarProcessor
 		float _Top2bdistance;
 		float _Top2btag;
 		float _Top2mass;
+		float _Top2energy;
+		float _Top2gamma;
 		int _Top2bcharge;
 		float _Top2momentum;
 		float _Top2costheta;
@@ -109,7 +119,10 @@ namespace QQbarProcessor
 		int _Top2KaonCharges[10];
 		float _Top2KaonMomentum[10];
 		int _Top2leptonCharge;
+		float _Top2leptonE;
+		float _Top2leptonCos;
 		int _Top2leptonCorrect;
+		float _qBCostheta[2];
 		float _qCostheta[2];
 		float _qCostheta1;
 		float _qCostheta2;
@@ -117,23 +130,21 @@ namespace QQbarProcessor
 		int _methodRefused;
 		int _methodZero;
 		int _methodCorrect;
-		int _methodTaken[6];
-		int _methodSameCharge[6];
-		int _methodZeroCharge[6];
-		float _chiHad1;
-		float _chiTopMass1;
-		float _chiTopE1;
-		float _chiPbstar1;
-		float _chiCosWb1;
-		float _chiGammaT1;
-		float _chiHad2;
-		float _chiTopMass2;
-		float _chiTopE2;
-		float _chiPbstar2;
-		float _chiCosWb2;
+		int _methodTaken[12];
+		int _methodSameCharge[12];
+		int _methodZeroCharge[12];
+		float _chiHad;
+		float _chiTopMass;
+		float _chiTopE;
+		float _chiPbstar;
+		float _chiCosWb;
+		float _chiGammaT;
 		float _chiGammaT2;
+		float _chiTop2Mass;
+		float _chiTop2E;
 
 		int _MCBOscillation;
+		int _MCBWcorrect;
 		int _MCBBarOscillation;
 		float _MCTopBangle;
 		//float _MCTopBarBangle;
@@ -159,6 +170,19 @@ namespace QQbarProcessor
 		float _missedEnergy;
 		float _gammaT;
 		
+		//hadronic
+		float _chiHad1;
+		float _chiTopMass1;
+		float _chiTopE1;
+		float _chiPbstar1;
+		float _chiCosWb1;
+		float _chiGammaT1;
+		float _chiHad2;
+		float _chiTopMass2;
+		float _chiTopE2;
+		float _chiPbstar2;
+		float _chiCosWb2;
+
 		void Clear()
 		{
 			_MCPDG = 0;
@@ -195,12 +219,13 @@ namespace QQbarProcessor
 			_Top1mass = -1.0;
 			_W1mass = -1.0;
 			_W2costheta = -2.0;
-			_chiHad1 = -1.0;
-			_chiHad2 = -1.0;
+			_chiHad = -1.0;
 			_methodUsed = 0;
 			_methodRefused = 0;
 			_methodZero = 0;
 			_methodCorrect = -1;
+			_qBCostheta[0] = -2.0;
+			_qBCostheta[1] = -2.0;
 			_qCostheta[0] = -2.0;
 			_qCostheta[1] = -2.0;
 			_ZZMass1 = -1;
