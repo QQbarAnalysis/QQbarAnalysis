@@ -603,7 +603,7 @@ namespace QQbarProcessor
 						}
 				}//*/
 				//LEPTON
-				/*if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTrackCount)
+				if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTrackCount)
 				  {
 				  int top2lepton = *(top2->GetComputedCharge().ByLepton );
 				  int top2charge = *(top2->GetComputedCharge().ByTrackCount );
@@ -667,7 +667,7 @@ namespace QQbarProcessor
 				{
 				samecharge.push_back(6);
 				}
-				}//*/
+				}//
 				//float chi2 = _stats._chiTopMass + _stats._chiTopE + _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 				float chi2 =  _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 				//if (top2->GetComputedCharge().ByLepton &&  _stats._Top1gamma > gammacut1+0.1  && goodcharge.size() == 0) 

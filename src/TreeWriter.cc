@@ -95,14 +95,19 @@ namespace QQbarProcessor
 
 		//Reconstructed
 		_hTree->Branch("totalEnergy", &data._totalEnergy, "totalEnergy/F");
+		_hTree->Branch("bProduct", &data._bProduct, "bProduct/F");
+		_hTree->Branch("hadMass", &data._hadMass, "hadMass/F");
 		_hTree->Branch("missedEnergy", &data._missedEnergy, "missedEnergy/F");
 		_hTree->Branch("W1mass", &data._W1mass, "W1mass/F");
+		_hTree->Branch("W1gamma", &data._W1gamma, "W1gamma/F");
 		_hTree->Branch("W1momentum", &data._W1momentum, "W1momentum/F");
 		_hTree->Branch("W1costheta", &data._W1costheta, "W1costheta/F");
 		_hTree->Branch("W2mass", &data._W2mass, "W2mass/F");
 		_hTree->Branch("W2momentum", &data._W2momentum, "W2momentum/F");
 		_hTree->Branch("W2costheta", &data._W2costheta, "W2costheta/F");
 		_hTree->Branch("Top1mass", &data._Top1mass, "Top1mass/F");
+		_hTree->Branch("Top1gamma", &data._Top1gamma, "Top1gamma/F");
+		_hTree->Branch("Top1btag", &data._Top1btag, "Top1btag/F");
 		_hTree->Branch("Top1energy", &data._Top1energy, "Top1energy/F");
 		_hTree->Branch("Top1bcharge", &data._Top1bcharge, "Top1bcharge/I");
 		_hTree->Branch("Top1bmomentum", &data._Top1bmomentum, "Top1bmomentum/F");
@@ -113,12 +118,16 @@ namespace QQbarProcessor
 		_hTree->Branch("Top1bntracks", &data._Top1bntracks, "Top1bntracks/I");
 		_hTree->Branch("Top1bTVCM", &data._Top1bTVCM, "Top1bTVCM/I");
 		_hTree->Branch("Top1cosWb", &data._Top1cosWb, "Top1cosWb/F");
+		_hTree->Branch("Top1pstarb", &data._Top1pstarb, "Top1pstarb/F");
 		_hTree->Branch("Top1Vtx", &data._Top1Vtx, "Top1Vtx/I");
 		_hTree->Branch("Top1Kaon", &data._Top1Kaon, "Top1Kaon/I");
 		_hTree->Branch("Top1KaonNumber", &data._Top1KaonNumber, "Top1KaonNumber/I");
 		_hTree->Branch("Top1KaonCharges", data._Top1KaonCharges, "Top1KaonCharges[Top1KaonNumber]/I");
 		_hTree->Branch("Top1KaonMomentum", data._Top1KaonMomentum, "Top1KaonMomentum[Top1KaonNumber]/F");
 		_hTree->Branch("Top2mass", &data._Top2mass, "Top2mass/F");
+		_hTree->Branch("Top2energy", &data._Top2energy, "Top2energy/F");
+		_hTree->Branch("Top2gamma", &data._Top2gamma, "Top2gamma/F");
+		_hTree->Branch("Top2btag", &data._Top2btag, "Top2btag/F");
 		_hTree->Branch("Top2bmomentum", &data._Top2bmomentum, "Top2bmomentum/F");
 		_hTree->Branch("Top2bdistance", &data._Top2bdistance, "Top2bdistance/F");
 		_hTree->Branch("Top2bcharge", &data._Top2bcharge, "Top2bcharge/I");
@@ -126,6 +135,8 @@ namespace QQbarProcessor
 		_hTree->Branch("Top2bTVCM", &data._Top2bTVCM, "Top2bTVCM/I");
 		_hTree->Branch("Top2bntracks", &data._Top2bntracks, "Top2bntracks/I");
 		_hTree->Branch("Top2leptonCharge", &data._Top2leptonCharge, "Top2leptonCharge/I");
+		_hTree->Branch("Top2leptonE", &data._Top2leptonE, "Top2leptonE/F");
+		_hTree->Branch("Top2leptonCos", &data._Top2leptonCos, "Top2leptonCos/F");
 		_hTree->Branch("Top2leptonCorrect", &data._Top2leptonCorrect, "Top2leptonCorrect/I");
 		_hTree->Branch("Top2Vtx", &data._Top2Vtx, "Top2Vtx/I");
 		_hTree->Branch("Top2Kaon", &data._Top2Kaon, "Top2Kaon/I");
@@ -138,14 +149,19 @@ namespace QQbarProcessor
 		_hTree->Branch("methodCorrect", &data._methodCorrect, "methodCorrect/I");
 		_hTree->Branch("methodSameCharge", data._methodSameCharge, "methodSameCharge[methodRefused]/I");
 		_hTree->Branch("methodTaken", data._methodTaken, "methodTaken[methodUsed]/I");
+		_hTree->Branch("qBCostheta", data._qBCostheta, "qBCostheta[2]/F");
 		_hTree->Branch("qCostheta", data._qCostheta, "qCostheta[2]/F");
-		//_hTree->Branch("chiHad", &data._chiHad, "chiHad/F");
-		//_hTree->Branch("chiTopMass", &data._chiTopMass, "chiTopMass/F");
-		//_hTree->Branch("chiTopE", &data._chiTopE, "chiTopE/F");
-		//_hTree->Branch("chiPbstar", &data._chiPbstar, "chiPbstar/F");
-		//_hTree->Branch("chiCosWb", &data._chiCosWb, "chiCosWb/F");
-		//_hTree->Branch("chiGammaT", &data._chiGammaT, "chiGammaT/F");
+		_hTree->Branch("chiHad", &data._chiHad, "chiHad/F");
+		_hTree->Branch("chiTopMass", &data._chiTopMass, "chiTopMass/F");
+		_hTree->Branch("chiTopE", &data._chiTopE, "chiTopE/F");
+		_hTree->Branch("chiPbstar", &data._chiPbstar, "chiPbstar/F");
+		_hTree->Branch("chiCosWb", &data._chiCosWb, "chiCosWb/F");
+		_hTree->Branch("chiGammaT", &data._chiGammaT, "chiGammaT/F");
 		_hTree->Branch("gammaT", &data._gammaT, "gammaT/F");
+		_hTree->Branch("chiTop2Mass", &data._chiTop2Mass, "chiTop2Mass/F");
+		_hTree->Branch("chiTop2E", &data._chiTop2E, "chiTop2E/F");
+		_hTree->Branch("chiGammaT2", &data._chiGammaT2, "chiGammaT2/F");
+		_hTree->Branch("Thrust", &data._Thrust, "Thrust/F");
 		
 	}
 
