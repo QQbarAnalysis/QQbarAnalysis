@@ -27,7 +27,7 @@ namespace QQbarProcessor
 				_hGenTree->Branch("MCMass", &_stats._MCMass, "MCMass/F");
 				_hGenTree->Branch("MCPDG", &_stats._MCPDG, "MCPDG/F");
 				_hGenTree->Branch("MCquarkAngle", &_stats._MCquarkAngle, "MCMass/F");
-				_hGenTree->Branch("MCBcostheta", _stats._qMCBcostheta, "MCBcostheta[2]/F");
+				_hGenTree->Branch("qMCBcostheta", _stats._qMCBcostheta, "qMCBcostheta[2]/F");
 				_hGenTree->Branch("MCLeptonPDG", &_stats._MCLeptonPDG, "MCLeptonPDG/I");
 				_hTree = new TTree( "Stats", "tree" );
 
@@ -604,69 +604,69 @@ namespace QQbarProcessor
 				}//*/
 				//LEPTON
 				if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTrackCount)
-				  {
-				  int top2lepton = *(top2->GetComputedCharge().ByLepton );
-				  int top2charge = *(top2->GetComputedCharge().ByTrackCount );
-				  if (top2charge * top2lepton < 0  &&  ((_stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) || _stats._Top1gamma > gammacut1))
-				  {
-				  std::cout << "Vertex + lepton for top2 is used!\n";
-				  goodcharge.push_back(5);
-				  chargevalue.push_back(-top2charge);
-				  _stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
-				//_summary._nAfterKinematicCuts++;
-				}
-				if (top2charge * top2lepton > 0 &&  _stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) 
 				{
-				samecharge.push_back(5);
-				}
+						int top2lepton = *(top2->GetComputedCharge().ByLepton );
+						int top2charge = *(top2->GetComputedCharge().ByTrackCount );
+						if (top2charge * top2lepton < 0  &&  ((_stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) || _stats._Top1gamma > gammacut1))
+						{
+								std::cout << "Vertex + lepton for top2 is used!\n";
+								goodcharge.push_back(5);
+								chargevalue.push_back(-top2charge);
+								_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
+								//_summary._nAfterKinematicCuts++;
+						}
+						if (top2charge * top2lepton > 0 &&  _stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) 
+						{
+								samecharge.push_back(5);
+						}
 				}
 				if (top2->GetComputedCharge().ByLepton && top1->GetComputedCharge().ByTrackCount)
 				{
-				int top2lepton = *(top2->GetComputedCharge().ByLepton );
-				int top1charge = *(top1->GetComputedCharge().ByTrackCount );
-				if (top1charge * top2lepton > 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut)  || _stats._Top1gamma > gammacut1))
-				{
-				std::cout << "Vertex + lepton for top1 is used!\n";
-				goodcharge.push_back(5);
-				chargevalue.push_back(top1charge);
-				_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
-				}
-				if (top1charge * top2lepton < 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut) ||_stats._Top1gamma > gammacut1)) 
-				{
-				samecharge.push_back(5);
-				}
+						int top2lepton = *(top2->GetComputedCharge().ByLepton );
+						int top1charge = *(top1->GetComputedCharge().ByTrackCount );
+						if (top1charge * top2lepton > 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut)  || _stats._Top1gamma > gammacut1))
+						{
+								std::cout << "Vertex + lepton for top1 is used!\n";
+								goodcharge.push_back(5);
+								chargevalue.push_back(top1charge);
+								_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+						}
+						if (top1charge * top2lepton < 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut) ||_stats._Top1gamma > gammacut1)) 
+						{
+								samecharge.push_back(5);
+						}
 				}//
 				if (top2->GetComputedCharge().ByLepton && top1->GetComputedCharge().ByTVCM)
 				{
-				int top2lepton = *(top2->GetComputedCharge().ByLepton );
-				int top1charge = *(top1->GetComputedCharge().ByTVCM );
-				if (top1charge * top2lepton > 0  && _stats._Top1gamma > gammacut1)
-				{
-				std::cout << "Vertex + lepton for top1 is used!\n";
-				goodcharge.push_back(6);
-				chargevalue.push_back(top1charge);
-				_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
-				}
-				if (top1charge * top2lepton < 0 && _stats._Top1gamma > gammacut1) 
-				{
-				samecharge.push_back(6);
-				}
+						int top2lepton = *(top2->GetComputedCharge().ByLepton );
+						int top1charge = *(top1->GetComputedCharge().ByTVCM );
+						if (top1charge * top2lepton > 0  && _stats._Top1gamma > gammacut1)
+						{
+								std::cout << "Vertex + lepton for top1 is used!\n";
+								goodcharge.push_back(6);
+								chargevalue.push_back(top1charge);
+								_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+						}
+						if (top1charge * top2lepton < 0 && _stats._Top1gamma > gammacut1) 
+						{
+								samecharge.push_back(6);
+						}
 				}
 				if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTVCM)
 				{
-				int top2lepton = *(top2->GetComputedCharge().ByLepton );
-				int top2charge = *(top2->GetComputedCharge().ByTVCM );
-				if (top2charge * top2lepton < 0 &&  _stats._Top1gamma > gammacut1)
-				{
-				std::cout << "Vertex + lepton for top1 is used!\n";
-				goodcharge.push_back(6);
-				chargevalue.push_back(-top2charge);
-				_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
-				}
-				if (top2charge * top2lepton > 0  && _stats._Top1gamma > gammacut1) 
-				{
-				samecharge.push_back(6);
-				}
+						int top2lepton = *(top2->GetComputedCharge().ByLepton );
+						int top2charge = *(top2->GetComputedCharge().ByTVCM );
+						if (top2charge * top2lepton < 0 &&  _stats._Top1gamma > gammacut1)
+						{
+								std::cout << "Vertex + lepton for top1 is used!\n";
+								goodcharge.push_back(6);
+								chargevalue.push_back(-top2charge);
+								_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
+						}
+						if (top2charge * top2lepton > 0  && _stats._Top1gamma > gammacut1) 
+						{
+								samecharge.push_back(6);
+						}
 				}//
 				//float chi2 = _stats._chiTopMass + _stats._chiTopE + _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 				float chi2 =  _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
