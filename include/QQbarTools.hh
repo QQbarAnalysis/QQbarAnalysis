@@ -13,6 +13,7 @@
 #include <UTIL/PIDHandler.h>
 #include <IMPL/ReconstructedParticleImpl.h>
 // ----- include for verbosity dependend logging ---------
+#include "marlin/VerbosityLevels.h"
 #include "lcio.h"
 #include <string>
 #include <TFile.h>

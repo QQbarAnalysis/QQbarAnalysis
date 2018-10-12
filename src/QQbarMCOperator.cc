@@ -11,6 +11,56 @@ namespace QQbarProcessor
 		myCollection = col;
 		myNeutrino = NULL;
 	}
+
+	vector< MCParticle * > QQbarMCOperator::GetBBbarQuarksPS()
+	{
+
+	  int number = myCollection->getNumberOfElements();
+	  vector< MCParticle * > bbbar_ps;
+
+	  // find the process simulated (which quark is in the ps)
+	  int pdg = 0;
+	  if(number<3) return bbbar_ps;
+	  MCParticle * quark1 = dynamic_cast<MCParticle*>(myCollection->getElementAt(2));
+	  MCParticle * quark2 = dynamic_cast<MCParticle*>(myCollection->getElementAt(3));
+	  pdg = quark1->getPDG();
+
+	  // find the quarks and parton shower
+	  MCParticle * b = NULL;
+	  MCParticle * bbar = NULL;
+	  vector< MCParticle * > ps;
+	  bool bool_bbbar[2];
+	  bool_bbbar[0]=false;
+	  bool_bbbar[1]=false;
+
+	  for (int i = 0; i < number; i++) {
+	    MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
+	    if (particle->getPDG() == 92) {
+	      vector <MCParticle * > parents = particle->getParents();
+
+	      for(int j=0; j<parents.size(); j++) {
+		MCParticle * parent = parents.at(j);
+		if(parent->getPDG()==pdg) {
+		  b=parent;
+		  bool_bbbar[0]=true;
+		} else if(parent->getPDG()==-pdg) {
+		    bbar=parent;
+		    bool_bbbar[1]=true;
+		} else ps.push_back(parent);
+	      }
+	    }
+	    if(bool_bbbar[0]==true && bool_bbbar[1]==true) break;    
+	  }
+
+	  bbbar_ps.push_back(b);
+	  bbbar_ps.push_back(bbar);
+	  for(int k=0; k< ps.size(); k++) bbbar_ps.push_back(ps.at(k));
+	  
+	  
+	  return bbbar_ps;
+
+	}
+
 	//DO NOT USE THAT ON T-QUARKS!!!
 	vector< MCParticle * > QQbarMCOperator::GetPairParticles(int pdg)
 	{
