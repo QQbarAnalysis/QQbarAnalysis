@@ -7,6 +7,7 @@ using EVENT::Track;
 using EVENT::LCObject;
 using std::vector;
 using EVENT::LCCollection;
+
 namespace QQbarProcessor 
 {
 	const float VertexChargeOperator::BMASS = 5.279;
@@ -35,7 +36,7 @@ namespace QQbarProcessor
 		float distance = MathOperator::getModule(vertex1->getPosition());
 		//int ntracks = top->GetB()->GetNumberOfVertexParticles();
 		float coefficient = distance / CTAU;
-		std::cout << "We have a kaon " << kaon1->getType() 
+		streamlog_out(DEBUG) << "We have a kaon " << kaon1->getType() 
 			  << " with charge " << kaon1->getCharge() 
 			  << " momentum " << MathOperator::getModule(kaon1->getMomentum())
 			  << "  hits " << kaon1->getTracks()[0]->getSubdetectorHitNumbers()[6]
@@ -45,8 +46,8 @@ namespace QQbarProcessor
 		if (__mccharge * kaon1->getCharge() < 0) 
 		{
 			top->SetResultTVCM(-1);
-			std::cout << "FATAL: Charges are different!!!\n";
-			std::cout << "N particles: " << top->GetB()->GetNumberOfVertexParticles()
+			streamlog_out(DEBUG) << "FATAL: Charges are different!!!\n";
+			streamlog_out(DEBUG) << "N particles: " << top->GetB()->GetNumberOfVertexParticles()
 				  << " Ternary charge: " << vertex1->getAssociatedParticle()->getCharge()
 				  << " distance: " << MathOperator::getModule(vertex1->getPosition())
 				  << "\n";
@@ -64,9 +65,10 @@ namespace QQbarProcessor
 		vector< ReconstructedParticle * > secparticles;
 		vector< ReconstructedParticle * > kaons;
 		for (unsigned int i = 0; i < vertices->size(); i++) 
-		{
-			secparticles.reserve(secparticles.size() + vertices->at(i)->getAssociatedParticle()->getParticles().size());
-			secparticles.insert(secparticles.end(), vertices->at(i)->getAssociatedParticle()->getParticles().begin(), vertices->at(i)->getAssociatedParticle()->getParticles().end());
+		  {
+		    streamlog_out(DEBUG)<<"Kaon test 1:  vtx "<<i<<" is primary? "<<vertices->at(i)->isPrimary()<<" nparticles ="<<vertices->at(i)->getAssociatedParticle()->getParticles().size()<<std::endl;
+		    secparticles.reserve(secparticles.size() + vertices->at(i)->getAssociatedParticle()->getParticles().size());
+		    secparticles.insert(secparticles.end(), vertices->at(i)->getAssociatedParticle()->getParticles().begin(), vertices->at(i)->getAssociatedParticle()->getParticles().end());
 		}
 		//return __filterOutCheat(getKaons(secparticles),2212); //__getKaonsCheat(secparticles);
 		if (doCheating) 
@@ -112,7 +114,7 @@ namespace QQbarProcessor
 		for (int i = 0; i < kaons.size(); i++) 
 		{
 			sum += kaons[i]->getCharge();
-			std::cout << "\tq: " <<  kaons[i]->getCharge() << " p: " << MathOperator::getModule(kaons[i]->getMomentum()) <<"\n";
+			streamlog_out(DEBUG) << "\tq: " <<  kaons[i]->getCharge() << " p: " << MathOperator::getModule(kaons[i]->getMomentum()) <<"\n";
 		}
 		if (kaons.size() > 0 && abs(sum) > 0.0) 
 		{
@@ -122,12 +124,12 @@ namespace QQbarProcessor
 			int sign = sum / abs(sum);
 			if (!__magicBall(efficiency, kaons[0]->getMomentum()[0]) && doCheating) 
 			{
-				std::cout << "Magic cancel\n";
+				streamlog_out(DEBUG) << "Magic cancel\n";
 				return 0.0;
 			}
 			if (!__magicBall(purity, kaons[0]->getMomentum()[1]) && doCheating) 
 			{
-				std::cout << "Magic flip\n";
+				streamlog_out(DEBUG) << "Magic flip\n";
 				sign = -sign;
 			}
 			topCharge.ByTVCM = new int(sign);
@@ -137,7 +139,7 @@ namespace QQbarProcessor
 	}
 	float VertexChargeOperator::GetAsymmetryTVCM(TopQuark * top1, TopQuark * top2)
 	{
-		std::cout << "\n\n----TVCM method is called----\n";
+		streamlog_out(DEBUG) << "\n\n----TVCM method is called----\n";
 		Vertex * vertex1 =  getTernaryVertex(top1);
 		Vertex * vertex2 =  getTernaryVertex(top2);
 		//ReconstructedParticle * kaon1 = __getKaonCheat(vertex1);
@@ -161,9 +163,9 @@ namespace QQbarProcessor
 		float top1costheta =  std::cos( MathOperator::getAngles(direction)[1] );
 		float result = -2.0;
 		float maxp = 0;
-		std::cout << "Kaons 1 :\n";
+		streamlog_out(DEBUG) << "Kaons 1 :\n";
 		result = ComputeCharge(top1);
-		std::cout << "Kaons 2 :\n";
+		streamlog_out(DEBUG) << "Kaons 2 :\n";
 		result = ComputeCharge(top2);
 		
 		return result;
@@ -177,7 +179,7 @@ namespace QQbarProcessor
 		}
 		if (vertices->size() == 1) 
 		{
-			std::cout << "Only one vertex is reconstructed!\n";
+			streamlog_out(DEBUG) << "Only one vertex is reconstructed!\n";
 			return NULL;
 		}
 		float maxdistance = 0.0;
@@ -219,7 +221,7 @@ namespace QQbarProcessor
 		}
 		if (count>1) 
 		{
-			std::cout << "ERROR: Multiple leptons found!\n";
+			streamlog_out(DEBUG) << "ERROR: Multiple leptons found!\n";
 			return NULL;
 		}
 		return result;
@@ -236,12 +238,12 @@ namespace QQbarProcessor
 		vector< ReconstructedParticle * > kaons = getKaons(particles);
 		if (kaons.size() > 1) 
 		{
-			std::cout << "ERROR: Multiple kaons found!\n";
+			streamlog_out(DEBUG) << "ERROR: Multiple kaons found!\n";
 			return NULL;
 		}
 		if (kaons.size() == 0) 
 		{
-			std::cout << "ERROR: No kaons found!\n";
+			streamlog_out(DEBUG) << "ERROR: No kaons found!\n";
 			return NULL;
 		}
 		return kaons[0];
@@ -257,44 +259,68 @@ namespace QQbarProcessor
 		vector< ReconstructedParticle * > kaons = __getKaonsCheat(particles);
 		if (kaons.size() > 1) 
 		{
-			std::cout << "ERROR: Multiple kaons found!\n";
+			streamlog_out(DEBUG) << "ERROR: Multiple kaons found!\n";
 			return NULL;
 		}
 		if (kaons.size() == 0) 
 		{
-			std::cout << "ERROR: No kaons found!\n";
+			streamlog_out(DEBUG) << "ERROR: No kaons found!\n";
 			return NULL;
 		}
 		return kaons[0];
 	}
 	vector< ReconstructedParticle * > VertexChargeOperator::getKaons(const vector< ReconstructedParticle * > & particles)
 	{
+
+	  streamlog_out(DEBUG) << "get kaons not cheating 1\n";
+
 		vector< ReconstructedParticle * > result;
 		if (!myPIDHandler) 
 		{
 			return result;
+			streamlog_out(DEBUG) << "get kaons not cheating 2 \n";
+
 		}
+		streamlog_out(DEBUG) << "get kaons not cheating 3 \n";
+
 		for (unsigned int i = 0; i < particles.size(); i++) 
 		{
+		  streamlog_out(DEBUG) << "get kaons not cheating 4 "<<i<<" "<<  particles.size()<< "\n";
+
 			ReconstructedParticle * particle = particles[i];
+			streamlog_out(DEBUG) << "get kaons not cheating 4 - 1 "<<i<<" "<<  particles.size()<< "\n";
+			std::vector<int> a=myPIDHandler->getAlgorithmIDs ();
+			streamlog_out(DEBUG) << "size a "<<i<<" "<<  a.size()<< "\n";
+
 			int pid = myPIDHandler->getAlgorithmID(myAlgorithmName);
-			int pdg = myPIDHandler->getParticleID(particle, pid).getPDG();
+			streamlog_out(DEBUG) << "get kaons not cheating 4 - 2 "<<i<<" "<<  particles.size()<< "\n";
+			int pdg = myPIDHandler->getParticleID(particle,pid).getPDG();
+			streamlog_out(DEBUG) << "get kaons not cheating 4 - 3 "<<i<<" "<<  particles.size()<< "\n";
 			if (abs(pdg) == 321 && abs(particle->getType()) != 11 && abs(particle->getType()) != 13) 
 			{
-				//std::cout << "\tK p: " << MathOperator::getModule(particle->getMomentum()) << " q: " << particle->getCharge() << "\n";
-				result.push_back(particle);
+			  streamlog_out(DEBUG) << "\tK p: " << MathOperator::getModule(particle->getMomentum()) << " q: " << particle->getCharge() << "\n";
+			  result.push_back(particle);
 			}		
 		}
 		return result;
 	}
+
+
 	vector< ReconstructedParticle * > VertexChargeOperator::__getKaonsCheat(const vector< ReconstructedParticle * > & particles)
 	{
 		LCRelationNavigator navigator(myRelCollection);
 		vector< ReconstructedParticle * > result;
 		for (unsigned int i = 0; i < particles.size(); i++) 
 		{
-			ReconstructedParticle * particle = particles[i];
-			//std::cout << "Charge: " << particle->getCharge() << "\n";
+
+
+		  ReconstructedParticle * particle = particles[i];
+		  streamlog_out(DEBUG)<<" Kaon test 2:  particle "<<i<<"with ntrack "<<particle->getTracks().size()<<std::endl;
+
+		  for(int k =0; k<particle->getTracks().size(); k++) {
+		      streamlog_out(DEBUG)<<" Kaon test 3:  track "<<k<<" d0 and track z0 "<<particle->getTracks()[k]->getD0()<<" "<<particle->getTracks()[k]->getZ0()<<std::endl;
+		  }
+			//streamlog_out(DEBUG) << "Charge: " << particle->getCharge() << "\n";
 			vector<float> direction = MathOperator::getDirection(particle->getMomentum());
 			int tpchits = particle->getTracks()[0]->getSubdetectorHitNumbers()[6];
 			float p = MathOperator::getModule(particle->getMomentum());
@@ -307,24 +333,72 @@ namespace QQbarProcessor
 			vector< float > weights = navigator.getRelatedToWeights(particle);
 			MCParticle * winner = NULL;
 			float maxweight = 0.50;
-			for (unsigned int i = 0; i < obj.size(); i++) 
+			for (unsigned int j = 0; j < obj.size(); j++) 
 			{
-				if (weights[i] > maxweight) 
+				if (weights[j] > maxweight) 
 				{
-					winner = dynamic_cast< MCParticle * >(obj[i]);
-					maxweight = weights[i];
+					winner = dynamic_cast< MCParticle * >(obj[j]);
+					maxweight = weights[j];
 				}
 			}
 			if (!winner) 
 			{
-				std::cout << "ERROR: no genparticle!\n";
+				streamlog_out(DEBUG) << "ERROR: no genparticle!\n";
 			}
 			if (winner && abs(winner->getPDG()) == 321) 
 			{
 				result.push_back(particle);
+				streamlog_out(DEBUG)<<" Kaon test 4:  nkaons "<<result.size()<<std::endl;
+
 			}
 		}
+		streamlog_out(DEBUG)<<" Kaon test 5:  nkaons "<<result.size()<<std::endl;
+		      
 		return result;
+	}
+  
+  //irles function to get Kaons from single Reconstructed Particles
+	ReconstructedParticle * VertexChargeOperator::__getKaonsCheat( ReconstructedParticle * & particle)
+	{
+	  LCRelationNavigator navigator(myRelCollection);
+	  
+	  for(int k =0; k<particle->getTracks().size(); k++) {
+	    streamlog_out(DEBUG)<<" Kaon test 3--:  track "<<k<<" d0 and track z0 "<<particle->getTracks()[k]->getD0()<<" "<<particle->getTracks()[k]->getZ0()<<std::endl;
+	  }
+	  streamlog_out(DEBUG) << "Charge: " << particle->getCharge() << "\n";
+	  vector<float> direction = MathOperator::getDirection(particle->getMomentum());
+	  int tpchits = particle->getTracks()[0]->getSubdetectorHitNumbers()[6];
+	  float costheta =  std::abs(std::cos( MathOperator::getAngles(direction)[1] ));
+	  if (costheta > 0.95 || tpchits < 60) 
+	    {
+	      streamlog_out(DEBUG) << "no candidate tracks!\n";
+	      return NULL;
+	    }
+	  vector< LCObject * > obj = navigator.getRelatedToObjects(particle);
+	  vector< float > weights = navigator.getRelatedToWeights(particle);
+	  MCParticle * winner = NULL;
+	  float maxweight = 0.50;
+	  for (unsigned int j = 0; j < obj.size(); j++) 
+	    {
+	      if (weights[j] > maxweight) 
+		{
+		  winner = dynamic_cast< MCParticle * >(obj[j]);
+		  maxweight = weights[j];
+		}
+	    }
+	  if (!winner) 
+	    {
+	      streamlog_out(DEBUG) << "ERROR: no genparticle!\n";
+	      return NULL;
+	    }
+	  if (winner && abs(winner->getPDG()) == 321) 
+	    {
+	      streamlog_out(DEBUG)<<" Kaon test 4:  nkaons "<<std::endl;
+	      return particle;
+	    }
+
+	  return NULL;
+
 	}
 	vector< ReconstructedParticle * > VertexChargeOperator::__filterOutCheat(vector< ReconstructedParticle * > particles, int type)
 	{
@@ -337,17 +411,17 @@ namespace QQbarProcessor
 			vector< float > weights = navigator.getRelatedToWeights(particle);
 			MCParticle * winner = NULL;
 			float maxweight = 0.50;
-			for (unsigned int i = 0; i < obj.size(); i++) 
+			for (unsigned int j = 0; j < obj.size(); j++) 
 			{
-				if (weights[i] > maxweight) 
+				if (weights[j] > maxweight) 
 				{
-					winner = dynamic_cast< MCParticle * >(obj[i]);
-					maxweight = weights[i];
+					winner = dynamic_cast< MCParticle * >(obj[j]);
+					maxweight = weights[j];
 				}
 			}
 			if (!winner) 
 			{
-				std::cout << "ERROR: no genparticle!\n";
+				streamlog_out(DEBUG) << "ERROR: no genparticle!\n";
 			}
 			if (winner && abs(winner->getPDG()) != type) 
 			{
@@ -362,8 +436,8 @@ namespace QQbarProcessor
 		int input = std::abs(seed) * 1000;
 		srand(input);
 		float random = (float)(rand()) / RAND_MAX;
-		std::cout << "Time: " << input << "\n";
-		std::cout << "Random: " << random << "\n";
+		streamlog_out(DEBUG) << "Time: " << input << "\n";
+		streamlog_out(DEBUG) << "Random: " << random << "\n";
 		return random < threshold;
 	}
 } /* QQbarProcessor */

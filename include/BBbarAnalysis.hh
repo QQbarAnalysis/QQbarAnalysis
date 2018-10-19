@@ -42,14 +42,13 @@ namespace QQbarProcessor
 	  
 	  //METHODS
 	  
-	  void Init(std::string _hfilename, float masscut) ;
-	  std::vector< MCParticle * > AnalyseGeneratorBBBar(QQbarMCOperator & opera);
-	  void AnalyseBBBar(LCEvent * evt, 
+	  void Init(std::string _hfilename) ;
+	  std::vector< MCParticle * > AnalyseGeneratorBBbar(QQbarMCOperator & opera);
+	  void AnalyseBBbar(LCEvent * evt, 
 			    std::string _colName ,
 			    std::string _JetsColName ,
 			    std::string _JetsRelColName ,
 			    std::string _MCColName ,
-			    std::string _IsoLeptonColName ,
 			    std::string _colRelName  ) ;
 
 	  void ClearVariables();
@@ -58,23 +57,12 @@ namespace QQbarProcessor
 		    
 	private:
 
-	  void ComputeCharge(std::vector< RecoJet * > *jets, VertexChargeOperator & vtxOperator);
 	  void MatchB(std::vector<RecoJet*> * bjets, std::vector< MCParticle * > & mcbs, LCCollection * mcvtxcol);
 
-	  float _massCutparameter;
-	  float _lowBTagCutparameter;
-	  float _highBTagCutparameter;
-	  
 	  TFile * _hfile;
 	  TTree * _hTree;
-	  TTree * _hGenTree;
-	  TTree * _hSumTree;
-	  //TTree * _hBkgTree;
+	  StatsData_BBbar _stats;
 
-	  // int _bkgPDGs[4];
-
-	  SummaryData _summary;
-	  StatsData _stats;
 	} ;
 		
 } /* TTbarAnalisys */

@@ -41,7 +41,7 @@ namespace QQbarProcessor
       }
     catch(UTIL::UnknownAlgorithm &e)
       {
-	std::cout << "No algorithm vtxrec!\n";
+	streamlog_out(DEBUG) << "No algorithm vtxrec!\n";
 	alid = -1;
       }
     if (alid < 0) 
@@ -52,12 +52,12 @@ namespace QQbarProcessor
 	  }
 	catch(UTIL::UnknownAlgorithm &e)
 	  {
-	    std::cout << "No algorithm lcfiplus!\n";
+	    streamlog_out(DEBUG) << "No algorithm lcfiplus!\n";
 	    alid = -1;
 	  }
 			
       }
-    std::cout << "Algorithm id: " << jetnumber << "\n";
+    streamlog_out(DEBUG) << "Algorithm id: " << jetnumber << "\n";
     for (int j = 0; j < jetnumber; j++) 
       {
 	ReconstructedParticle * jetpart = dynamic_cast< ReconstructedParticle * >(jetcol->getElementAt(j));
@@ -94,7 +94,7 @@ namespace QQbarProcessor
 
   void QQbarTools::PrintJet(RecoJet * jet)
   {
-    std::cout << "Jet E: " << jet->getEnergy()
+    streamlog_out(DEBUG) << "Jet E: " << jet->getEnergy()
 	      << " m: " << jet->getMass()
 	      << " btag: " << jet->GetBTag()
 	      << " costheta: " << jet->GetCostheta()
@@ -105,7 +105,7 @@ namespace QQbarProcessor
 
   void QQbarTools::PrintParticle(ReconstructedParticle * jet)
   {
-    std::cout << "E: " << jet->getEnergy()
+    streamlog_out(DEBUG) << "E: " << jet->getEnergy()
 	      <<" m: " << jet->getMass()
 	      <<" PDG: " << jet->getType()
 	      << "\n";
@@ -113,7 +113,7 @@ namespace QQbarProcessor
 
   void QQbarTools::PrintParticle(MCParticle * jet)
   {
-    std::cout << "E: " << jet->getEnergy()
+    streamlog_out(DEBUG) << "E: " << jet->getEnergy()
 	      <<" m: " << jet->getMass()
 	      <<" q: " << jet->getCharge()
 	      <<" PDG: " << jet->getPDG()
@@ -163,12 +163,12 @@ namespace QQbarProcessor
 
   vector<float> QQbarTools::getThrust(vector<float> & thrust, LCCollection * pfos)
   {
-    std::cout << "Size: " << thrust.size() << "\n";
+    streamlog_out(DEBUG) << "Size: " << thrust.size() << "\n";
     double taxis[3];
     taxis[0] = thrust[0]; taxis[1] = thrust[1]; taxis[2] = thrust[2];
     vector<float> direction = MathOperator::getDirection(thrust);
     float axisAngle = MathOperator::getAngles(direction)[1];
-    std::cout << "THRUST COS0: " << std::cos(axisAngle) << "\n";
+    streamlog_out(DEBUG) << "THRUST COS0: " << std::cos(axisAngle) << "\n";
     int nparticles = pfos->getNumberOfElements();
     int counter = 0;
     vector< ReconstructedParticle * > jetPositive;
@@ -177,7 +177,7 @@ namespace QQbarProcessor
       {
 	ReconstructedParticle * particle = dynamic_cast< ReconstructedParticle * >(pfos->getElementAt(i));
 	float angle = MathOperator::getAngleBtw(taxis, particle->getMomentum());
-	//std::cout << "Angle: " << angle << "\n";
+	//streamlog_out(DEBUG) << "Angle: " << angle << "\n";
 	if (angle > 3.1416/2) 
 	  {
 	    jetPositive.push_back(particle);
@@ -188,14 +188,14 @@ namespace QQbarProcessor
 	    jetNegative.push_back(particle);
 	  }
       }
-    std::cout << "In positive direction " << counter << " particles, in negative - " << nparticles - counter << "\n";
+    streamlog_out(DEBUG) << "In positive direction " << counter << " particles, in negative - " << nparticles - counter << "\n";
     //_stats._ZZMass1 = getMass(jetPositive);
     //_stats._ZZMass2 = getMass(jetNegative);
     vector<float> masses;
     masses.push_back(getMass(jetPositive));
     masses.push_back(getMass(jetNegative));
 
-    std::cout << "Mass_+: " << masses.at(0) << " Mass_-: " << masses.at(1) << "\n";
+    streamlog_out(DEBUG) << "Mass_+: " << masses.at(0) << " Mass_-: " << masses.at(1) << "\n";
   }
 
   vector<float> QQbarTools::getZZ(LCCollection * fourjetcol)
@@ -219,7 +219,7 @@ namespace QQbarProcessor
 	jets.push_back(jetpart);
 	masses.push_back(jetpart->getMass());
 	//average += std::sqrt(std::pow(jetpart->getEnergy(),2) -std::pow( MathOperator::getModule(jetpart->getMomentum()),2));
-	//std::cout << "m_" << i << ": " << std::sqrt(std::pow(jetpart->getEnergy(),2) -std::pow( MathOperator::getModule(jetpart->getMomentum()),2)) << "\n";
+	//streamlog_out(DEBUG) << "m_" << i << ": " << std::sqrt(std::pow(jetpart->getEnergy(),2) -std::pow( MathOperator::getModule(jetpart->getMomentum()),2)) << "\n";
       }
     //    std::sort(jets.begin(), jets.end(), sortByEnergy);
 
@@ -264,7 +264,7 @@ namespace QQbarProcessor
     pair3.push_back(mass6);
     differences.push_back(pair3);
 		
-    std::cout << "Masses: " //<< mass1 << " & " << mass2 << "; "
+    streamlog_out(DEBUG) << "Masses: " //<< mass1 << " & " << mass2 << "; "
 	      << mass3 << " & " << mass4 << "; "
 	      << mass5 << " & " << mass6 << ";\n";
     float mindiff = 1000.;
@@ -301,7 +301,7 @@ namespace QQbarProcessor
       average += mass;
       massesZ.push_back(mass);
       n++;
-      std::cout << "Z_" << i << "|" << j << ": " << mass << "\n";
+      streamlog_out(DEBUG) << "Z_" << i << "|" << j << ": " << mass << "\n";
       }
       }
       float deviation = 0.0;
@@ -335,7 +335,7 @@ namespace QQbarProcessor
     vector< RecoJet * > * result = new vector< RecoJet * >();
     if (!wjets) 
       {
-        std::cout << "Wjets are NULL!\n";
+        streamlog_out(DEBUG) << "Wjets are NULL!\n";
         return result;
       }
     if (alljets->size() < 4) 
@@ -343,11 +343,11 @@ namespace QQbarProcessor
         return result;
       }
     //vector<RecoJet>
-    std::cout << "Before sorting:\n";
+    streamlog_out(DEBUG) << "Before sorting:\n";
     for (unsigned int i = 0; i < alljets->size(); i++) 
       {
         RecoJet * jet = alljets->at(i);
-        std::cout << "\tB tag: " << jet->GetBTag()  << "\n";
+        streamlog_out(DEBUG) << "\tB tag: " << jet->GetBTag()  << "\n";
         /*if (jet->GetBTag() > _lowBTagCutparameter) 
           {
           result->push_back(jet);
@@ -358,11 +358,11 @@ namespace QQbarProcessor
           }*/
       }
     std::sort(alljets->begin(), alljets->end(), sortByBtag);
-    std::cout << "After sorting:\n";
+    streamlog_out(DEBUG) << "After sorting:\n";
     for (unsigned int i = 0; i < alljets->size(); i++) 
       {
         RecoJet * jet = alljets->at(i);
-        std::cout << "\tB tag: " << jet->GetBTag()  << "\n";
+        streamlog_out(DEBUG) << "\tB tag: " << jet->GetBTag()  << "\n";
 
       }
     result->push_back(alljets->at(0));

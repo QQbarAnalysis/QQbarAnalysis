@@ -104,7 +104,7 @@ namespace QQbarProcessor
        	break;
       case BBbar:
 	std::cout << "Initialize BBarTree, _analysisType= " << _analysisType << "\n";
-	_bbbaranalysis.Init(_hfilename, _massCutparameter);
+	_bbbaranalysis.Init(_hfilename);
 	break;
       case TTbarHadronic:
 	std::cout << "Initialize TTbarHadronicTree, _analysisType= " << _analysisType << "\n";
@@ -134,12 +134,11 @@ namespace QQbarProcessor
        	break;
 
       case BBbar:
-	_bbbaranalysis.AnalyseBBBar(evt,
+	_bbbaranalysis.AnalyseBBbar(evt,
 				    _colName ,
 				    _JetsColName ,
 				    _JetsRelColName ,
 				    _MCColName ,
-				    _IsoLeptonColName ,
 				    _colRelName);
 	break;
 

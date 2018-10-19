@@ -16,19 +16,20 @@ namespace QQbarProcessor
 	class QQbarMCOperator 
 	{
 		public:
-		//
-		//	Constants
-		//
-	
-		//
-		//	Constructors
-		//
+			//
+			//	Constants
+			//
+
+			//
+			//	Constructors
+			//
 			QQbarMCOperator (EVENT::LCCollection * col);
 			virtual ~QQbarMCOperator () {};
-		//
-		//	Methods
-		//
+			//
+			//	Methods
+			//
 			//DO NOT USE THAT ON T-QUARKS!!!
+			std::vector< EVENT::MCParticle * > GetBBbarQuarksPS();
 			std::vector< EVENT::MCParticle * > GetPairParticles(int pdg);
 			std::vector< EVENT::MCParticle * > GetTopPairParticles(float & topBangle, float & topBarBangle);
 			std::vector< EVENT::MCParticle * > GetFinalState();
@@ -41,16 +42,16 @@ namespace QQbarProcessor
 			EVENT::MCParticle * GetTauLepton();
 
 		private:
-		//
-		//	Data
-		//
+			//
+			//	Data
+			//
 			EVENT::LCCollection * myCollection;
 			std::vector< EVENT::MCParticle * > myBquarkPair;
 			std::vector< EVENT::MCParticle * > myWPair;
 			EVENT::MCParticle * myNeutrino;
-		//
-		//	Private methods
-		//
+			//
+			//	Private methods
+			//
 	};
 }
 #endif
