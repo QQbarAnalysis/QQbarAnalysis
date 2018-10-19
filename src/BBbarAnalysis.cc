@@ -213,6 +213,7 @@ namespace QQbarProcessor
 	  }//itx
 	}//ijet
 
+	_hTree->Fill();
 	delete jets;
       }
     catch(DataNotAvailableException &e)
