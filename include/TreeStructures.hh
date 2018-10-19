@@ -81,10 +81,12 @@ namespace QQbarProcessor
 		float _W2momentum;
 		float _W2costheta;
 		int _Top1bcharge;
+		int _Top1Genbcharge;
 		float _Top1btag;
 		float _Top1gamma;
 		float _Top1bmomentum;
 		int _Top1bntracks;
+		int _Top1Genbntracks;
 		float _Top1mass;
 		float _Top1momentum;
 		float _Top1energy;
@@ -101,6 +103,7 @@ namespace QQbarProcessor
 		float _Top1KaonMomentum[10];
 		int _Top1bTVCM;
 		int _Top2bntracks;
+		int _Top2Genbntracks;
 		int _Top2bTVCM;
 		int _UsedBTVCM;
 		float _Top2bmomentum;
@@ -110,6 +113,7 @@ namespace QQbarProcessor
 		float _Top2energy;
 		float _Top2gamma;
 		int _Top2bcharge;
+		int _Top2Genbcharge;
 		float _Top2momentum;
 		float _Top2costheta;
 		float _Top2bcostheta;

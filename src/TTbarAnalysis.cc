@@ -52,18 +52,60 @@ namespace QQbarProcessor
 				_GammaTSigmaparameter = 0.05;
 		}
 
+		/*
+		void TTbarAnalysis::BHadronInfo(vector< MCParticle * > & mcBHadron)
+		{
+				if(mcBHadron){
+						
+						if(mcBHadron[0])
+						{
+								_stats._Top1Genbntracks = mcBHadron[0]->getDaughters().size();
+						}
+						if(mcBHadron[1])
+						{
+								_stats._Top2Genbntracks = mcBHadron[1]->getDaughters().size();
+						}
+				}
+		}*/
+
 		vector< MCParticle * > TTbarAnalysis::AnalyseGenerator(QQbarMCOperator & opera)
 		{
 				std::vector< EVENT::MCParticle * > mctops = opera.GetTopPairParticles(_stats._MCTopBangle, _stats._MCTopcosWb);
+				std::vector< EVENT::MCParticle * > mcB0 = opera.GetPairParticles(511);
+				std::vector< EVENT::MCParticle * > mcBplus = opera.GetPairParticles(521);
+				std::vector< EVENT::MCParticle * > mcB0s = opera.GetPairParticles(531);
+				std::vector< EVENT::MCParticle * > mcB0c = opera.GetPairParticles(541);
+				std::vector< EVENT::MCParticle * > mcBLambda0b = opera.GetPairParticles(5122);
+				std::vector< EVENT::MCParticle * > mcBXiminusb = opera.GetPairParticles(5132);
+				std::vector< EVENT::MCParticle * > mcBXi0b = opera.GetPairParticles(5232);
+				std::vector< EVENT::MCParticle * > mcBOmegaminusb = opera.GetPairParticles(5332);
 
 				if (mctops.size() < 2) 
 				{
 						_stats._mctag = 0;
 						return mctops;
 				}
+
 				_summary._nGenUsed++;
 				MCParticle * top = mctops[0];
 				MCParticle * topbar = mctops[1];
+
+				std::cout << "mcB0 size = " << mcB0.size() << "\n";
+				std::cout << "mcBplus size = " << mcBplus.size() << "\n";
+
+				/*
+				if(mcB0){
+						if(mcB0[0])
+						{
+								_stats._Top1Genbntracks = mcB0[0]->getDaughters().size();
+						}
+						if(mcB0[1])
+						{
+								_stats._Top2Genbntracks = mcB0[1]->getDaughters().size();
+						}
+				}*/
+
+
 				vector<float> direction = MathOperator::getDirection(top->getMomentum());
 				vector<float> directionbar = MathOperator::getDirection(topbar->getMomentum());
 				_stats._MCTopmass = top->getMass();
@@ -349,12 +391,20 @@ namespace QQbarProcessor
 				//Top hadronic
 				_stats._qCostheta[0] = -2.;
 				_stats._Top1bcharge = top1->GetHadronCharge();
+				//_stats._Top1Genbcharge = top1->GetB()->__GetMCCharge();
+				
+				//std::cout << "Top1Genbcharge = " << top1->GetB()->__GetMCCharge() << std::endl;
+
 				_stats._Top1bmomentum = top1->GetHadronMomentum();
 				_stats._Top1bdistance = top1->GetMinHadronDistance();
 				vector<float> direction = MathOperator::getDirection(top1->getMomentum());
 				_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction)[1] );
+				
+				// Number of b tracks
 				_stats._Top1bntracks = top1->GetNumberOfVertexParticles();
+				_stats._Top1Genbntracks = top1->GetB()->__GetMCNtracks();
 				_stats._Top1btag = top1->GetBTag();
+
 				_stats._Top1gamma = top1->getEnergy()/top1->getMass();
 				_stats._W1gamma = top1->GetW()->getEnergy()/top1->GetW()->getMass();
 				float Top1nvtx = top1->GetNumberOfVertices();
@@ -373,9 +423,14 @@ namespace QQbarProcessor
 				_stats._Top2bmomentum = top2->GetHadronMomentum();
 				_stats._Top2bdistance = top2->GetMinHadronDistance();
 				_stats._Top2bcharge = top2->GetHadronCharge();
+				//_stats._Top2Genbcharge = top2->GetB()->__GetMCCharge();
 				vector<float> direction2 = MathOperator::getDirection(top2->getMomentum());
 				_stats._Top2costheta =  std::cos( MathOperator::getAngles(direction2)[1] );
+				
+				// Number of b tracks
 				_stats._Top2bntracks = top2->GetNumberOfVertexParticles();
+				_stats._Top2Genbntracks = top2->GetB()->__GetMCNtracks();
+
 				_stats._Top2leptonCharge = top2->GetW()->getCharge();
 				vector<float> ldirection = MathOperator::getDirection(top2->GetW()->getMomentum());
 				_stats._Top2leptonE = top2->GetW()->getEnergy();
@@ -1079,9 +1134,18 @@ namespace QQbarProcessor
 				_stats._MCBBarOscillation = 0;
 				if (mcvtxcol && mcvtxcol->getNumberOfElements() > 0) 
 				{
+						std::cout << "nElements = " << mcvtxcol->getNumberOfElements() << "\n";
 						for (int i = 0; i < mcvtxcol->getNumberOfElements(); i++) 
-						{
+						{	
 								Vertex * vertex = dynamic_cast< Vertex * >(mcvtxcol->getElementAt(i));
+
+								std::cout << "getParameters = " << vertex->getParameters().size() << "\n" ;
+								//std::cout << "bgenntracks = " << vertex->getAssociatedParticle()->getParticles().size() << "\n" ;
+								if (!vertex->getAssociatedParticle()) {
+										std::cout << "i = " << i << std::endl;
+										continue;
+								}
+								
 								if (vertex->getParameters()[1] > 0) 
 								{
 										bgenntracks += vertex->getAssociatedParticle()->getParticles().size();
@@ -1091,6 +1155,7 @@ namespace QQbarProcessor
 										bbargenntracks += vertex->getAssociatedParticle()->getParticles().size();
 								}
 						}
+
 						_stats._MCBBarOscillation = mcvtxcol->getParameters().getIntVal("BBarOscillation");
 						_stats._MCBOscillation = mcvtxcol->getParameters().getIntVal("BOscillation");
 				}
@@ -1107,6 +1172,7 @@ namespace QQbarProcessor
 
 				}
 				std::cout << "Truth Angle: " << angle << " charge: " << charge << "\n";
+				
 				if (top2) 
 				{
 						if (topHadronic->GetB()->__GetMCCharge() < 0) 
