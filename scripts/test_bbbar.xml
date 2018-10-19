@@ -11,9 +11,9 @@
 <!--########  Global  ######################################## -->
 <global>
   <parameter name="LCIOInputFiles">
-    /sps/flc/irles/BBbar/QQbarAnalysis/testdata/eL/rv01-16-p10_250.sv01-14-01-p00.mILD_o1_v05.E250-TDR_ws.I110011.P2f-highM_z_h.eL.pR_dst_7637_00001_DST.slcio
+    /nfs/dust/ilc/user/airqui/bbbar/QQbarAnalysis/test/rv01-16-p10_250.sv01-14-01-p00.mILD_o1_v05.E250-TDR_ws.I110011.P2f-highM_z_h.eL.pR_dst_7637_00001_DST.slcio
   </parameter>
-  <parameter name="MaxRecordNumber" value="1000" />  
+  <parameter name="MaxRecordNumber" value="300" />  
   <parameter name="GearXMLFile" value="GearOutput.xml"/>
   <parameter name="SkipNEvents" value="0"/>
   <parameter name="SupressCheck" value="false"/>
@@ -22,13 +22,14 @@
 </global>
 
 <!--########  Processor  ######################################## -->
-<processor name="FirstJetClustering" type="SatoruJetFinderProcessor">
-  <parameter name="InputCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
-  <parameter name="Mode" type="string" value="DurhamNJet"/>
-  <parameter name="NJetRequested" type="int" value="2"/>
-  <!--parameter name="YCut" type="int" value="0.05"/-->
-  <parameter name="OutputCollection" type="string" lcioOutType="ReconstructedParticle"> RefinedJets </parameter>
+<processor name="FirstJetClustering" type="FastJetProcessor">
+  <parameter name="algorithm" type="StringVec"> ee_kt_algorithm </parameter>
+  <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 2 </parameter>
+  <parameter name="recombinationScheme" type="string"> E_scheme </parameter>
+  <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
+  <parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle"> RefinedJets </parameter>
 </processor>
+
 
 <processor name="JetClusteringAndFlavorTag" type="LcfiplusProcessor">
 	<!-- run primary and secondary vertex finders -->
