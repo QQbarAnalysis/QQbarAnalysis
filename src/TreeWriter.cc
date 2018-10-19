@@ -110,12 +110,14 @@ namespace QQbarProcessor
 		_hTree->Branch("Top1btag", &data._Top1btag, "Top1btag/F");
 		_hTree->Branch("Top1energy", &data._Top1energy, "Top1energy/F");
 		_hTree->Branch("Top1bcharge", &data._Top1bcharge, "Top1bcharge/I");
+		_hTree->Branch("Top1Genbcharge", &data._Top1Genbcharge, "Top1Genbcharge/I");
 		_hTree->Branch("Top1bmomentum", &data._Top1bmomentum, "Top1bmomentum/F");
 		_hTree->Branch("Top1bdistance", &data._Top1bdistance, "Top1bdistance/F");
 		_hTree->Branch("Top1costheta", &data._Top1costheta, "Top1costheta/F");
 		_hTree->Branch("Top1bcostheta", &data._Top1bcostheta, "Top1bcostheta/F");
 		_hTree->Branch("Top1truthAngle", &data._Top1truthAngle, "Top1truthAngle/F");
 		_hTree->Branch("Top1bntracks", &data._Top1bntracks, "Top1bntracks/I");
+		_hTree->Branch("Top1Genbntracks", &data._Top1Genbntracks, "Top1Genbntracks/I");
 		_hTree->Branch("Top1bTVCM", &data._Top1bTVCM, "Top1bTVCM/I");
 		_hTree->Branch("Top1cosWb", &data._Top1cosWb, "Top1cosWb/F");
 		_hTree->Branch("Top1pstarb", &data._Top1pstarb, "Top1pstarb/F");
@@ -131,9 +133,11 @@ namespace QQbarProcessor
 		_hTree->Branch("Top2bmomentum", &data._Top2bmomentum, "Top2bmomentum/F");
 		_hTree->Branch("Top2bdistance", &data._Top2bdistance, "Top2bdistance/F");
 		_hTree->Branch("Top2bcharge", &data._Top2bcharge, "Top2bcharge/I");
+		_hTree->Branch("Top2Genbcharge", &data._Top2Genbcharge, "Top2Genbcharge/I");
 		_hTree->Branch("Top2bcostheta", &data._Top2bcostheta, "Top2bcostheta/F");
 		_hTree->Branch("Top2bTVCM", &data._Top2bTVCM, "Top2bTVCM/I");
 		_hTree->Branch("Top2bntracks", &data._Top2bntracks, "Top2bntracks/I");
+		_hTree->Branch("Top2Genbntracks", &data._Top2Genbntracks, "Top2Genbntracks/I");
 		_hTree->Branch("Top2leptonCharge", &data._Top2leptonCharge, "Top2leptonCharge/I");
 		_hTree->Branch("Top2leptonE", &data._Top2leptonE, "Top2leptonE/F");
 		_hTree->Branch("Top2leptonCos", &data._Top2leptonCos, "Top2leptonCos/F");

@@ -48,10 +48,34 @@ namespace QQbarProcessor
 	vector< MCParticle * > QQbarMCOperator::GetTopPairParticles(float & topBangle, float & topcosWb)
 	{
 		vector< MCParticle * > pair;
+
+		// particle declaration
 		MCParticle * b = FindParticle(5);
 		MCParticle * bbar = FindParticle(-5);
 		MCParticle * wplus = FindParticle(24);
 		MCParticle * wminus = FindParticle(-24);
+
+		// B Hadron
+		/*
+		MCParticle * B0 = FindParticle(511);
+		MCParticle * Bplus = FindParticle(521);
+		MCParticle * B0s = FindParticle(531);
+		MCParticle * B0c = FindParticle(541);
+		MCParticle * BLambda0b = FindParticle(5122);
+		MCParticle * BXiminusb = FindParticle(5132); 
+		MCParticle * BXi0b = FindParticle(5232);
+		MCParticle * BOmegaminusb = FindParticle(5332);
+
+		MCParticle * B0bar = FindParticle(-511);
+		MCParticle * Bplusbar = FindParticle(-521);
+		MCParticle * B0sbar = FindParticle(-531);
+		MCParticle * B0cbar = FindParticle(-541);
+		MCParticle * BLambda0bbar = FindParticle(-5122);
+		MCParticle * BXiminusbbar = FindParticle(-5132); 
+		MCParticle * BXi0bbar = FindParticle(-5232);
+		MCParticle * BOmegaminusbbar = FindParticle(-5332);
+		*/
+
 		if (!b || !bbar ) 
 		{
 			return pair;
