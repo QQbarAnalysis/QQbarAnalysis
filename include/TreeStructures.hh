@@ -80,7 +80,6 @@ namespace QQbarProcessor
 			float _W2momentum;
 			float _W2costheta;
 			int _Top1bcharge;
-			int _Top1Genbcharge;
 			float _Top1btag;
 			float _Top1gamma;
 			float _Top1bmomentum;
@@ -112,7 +111,6 @@ namespace QQbarProcessor
 			float _Top2energy;
 			float _Top2gamma;
 			int _Top2bcharge;
-			int _Top2Genbcharge;
 			float _Top2momentum;
 			float _Top2costheta;
 			float _Top2bcostheta;
@@ -145,6 +143,10 @@ namespace QQbarProcessor
 			float _chiGammaT2;
 			float _chiTop2Mass;
 			float _chiTop2E;
+
+			// Generated
+			int _MCBHadCharge;
+			int _MCBHadNtracks;
 
 			int _MCBOscillation;
 			int _MCBWcorrect;
