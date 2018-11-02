@@ -73,6 +73,10 @@ namespace QQbarProcessor
 		}
 		return sum;
 	}
+	ReconstructedParticle * RecoJet::GetRecoJet()
+	{
+		return myRawRecoJet;
+	}
 	float RecoJet::GetCostheta()
 	{
 		float costheta1 =  -2.0;

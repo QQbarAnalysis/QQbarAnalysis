@@ -57,6 +57,7 @@ namespace QQbarProcessor
 			float GetHadronCharge(bool weight = false);
 			float GetHadronMomentum();
 			float GetHadronMass();
+			EVENT::ReconstructedParticle * GetRecoJet();
 			float GetCostheta();
 			float GetMinHadronDistance();
 			float GetMaxHadronDistance();
