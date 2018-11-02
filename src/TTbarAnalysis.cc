@@ -52,22 +52,6 @@ namespace QQbarProcessor
 		_GammaTSigmaparameter = 0.05;
 	}
 
-	/*
-		 void TTbarAnalysis::BHadronInfo(vector< MCParticle * > & mcBHadron)
-		 {
-		 if(mcBHadron){
-
-		 if(mcBHadron[0])
-		 {
-		 _stats._Top1Genbntracks = mcBHadron[0]->getDaughters().size();
-		 }
-		 if(mcBHadron[1])
-		 {
-		 _stats._Top2Genbntracks = mcBHadron[1]->getDaughters().size();
-		 }
-		 }
-		 }
-		 */
 	void TTbarAnalysis::getBHadrons(vector< MCParticle * > & Bhad)
 	{
 		for(int iB=0; iB < Bhad.size(); iB++)
@@ -76,32 +60,6 @@ namespace QQbarProcessor
 			_stats._MCBHadCharge = Bhad[iB]->getCharge();
 			_stats._MCBHadNtracks = Bhad[iB]->getDaughters().size();
 		}
-
-	}
-
-	void TTbarAnalysis::BHadronHandler(QQbarMCOperator & Bopera)
-	{
-		std::vector< EVENT::MCParticle * > mcB0						= Bopera.GetPairParticles(511);
-		std::vector< EVENT::MCParticle * > mcBplus				= Bopera.GetPairParticles(521);
-		std::vector< EVENT::MCParticle * > mcB0s 					= Bopera.GetPairParticles(531);
-		std::vector< EVENT::MCParticle * > mcB0c 					= Bopera.GetPairParticles(541);
-		std::vector< EVENT::MCParticle * > mcBLambda0b 		= Bopera.GetPairParticles(5122);
-		std::vector< EVENT::MCParticle * > mcBXiminusb 		= Bopera.GetPairParticles(5132);
-		std::vector< EVENT::MCParticle * > mcBXi0b 				= Bopera.GetPairParticles(5232);
-		std::vector< EVENT::MCParticle * > mcBOmegaminusb = Bopera.GetPairParticles(5332);
-
-		int nHadrons = 0;
-
-		if(mcB0.size()) 					getBHadrons(mcB0); nHadrons += mcB0.size();
-		if(mcBplus.size()) 				getBHadrons(mcBplus); nHadrons += mcBplus.size();
-		if(mcB0s.size()) 					getBHadrons(mcB0s); nHadrons += mcB0s.size();
-		if(mcB0c.size()) 					getBHadrons(mcB0c); nHadrons += mcB0c.size();
-		if(mcBLambda0b.size()) 		getBHadrons(mcBLambda0b); nHadrons += mcBLambda0b.size();
-		if(mcBXiminusb.size()) 		getBHadrons(mcBXiminusb); nHadrons += mcBXiminusb.size();
-		if(mcBXi0b.size()) 				getBHadrons(mcBXi0b); nHadrons += mcBXi0b.size();
-		if(mcBOmegaminusb.size()) getBHadrons(mcBOmegaminusb); nHadrons += mcBOmegaminusb.size();
-
-		std::cout << "nHadrons = " << nHadrons << std::endl;
 	}
 
 	vector< MCParticle * > TTbarAnalysis::AnalyseGenerator(QQbarMCOperator & opera)
@@ -1006,6 +964,31 @@ namespace QQbarProcessor
 			}*/
 		_stats._qCostheta[0] = _stats._Top1costheta * _stats._Top1bcharge;
 
+	}
+
+	void TTbarAnalysis::BHadronHandler(QQbarMCOperator & Bopera)
+	{
+		std::vector< EVENT::MCParticle * > mcB0						= Bopera.GetPairParticles(511);
+		std::vector< EVENT::MCParticle * > mcBplus				= Bopera.GetPairParticles(521);
+		std::vector< EVENT::MCParticle * > mcB0s 					= Bopera.GetPairParticles(531);
+		std::vector< EVENT::MCParticle * > mcB0c 					= Bopera.GetPairParticles(541);
+		std::vector< EVENT::MCParticle * > mcBLambda0b 		= Bopera.GetPairParticles(5122);
+		std::vector< EVENT::MCParticle * > mcBXiminusb 		= Bopera.GetPairParticles(5132);
+		std::vector< EVENT::MCParticle * > mcBXi0b 				= Bopera.GetPairParticles(5232);
+		std::vector< EVENT::MCParticle * > mcBOmegaminusb = Bopera.GetPairParticles(5332);
+
+		int nHadrons = 0;
+
+		if(mcB0.size()) 					getBHadrons(mcB0); nHadrons += mcB0.size();
+		if(mcBplus.size()) 				getBHadrons(mcBplus); nHadrons += mcBplus.size();
+		if(mcB0s.size()) 					getBHadrons(mcB0s); nHadrons += mcB0s.size();
+		if(mcB0c.size()) 					getBHadrons(mcB0c); nHadrons += mcB0c.size();
+		if(mcBLambda0b.size()) 		getBHadrons(mcBLambda0b); nHadrons += mcBLambda0b.size();
+		if(mcBXiminusb.size()) 		getBHadrons(mcBXiminusb); nHadrons += mcBXiminusb.size();
+		if(mcBXi0b.size()) 				getBHadrons(mcBXi0b); nHadrons += mcBXi0b.size();
+		if(mcBOmegaminusb.size()) getBHadrons(mcBOmegaminusb); nHadrons += mcBOmegaminusb.size();
+
+		std::cout << "nHadrons = " << nHadrons << std::endl;
 	}
 
 	void TTbarAnalysis::Match(vector< MCParticle * > & mctops,vector< MCParticle * > &  mcbs, vector< MCParticle * > & mcws, TopQuark * topHadronic,  TopQuark * top2)
