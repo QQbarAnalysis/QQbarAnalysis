@@ -244,6 +244,15 @@ namespace QQbarProcessor
 			for (unsigned int i = 0; i < bjets->size(); i++) 
 			{
 				TopQuark * candidate = new TopQuark(bjets->at(i), wHadronic);
+				ReconstructedParticle * bjet = bjets->at(i)->GetRawRecoJet();
+
+				// access jet info
+				_stats._jet_E[i] = bjets->at(i)->getEnergy();
+				_stats._jet_px[i]= bjets->at(i)->getMomentum()[0];
+				_stats._jet_py[i]= bjets->at(i)->getMomentum()[1];
+				_stats._jet_pz[i]= bjets->at(i)->getMomentum()[2];
+				_stats._jet_M[i] = bjets->at(i)->getMass();
+
 				float chi2 = getChi2(candidate);
 				if (chi2 < chimin) 
 				{
@@ -313,6 +322,7 @@ namespace QQbarProcessor
 		vector< ReconstructedParticle * > kaons2 = vtxOperator.GetKaons(top2);
 		_stats._Top1KaonNumber = kaons1.size();
 		_stats._Top2KaonNumber = kaons2.size();
+
 		if (top->GetComputedCharge().ByTVCM || top2->GetComputedCharge().ByTVCM) 
 		{
 			_summary._nKaons++;
@@ -324,6 +334,10 @@ namespace QQbarProcessor
 			_stats._Top1KaonCharges[i] = kaons1[i]->getCharge();
 			_stats._Top1KaonMomentum[i] = MathOperator::getModule(kaons1[i]->getMomentum());
 			//std::cout << "\tq: " <<  kaons1[i]->getCharge() << " p: " << MathOperator::getModule(kaons1[i]->getMomentum()) <<"\n";
+			
+			// kaon dEdx implementation
+			_stats._Top1KaondEdx[i] = kaons1[i]->getTracks()[0]->getdEdx();
+			
 		}
 		//std::cout << "Kaons 2 :\n";
 		for (unsigned int i = 0; i < kaons2.size(); i++) 

@@ -327,49 +327,49 @@ namespace QQbarProcessor
 		return result;
 	}
 
-  //irles function to get Kaons from single Reconstructed Particles
-  ReconstructedParticle * VertexChargeOperator::__getKaonsCheat( ReconstructedParticle * & particle)
-  {
-    LCRelationNavigator navigator(myRelCollection);
-    
-    for(int k =0; k<particle->getTracks().size(); k++) {
-      streamlog_out(DEBUG)<<" Kaon test 3--:  track "<<k<<" d0 and track z0 "<<particle->getTracks()[k]->getD0()<<" "<<particle->getTracks()[k]->getZ0()<<std::endl;
-    }
-    streamlog_out(DEBUG) << "Charge: " << particle->getCharge() << "\n";
-    vector<float> direction = MathOperator::getDirection(particle->getMomentum());
-    int tpchits = particle->getTracks()[0]->getSubdetectorHitNumbers()[6];
-    float costheta =  std::abs(std::cos( MathOperator::getAngles(direction)[1] ));
-    if (costheta > 0.95 || tpchits < 60) 
-      {
-	streamlog_out(DEBUG) << "no candidate tracks!\n";
-	return NULL;
-      }
-    vector< LCObject * > obj = navigator.getRelatedToObjects(particle);
-    vector< float > weights = navigator.getRelatedToWeights(particle);
-    MCParticle * winner = NULL;
-    float maxweight = 0.50;
-    for (unsigned int j = 0; j < obj.size(); j++) 
-      {
-	if (weights[j] > maxweight) 
-	  {
-	    winner = dynamic_cast< MCParticle * >(obj[j]);
-	    maxweight = weights[j];
-	  }
-      }
-    if (!winner) 
-      {
-	streamlog_out(DEBUG) << "ERROR: no genparticle!\n";
-	return NULL;
-      }
-    if (winner && abs(winner->getPDG()) == 321) 
-      {
-	streamlog_out(DEBUG)<<" Kaon test 4:  nkaons "<<std::endl;
-	return particle;
-      }
-    
-    return NULL;
+	//irles function to get Kaons from single Reconstructed Particles
+	ReconstructedParticle * VertexChargeOperator::__getKaonsCheat( ReconstructedParticle * & particle)
+	{
+		LCRelationNavigator navigator(myRelCollection);
 
-  }
+		for(int k =0; k<particle->getTracks().size(); k++) {
+			streamlog_out(DEBUG)<<" Kaon test 3--:  track "<<k<<" d0 and track z0 "<<particle->getTracks()[k]->getD0()<<" "<<particle->getTracks()[k]->getZ0()<<std::endl;
+		}
+		streamlog_out(DEBUG) << "Charge: " << particle->getCharge() << "\n";
+		vector<float> direction = MathOperator::getDirection(particle->getMomentum());
+		int tpchits = particle->getTracks()[0]->getSubdetectorHitNumbers()[6];
+		float costheta =  std::abs(std::cos( MathOperator::getAngles(direction)[1] ));
+		if (costheta > 0.95 || tpchits < 60) 
+		{
+			streamlog_out(DEBUG) << "no candidate tracks!\n";
+			return NULL;
+		}
+		vector< LCObject * > obj = navigator.getRelatedToObjects(particle);
+		vector< float > weights = navigator.getRelatedToWeights(particle);
+		MCParticle * winner = NULL;
+		float maxweight = 0.50;
+		for (unsigned int j = 0; j < obj.size(); j++) 
+		{
+			if (weights[j] > maxweight) 
+			{
+				winner = dynamic_cast< MCParticle * >(obj[j]);
+				maxweight = weights[j];
+			}
+		}
+		if (!winner) 
+		{
+			streamlog_out(DEBUG) << "ERROR: no genparticle!\n";
+			return NULL;
+		}
+		if (winner && abs(winner->getPDG()) == 321) 
+		{
+			streamlog_out(DEBUG)<<" Kaon test 4:  nkaons "<<std::endl;
+			return particle;
+		}
+
+		return NULL;
+
+	}
   
   vector< ReconstructedParticle * > VertexChargeOperator::__filterOutCheat(vector< ReconstructedParticle * > particles, int type)
 	{

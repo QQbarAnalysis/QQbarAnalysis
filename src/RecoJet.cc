@@ -73,7 +73,7 @@ namespace QQbarProcessor
 		}
 		return sum;
 	}
-	ReconstructedParticle * RecoJet::GetRecoJet()
+	ReconstructedParticle * RecoJet::GetRawRecoJet()
 	{
 		return myRawRecoJet;
 	}

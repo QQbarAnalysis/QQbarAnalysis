@@ -32,19 +32,19 @@ namespace QQbarProcessor
 	class RecoJet : public IMPL::ReconstructedParticleImpl
 	{
 		public:
-		//
-		//	Constants
-		//
-	
-		//
-		//	Constructors
-		//
+			//
+			//	Constants
+			//
+
+			//
+			//	Constructors
+			//
 			RecoJet (EVENT::ReconstructedParticle * rawjet, float btag, float ctag, int number);// : IMPL::ReconstructedParticleImpl(rawjet);
 			RecoJet ();
 			virtual ~RecoJet () {};
-		//
-		//	Methods
-		//
+			//
+			//	Methods
+			//
 			JetCharge & GetComputedCharge();
 			const float GetBTag() const;
 			const float GetCTag() const;
@@ -57,7 +57,7 @@ namespace QQbarProcessor
 			float GetHadronCharge(bool weight = false);
 			float GetHadronMomentum();
 			float GetHadronMass();
-			EVENT::ReconstructedParticle * GetRecoJet();
+			EVENT::ReconstructedParticle * GetRawRecoJet();
 			float GetCostheta();
 			float GetMinHadronDistance();
 			float GetMaxHadronDistance();
@@ -72,24 +72,24 @@ namespace QQbarProcessor
 			void __SetMCNtracks(int n);
 			const int __GetMCOscillation() const;
 			void __SetMCOscillation(int n);
-			
+
 		protected:
-		//
-		//	Data
-		//
-			 float myBTag;
-			 float myCTag;
-			 int myNumber;
-			 int myMCPDG;
+			//
+			//	Data
+			//
+			float myBTag;
+			float myCTag;
+			int myNumber;
+			int myMCPDG;
 			float myMCCharge;
 			int myMCNtracks;
 			int myMCOscillation;
 			JetCharge myComputedCharge;
-			 EVENT::ReconstructedParticle * myRawRecoJet;
-			 std::vector<  EVENT::Vertex * > * myRecoVertices;
-		//
-		//	Private methods
-		//
+			EVENT::ReconstructedParticle * myRawRecoJet;
+			std::vector<  EVENT::Vertex * > * myRecoVertices;
+			//
+			//	Private methods
+			//
 	};
 }
 #endif

@@ -175,7 +175,18 @@ namespace QQbarProcessor
 			float _missedEnergy;
 			float _gammaT;
 
-			//hadronic
+			// jet information
+			int   _jet_nvtx[2];
+			float _jet_E[2];
+			float _jet_px[2];
+			float _jet_py[2];
+			float _jet_pz[2];
+			float _jet_M[2];
+
+			// kaon information
+			float _Top1KaondEdx[10];
+
+			// hadronic
 			float _chiHad1;
 			float _chiTopMass1;
 			float _chiTopE1;

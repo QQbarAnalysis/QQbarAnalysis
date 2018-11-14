@@ -135,6 +135,8 @@ namespace QQbarProcessor
 		_hTree->Branch("W2mass", &data._W2mass, "W2mass/F");
 		_hTree->Branch("W2momentum", &data._W2momentum, "W2momentum/F");
 		_hTree->Branch("W2costheta", &data._W2costheta, "W2costheta/F");
+		
+		// Top1
 		_hTree->Branch("Top1mass", &data._Top1mass, "Top1mass/F");
 		_hTree->Branch("Top1gamma", &data._Top1gamma, "Top1gamma/F");
 		_hTree->Branch("Top1btag", &data._Top1btag, "Top1btag/F");
@@ -155,6 +157,8 @@ namespace QQbarProcessor
 		_hTree->Branch("Top1KaonNumber", &data._Top1KaonNumber, "Top1KaonNumber/I");
 		_hTree->Branch("Top1KaonCharges", data._Top1KaonCharges, "Top1KaonCharges[Top1KaonNumber]/I");
 		_hTree->Branch("Top1KaonMomentum", data._Top1KaonMomentum, "Top1KaonMomentum[Top1KaonNumber]/F");
+		
+		// Top2
 		_hTree->Branch("Top2mass", &data._Top2mass, "Top2mass/F");
 		_hTree->Branch("Top2energy", &data._Top2energy, "Top2energy/F");
 		_hTree->Branch("Top2gamma", &data._Top2gamma, "Top2gamma/F");
@@ -175,6 +179,19 @@ namespace QQbarProcessor
 		_hTree->Branch("Top2KaonNumber", &data._Top2KaonNumber, "Top2KaonNumber/I");
 		_hTree->Branch("Top2KaonCharges", data._Top2KaonCharges, "Top2KaonCharges[Top2KaonNumber]/I");
 		_hTree->Branch("Top2KaonMomentum", data._Top2KaonMomentum, "Top2KaonMomentum[Top2KaonNumber]/F");
+
+		// Jet information
+		_hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");
+		_hTree->Branch("jet_E", data._jet_E, "jet_E[2]/F");
+		_hTree->Branch("jet_px", data._jet_px, "jet_px[2]/F");
+		_hTree->Branch("jet_py", data._jet_py, "jet_py[2]/F");
+		_hTree->Branch("jet_pz", data._jet_pz, "jet_pz[2]/F");
+		_hTree->Branch("jet_M", data._jet_M, "jet_M[2]/F");
+
+		// kaon information
+		_hTree->Branch("Top1KaondEdx", data._Top1KaondEdx, "Top1KaondEdx[Top1KaonNumber]/F");
+
+		// methods
 		_hTree->Branch("UsedBTVCM", &data._UsedBTVCM, "UsedBTVCM/I");
 		_hTree->Branch("methodUsed", &data._methodUsed, "methodUsed/I");
 		_hTree->Branch("methodRefused", &data._methodRefused, "methodRefused/I");
@@ -183,6 +200,8 @@ namespace QQbarProcessor
 		_hTree->Branch("methodTaken", data._methodTaken, "methodTaken[methodUsed]/I");
 		_hTree->Branch("qBCostheta", data._qBCostheta, "qBCostheta[2]/F");
 		_hTree->Branch("qCostheta", data._qCostheta, "qCostheta[2]/F");
+		
+		// chi
 		_hTree->Branch("chiHad", &data._chiHad, "chiHad/F");
 		_hTree->Branch("chiTopMass", &data._chiTopMass, "chiTopMass/F");
 		_hTree->Branch("chiTopE", &data._chiTopE, "chiTopE/F");
