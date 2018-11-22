@@ -22,9 +22,8 @@
 #include <TGraphErrors.h>
 #include "../style/Style.C"
 #include "../style/Labels.C"
+#include "TSystemFile.h"
 
-//#include "fastjet/ClusterSequence.hh"
-//using namespace fastjet;
 using namespace std;
 
 // Header file for the classes stored in the TTree if any.
@@ -32,8 +31,8 @@ using namespace std;
 class observable {
 public :
 
-  float btag1=0.8;
-  float btag2=0.3;
+  float btag1=0.9;
+  float btag2=0.2;
   
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -230,63 +229,150 @@ public :
    TBranch        *b_method;   //!
 
   
-   observable(TTree *tree=0);
+   observable(TString tree_s);
+   observable(TList *f=0);
    virtual ~observable();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     y23Analysis();
-   //   virtual void     PSAnalysis();
-   virtual void     Plot(bool reco_truth, int mode, int n);
-   std::vector<TH1F*> Asymm_Bc(int n, bool reco_truth);
-   std::vector<TH1F*> Asymm_Kc(int n, bool reco_truth);
+
+   virtual void     Analysis(int n, bool all, TString polarization);
    std::vector<TH1F*> Asymm_BcKc(int n, bool reco_truth);
+   virtual void     PlotCrossSection(TString s_method, TString title, TH1F* reco, TH1F* corrected, TH1F* bkg, TH1F* truth);
+
+   virtual void     Plot_p(TString s_method, TString title, std::vector<TH1F*> prob);
+   virtual void     Efficiency_plot(TString s_method, TString title, std::vector<TH1F*> eff);
+   virtual void     Selection(int n);
    virtual float    ChargeBcJet(int ijet);
    virtual float    ChargeKcJet(int ijet);
-   virtual float    CalculateP(int a, int r);
    virtual std::vector<float>    CalculateP(TH1F* a, TH1F* r);
-   TH1F*    CorrectHistoDoubleTag(TH1F* histo, float p);
-   TH1F*    CorrectHistoSingleTag(TH1F* histo, float p);
-
    TH1F*    CorrectHistoDoubleTag(TH1F* histo, std::vector<float> p);
-   TH1F*    CorrectHistoDoubleTag(TH1F* histo, std::vector<float> p, std::vector<float> p2);
-   TH1F*    CorrectHistoSingleTag(TH1F* histo, std::vector<float> p);
-
-   TH1F*    CorrectHistoSingleTag(TH1F* histo, float p, float p2);
    TGraphErrors*    Ratio(TH1F* histo, TH1F* histo_ref);
-   // TH1F*    CorrectHistoSingleTag(TH1F* histo, float p);
-   virtual float    CalculateP_Bc();
    virtual bool     PreSelection();
 
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
+   
+   float getModule(vector< float > & v)   {
+     float module = 0.0;
+     for (unsigned int i = 0; i < v.size(); i++) module += v[i]*v[i];
+     module = sqrt(module);
+     return module;
+   }
+   
+   std::vector< float > getDirection(vector<float> & vectorPoint) {
+     vector< float > vector1;
+     float module = getModule(vectorPoint);
+     for (int i = 0; i < 3; i++) vector1.push_back( vectorPoint[i]/module);
+     return vector1;
+   }
+   
+   std::vector< float > getAngles(std::vector< float > & direction) {
+       vector< float > result;
+       float epsilon = 0.00001;
+       float semi = 1.5708;
+       float pi = 2*semi;
+       float phi = 0.0;
+       if (direction[0] > 0.0 && direction[1] > 0.0 - epsilon) 
+	   phi = atan(direction[1] / direction[0]); //(direction[0] < epsilon && direction[0] > 0.0 - epsilon)?
+       if (direction[0] < 0.0 && direction[1] > 0.0) 
+	   phi = semi - atan(direction[1] / direction[0]) ;
+       if (direction[0] < 0.0 && direction[1] < 0.0 + epsilon) 
+	   phi =  atan(direction[1] / direction[0]) + pi;
+       if (direction[0] > 0.0 && direction[1] < 0.0 - epsilon) 
+	   phi = semi - atan(direction[1] / direction[0]) + pi;
+       if (direction[1] > 0.0 && direction[0] < 0.0 + epsilon && direction[0] > 0.0 -  epsilon) 
+	   phi = semi;
+       if (direction[1] < 0.0 && direction[0] < 0.0 + epsilon && direction[0] > 0.0 -  epsilon) 
+	   phi = pi + semi;
 
+       float teta = acos(direction[2]);
+       result.push_back(phi);
+       result.push_back(teta);
+       return result;
+   }
+   
+   float GetCostheta(std::vector<float> & vectorPoint){
+     float costheta1 =  -2.0;
+     std::vector< float > d1= getDirection(vectorPoint);
+     costheta1 =  std::cos( getAngles(d1).at(1) );
+     return costheta1;
+   }
+   
+ private:   
+
+   int bbbar_gen;
+   int preselection;
+   int bkg;
+   int bbbar_gen_recoil;
+   int qqbar_gen;
+  
+   int bbbar_KcKc_reco;
+   int bbbar_BcBc_reco;
+   int bbbar_BcKc_reco;
+   int bbbar_KcBc_reco;
+
+   int bbbar_BcKc_same1_reco;
+   int bbbar_BcKc_same2_reco;
+   
+   TH1F * h_bbbar;   
+   TH1F * h_bbbar_KcKc_reco;
+   TH1F * h_bbbar_KcKc_rejected;
+   TH1F * h_bbbar_BcBc_reco;
+   TH1F * h_bbbar_BcBc_rejected;
+   TH1F * h_bbbar_BcKc_reco;
+   TH1F * h_bbbar_BcKc_rejected;
+   TH1F * h_bbbar_KcBc_reco;
+   TH1F * h_bbbar_KcBc_rejected;
+   TH1F * h_bbbar_BcKc_same1_reco;
+   TH1F * h_bbbar_BcKc_same1_rejected;
+   TH1F * h_bbbar_BcKc_same2_reco;
+   TH1F * h_bbbar_BcKc_same2_rejected;
+   TH1F * asymm_BcBc[4];
+   TH1F * asymm_KcKc[4]; 
+   TH1F * asymm_BcKc[4]; 
+   TH1F * asymm_KcBc[4];   
+   TH1F * asymm_BcKc_same1[4];  
+   TH1F * asymm_BcKc_same2[4];
 
 };
 
 #endif
-
 #ifdef observable_cxx
-observable::observable(TTree *tree) : fChain(0) 
+observable::observable(TString tree_s) : fChain(0) 
 {
-// if parameter tree is not specified (or zero), connect the file
-// used to generate this class and read the Tree.
-   if (tree == 0) {
-     TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("../../ntuples/BBbar_20180911_7637.root");
-     if (!f || !f->IsOpen()) {
-       f = new TFile("../../ntuples/BBbar_20180911_7637.root");
-      }
-     f->GetObject("Stats",tree);
-   }
-   Init(tree);
+  
+  TFile *f = new TFile(tree_s);
+  TTree *tree = (TTree*)f->Get("Stats");
+  //  tree->Print();
+  Init(tree);
+  
 }
+
+observable::observable(TList *f) : fChain(0) 
+{
+// if parameter tree is not specified (or zero), use a list of of files provided as input
+
+  TIter next(f);
+  TSystemFile *file;
+  TString fname;
+  while((file = (TSystemFile*)next())){
+      fname = file->GetName();
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject(fname);
+      TTree *tree=0;
+      f->GetObject("Stats",tree);
+      Init(tree);
+  }
+}
+
 
 observable::~observable()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
+
 
 Int_t observable::GetEntry(Long64_t entry)
 {
