@@ -22,6 +22,8 @@
 #include <string>
 #include <TFile.h>
 #include <TTree.h>
+#include <TLorentzVector.h>
+#include <TVector3.h>
 #include "QQbarTools.hh"
 #include "QQbarMCOperator.hh"
 
@@ -90,6 +92,9 @@ namespace QQbarProcessor
 			void DecideOnAsymmetry(TopQuark * top, TopQuark * top2);
 			std::vector<int> getOpposite(int i, int j);
 			void test(TopQuark * top, TopQuark * top2, std::vector< RecoJet * > *jets = NULL, std::vector< RecoJet * > *jets2 = NULL, EVENT::ReconstructedParticle * particlei = NULL);
+#if 1 //RY Test
+			MCParticle* getBestMCParticleOf(ReconstructedParticle* p, LCRelationNavigator* nav);
+#endif
 
 
 			/** Input collection name.

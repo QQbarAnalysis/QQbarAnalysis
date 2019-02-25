@@ -179,6 +179,8 @@ namespace QQbarProcessor
 		_hTree->Branch("Top2KaonNumber", &data._Top2KaonNumber, "Top2KaonNumber/I");
 		_hTree->Branch("Top2KaonCharges", data._Top2KaonCharges, "Top2KaonCharges[Top2KaonNumber]/I");
 		_hTree->Branch("Top2KaonMomentum", data._Top2KaonMomentum, "Top2KaonMomentum[Top2KaonNumber]/F");
+		
+		_hTree->Branch("visM", &data._visM, "visM/D");
 
 		// Jet information
 		_hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");

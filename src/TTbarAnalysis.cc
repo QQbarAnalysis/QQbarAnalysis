@@ -181,6 +181,26 @@ namespace QQbarProcessor
 			vector< RecoJet * > * bjets = QQbarTools::getBTagJets(jets, wjets);
 			LCCollection * pfocol = evt->getCollection(_colName);
 			_stats._Thrust = pfocol->getParameters().getFloatVal("majorThrustValue");
+
+#if 0 // RY Test
+			int nPFO = pfocol->getNumberOfElements()  ;
+			TLorentzVector p4sum;
+			for(int ipfo=0; ipfo< nPFO ; ipfo++){
+				ReconstructedParticle* pfo = dynamic_cast<ReconstructedParticle*>( pfocol->getElementAt( ipfo ) ) ;
+				LCRelationNavigator nav( evt->getCollection( _colRelName) );
+				int nmcr = nav.getRelatedToObjects( pfo ).size();
+				if ( nmcr > 0 ) {
+					MCParticle* mcr = getBestMCParticleOf(pfo,&nav); // pick up a MCParticle having the highest weight (probability) in candidates.
+					if (!mcr->isOverlay()) { // Consider non-overlaid particles only.
+						TVector3 p3(pfo->getMomentum());
+						TLorentzVector p4(p3,pfo->getEnergy());
+						p4sum += p4;
+					}
+				}
+			}
+			_stats._visM = p4sum.M(); // Fill this value into a new histogram.
+#endif
+
 			std::cout << "B jets: \n";
 			QQbarTools::PrintJets(bjets);
 			std::cout << "W jets: \n";
@@ -262,9 +282,13 @@ namespace QQbarProcessor
 					_stats._Top1cosWb = std::cos( MathOperator::getAngle(candidate->GetB()->getMomentum(), candidate->GetW()->getMomentum()) );
 				}
 			}
+
 			if (chosen && wLeptonic) 
 			{
 				topLeptonic = new TopQuark(bjets->at(0), wLeptonic);
+				// Yuichi Test
+				//std::cout << "test begin\n";
+				//std::cout << "Yuichi Test = " << bjets->at(0)->GetRecoVertices()->at(1)->getAssociatedParticle()->getParticles().size() << "\n";
 			}
 			if (!chosen && wLeptonic) 
 			{
@@ -278,6 +302,9 @@ namespace QQbarProcessor
 				{
 				topLeptonic = new TopQuark(bjets->at(1));
 				}*/
+
+
+
 			_stats._W1mass = wHadronic->getMass();
 			_stats._W1momentum = MathOperator::getModule(wHadronic->getMomentum());
 			_stats._W2momentum = MathOperator::getModule(wLeptonic->getMomentum());
@@ -295,6 +322,7 @@ namespace QQbarProcessor
 			Match(mctops, mcbquarks, mcws, topHadronic);
 			MatchB(mcbquarks, topHadronic, topLeptonic, mcvtxcol);
 			ComputeCharge(topHadronic, topLeptonic);
+
 			ComputeChargeTVCM(topHadronic, topLeptonic, vtxOperator);
 
 			DecideOnAsymmetry(topHadronic, topLeptonic);
@@ -334,10 +362,10 @@ namespace QQbarProcessor
 			_stats._Top1KaonCharges[i] = kaons1[i]->getCharge();
 			_stats._Top1KaonMomentum[i] = MathOperator::getModule(kaons1[i]->getMomentum());
 			//std::cout << "\tq: " <<  kaons1[i]->getCharge() << " p: " << MathOperator::getModule(kaons1[i]->getMomentum()) <<"\n";
-			
+
 			// kaon dEdx implementation
 			_stats._Top1KaondEdx[i] = kaons1[i]->getTracks()[0]->getdEdx();
-			
+
 		}
 		//std::cout << "Kaons 2 :\n";
 		for (unsigned int i = 0; i < kaons2.size(); i++) 
@@ -1239,6 +1267,40 @@ namespace QQbarProcessor
 		result.push_back(lcandidate);
 		return result;
 	}
+
+#if 1 // RY Test
+	MCParticle* TTbarAnalysis::getBestMCParticleOf(ReconstructedParticle* p, LCRelationNavigator* nav)
+	{
+		// getting MC information
+		int nrel = nav->getRelatedToObjects(p).size();
+
+		double wmax;
+		MCParticle *best = 0;
+		for (int imc = 0; imc < nrel; imc++ ) {
+
+			MCParticle *mcp = dynamic_cast<MCParticle*>(nav->getRelatedToObjects(p)[imc]);
+
+			double trkw = double((int(nav->getRelatedToWeights(p)[imc])%10000)/1000.);
+			double calw = double((int(nav->getRelatedToWeights(p)[imc])/10000)/1000.);
+
+			if (imc==0) {
+				if (trkw>calw) wmax = trkw;
+				else           wmax = calw;
+				best = mcp;
+			} else {
+				if (trkw > wmax) {
+					wmax = trkw;
+					best = mcp;
+				}
+				if (calw > wmax) {
+					wmax = calw;
+					best = mcp;
+				}
+			}
+		}
+		return best;
+	}
+#endif
 
 	void TTbarAnalysis::End()
 	{   

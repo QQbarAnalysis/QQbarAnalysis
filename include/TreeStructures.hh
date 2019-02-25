@@ -175,6 +175,8 @@ namespace QQbarProcessor
 			float _missedEnergy;
 			float _gammaT;
 
+			double _visM;
+
 			// jet information
 			int   _jet_nvtx[2];
 			float _jet_E[2];

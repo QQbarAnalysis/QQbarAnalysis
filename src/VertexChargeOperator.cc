@@ -14,9 +14,11 @@ namespace QQbarProcessor
 	VertexChargeOperator:: VertexChargeOperator(LCCollection * pfo, LCCollection * rel)
 	{
 		myResultingB = 0;
-		doCheating = true;
+		//doCheating = true;
+		doCheating = false;
 		myRelCollection = rel;
-		myAlgorithmName = "HadronTagger";
+		//myAlgorithmName = "HadronTagger";
+		myAlgorithmName = "KaonTagger";
 		if (pfo) 
 		{
 			myPFOCollection = pfo;
@@ -65,8 +67,15 @@ namespace QQbarProcessor
 		vector< ReconstructedParticle * > kaons;
 		for (unsigned int i = 0; i < vertices->size(); i++) 
 		{
+			std::cout << "vertices->at(i)->getAssociatedParticle()->getParticles().size() = " << vertices->at(i)->getAssociatedParticle()->getParticles().size() << "\n";
 			secparticles.reserve(secparticles.size() + vertices->at(i)->getAssociatedParticle()->getParticles().size());
 			secparticles.insert(secparticles.end(), vertices->at(i)->getAssociatedParticle()->getParticles().begin(), vertices->at(i)->getAssociatedParticle()->getParticles().end());
+
+			/*
+			for (int j = 0; j < secparticles.size(); j++){
+				std::cout << "particle upsream = " << secparticles[j] << "\n";
+			}*/
+
 		}
 		//return __filterOutCheat(getKaons(secparticles),2212); //__getKaonsCheat(secparticles);
 		if (doCheating) 
@@ -291,10 +300,17 @@ namespace QQbarProcessor
 	{
 		LCRelationNavigator navigator(myRelCollection);
 		vector< ReconstructedParticle * > result;
+
+		std::cout << "particles size =  " << particles.size() << std::endl;
+
 		for (unsigned int i = 0; i < particles.size(); i++) 
 		{
 			ReconstructedParticle * particle = particles[i];
 			//std::cout << "Charge: " << particle->getCharge() << "\n";
+			if(!particle){
+				continue;
+			}
+			
 			vector<float> direction = MathOperator::getDirection(particle->getMomentum());
 			int tpchits = particle->getTracks()[0]->getSubdetectorHitNumbers()[6];
 			float p = MathOperator::getModule(particle->getMomentum());
