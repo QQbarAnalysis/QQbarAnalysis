@@ -33,12 +33,12 @@ public :
 
   float btag1=0.9;
   float btag2=0.2;
-  
+  Int_t nbins=40;
+  TString process="bbbar";
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
-
    Float_t         mc_quark_E[2];
    Float_t         mc_quark_px[2];
    Float_t         mc_quark_py[2];
@@ -58,17 +58,31 @@ public :
    Float_t         mc_quark_ps_pdg[300];
    Float_t         mc_quark_ps_charge[300];
    Int_t           mc_quark_ps_n;
+   Int_t           MCBOscillation;
+   Int_t           MCBBarOscillation;
    Int_t           mc_matching;
    Float_t         maxenergy_photon_E;
    Float_t         maxenergy_photon_costheta;
-   Float_t         y23;
-   Float_t         y12;
    Float_t         jet_E[2];
    Float_t         jet_px[2];
    Float_t         jet_py[2];
    Float_t         jet_pz[2];
    Float_t         jet_m[2];
    Float_t         jet_btag[2];
+   Float_t         y23;
+   Float_t         y12;
+   Float_t         d23;
+   Float_t         d12;
+   Float_t         oblateness;
+   Float_t         aplanarity;
+   Float_t         major_thrust_value;
+   Float_t         major_thrust_axis[3];
+   Float_t         minor_thrust_value;
+   Float_t         minor_thrust_axis[3];
+   Float_t         principle_thrust_value;
+   Float_t         principle_thrust_axis[3];
+   Float_t         sphericity;
+   Float_t         sphericity_tensor[3];
    Int_t           jet_nvtx[2];
    Int_t           jet_vtx_isprimary[2][10];
    Int_t           jet_ntrack[2];
@@ -80,58 +94,18 @@ public :
    Float_t         jet_track_pz[2][10][20];
    Float_t         jet_track_p[2][10][20];
    Float_t         jet_track_charge[2][10][20];
-   Int_t           jet_track_iskaon[2][10][20];
-   Float_t         jet_track_kaoncharge[2][10][20];
+   Int_t           jet_track_iskaon[2][10];
+   Float_t         jet_track_kaoncharge[2][10];
    Float_t         jet_track_z0[2][10][20];
    Float_t         jet_track_d0[2][10][20];
    Float_t         jet_track_phi[2][10][20];
-   Float_t         qMCcostheta[2];
-   Float_t         MCMass;
-   Float_t         MCPDG;
-   Float_t         B1momentum;
-   Float_t         B2momentum;
-   Float_t         B1Jetmomentum;
-   Float_t         B2Jetmomentum;
-   Float_t         B1mass;
-   Float_t         B2mass;
-   Float_t         B1btag;
-   Float_t         B2btag;
-   Float_t         B1chargeBalance;
-   Float_t         B2chargeBalance;
-   Int_t           B1charge;
-   Int_t           B2charge;
-   Int_t           B1VtxTag;
-   Int_t           B2VtxTag;
-   Int_t           B1KaonTag;
-   Int_t           B2KaonTag;
-   Float_t         B1costheta;
-   Float_t         B2costheta;
-   Float_t         B1truthAngle;
-   Float_t         bbbarAngle;
-   Float_t         bbbarPt;
-   Float_t         bbbarP;
-   Float_t         bbbar4JetMass;
-   Float_t         InvMass;
-   Float_t         Sphericity;
-   Float_t         Thrust;
-   Float_t         B1Y;
-   Float_t         B2Y;
-   Float_t         ZZMass1;
-   Float_t         ZZMass2;
-   Float_t         maxPhotonEnergy;
-   Float_t         kaonMomentum;
-   Float_t         maxPhotonCostheta;
-   Float_t         qCostheta[2];
-   Float_t         qCostheta1;
-   Float_t         qCostheta2;
-   Int_t           methodUsed;
-   Int_t           methodRefused;
-   Int_t           methodZero;
-   Int_t           methodCorrect;
-   Int_t           methodSameCharge[3];   //[methodRefused]
-   Int_t           methodZeroCharge[3];   //[methodZero]
-   Int_t           methodTaken[3];   //[methodUsed]
-   Int_t           method[6];
+   Int_t           pfo_n;
+   Float_t         pfo_E[300];
+   Float_t         pfo_px[300];
+   Float_t         pfo_py[300];
+   Float_t         pfo_pz[300];
+   Float_t         pfo_m[300];
+   Int_t           pfo_type[300];
 
    // List of branches
    TBranch        *b_mc_quark_E;   //!
@@ -153,17 +127,31 @@ public :
    TBranch        *b_mc_quark_ps_pdg;   //!
    TBranch        *b_mc_quark_ps_charge;   //!
    TBranch        *b_mc_quark_ps_n;   //!
+   TBranch        *b_MCBOscillation;   //!
+   TBranch        *b_MCBBarOscillation;   //!
    TBranch        *b_mc_matching;   //!
    TBranch        *b_maxenergy_photon_E;   //!
    TBranch        *b_maxenergy_photon_costheta;   //!
-   TBranch        *b_y23;   //!
-   TBranch        *b_y12;   //!
    TBranch        *b_jet_E;   //!
    TBranch        *b_jet_px;   //!
    TBranch        *b_jet_py;   //!
    TBranch        *b_jet_pz;   //!
    TBranch        *b_jet_m;   //!
    TBranch        *b_jet_btag;   //!
+   TBranch        *b_y23;   //!
+   TBranch        *b_y12;   //!
+   TBranch        *b_d23;   //!
+   TBranch        *b_d12;   //!
+   TBranch        *b_oblateness;   //!
+   TBranch        *b_aplanarity;   //!
+   TBranch        *b_major_thrust_value;   //!
+   TBranch        *b_major_thrust_axis;   //!
+   TBranch        *b_minor_thrust_value;   //!
+   TBranch        *b_minor_thrust_axis;   //!
+   TBranch        *b_principle_thrust_value;   //!
+   TBranch        *b_principle_thrust_axis;   //!
+   TBranch        *b_sphericity;   //!
+   TBranch        *b_sphericity_tensor;   //!
    TBranch        *b_jet_nvtx;   //!
    TBranch        *b_jet_vtx_isprimary;   //!
    TBranch        *b_jet_ntrack;   //!
@@ -180,54 +168,15 @@ public :
    TBranch        *b_jet_track_z0;   //!
    TBranch        *b_jet_track_d0;   //!
    TBranch        *b_jet_track_phi;   //!
-   TBranch        *b_qMCcostheta;   //!
-   TBranch        *b_MCMass;   //!
-   TBranch        *b_MCPDG;   //!
-   TBranch        *b_B1momentum;   //!
-   TBranch        *b_B2momentum;   //!
-   TBranch        *b_B1Jetmomentum;   //!
-   TBranch        *b_B2Jetmomentum;   //!
-   TBranch        *b_B1mass;   //!
-   TBranch        *b_B2mass;   //!
-   TBranch        *b_B1btag;   //!
-   TBranch        *b_B2btag;   //!
-   TBranch        *b_B1chargeBalance;   //!
-   TBranch        *b_B2chargeBalance;   //!
-   TBranch        *b_B1charge;   //!
-   TBranch        *b_B2charge;   //!
-   TBranch        *b_B1VtxTag;   //!
-   TBranch        *b_B2VtxTag;   //!
-   TBranch        *b_B1KaonTag;   //!
-   TBranch        *b_B2KaonTag;   //!
-   TBranch        *b_B1costheta;   //!
-   TBranch        *b_B2costheta;   //!
-   TBranch        *b_B1truthAngle;   //!
-   TBranch        *b_bbbarAngle;   //!
-   TBranch        *b_bbbarPt;   //!
-   TBranch        *b_bbbarP;   //!
-   TBranch        *b_bbbar4JetMass;   //!
-   TBranch        *b_InvMass;   //!
-   TBranch        *b_Sphericity;   //!
-   TBranch        *b_Thrust;   //!
-   TBranch        *b_B1Y;   //!
-   TBranch        *b_B2Y;   //!
-   TBranch        *b_ZZMass1;   //!
-   TBranch        *b_ZZMass2;   //!
-   TBranch        *b_maxPhotonEnergy;   //!
-   TBranch        *b_kaonMomentum;   //!
-   TBranch        *b_maxPhotonCostheta;   //!
-   TBranch        *b_qCostheta;   //!
-   TBranch        *b_qCostheta1;   //!
-   TBranch        *b_qCostheta2;   //!
-   TBranch        *b_methodUsed;   //!
-   TBranch        *b_methodRefused;   //!
-   TBranch        *b_methodZero;   //!
-   TBranch        *b_methodCorrect;   //!
-   TBranch        *b_methodSameCharge;   //!
-   TBranch        *b_methodZeroCharge;   //!
-   TBranch        *b_methodTaken;   //!
-   TBranch        *b_method;   //!
+   TBranch        *b_pfo_n;   //!
+   TBranch        *b_pfo_E;   //!
+   TBranch        *b_pfo_px;   //!
+   TBranch        *b_pfo_py;   //!
+   TBranch        *b_pfo_pz;   //!
+   TBranch        *b_pfo_m;   //!
+   TBranch        *b_pfo_type;   //!
 
+  
   
    observable(TString tree_s);
    observable(TList *f=0);
@@ -235,22 +184,33 @@ public :
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
+   //initialize
    virtual void     Init(TTree *tree);
+   virtual void     InitializeHistos(int n);
+   //save and output
+   virtual void     SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> resolution, TString polarization);
+   virtual void     SaveRootFile(std::vector<TH1F*> asymm_all, TString polarization);
+   virtual void     HistoEfficiencies();
+   virtual void     CoutEfficiencies();
+   //analysis
+   virtual void     Analysis(int n, TString polarization, int nbin,int cuts);
+   virtual void     AnalysisBKG(int n, TString polarization, int nbin,int cuts);
 
-   virtual void     Analysis(int n, bool all, TString polarization);
-   std::vector<TH1F*> Asymm_BcKc(int n, bool reco_truth);
-   virtual void     PlotCrossSection(TString s_method, TString title, TH1F* reco, TH1F* corrected, TH1F* bkg, TH1F* truth);
-
-   virtual void     Plot_p(TString s_method, TString title, std::vector<TH1F*> prob);
-   virtual void     Efficiency_plot(TString s_method, TString title, std::vector<TH1F*> eff);
-   virtual void     Selection(int n);
+   //preselection and charge measurement and correction
+   virtual bool     PreSelection(int);
+   virtual bool     PreSelectionTest(int);
    virtual float    ChargeBcJet(int ijet);
    virtual float    ChargeKcJet(int ijet);
    virtual std::vector<float>    CalculateP(TH1F* a, TH1F* r);
    TH1F*    CorrectHistoDoubleTag(TH1F* histo, std::vector<float> p);
-   TGraphErrors*    Ratio(TH1F* histo, TH1F* histo_ref);
-   virtual bool     PreSelection();
+   TH1F*    MakeCorrection(TString type, TH1F* reco, TH1F* rejected);
 
+   //pre-analysis
+   virtual void      AngularDistributions(int n_entries, TString pol);
+   virtual void      Selection(int, int, TString);
+   virtual void      SelectionBKG(int, int, TString);
+   
+   
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
    
@@ -315,8 +275,9 @@ public :
 
    int bbbar_BcKc_same1_reco;
    int bbbar_BcKc_same2_reco;
-   
-   TH1F * h_bbbar;   
+
+   TH1F * h_bbbar;
+   TH1F * h_bbbar_recocuts;
    TH1F * h_bbbar_KcKc_reco;
    TH1F * h_bbbar_KcKc_rejected;
    TH1F * h_bbbar_BcBc_reco;
@@ -329,12 +290,38 @@ public :
    TH1F * h_bbbar_BcKc_same1_rejected;
    TH1F * h_bbbar_BcKc_same2_reco;
    TH1F * h_bbbar_BcKc_same2_rejected;
-   TH1F * asymm_BcBc[4];
-   TH1F * asymm_KcKc[4]; 
-   TH1F * asymm_BcKc[4]; 
-   TH1F * asymm_KcBc[4];   
-   TH1F * asymm_BcKc_same1[4];  
-   TH1F * asymm_BcKc_same2[4];
+   TH1F * asymm_BcBc[5];
+   TH1F * asymm_KcKc[5]; 
+   TH1F * asymm_BcKc[5]; 
+   TH1F * asymm_KcBc[5];   
+   TH1F * asymm_BcKc_same1[5];  
+   TH1F * asymm_BcKc_same2[5];
+
+   //efficiency plots
+   TH1F * h_cos_parton;
+   TH1F * h_cos_preselection;
+   TH1F * h_cos_charge_BcBc;
+   TH1F * h_cos_charge_KcKc;
+   TH1F * h_cos_charge_BcKc;
+   TH1F * h_cos_charge_KcBc;
+   TH1F * h_cos_charge_BcKc_same1;
+   TH1F * h_cos_charge_BcKc_same2;
+
+   //resolution plots
+   TH2F * h_resolution_BcBc;
+   TH2F * h_resolution_KcKc;
+   TH2F * h_resolution_BcKc;
+   TH2F * h_resolution_KcBc;
+   TH2F * h_resolution_BcKc_same1;
+   TH2F * h_resolution_BcKc_same2;
+
+   //resolution_jettrack plots
+   TH2F * h_resolution_jettrack_BcBc;
+   TH2F * h_resolution_jettrack_KcKc;
+   TH2F * h_resolution_jettrack_BcKc;
+   TH2F * h_resolution_jettrack_KcBc;
+   TH2F * h_resolution_jettrack_BcKc_same1;
+   TH2F * h_resolution_jettrack_BcKc_same2;
 
 };
 
@@ -408,7 +395,7 @@ void observable::Init(TTree *tree)
    fChain = tree;
    fCurrent = -1;
    fChain->SetMakeClass(1);
-
+   
    fChain->SetBranchAddress("mc_quark_E", mc_quark_E, &b_mc_quark_E);
    fChain->SetBranchAddress("mc_quark_px", mc_quark_px, &b_mc_quark_px);
    fChain->SetBranchAddress("mc_quark_py", mc_quark_py, &b_mc_quark_py);
@@ -428,17 +415,31 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("mc_quark_ps_pdg", mc_quark_ps_pdg, &b_mc_quark_ps_pdg);
    fChain->SetBranchAddress("mc_quark_ps_charge", mc_quark_ps_charge, &b_mc_quark_ps_charge);
    fChain->SetBranchAddress("mc_quark_ps_n", &mc_quark_ps_n, &b_mc_quark_ps_n);
+   fChain->SetBranchAddress("MCBOscillation", &MCBOscillation, &b_MCBOscillation);
+   fChain->SetBranchAddress("MCBBarOscillation", &MCBBarOscillation, &b_MCBBarOscillation);
    fChain->SetBranchAddress("mc_matching", &mc_matching, &b_mc_matching);
    fChain->SetBranchAddress("maxenergy_photon_E", &maxenergy_photon_E, &b_maxenergy_photon_E);
    fChain->SetBranchAddress("maxenergy_photon_costheta", &maxenergy_photon_costheta, &b_maxenergy_photon_costheta);
-   fChain->SetBranchAddress("y23", &y23, &b_y23);
-   fChain->SetBranchAddress("y12", &y12, &b_y12);
    fChain->SetBranchAddress("jet_E", jet_E, &b_jet_E);
    fChain->SetBranchAddress("jet_px", jet_px, &b_jet_px);
    fChain->SetBranchAddress("jet_py", jet_py, &b_jet_py);
    fChain->SetBranchAddress("jet_pz", jet_pz, &b_jet_pz);
    fChain->SetBranchAddress("jet_m", jet_m, &b_jet_m);
    fChain->SetBranchAddress("jet_btag", jet_btag, &b_jet_btag);
+   fChain->SetBranchAddress("y23", &y23, &b_y23);
+   fChain->SetBranchAddress("y12", &y12, &b_y12);
+   fChain->SetBranchAddress("d23", &d23, &b_d23);
+   fChain->SetBranchAddress("d12", &d12, &b_d12);
+   fChain->SetBranchAddress("oblateness", &oblateness, &b_oblateness);
+   fChain->SetBranchAddress("aplanarity", &aplanarity, &b_aplanarity);
+   fChain->SetBranchAddress("major_thrust_value", &major_thrust_value, &b_major_thrust_value);
+   fChain->SetBranchAddress("major_thrust_axis", major_thrust_axis, &b_major_thrust_axis);
+   fChain->SetBranchAddress("minor_thrust_value", &minor_thrust_value, &b_minor_thrust_value);
+   fChain->SetBranchAddress("minor_thrust_axis", minor_thrust_axis, &b_minor_thrust_axis);
+   fChain->SetBranchAddress("principle_thrust_value", &principle_thrust_value, &b_principle_thrust_value);
+   fChain->SetBranchAddress("principle_thrust_axis", principle_thrust_axis, &b_principle_thrust_axis);
+   fChain->SetBranchAddress("sphericity", &sphericity, &b_sphericity);
+   fChain->SetBranchAddress("sphericity_tensor", sphericity_tensor, &b_sphericity_tensor);
    fChain->SetBranchAddress("jet_nvtx", jet_nvtx, &b_jet_nvtx);
    fChain->SetBranchAddress("jet_vtx_isprimary", jet_vtx_isprimary, &b_jet_vtx_isprimary);
    fChain->SetBranchAddress("jet_ntrack", jet_ntrack, &b_jet_ntrack);
@@ -455,53 +456,13 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("jet_track_z0", jet_track_z0, &b_jet_track_z0);
    fChain->SetBranchAddress("jet_track_d0", jet_track_d0, &b_jet_track_d0);
    fChain->SetBranchAddress("jet_track_phi", jet_track_phi, &b_jet_track_phi);
-   fChain->SetBranchAddress("qMCcostheta", qMCcostheta, &b_qMCcostheta);
-   fChain->SetBranchAddress("MCMass", &MCMass, &b_MCMass);
-   fChain->SetBranchAddress("MCPDG", &MCPDG, &b_MCPDG);
-   fChain->SetBranchAddress("B1momentum", &B1momentum, &b_B1momentum);
-   fChain->SetBranchAddress("B2momentum", &B2momentum, &b_B2momentum);
-   fChain->SetBranchAddress("B1Jetmomentum", &B1Jetmomentum, &b_B1Jetmomentum);
-   fChain->SetBranchAddress("B2Jetmomentum", &B2Jetmomentum, &b_B2Jetmomentum);
-   fChain->SetBranchAddress("B1mass", &B1mass, &b_B1mass);
-   fChain->SetBranchAddress("B2mass", &B2mass, &b_B2mass);
-   fChain->SetBranchAddress("B1btag", &B1btag, &b_B1btag);
-   fChain->SetBranchAddress("B2btag", &B2btag, &b_B2btag);
-   fChain->SetBranchAddress("B1chargeBalance", &B1chargeBalance, &b_B1chargeBalance);
-   fChain->SetBranchAddress("B2chargeBalance", &B2chargeBalance, &b_B2chargeBalance);
-   fChain->SetBranchAddress("B1charge", &B1charge, &b_B1charge);
-   fChain->SetBranchAddress("B2charge", &B2charge, &b_B2charge);
-   fChain->SetBranchAddress("B1VtxTag", &B1VtxTag, &b_B1VtxTag);
-   fChain->SetBranchAddress("B2VtxTag", &B2VtxTag, &b_B2VtxTag);
-   fChain->SetBranchAddress("B1KaonTag", &B1KaonTag, &b_B1KaonTag);
-   fChain->SetBranchAddress("B2KaonTag", &B2KaonTag, &b_B2KaonTag);
-   fChain->SetBranchAddress("B1costheta", &B1costheta, &b_B1costheta);
-   fChain->SetBranchAddress("B2costheta", &B2costheta, &b_B2costheta);
-   fChain->SetBranchAddress("B1truthAngle", &B1truthAngle, &b_B1truthAngle);
-   fChain->SetBranchAddress("bbbarAngle", &bbbarAngle, &b_bbbarAngle);
-   fChain->SetBranchAddress("bbbarPt", &bbbarPt, &b_bbbarPt);
-   fChain->SetBranchAddress("bbbarP", &bbbarP, &b_bbbarP);
-   fChain->SetBranchAddress("bbbar4JetMass", &bbbar4JetMass, &b_bbbar4JetMass);
-   fChain->SetBranchAddress("InvMass", &InvMass, &b_InvMass);
-   fChain->SetBranchAddress("Sphericity", &Sphericity, &b_Sphericity);
-   fChain->SetBranchAddress("Thrust", &Thrust, &b_Thrust);
-   fChain->SetBranchAddress("B1Y", &B1Y, &b_B1Y);
-   fChain->SetBranchAddress("B2Y", &B2Y, &b_B2Y);
-   fChain->SetBranchAddress("ZZMass1", &ZZMass1, &b_ZZMass1);
-   fChain->SetBranchAddress("ZZMass2", &ZZMass2, &b_ZZMass2);
-   fChain->SetBranchAddress("maxPhotonEnergy", &maxPhotonEnergy, &b_maxPhotonEnergy);
-   fChain->SetBranchAddress("kaonMomentum", &kaonMomentum, &b_kaonMomentum);
-   fChain->SetBranchAddress("maxPhotonCostheta", &maxPhotonCostheta, &b_maxPhotonCostheta);
-   fChain->SetBranchAddress("qCostheta", qCostheta, &b_qCostheta);
-   fChain->SetBranchAddress("qCostheta1", &qCostheta1, &b_qCostheta1);
-   fChain->SetBranchAddress("qCostheta2", &qCostheta2, &b_qCostheta2);
-   fChain->SetBranchAddress("methodUsed", &methodUsed, &b_methodUsed);
-   fChain->SetBranchAddress("methodRefused", &methodRefused, &b_methodRefused);
-   fChain->SetBranchAddress("methodZero", &methodZero, &b_methodZero);
-   fChain->SetBranchAddress("methodCorrect", &methodCorrect, &b_methodCorrect);
-   fChain->SetBranchAddress("methodSameCharge", methodSameCharge, &b_methodSameCharge);
-   fChain->SetBranchAddress("methodZeroCharge", methodZeroCharge, &b_methodZeroCharge);
-   fChain->SetBranchAddress("methodTaken", methodTaken, &b_methodTaken);
-   fChain->SetBranchAddress("method", method, &b_method);
+   fChain->SetBranchAddress("pfo_n", &pfo_n, &b_pfo_n);
+   fChain->SetBranchAddress("pfo_E", pfo_E, &b_pfo_E);
+   fChain->SetBranchAddress("pfo_px", pfo_px, &b_pfo_px);
+   fChain->SetBranchAddress("pfo_py", pfo_py, &b_pfo_py);
+   fChain->SetBranchAddress("pfo_pz", pfo_pz, &b_pfo_pz);
+   fChain->SetBranchAddress("pfo_m", pfo_m, &b_pfo_m);
+   fChain->SetBranchAddress("pfo_type", pfo_type, &b_pfo_type);
    Notify();
 }
 
