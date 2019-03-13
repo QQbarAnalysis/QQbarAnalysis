@@ -132,7 +132,7 @@ void fit() {
  
   TString filename = TString::Format("%s/bbbar_%s_cuts4_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),model.Data(),pol.Data(),nbins);
   TFile *f = new TFile(filename);
-  TH1F *h_corrected = (TH1F*)f->Get("corrected_BcBc");
+  TH1F *h_corrected = (TH1F*)f->Get("corrected");
   h_corrected->Sumw2();
 
 

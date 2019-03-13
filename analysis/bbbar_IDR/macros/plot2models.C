@@ -37,7 +37,7 @@ void plot2models() {
   //---------------------------------
   TString filename = TString::Format("%s/bbbar_%s_cuts4_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),model.Data(),pol.Data(),nbins);
   TFile *f = new TFile(filename);
-  TH1F *h_corrected = (TH1F*)f->Get("corrected_BcBc");
+  TH1F *h_corrected = (TH1F*)f->Get("corrected");
   h_corrected->Sumw2();
 
   TH1F *h_parton = (TH1F*)f->Get("parton");
@@ -48,7 +48,7 @@ void plot2models() {
   h_eff->Divide(h_parton);
   
   double max =0;
-  for(int i=nbins/2; i<nbins; i++) if(h_eff->GetBinContent(i+1)>max) max = h_eff->GetBinContent(i+1);
+  for(int i=nbins/2; i<nbins-3; i++) if(h_eff->GetBinContent(i+1)>max) max = h_eff->GetBinContent(i+1);
   h_eff->Scale(1./max);
   
   for(int i=0; i<nbins+2; i++) {  
@@ -74,7 +74,7 @@ void plot2models() {
   model="s5_valencia1.4";
   filename = TString::Format("%s/bbbar_%s_cuts4_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),model.Data(),pol.Data(),nbins);
   TFile *f2 = new TFile(filename);
-  TH1F *h2_corrected = (TH1F*)f2->Get("corrected_BcBc");
+  TH1F *h2_corrected = (TH1F*)f2->Get("corrected");
   h2_corrected->Sumw2();
 
   TH1F *h2_parton = (TH1F*)f2->Get("parton");
@@ -83,7 +83,7 @@ void plot2models() {
   TH1F *h2_eff = (TH1F*)f2->Get("parton_recocuts");
   h2_eff->Sumw2();
   h2_eff->Divide(h2_parton);
-  
+
   max =0;
   for(int i=nbins/2; i<nbins; i++) if(h2_eff->GetBinContent(i+1)>max) max = h2_eff->GetBinContent(i+1);
   h2_eff->Scale(1./max);

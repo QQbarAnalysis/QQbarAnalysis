@@ -1,7 +1,7 @@
 void purity()
 {
 //=========Macro generated from canvas: canvas2/canvas2
-//=========  (Mon Mar 11 17:02:06 2019) by ROOT version 6.11/01
+//=========  (Wed Mar 13 18:28:10 2019) by ROOT version 6.11/01
    TCanvas *canvas2 = new TCanvas("canvas2", "canvas2",1345,108,1000,800);
    gStyle->SetOptStat(0);
    canvas2->Range(-1.332608,0.1278481,3.77119,1.203797);
@@ -88,20 +88,20 @@ void purity()
    2,
    3};
    Double_t Graph1_fy1002[4] = {
-   0.8016585,
-   0.561754,
-   0.6076556,
-   0.6462317};
+   0.802436,
+   0.7586937,
+   0.7355065,
+   0.7930785};
    Double_t Graph1_fex1002[4] = {
    0.5,
    0.5,
    0.5,
    0.5};
    Double_t Graph1_fey1002[4] = {
-   0.01616848,
-   0.01652134,
-   0.07475763,
-   0.05661533};
+   0.0159936,
+   0.01056699,
+   0.05310067,
+   0.03298672};
    gre = new TGraphErrors(4,Graph1_fx1002,Graph1_fy1002,Graph1_fex1002,Graph1_fey1002);
    gre->SetName("Graph1");
    gre->SetTitle("Graph");
@@ -112,8 +112,8 @@ void purity()
    gre->SetMarkerStyle(21);
    
    TH1F *Graph_Graph1002 = new TH1F("Graph_Graph1002","Graph",100,-0.9,3.9);
-   Graph_Graph1002->SetMinimum(0.5044051);
-   Graph_Graph1002->SetMaximum(0.8463199);
+   Graph_Graph1002->SetMinimum(0.6680399);
+   Graph_Graph1002->SetMaximum(0.8404312);
    Graph_Graph1002->SetDirectory(0);
    Graph_Graph1002->SetStats(0);
    Graph_Graph1002->SetLineWidth(2);
@@ -144,20 +144,20 @@ void purity()
    2,
    3};
    Double_t Graph2_fy1003[4] = {
-   0.8055516,
-   0.5388477,
-   0.604745,
-   0.6325119};
+   0.8114574,
+   0.7081217,
+   0.702571,
+   0.7860803};
    Double_t Graph2_fex1003[4] = {
    0.5,
    0.5,
    0.5,
    0.5};
    Double_t Graph2_fey1003[4] = {
-   0.0158315,
-   0.01138969,
-   0.07936233,
-   0.06469261};
+   0.01532125,
+   0.01418616,
+   0.06295126,
+   0.03522827};
    gre = new TGraphErrors(4,Graph2_fx1003,Graph2_fy1003,Graph2_fex1003,Graph2_fey1003);
    gre->SetName("Graph2");
    gre->SetTitle("Graph");
@@ -169,8 +169,8 @@ void purity()
    gre->SetMarkerStyle(22);
    
    TH1F *Graph_Graph1003 = new TH1F("Graph_Graph1003","Graph",100,-0.9,3.9);
-   Graph_Graph1003->SetMinimum(0.4957826);
-   Graph_Graph1003->SetMaximum(0.8509832);
+   Graph_Graph1003->SetMinimum(0.6209039);
+   Graph_Graph1003->SetMaximum(0.8454945);
    Graph_Graph1003->SetDirectory(0);
    Graph_Graph1003->SetStats(0);
    Graph_Graph1003->SetLineWidth(2);
