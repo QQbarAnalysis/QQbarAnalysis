@@ -94,18 +94,12 @@ public :
    Float_t         jet_track_pz[2][10][20];
    Float_t         jet_track_p[2][10][20];
    Float_t         jet_track_charge[2][10][20];
-   Int_t           jet_track_iskaon[2][10];
-   Float_t         jet_track_kaoncharge[2][10];
+   Int_t           jet_track_iskaon[2][10][20];
+   Int_t           jet_track_iskaoncheat[2][10][20];
    Float_t         jet_track_z0[2][10][20];
    Float_t         jet_track_d0[2][10][20];
    Float_t         jet_track_phi[2][10][20];
-   Int_t           pfo_n;
-   Float_t         pfo_E[300];
-   Float_t         pfo_px[300];
-   Float_t         pfo_py[300];
-   Float_t         pfo_pz[300];
-   Float_t         pfo_m[300];
-   Int_t           pfo_type[300];
+
 
    // List of branches
    TBranch        *b_mc_quark_E;   //!
@@ -164,17 +158,10 @@ public :
    TBranch        *b_jet_track_p;   //!
    TBranch        *b_jet_track_charge;   //!
    TBranch        *b_jet_track_iskaon;   //!
-   TBranch        *b_jet_track_kaoncharge;   //!
+   TBranch        *b_jet_track_iskaoncheat;   //!
    TBranch        *b_jet_track_z0;   //!
    TBranch        *b_jet_track_d0;   //!
    TBranch        *b_jet_track_phi;   //!
-   TBranch        *b_pfo_n;   //!
-   TBranch        *b_pfo_E;   //!
-   TBranch        *b_pfo_px;   //!
-   TBranch        *b_pfo_py;   //!
-   TBranch        *b_pfo_pz;   //!
-   TBranch        *b_pfo_m;   //!
-   TBranch        *b_pfo_type;   //!
 
   
   
@@ -452,17 +439,10 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("jet_track_p", jet_track_p, &b_jet_track_p);
    fChain->SetBranchAddress("jet_track_charge", jet_track_charge, &b_jet_track_charge);
    fChain->SetBranchAddress("jet_track_iskaon", jet_track_iskaon, &b_jet_track_iskaon);
-   fChain->SetBranchAddress("jet_track_kaoncharge", jet_track_kaoncharge, &b_jet_track_kaoncharge);
+   fChain->SetBranchAddress("jet_track_iskaoncheat", jet_track_iskaoncheat, &b_jet_track_iskaoncheat);
    fChain->SetBranchAddress("jet_track_z0", jet_track_z0, &b_jet_track_z0);
    fChain->SetBranchAddress("jet_track_d0", jet_track_d0, &b_jet_track_d0);
    fChain->SetBranchAddress("jet_track_phi", jet_track_phi, &b_jet_track_phi);
-   fChain->SetBranchAddress("pfo_n", &pfo_n, &b_pfo_n);
-   fChain->SetBranchAddress("pfo_E", pfo_E, &b_pfo_E);
-   fChain->SetBranchAddress("pfo_px", pfo_px, &b_pfo_px);
-   fChain->SetBranchAddress("pfo_py", pfo_py, &b_pfo_py);
-   fChain->SetBranchAddress("pfo_pz", pfo_pz, &b_pfo_pz);
-   fChain->SetBranchAddress("pfo_m", pfo_m, &b_pfo_m);
-   fChain->SetBranchAddress("pfo_type", pfo_type, &b_pfo_type);
    Notify();
 }
 

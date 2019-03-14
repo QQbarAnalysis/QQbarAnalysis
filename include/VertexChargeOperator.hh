@@ -30,7 +30,7 @@ namespace QQbarProcessor
     //
     //	Constructors
     //
-    VertexChargeOperator (EVENT::LCCollection * pfo, EVENT::LCCollection * rel = NULL) ;
+    VertexChargeOperator (EVENT::LCCollection * pfo, EVENT::LCCollection * rel = NULL, bool cheat=false, std::string kaontagger="KaonTagger") ;
     virtual ~VertexChargeOperator () { delete myPIDHandler; };
     //
     //	Methods
@@ -41,7 +41,11 @@ namespace QQbarProcessor
     std::vector< EVENT::ReconstructedParticle * > GetKaons(RecoJet * top);
     float ComputeCharge(RecoJet * top);
     EVENT::ReconstructedParticle * __getKaonsCheat( EVENT::ReconstructedParticle * &particle);
+    EVENT::ReconstructedParticle * __getHadronsCheat( EVENT::ReconstructedParticle * &particle, int pdg);
     bool __magicBall(float threshold, float seed = 0.0);
+    bool isKaon(EVENT::ReconstructedParticle *particle);
+    bool isKaonCheat(EVENT::ReconstructedParticle *particle);
+
   private:
     //
     //	Data

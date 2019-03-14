@@ -582,7 +582,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	if( fabs(mc_quark_pdg[0]==5) && bbmass>180)	{
 	  h_resolution_KcKc->Fill(cos_truth,cos_reco_truth);
 	  h_resolution_jettrack_KcKc->Fill(cos_truth,cos_trackreco_truth);
-	  //h_bbbar_recocuts->Fill(costheta_bbbar);
+	  h_bbbar_recocuts->Fill(costheta_bbbar);
 	  
 	  asymm_KcKc[0]->Fill(cos_reco);
 	  asymm_KcKc[1]->Fill(cos_reco_truth);
@@ -621,7 +621,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	if( fabs(mc_quark_pdg[0]==5) && bbmass>180)	{
 	  h_resolution_BcKc->Fill(cos_truth,cos_reco_truth);
 	  h_resolution_jettrack_BcKc->Fill(cos_truth,cos_trackreco_truth);
-	  //          h_bbbar_recocuts->Fill(costheta_bbbar);
+	  h_bbbar_recocuts->Fill(costheta_bbbar);
 	  
 	  asymm_BcKc[0]->Fill(cos_reco);
 	  asymm_BcKc[1]->Fill(cos_reco_truth);
@@ -660,7 +660,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	if( fabs(mc_quark_pdg[0]==5) && bbmass>180) {
 	  h_resolution_KcBc->Fill(cos_truth,cos_reco_truth);
 	  h_resolution_jettrack_KcBc->Fill(cos_truth,cos_trackreco_truth);
-	  //          h_bbbar_recocuts->Fill(costheta_bbbar);
+	  h_bbbar_recocuts->Fill(costheta_bbbar);
 	  
 	  asymm_KcBc[0]->Fill(cos_reco);
 	  asymm_KcBc[1]->Fill(cos_reco_truth);
@@ -682,11 +682,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 
     if(taken == false ) {
 
-    if(Bc[0]*Kc[0]<0 && (Bc[1]==0 || Kc[1]==0)){
+    if(Bc[0]*Kc[0]<0 ){
       h_bbbar_BcKc_same1_rejected->Fill( costheta_BcKc_same1);
 	h_bbbar_BcKc_same1_rejected->Fill( -costheta_BcKc_same1);
       }
-      if( Bc[0]*Kc[0]>0 && (Bc[1]==0 || Kc[1]==0)) {
+      if( Bc[0]*Kc[0]>0 && (Bc[1]==0 && Kc[1]==0)) {
 	if(Bc[0] < 0) h_bbbar_BcKc_same1_reco->Fill( costheta_BcKc_same1);
 	else h_bbbar_BcKc_same1_reco->Fill( -costheta_BcKc_same1);
       }
@@ -704,7 +704,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	if( fabs(mc_quark_pdg[0]==5) && bbmass>180) {
 	  h_resolution_BcKc_same1->Fill(cos_truth,cos_reco_truth);
 	  h_resolution_jettrack_BcKc_same1->Fill(cos_truth,cos_trackreco_truth);
-	  //          h_bbbar_recocuts->Fill(costheta_bbbar);
+	  h_bbbar_recocuts->Fill(costheta_bbbar);
 	  
 	  asymm_BcKc_same1[0]->Fill(cos_reco);
 	  asymm_BcKc_same1[1]->Fill(cos_reco_truth);
@@ -726,7 +726,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
     //Information to calculate p, for BcKc category
     if(taken == false) {
 
-    if(Bc[1]*Kc[1]<0  && Bc[0]==0 && Kc[0]==0 ){
+    if(Bc[1]*Kc[1]<0   ){
       h_bbbar_BcKc_same2_rejected->Fill( costheta_BcKc_same2);
       h_bbbar_BcKc_same2_rejected->Fill( -costheta_BcKc_same2);
     }
@@ -745,7 +745,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	if( fabs(mc_quark_pdg[0]==5) && bbmass>180) {
 	  h_resolution_BcKc_same2->Fill(cos_truth,cos_reco_truth);
 	  h_resolution_jettrack_BcKc_same2->Fill(cos_truth,cos_trackreco_truth);
-	  //          h_bbbar_recocuts->Fill(costheta_bbbar);
+	  h_bbbar_recocuts->Fill(costheta_bbbar);
 	  
 	  asymm_BcKc_same2[0]->Fill(cos_reco);
 	  asymm_BcKc_same2[1]->Fill(cos_reco_truth);
@@ -1741,7 +1741,6 @@ void observable::AngularDistributions(int n_entries=-1,  TString polarization="e
   qqbar_gen=0;
 
   TH1F * h_cos_b = new TH1F("h_cos_b","h_cos_b",160,-1,1);
-  TH1F * h_cos_pfo = new TH1F("h_cos_pfo","h_cos_pfo",160,-1,1);
   TH1F * h_cos_q = new TH1F("h_cos_q","h_cos_q",160,-1,1);
   
   //--------------------------------------------------------------------------------------------------------
@@ -1896,20 +1895,8 @@ void observable::AngularDistributions(int n_entries=-1,  TString polarization="e
 	}
       }
     }
-      
-    for(int ipfo=0; ipfo<300; ipfo++) {
-      if(fabs(pfo_px[ipfo])!=0) {
-	std::vector<float> p0;
-	p0.push_back(pfo_px[ipfo]);
-	p0.push_back(pfo_py[ipfo]);
-	p0.push_back(pfo_pz[ipfo]);
-	
-	float costheta0=GetCostheta(p0);
-	h_cos_pfo->Fill(costheta0);
-      }
-    }
 
-
+ 
     if(PreSelectionTest(0)==true) {
 
       for(int ijet=0; ijet<2; ijet++) {
@@ -1987,7 +1974,7 @@ void observable::AngularDistributions(int n_entries=-1,  TString polarization="e
 
   cout<<selected_parton_level<<" "<<selected_jet_level<<endl;
   h_cos_b->Write();
-  h_cos_pfo->Write();
+
   h_cos_q->Write();
   
   //--------------------------------------------------------------------------------------------------------
@@ -2068,16 +2055,16 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
 	
 	float accepted_total=0;
 	float rejected_total=0;
-	for(int i=2; i<nbins/2-2; i++) {
-	  if(h_accepted->GetBinContent(nbins+1-i)>0 && h_accepted->GetBinContent(nbins+1-i)<1000000 &&
-	     h_accepted->GetBinContent(i)>0 && h_accepted->GetBinContent(i)<1000000 &&
-	     h_rejected->GetBinContent(nbins+1-i)>0 && h_rejected->GetBinContent(nbins+1-i)<1000000 ) {
-	    //	    cout<<j1<<" "<<j2<<" "<<j3<<" "<<i<<" "<<h_accepted->GetBinContent(nbins+1-i)<<" "<<h_accepted->GetBinContent(i)<<" "<<h_rejected->GetBinContent(nbins+1-i)<<endl;
+	for(int i=3; i<nbins/2-3; i++) {
+	  //	  if(h_accepted->GetBinContent(nbins+1-i)>0 && h_accepted->GetBinContent(nbins+1-i)<1000000 &&
+	  //     h_accepted->GetBinContent(i)>0 && h_accepted->GetBinContent(i)<1000000 &&
+	  //    h_rejected->GetBinContent(nbins+1-i)>0 && h_rejected->GetBinContent(nbins+1-i)<1000000 ) {
+	  //cout<<j1<<" "<<j2<<" "<<j3<<" "<<i<<" "<<h_accepted->GetBinContent(nbins+1-i)<<" "<<h_accepted->GetBinContent(i)<<" "<<h_rejected->GetBinContent(nbins+1-i)<<endl;
 	    accepted_total += h_accepted->GetBinContent(nbins+1-i)+float(j1)*sqrt(h_accepted->GetBinContent(nbins+1-i));
 	    rejected_total += h_rejected->GetBinContent(nbins+1-i)+float(j2)*sqrt(h_rejected->GetBinContent(nbins+1-i));
 	    accepted_total += h_accepted->GetBinContent(i)+float(j3)*sqrt(h_accepted->GetBinContent(i));
 	    // rejected += h_rejected->GetBinContent(i);
-	  }
+	    //	  }
 	}
 	float a=1;
 	float b=-1;
@@ -2089,7 +2076,7 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
 	if(p<0) p=0;
 	if(p2<0) p2=0;
 	if(p >0 || p2>0 ) p=max(p,p2);
-	//	cout<<p<<endl;
+	//	cout<<j1<<" "<<j2<<" "<<j3<<" "<<p<<endl;
 	if(p<pvaluemin && p>0 && p<1) pvaluemin=p;
 	if(p>pvaluemax && p>0 && p<1) pvaluemax=p;
       }
@@ -2420,13 +2407,14 @@ float observable::ChargeKcJet(int ijet){//, int eff=0.88) {
 
   float charge=0;
   float n=0;
-  for(int ikaon=0; ikaon<10; ikaon++) {
-    if(jet_track_iskaon[ijet][ikaon]==1) {
-      charge+=jet_track_kaoncharge[ijet][ikaon];
-      n++;
+
+  for(int ivtx=0; ivtx<jet_nvtx[ijet]; ivtx++) {
+    for(int itrack=0; itrack<jet_vtx_ntrack[ijet][ivtx]; itrack++) {
+      //double mom = sqrt(pow(jet_track_px[ijet][ivtx][itrack],2)+pow(jet_track_py[ijet][ivtx][itrack],2)+pow(jet_track_pz[ijet][ivtx][itrack],2));
+      if(jet_track_iskaon[ijet][ivtx][itrack]==1) charge+=jet_track_charge[ijet][ivtx][itrack];
     }
   }
-
+  
   return charge;
 }
 
