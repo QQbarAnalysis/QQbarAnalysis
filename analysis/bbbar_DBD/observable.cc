@@ -143,28 +143,28 @@ void observable::HistoEfficiencies() {
   h_cos_preselection->Divide(h_cos_parton);
 
   /*
-  float max=0;
-  for(int i=0; i<20; i++) {
+    float max=0;
+    for(int i=0; i<20; i++) {
     if(h_cos_preselection->GetBinContent(i+1)>max) max=h_cos_preselection->GetBinContent(i+1);
-  }
-   h_cos_preselection->Scale(1./max);
+    }
+    h_cos_preselection->Scale(1./max);
 
-  float max_BcBc=0, max_KcKc=0, max_BcKc=0, max_KcBc=0, max_BcKc_same1=0, max_BcKc_same2=0;
-  for(int i=0; i<20; i++) {
+    float max_BcBc=0, max_KcKc=0, max_BcKc=0, max_KcBc=0, max_BcKc_same1=0, max_BcKc_same2=0;
+    for(int i=0; i<20; i++) {
     if(h_cos_charge_BcBc->GetBinContent(i+1)>max_BcBc) max_BcBc=h_cos_charge_BcBc->GetBinContent(i+1);
     if(h_cos_charge_KcKc->GetBinContent(i+1)>max_KcKc) max_KcKc=h_cos_charge_KcKc->GetBinContent(i+1);
     if(h_cos_charge_BcKc->GetBinContent(i+1)>max_BcKc) max_BcKc=h_cos_charge_BcKc->GetBinContent(i+1);
     if(h_cos_charge_KcBc->GetBinContent(i+1)>max_KcBc) max_KcBc=h_cos_charge_KcBc->GetBinContent(i+1);
     if(h_cos_charge_BcKc_same1->GetBinContent(i+1)>max_BcKc_same1) max_BcKc_same1=h_cos_charge_BcKc_same1->GetBinContent(i+1);
     if(h_cos_charge_BcKc_same2->GetBinContent(i+1)>max_BcKc_same2) max_BcKc_same2=h_cos_charge_BcKc_same2->GetBinContent(i+1);
-  }
+    }
   
-  h_cos_charge_BcBc->Scale(1./max_BcBc);
-  h_cos_charge_KcKc->Scale(1./max_KcKc);
-  h_cos_charge_BcKc->Scale(1./max_BcKc);
-  h_cos_charge_KcBc->Scale(1./max_KcBc);
-  h_cos_charge_BcKc_same1->Scale(1./max_BcKc_same1);
-  h_cos_charge_BcKc_same2->Scale(1./max_BcKc_same2);*/
+    h_cos_charge_BcBc->Scale(1./max_BcBc);
+    h_cos_charge_KcKc->Scale(1./max_KcKc);
+    h_cos_charge_BcKc->Scale(1./max_BcKc);
+    h_cos_charge_KcBc->Scale(1./max_KcBc);
+    h_cos_charge_BcKc_same1->Scale(1./max_BcKc_same1);
+    h_cos_charge_BcKc_same2->Scale(1./max_BcKc_same2);*/
 
 }
 
@@ -384,7 +384,7 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, TString polarization
 void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20, int cuts=3)
 {
 
-    InitializeHistos(n);
+  InitializeHistos(n);
   
   Long64_t nentries;
   if(n_entries>0) nentries= n_entries;
@@ -470,11 +470,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
     p.push_back(jet_pz[0]-jet_pz[1]);
     
     /* costheta_BcBc=GetCostheta(p);
-    costheta_KcKc=GetCostheta(p);
-    costheta_BcKc=GetCostheta(p);
-    costheta_KcBc=GetCostheta(p);
-    costheta_BcKc_same1=GetCostheta(p);
-    costheta_BcKc_same2=GetCostheta(p);*/
+       costheta_KcKc=GetCostheta(p);
+       costheta_BcKc=GetCostheta(p);
+       costheta_KcBc=GetCostheta(p);
+       costheta_BcKc_same1=GetCostheta(p);
+       costheta_BcKc_same2=GetCostheta(p);*/
 
     costheta_BcBc=costheta_tracks;
     costheta_KcKc=costheta_tracks;
@@ -569,7 +569,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
       if(Kc[0]*Kc[1]>0) {
 	h_bbbar_KcKc_rejected->Fill( costheta_KcKc);
 	h_bbbar_KcKc_rejected->Fill( -costheta_KcKc);
-       }
+      }
 	
       if(Kc[0]*Kc[1]<0) {
 	if(Kc[0] < 0) h_bbbar_KcKc_reco->Fill(costheta_KcKc);
@@ -598,7 +598,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
       }
     }
 
-     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     //Information to calculate p, for BcKc category
     if(Bc[0]*Kc[1]>0 && Bc[1]==0 && Kc[0]==0 ){
       h_bbbar_BcKc_rejected->Fill(costheta_BcKc);
@@ -678,21 +678,18 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
     // Same side 1
     //Information to calculate p, for BcKc category
 
-    //    if(taken == false ) {
-
+    if(taken == false ) {
+      
     if(Bc[0]*Kc[0]<0  ){
       h_bbbar_BcKc_same1_rejected->Fill( costheta_BcKc_same1);
       h_bbbar_BcKc_same1_rejected->Fill( -costheta_BcKc_same1);
     }
+      
     if( Bc[0]*Kc[0]>0 && (Bc[1]==0 && Kc[1]==0) ) {
+
       if(Bc[0] < 0) h_bbbar_BcKc_same1_reco->Fill( costheta_BcKc_same1);
       else h_bbbar_BcKc_same1_reco->Fill( -costheta_BcKc_same1);
-    }
-
-    if(taken == false ) {
-      
-      if( Bc[0]*Kc[0]>0 && (Bc[1]==0 || Kc[1]==0)) {
-	
+ 	
 	float cos_reco=  (Bc[0] < 0) ? costheta_BcKc_same1: -costheta_BcKc_same1;
 	
 	h_cos_charge_BcKc_same1->Fill(costheta_BcKc_same1);
@@ -721,17 +718,15 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
     // --------------------------------------------------------------------------
     // Same side 2
     //Information to calculate p, for BcKc category
-    if(taken == false) {
 
-    if(Bc[1]*Kc[1]<0  ){
-      h_bbbar_BcKc_same2_rejected->Fill( costheta_BcKc_same2);
-      h_bbbar_BcKc_same2_rejected->Fill( -costheta_BcKc_same2);
-    }
-    if( Bc[1]*Kc[1]>0 && Bc[0]==0 && Kc[0]==0 ) {
-      if(Bc[1] > 0) h_bbbar_BcKc_same2_reco->Fill( costheta_BcKc_same2);
-      else h_bbbar_BcKc_same2_reco->Fill( -costheta_BcKc_same2);
-    }
+    if(taken == false) {      
+      if(Bc[1]*Kc[1]<0){
+	h_bbbar_BcKc_same2_rejected->Fill( costheta_BcKc_same2);
+	h_bbbar_BcKc_same2_rejected->Fill( -costheta_BcKc_same2);
+      }
       if( Bc[1]*Kc[1]>0 && Bc[0]==0 && Kc[0]==0 ) {
+	if(Bc[1] > 0) h_bbbar_BcKc_same2_reco->Fill( costheta_BcKc_same2);
+	else h_bbbar_BcKc_same2_reco->Fill( -costheta_BcKc_same2);
 
 	float cos_reco=  (Bc[1] > 0) ? costheta_BcKc_same2: -costheta_BcKc_same2;
 	h_cos_charge_BcKc_same2->Fill(costheta_BcKc_same2);
@@ -981,7 +976,7 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
 
   }//end loop
 
-    // ***************************************************************  
+  // ***************************************************************  
   std::vector<TH1F*> result;
   result.push_back(asymm_BcBc[0]);//reco
   result.push_back(asymm_KcKc[0]);
@@ -997,8 +992,8 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
 
 
 /*
-void observable::Selection(int n_entries=-1)
-{
+  void observable::Selection(int n_entries=-1)
+  {
 
   //  gROOT->Reset();
   SetQQbarStyle();
@@ -1041,44 +1036,44 @@ void observable::Selection(int n_entries=-1)
 
   Long64_t nbytes = 0, nb = 0;
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
-    Long64_t ientry = LoadTree(jentry);
-    if (ientry < 0) break;
-    nb = fChain->GetEntry(jentry);   nbytes += nb;
+  Long64_t ientry = LoadTree(jentry);
+  if (ientry < 0) break;
+  nb = fChain->GetEntry(jentry);   nbytes += nb;
 
-    if ( jentry > 100000 && jentry % 100000 ==0 ) std::cout << "Progress: " << 100.*jentry/nentries <<" %"<<endl;
-    if(PreSelection()==false) continue; 
+  if ( jentry > 100000 && jentry % 100000 ==0 ) std::cout << "Progress: " << 100.*jentry/nentries <<" %"<<endl;
+  if(PreSelection()==false) continue; 
 
-    double reco_b1mass= sqrt(pow(jet_E[0],2)-pow(jet_px[0],2)-pow(jet_py[0],2)-pow(jet_pz[0],2));
-    double reco_b2mass= sqrt(pow(jet_E[1],2)-pow(jet_px[1],2)-pow(jet_py[1],2)-pow(jet_pz[1],2));
-    double reco_bbmass= sqrt(pow(jet_E[0]+jet_E[1],2)-pow(jet_px[0]+jet_px[1],2)-pow(jet_py[0]+jet_py[1],2)-pow(jet_pz[0]+jet_pz[1],2));
-    double bbmass= sqrt(pow(mc_quark_E[0]+mc_quark_E[1],2)-pow(mc_quark_px[0]+mc_quark_px[1],2)-pow(mc_quark_py[0]+mc_quark_py[1],2)-pow(mc_quark_pz[0]+mc_quark_pz[1],2));
+  double reco_b1mass= sqrt(pow(jet_E[0],2)-pow(jet_px[0],2)-pow(jet_py[0],2)-pow(jet_pz[0],2));
+  double reco_b2mass= sqrt(pow(jet_E[1],2)-pow(jet_px[1],2)-pow(jet_py[1],2)-pow(jet_pz[1],2));
+  double reco_bbmass= sqrt(pow(jet_E[0]+jet_E[1],2)-pow(jet_px[0]+jet_px[1],2)-pow(jet_py[0]+jet_py[1],2)-pow(jet_pz[0]+jet_pz[1],2));
+  double bbmass= sqrt(pow(mc_quark_E[0]+mc_quark_E[1],2)-pow(mc_quark_px[0]+mc_quark_px[1],2)-pow(mc_quark_py[0]+mc_quark_py[1],2)-pow(mc_quark_pz[0]+mc_quark_pz[1],2));
 
-    double jet0_p = sqrt(pow(jet_px[0],2)+pow(jet_py[0],2)+pow(jet_pz[0],2));
-    double jet1_p = sqrt(pow(jet_px[1],2)+pow(jet_py[1],2)+pow(jet_pz[1],2));
+  double jet0_p = sqrt(pow(jet_px[0],2)+pow(jet_py[0],2)+pow(jet_pz[0],2));
+  double jet1_p = sqrt(pow(jet_px[1],2)+pow(jet_py[1],2)+pow(jet_pz[1],2));
 
-    double jj_pT= sqrt(pow(jet_px[0]+jet_px[1],2)+pow(jet_py[0]+jet_py[1],2));
+  double jj_pT= sqrt(pow(jet_px[0]+jet_px[1],2)+pow(jet_py[0]+jet_py[1],2));
     
-    if(abs(mc_quark_pdg[0])==5 && bbmass>180) {
-      h_mjj_bb->Fill(reco_bbmass);
-      h_egamma_bb->Fill(maxenergy_photon_E);
-      h_btag1_btag2_bb->Fill(jet_btag[0],jet_btag[1]);
-      h_mj1_mj2_bb->Fill(reco_b1mass,reco_b2mass);
-      h_pj1_pj2_bb->Fill(jet0_p,jet1_p);
-    }
-    if(abs(mc_quark_pdg[0])==5 && bbmass<180) {
-      h_mjj_recoil->Fill(reco_bbmass);
-      h_egamma_recoil->Fill(maxenergy_photon_E);
-      h_btag1_btag2_recoil->Fill(jet_btag[0],jet_btag[1]);
-      h_mj1_mj2_recoil->Fill(reco_b1mass,reco_b2mass);
-      h_pj1_pj2_recoil->Fill(jet0_p,jet1_p);
-    }
-    if(abs(mc_quark_pdg[0])!=5) {
-      h_mjj_qq->Fill(reco_bbmass);
-      h_egamma_qq->Fill(maxenergy_photon_E);
-      h_btag1_btag2_qq->Fill(jet_btag[0],jet_btag[1]);
-      h_mj1_mj2_qq->Fill(reco_b1mass,reco_b2mass);
-      h_pj1_pj2_qq->Fill(jet0_p,jet1_p);
-    }
+  if(abs(mc_quark_pdg[0])==5 && bbmass>180) {
+  h_mjj_bb->Fill(reco_bbmass);
+  h_egamma_bb->Fill(maxenergy_photon_E);
+  h_btag1_btag2_bb->Fill(jet_btag[0],jet_btag[1]);
+  h_mj1_mj2_bb->Fill(reco_b1mass,reco_b2mass);
+  h_pj1_pj2_bb->Fill(jet0_p,jet1_p);
+  }
+  if(abs(mc_quark_pdg[0])==5 && bbmass<180) {
+  h_mjj_recoil->Fill(reco_bbmass);
+  h_egamma_recoil->Fill(maxenergy_photon_E);
+  h_btag1_btag2_recoil->Fill(jet_btag[0],jet_btag[1]);
+  h_mj1_mj2_recoil->Fill(reco_b1mass,reco_b2mass);
+  h_pj1_pj2_recoil->Fill(jet0_p,jet1_p);
+  }
+  if(abs(mc_quark_pdg[0])!=5) {
+  h_mjj_qq->Fill(reco_bbmass);
+  h_egamma_qq->Fill(maxenergy_photon_E);
+  h_btag1_btag2_qq->Fill(jet_btag[0],jet_btag[1]);
+  h_mj1_mj2_qq->Fill(reco_b1mass,reco_b2mass);
+  h_pj1_pj2_qq->Fill(jet0_p,jet1_p);
+  }
     
   }
 
@@ -1434,7 +1429,7 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
   h_d23_recoil->SetLineColor(4);
   h_d23_recoil->DrawNormalized("histosame");
 
-   canvas_2->cd(6);
+  canvas_2->cd(6);
   h_d12_bb->SetLineColor(2);
   h_d12_bb->DrawNormalized("histo");
   h_d12_qq->SetLineColor(1);
@@ -1596,7 +1591,7 @@ void observable::SelectionBKG(int n_entries=-1, int selection_type=0, TString po
   cout<<  TString::Format("selection_%s_250GeV_%s_btag1_%0.1f_btag2_%0.1f.root",process.Data(),polarization.Data(),btag1,btag2)<<endl;
   cout<<" Total generated events: " << counter<<endl;
 
-    // save histograms
+  // save histograms
   h_mjj_bb->Write();
   h_egamma_bb->Write();
   h_mj1_mj2_bb->Write();
@@ -1952,14 +1947,14 @@ void observable::AngularDistributions(int n_entries=-1,  TString polarization="e
 
   
   
-   for(int itest =0; itest<18; itest++) {
-     h_cos_jet_test[itest]->Write();
-     h_cos_quark_jet_test[itest]->Write();
-     h2_cos_quark_jet_test[itest]->Write();
+  for(int itest =0; itest<18; itest++) {
+    h_cos_jet_test[itest]->Write();
+    h_cos_quark_jet_test[itest]->Write();
+    h2_cos_quark_jet_test[itest]->Write();
 
-     h_cos_quark_jettracks_test[itest]->Write();
-     h2_cos_quark_jettracks_test[itest]->Write();
-   }
+    h_cos_quark_jettracks_test[itest]->Write();
+    h2_cos_quark_jettracks_test[itest]->Write();
+  }
 
 }
 
@@ -2025,9 +2020,9 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
     /*if(average!=0) {
       float std_dev=0;
       for(unsigned j=0; j<result_j.size(); j++) {
-	if(result_j.at(j)>0) {
-	  std_dev+=pow(result_j.at(j)-average,2);
-	}
+      if(result_j.at(j)>0) {
+      std_dev+=pow(result_j.at(j)-average,2);
+      }
       }
       std_dev=sqrt(std_dev/(n-1));
       result_error.push_back(std_dev);
@@ -2082,31 +2077,31 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
 
 TH1F* observable::CorrectHistoDoubleTag(TH1F* histo, std::vector<float> p_vect) {
   /*  
-  TH1F * corrected_up = new TH1F("corrected_up","corrected_up",nbins,-1,1);
-  corrected_up->Sumw2(); 
-  for(int i=1; i<nbins/2+1; i++) {
-    float nm_reco=histo->GetBinContent(i);
-    float np_reco=histo->GetBinContent(nbins+1-i);
+      TH1F * corrected_up = new TH1F("corrected_up","corrected_up",nbins,-1,1);
+      corrected_up->Sumw2(); 
+      for(int i=1; i<nbins/2+1; i++) {
+      float nm_reco=histo->GetBinContent(i);
+      float np_reco=histo->GetBinContent(nbins+1-i);
     
-    float p=p_vect.at(i-1)+p_vect.at(nbins-(nbins/2+1-i));
-    float q=1-p;
-    float weight = (p*p+q*q)/(q*q*q*q-p*p*p*p);
-    corrected_up->SetBinContent(i,(np_reco*q*q-nm_reco*p*p)*weight);
-    corrected_up->SetBinContent(nbins+1-i,-(np_reco*p*p-nm_reco*q*q)*weight);
-  }
+      float p=p_vect.at(i-1)+p_vect.at(nbins-(nbins/2+1-i));
+      float q=1-p;
+      float weight = (p*p+q*q)/(q*q*q*q-p*p*p*p);
+      corrected_up->SetBinContent(i,(np_reco*q*q-nm_reco*p*p)*weight);
+      corrected_up->SetBinContent(nbins+1-i,-(np_reco*p*p-nm_reco*q*q)*weight);
+      }
   
-  TH1F * corrected_down = new TH1F("corrected_down","corrected_down",nbins,-1,1);
-  corrected_down->Sumw2(); 
-  for(int i=1; i<nbins/2+1; i++) {
-    float nm_reco=histo->GetBinContent(i);
-    float np_reco=histo->GetBinContent(nbins+1-i);
+      TH1F * corrected_down = new TH1F("corrected_down","corrected_down",nbins,-1,1);
+      corrected_down->Sumw2(); 
+      for(int i=1; i<nbins/2+1; i++) {
+      float nm_reco=histo->GetBinContent(i);
+      float np_reco=histo->GetBinContent(nbins+1-i);
     
-    float p=p_vect.at(i-1)-p_vect.at(nbins-(nbins/2+1-i));
-    float q=1-p;
-    float weight = (p*p+q*q)/(q*q*q*q-p*p*p*p);
-    corrected_down->SetBinContent(i,(np_reco*q*q-nm_reco*p*p)*weight);
-    corrected_down->SetBinContent(nbins+1-i,-(np_reco*p*p-nm_reco*q*q)*weight);
-    }*/
+      float p=p_vect.at(i-1)-p_vect.at(nbins-(nbins/2+1-i));
+      float q=1-p;
+      float weight = (p*p+q*q)/(q*q*q*q-p*p*p*p);
+      corrected_down->SetBinContent(i,(np_reco*q*q-nm_reco*p*p)*weight);
+      corrected_down->SetBinContent(nbins+1-i,-(np_reco*p*p-nm_reco*q*q)*weight);
+      }*/
   
 
   TH1F * corrected = new TH1F("corrected","corrected",nbins,-1,1);
@@ -2285,7 +2280,7 @@ float observable::ChargeKcJet(int ijet){//, int eff=0.88) {
 	if(gen_purity<purity) charge+=jet_track_charge[ijet][ivtx][itrack];
 	else charge-=jet_track_charge[ijet][ivtx][itrack];
       }
-}
+    }
    
   }
     
