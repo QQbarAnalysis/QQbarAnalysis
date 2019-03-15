@@ -1967,7 +1967,6 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
     float accepted = h_accepted->GetBinContent(nbins+1-i);
     float rejected = h_rejected->GetBinContent(nbins+1-i);
     accepted += h_accepted->GetBinContent(i);
-    // rejected += h_rejected->GetBinContent(i);
     float a=1;
     float b=-1;
     float c= rejected/ (2* (accepted+rejected));
@@ -1976,6 +1975,7 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
   }
 
   std::vector<float> result_error;
+  std::vector<float> result;
 
   for(int i=1; i<nbins/2+1; i++) {
     std::vector<float> result_j;
@@ -1985,7 +1985,6 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
 	  float accepted = h_accepted->GetBinContent(nbins+1-i)+i1*sqrt(h_accepted->GetBinContent(nbins+1-i));
 	  float rejected = h_rejected->GetBinContent(nbins+1-i)+i2*sqrt(h_rejected->GetBinContent(nbins+1-i));
 	  accepted += h_accepted->GetBinContent(i)+i3*sqrt(h_accepted->GetBinContent(i));
-	  //	rejected += h_rejected->GetBinContent(i)+i2*sqrt(h_rejected->GetBinContent(i));
 	  
 	  float a=1;
 	  float b=-1;
@@ -2007,101 +2006,37 @@ std::vector<float> observable::CalculateP(TH1F* h_accepted, TH1F *h_rejected)
       }
     }
     average/=n;
+ 
     if(average!=0) {
-      float min=10000000000, max=0;
-      for(unsigned j=0; j<result_j.size(); j++) {
-	if(result_j.at(j)>max) max=result_j.at(j);
-	if(result_j.at(j)<min) min=result_j.at(j);
-      }
-      float std_dev=(max-min)/2.;
-      result_error.push_back(std_dev);
-    } else result_error.push_back(0);
-    
-    /*if(average!=0) {
+      result.push_back(average);
       float std_dev=0;
       for(unsigned j=0; j<result_j.size(); j++) {
-      if(result_j.at(j)>0) {
-      std_dev+=pow(result_j.at(j)-average,2);
-      }
+	if(result_j.at(j)>0) {
+	  std_dev+=pow(result_j.at(j)-average,2);
+	}
       }
       std_dev=sqrt(std_dev/(n-1));
       result_error.push_back(std_dev);
-      } else result_error.push_back(0);*/
-     
-    
-  }
- 
-  std::vector<float> result;
-  for(int i=1; i<nbins/2+1; i++) {
-    float accepted = h_accepted->GetBinContent(nbins+1-i);
-    float rejected = h_rejected->GetBinContent(nbins+1-i);
-    accepted += h_accepted->GetBinContent(i);
-    
-    float a=1;
-    float b=-1;
-    float c= rejected/ (2* (accepted+rejected));
-    float p= (0.5/a) * (-b + sqrt( b*b-4*a*c));
-    float p2= (0.5/a) * (-b - sqrt( b*b-4*a*c));
-    if(p>0.99) p=0;
-    if(p2>0.99) p2=0;
-    if(p>0 || p2>0 ) result.push_back(max(p,p2));
-    else result.push_back(-1);
-
-  }
-  
-
-  float average=0;
-  float n=0;
-  for(unsigned i=0; i<result.size(); i++) {
-    if(result.at(i)>0 && result.at(i)!=0.5) { average+=result.at(i); n++;}
-  }
-
-  
-  average/=n;
-  for(unsigned i=0; i<result_error.size(); i++) {
-    if(result.at(i)<0) result.at(i)=average;
-    if(result.at(i)==0.5) result.at(i)=average;
-    if(result_error.at(i)>0) {
-      result.push_back(result_error.at(i));
     } else {
+      result_error.push_back(0);
       result.push_back(0);
     }
-    
+  }
+
+  for(unsigned i=0; i<result_error.size(); i++) {
+    if(result_error.at(i)>0) 
+      result.push_back(result_error.at(i));
+    else
+      result.push_back(0);
   }
 
 
   return result;
-  
+   
 }
 
 
 TH1F* observable::CorrectHistoDoubleTag(TH1F* histo, std::vector<float> p_vect) {
-  /*  
-      TH1F * corrected_up = new TH1F("corrected_up","corrected_up",nbins,-1,1);
-      corrected_up->Sumw2(); 
-      for(int i=1; i<nbins/2+1; i++) {
-      float nm_reco=histo->GetBinContent(i);
-      float np_reco=histo->GetBinContent(nbins+1-i);
-    
-      float p=p_vect.at(i-1)+p_vect.at(nbins-(nbins/2+1-i));
-      float q=1-p;
-      float weight = (p*p+q*q)/(q*q*q*q-p*p*p*p);
-      corrected_up->SetBinContent(i,(np_reco*q*q-nm_reco*p*p)*weight);
-      corrected_up->SetBinContent(nbins+1-i,-(np_reco*p*p-nm_reco*q*q)*weight);
-      }
-  
-      TH1F * corrected_down = new TH1F("corrected_down","corrected_down",nbins,-1,1);
-      corrected_down->Sumw2(); 
-      for(int i=1; i<nbins/2+1; i++) {
-      float nm_reco=histo->GetBinContent(i);
-      float np_reco=histo->GetBinContent(nbins+1-i);
-    
-      float p=p_vect.at(i-1)-p_vect.at(nbins-(nbins/2+1-i));
-      float q=1-p;
-      float weight = (p*p+q*q)/(q*q*q*q-p*p*p*p);
-      corrected_down->SetBinContent(i,(np_reco*q*q-nm_reco*p*p)*weight);
-      corrected_down->SetBinContent(nbins+1-i,-(np_reco*p*p-nm_reco*q*q)*weight);
-      }*/
   
 
   TH1F * corrected = new TH1F("corrected","corrected",nbins,-1,1);
@@ -2144,7 +2079,7 @@ TH1F* observable::CorrectHistoDoubleTag(TH1F* histo, std::vector<float> p_vect) 
     }
     error_i=sqrt(error_i/(n-1.));
     error_41i=sqrt(error_41i/(n-1.));
-    corrected->SetBinError(i, error_i  );
+    corrected->SetBinError(i,error_i );
     corrected->SetBinError(nbins+1-i,error_41i );
   }
   
