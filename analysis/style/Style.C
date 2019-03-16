@@ -6,87 +6,99 @@
 #include "Style.h"
 #include "TROOT.h"
 
-void SetIrlesStyle ()
+void SetQQbarStyle ()
 {
-  static TStyle* irlesStyle = 0;
-  std::cout << "\nApplying IRLES style settings...\n" << std::endl ;
-  if ( irlesStyle==0 ) irlesStyle = IrlesStyle();
-  gROOT->SetStyle("IRLES");
+  static TStyle* qqbarStyle = 0;
+  std::cout << "\nApplying QQBAR style settings...\n" << std::endl ;
+  if ( qqbarStyle==0 ) qqbarStyle = QQbarStyle();
+  gROOT->SetStyle("QQBAR");
   gROOT->ForceStyle();
 }
 
-TStyle* IrlesStyle() 
+TStyle* QQbarStyle() 
 {
-  TStyle *irlesStyle = new TStyle("IRLES","Irles style");
+  TStyle *qqbarStyle = new TStyle("QQBAR","QQbar style");
 
   // use plain black on white colors
   Int_t icol=0; // WHITE
-  irlesStyle->SetFrameBorderMode(icol);
-  irlesStyle->SetFrameFillColor(icol);
-  irlesStyle->SetCanvasBorderMode(icol);
-  irlesStyle->SetCanvasColor(icol);
-  irlesStyle->SetPadBorderMode(icol);
-  irlesStyle->SetPadColor(icol);
-  irlesStyle->SetStatColor(icol);
-  //irlesStyle->SetFillColor(icol); // don't use: white fill color for *all* objects
+  qqbarStyle->SetFrameBorderMode(icol);
+  qqbarStyle->SetFrameFillColor(icol);
+  qqbarStyle->SetCanvasBorderMode(icol);
+  qqbarStyle->SetCanvasColor(icol);
+  qqbarStyle->SetPadBorderMode(icol);
+  qqbarStyle->SetPadColor(icol);
+  qqbarStyle->SetStatColor(icol);
+  //qqbarStyle->SetFillColor(icol); // don't use: white fill color for *all* objects
 
   // set the paper & margin sizes
-  irlesStyle->SetPaperSize(20,26);
+  qqbarStyle->SetPaperSize(20,26);
 
   // set margin sizes
-  irlesStyle->SetPadTopMargin(0.05);
-  irlesStyle->SetPadRightMargin(0.05);
-  irlesStyle->SetPadBottomMargin(0.16);
-  irlesStyle->SetPadLeftMargin(0.16);
+  qqbarStyle->SetPadTopMargin(0.05);
+  qqbarStyle->SetPadRightMargin(0.05);
+  qqbarStyle->SetPadBottomMargin(0.16);
+  qqbarStyle->SetPadLeftMargin(0.16);
 
   // set title offsets (for axis label)
-  irlesStyle->SetTitleXOffset(1.4);
-  irlesStyle->SetTitleYOffset(1.4);
+  //  qqbarStyle->SetTitleXOffset(1.4);
+  //qqbarStyle->SetTitleYOffset(1.4);
 
   // use large fonts
   //Int_t font=72; // Helvetica italics
   Int_t font=42; // Helvetica
   Double_t tsize=0.04;
-  irlesStyle->SetTextFont(font);
+  qqbarStyle->SetTextFont(font);
 
-  irlesStyle->SetTextSize(tsize);
-  irlesStyle->SetLabelFont(font,"x");
-  irlesStyle->SetTitleFont(font,"x");
-  irlesStyle->SetLabelFont(font,"y");
-  irlesStyle->SetTitleFont(font,"y");
-  irlesStyle->SetLabelFont(font,"z");
-  irlesStyle->SetTitleFont(font,"z");
+  qqbarStyle->SetTitleX(0.2);
+  qqbarStyle->SetTitleY(0.92);
   
-  irlesStyle->SetLabelSize(tsize,"x");
-  irlesStyle->SetTitleSize(tsize,"x");
-  irlesStyle->SetLabelSize(tsize,"y");
-  irlesStyle->SetTitleSize(tsize,"y");
-  irlesStyle->SetLabelSize(tsize,"z");
-  irlesStyle->SetTitleSize(tsize,"z");
-
+  qqbarStyle->SetLabelFont(42,"xyz");
+  qqbarStyle->SetLabelSize(0.04,"xyz");
+  qqbarStyle->SetLabelOffset(0.015,"xyz");
+  qqbarStyle->SetTitleFont(42,"xyz");
+  qqbarStyle->SetTitleSize(0.05,"xyz");
+  qqbarStyle->SetTitleOffset(1.1,"yz");
+  qqbarStyle->SetTitleOffset(1.1,"x");
+  
+  /*qqbarStyle->SetTextSize(tsize);
+  qqbarStyle->SetLabelFont(font,"x");
+  qqbarStyle->SetTitleFont(font,"x");
+  qqbarStyle->SetLabelFont(font,"y");
+  qqbarStyle->SetTitleFont(font,"y");
+  qqbarStyle->SetLabelFont(font,"z");
+  qqbarStyle->SetTitleFont(font,"z");
+  
+  qqbarStyle->SetLabelSize(tsize,"x");
+  qqbarStyle->SetTitleSize(tsize,"x");
+  qqbarStyle->SetLabelSize(tsize,"y");
+  qqbarStyle->SetTitleSize(tsize,"y");
+  qqbarStyle->SetLabelSize(tsize,"z");
+  qqbarStyle->SetTitleSize(tsize,"z");
+  */
+  
   // use bold lines and markers
-  irlesStyle->SetMarkerStyle(20);
-  irlesStyle->SetMarkerSize(0.8);
-  irlesStyle->SetHistLineWidth(2.);
-  irlesStyle->SetLineStyleString(2,"[12 12]"); // postscript dashes
+  qqbarStyle->SetMarkerStyle(20);
+  qqbarStyle->SetMarkerSize(0.8);
+  qqbarStyle->SetHistLineWidth(2.);
+  qqbarStyle->SetLineStyleString(2,"[12 12]"); // postscript dashes
 
   // get rid of X error bars 
-  //irlesStyle->SetErrorX(0.001);
+  //qqbarStyle->SetErrorX(0.001);
   // get rid of error bar caps
-  irlesStyle->SetEndErrorSize(0.);
+  qqbarStyle->SetEndErrorSize(0.);
 
   // do not display any of the standard histogram decorations
-  irlesStyle->SetOptTitle(0);
-  //irlesStyle->SetOptStat(1111);
-  irlesStyle->SetOptStat(0);
-  //irlesStyle->SetOptFit(1111);
-  irlesStyle->SetOptFit(0);
+  qqbarStyle->SetOptTitle(0);
+  //qqbarStyle->SetOptStat(1111);
+  qqbarStyle->SetOptStat(0);
+  //qqbarStyle->SetOptFit(1111);
+  qqbarStyle->SetOptFit(0);
 
   // put tick marks on top and RHS of plots
-  irlesStyle->SetPadTickX(1);
-  irlesStyle->SetPadTickY(1);
+  qqbarStyle->SetPadTickX(1);
+  qqbarStyle->SetPadTickY(1);
 
-  return irlesStyle;
+  return qqbarStyle;
 
 }
 

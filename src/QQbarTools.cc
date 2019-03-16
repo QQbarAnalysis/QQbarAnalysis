@@ -28,7 +28,7 @@ namespace QQbarProcessor
     return winner;
   }
 
- vector< RecoJet * > * QQbarTools::getJets(LCCollection * jetcol, LCCollection *jetrelcol)
+  vector< RecoJet * > * QQbarTools::getJets(LCCollection * jetcol, LCCollection *jetrelcol)
   {
     int jetnumber = jetcol->getNumberOfElements();
     vector< RecoJet * > * result = new vector< RecoJet * >();
@@ -100,29 +100,29 @@ namespace QQbarProcessor
   void QQbarTools::PrintJet(RecoJet * jet)
   {
     streamlog_out(DEBUG) << "Jet E: " << jet->getEnergy()
-	      << " m: " << jet->getMass()
-	      << " btag: " << jet->GetBTag()
-	      << " costheta: " << jet->GetCostheta()
-	      << " p_B: " << jet->GetHadronMomentum()
-	      << " ntracks: " << jet->GetNumberOfVertexParticles()
-	      << "\n";
+			 << " m: " << jet->getMass()
+			 << " btag: " << jet->GetBTag()
+			 << " costheta: " << jet->GetCostheta()
+			 << " p_B: " << jet->GetHadronMomentum()
+			 << " ntracks: " << jet->GetNumberOfVertexParticles()
+			 << "\n";
   }
 
   void QQbarTools::PrintParticle(ReconstructedParticle * jet)
   {
     streamlog_out(DEBUG) << "E: " << jet->getEnergy()
-	      <<" m: " << jet->getMass()
-	      <<" PDG: " << jet->getType()
-	      << "\n";
+			 <<" m: " << jet->getMass()
+			 <<" PDG: " << jet->getType()
+			 << "\n";
   }
 
   void QQbarTools::PrintParticle(MCParticle * jet)
   {
     streamlog_out(DEBUG) << "E: " << jet->getEnergy()
-	      <<" m: " << jet->getMass()
-	      <<" q: " << jet->getCharge()
-	      <<" PDG: " << jet->getPDG()
-	      << "\n";
+			 <<" m: " << jet->getMass()
+			 <<" q: " << jet->getCharge()
+			 <<" PDG: " << jet->getPDG()
+			 << "\n";
   }
 
   void QQbarTools::PrintJets(std::vector< RecoJet * > *jets)
@@ -270,8 +270,8 @@ namespace QQbarProcessor
     differences.push_back(pair3);
 		
     streamlog_out(DEBUG) << "Masses: " //<< mass1 << " & " << mass2 << "; "
-	      << mass3 << " & " << mass4 << "; "
-	      << mass5 << " & " << mass6 << ";\n";
+			 << mass3 << " & " << mass4 << "; "
+			 << mass5 << " & " << mass6 << ";\n";
     float mindiff = 1000.;
     int chosen = -1;
     for (unsigned int i = 0; i < differences.size(); i++) 
