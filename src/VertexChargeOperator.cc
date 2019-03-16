@@ -278,14 +278,21 @@ namespace QQbarProcessor
 	}
 	vector< ReconstructedParticle * > VertexChargeOperator::getKaons(const vector< ReconstructedParticle * > & particles)
 	{
+
 		vector< ReconstructedParticle * > result;
 		if (!myPIDHandler) 
 		{
 			return result;
 		}
+		std::cout << "test" << "\n";
 		for (unsigned int i = 0; i < particles.size(); i++) 
 		{
 			ReconstructedParticle * particle = particles[i];
+			
+			if(!particle){
+				continue;
+			}
+
 			int pid = myPIDHandler->getAlgorithmID(myAlgorithmName);
 			int pdg = myPIDHandler->getParticleID(particle, pid).getPDG();
 			if (abs(pdg) == 321 && abs(particle->getType()) != 11 && abs(particle->getType()) != 13) 
