@@ -89,7 +89,7 @@ namespace QQbarProcessor
 			     _MCColName ,
 			     std::string("MCParticles")
 			     );
-    registerInputCollection( LCIO::MCPARTICLE,
+    registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			     "IsoLeptonCollectionName" , 
 			     "Name of the isolepton collection"  ,
 			     _IsoLeptonColName ,

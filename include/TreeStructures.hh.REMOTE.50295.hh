@@ -33,7 +33,7 @@ namespace QQbarProcessor
 
   struct StatsData  {
   public:
-
+	  
     float _B1momentum;
     float _B2momentum;
     float _B1Jetmomentum;
@@ -70,22 +70,16 @@ namespace QQbarProcessor
 
     int _mctag;
     int _recotag;
-    float _hadMass;
-    float _bProduct;
     float _W1mass;
-    float _W1gamma;
     float _W1momentum;
     float _W1costheta;
     float _W2mass;
     float _W2momentum;
     float _W2costheta;
     int _Top1bcharge;
-    int _Top1Genbcharge;
     float _Top1btag;
-    float _Top1gamma;
     float _Top1bmomentum;
     int _Top1bntracks;
-    int _Top1Genbntracks;
     float _Top1mass;
     float _Top1momentum;
     float _Top1energy;
@@ -93,7 +87,6 @@ namespace QQbarProcessor
     float _Top1costheta;
     float _Top1bcostheta;
     float _Top1cosWb;
-    float _Top1pstarb;
     float _Top1truthAngle;
     int _Top1Vtx;
     int _Top1Kaon;
@@ -102,17 +95,13 @@ namespace QQbarProcessor
     float _Top1KaonMomentum[10];
     int _Top1bTVCM;
     int _Top2bntracks;
-    int _Top2Genbntracks;
     int _Top2bTVCM;
     int _UsedBTVCM;
     float _Top2bmomentum;
     float _Top2bdistance;
     float _Top2btag;
     float _Top2mass;
-    float _Top2energy;
-    float _Top2gamma;
     int _Top2bcharge;
-    int _Top2Genbcharge;
     float _Top2momentum;
     float _Top2costheta;
     float _Top2bcostheta;
@@ -122,10 +111,7 @@ namespace QQbarProcessor
     int _Top2KaonCharges[10];
     float _Top2KaonMomentum[10];
     int _Top2leptonCharge;
-    float _Top2leptonE;
-    float _Top2leptonCos;
     int _Top2leptonCorrect;
-    float _qBCostheta[2];
     float _qCostheta[2];
     float _qCostheta1;
     float _qCostheta2;
@@ -133,37 +119,24 @@ namespace QQbarProcessor
     int _methodRefused;
     int _methodZero;
     int _methodCorrect;
-    int _methodTaken[12];
-    int _methodSameCharge[12];
-    int _methodZeroCharge[12];
-    float _chiHad;
-    float _chiTopMass;
-    float _chiTopE;
-    float _chiPbstar;
-    float _chiCosWb;
-    float _chiGammaT;
+    int _methodTaken[6];
+    int _methodSameCharge[6];
+    int _methodZeroCharge[6];
+    int _method[6];
+    float _chiHad1;
+    float _chiTopMass1;
+    float _chiTopE1;
+    float _chiPbstar1;
+    float _chiCosWb1;
+    float _chiGammaT1;
+    float _chiHad2;
+    float _chiTopMass2;
+    float _chiTopE2;
+    float _chiPbstar2;
+    float _chiCosWb2;
     float _chiGammaT2;
-    float _chiTop2Mass;
-    float _chiTop2E;
-
-		//Generated
-		int _MCBHadCharge;
-		int _MCBHadNtracks;
-		
-		// jet information
-		int   _jet_nvtx[2];
-		float _jet_E[2];
-		float _jet_px[2];
-		float _jet_py[2];
-		float _jet_pz[2];
-		float _jet_M[2];
-																		
-		// kaon information
- 		float _Top1KaondEdx[10];
-						
 
     int _MCBOscillation;
-    int _MCBWcorrect;
     int _MCBBarOscillation;
     float _MCTopBangle;
     //float _MCTopBarBangle;
@@ -188,20 +161,7 @@ namespace QQbarProcessor
     float _totalEnergy;
     float _missedEnergy;
     float _gammaT;
-
-    //hadronic
-    float _chiHad1;
-    float _chiTopMass1;
-    float _chiTopE1;
-    float _chiPbstar1;
-    float _chiCosWb1;
-    float _chiGammaT1;
-    float _chiHad2;
-    float _chiTopMass2;
-    float _chiTopE2;
-    float _chiPbstar2;
-    float _chiCosWb2;
-
+		
     void Clear()  {
       _MCPDG = 0;
       _B1momentum = -1.0;
@@ -237,15 +197,12 @@ namespace QQbarProcessor
       _Top1mass = -1.0;
       _W1mass = -1.0;
       _W2costheta = -2.0;
-      _chiHad = -1.0;
       _chiHad1 = -1.0;
       _chiHad2 = -1.0;
       _methodUsed = 0;
       _methodRefused = 0;
       _methodZero = 0;
       _methodCorrect = -1;
-      _qBCostheta[0] = -2.0;
-      _qBCostheta[1] = -2.0;
       _qCostheta[0] = -2.0;
       _qCostheta[1] = -2.0;
       _ZZMass1 = -1;
@@ -254,6 +211,7 @@ namespace QQbarProcessor
 	_methodTaken[i] = -1;
 	_methodSameCharge[i] = -1;
 	_methodZeroCharge[i] = -1;
+	_method[i]=0;
       }
     }
   };
@@ -261,7 +219,7 @@ namespace QQbarProcessor
 
   struct StatsData_BBbar  {
   public:
-
+	  
     float _mc_quark_E[2];
     float _mc_quark_px[2];
     float _mc_quark_py[2];
@@ -292,19 +250,6 @@ namespace QQbarProcessor
 
     float _y23;
     float _y12;
-    float _d23;
-    float _d12;
-
-    float _oblateness;
-    float _aplanarity;
-    float _major_thrust_value;
-    float _minor_thrust_value;
-    float _principle_thrust_value;
-    float _sphericity;
-    float _major_thrust_axis[3];
-    float _minor_thrust_axis[3];
-    float _principle_thrust_axis[3];
-    float _sphericity_tensor[3];
 
     float _jet_E[2];
     float _jet_px[2];
@@ -312,7 +257,6 @@ namespace QQbarProcessor
     float _jet_pz[2];
     float _jet_m[2];
     float _jet_btag[2];
-
 
     int _jet_nvtx[2];
     int _jet_ntrack[2];
@@ -327,11 +271,11 @@ namespace QQbarProcessor
     float _jet_track_p[2][10][20];
     float _jet_track_charge[2][10][20];
     int _jet_track_iskaon[2][10][20];
-    int _jet_track_iskaoncheat[2][10][20];
+    float _jet_track_kaoncharge[2][10][20];
     float _jet_track_z0[2][10][20];
     float _jet_track_d0[2][10][20];
     float _jet_track_phi[2][10][20];
-
+		
     void Clear()  {
 
       for (unsigned int i = 0; i < 300; i++) {
@@ -371,24 +315,7 @@ namespace QQbarProcessor
       _maxenergy_photon_costheta=0;
       _y12=0;
       _y23=0;
-      _d12=0;
-      _d23=0;
-      
-      _oblateness=0;
-      _aplanarity=0;
-      _major_thrust_value=0;
-      _minor_thrust_value=0;
-      _principle_thrust_value=0;
-      _sphericity=0;
-      
-      for(int i=0; i<3; i++ ) {
-	_major_thrust_axis[i]=0;
-	_minor_thrust_axis[i]=0;
-	_principle_thrust_axis[i]=0;
-	_sphericity_tensor[i]=0;
-      }
 
-  		
       for (unsigned int i = 0; i < 2; i++) {
 	_jet_E[i]=0;
 	_jet_px[i]=0;
@@ -413,16 +340,17 @@ namespace QQbarProcessor
 	    _jet_track_p[i][ivx][itr]=0;
 	    _jet_track_charge[i][ivx][itr]=-1000;
 	    _jet_track_iskaon[i][ivx][itr]=-1;
-	    _jet_track_iskaoncheat[i][ivx][itr]=-1;
+	    _jet_track_kaoncharge[i][ivx][itr]=-1000;
 	    _jet_track_z0[i][ivx][itr]=-1000;
 	    _jet_track_d0[i][ivx][itr]=-1000;
 	    _jet_track_phi[i][ivx][itr]=-1000;
 	  }
-
+	  
 	}
       }
-
+      
     }//end clear
   };//end StatsData_BBbar
+
 }
 #endif
