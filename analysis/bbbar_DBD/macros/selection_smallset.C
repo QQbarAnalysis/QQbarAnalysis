@@ -26,7 +26,7 @@
 
 void selection_smallset() {
 
-  cout<< "bb qq recoil ww zz hz "<<endl;
+  cout<< "bb qq radreturn ww zz hz "<<endl;
 
   for(int cuts=0; cuts<18; cuts++) {
 
@@ -55,13 +55,13 @@ void selection_smallset() {
   TH1F *h_oblateness_qq = (TH1F*)f->Get("h_oblateness_qq");
   TH1F *h_sphericity_qq = (TH1F*)f->Get("h_sphericity_qq");
 
-  TH1F *h_mjj_recoil = (TH1F*)f->Get("h_mjj_recoil");
-  TH1F *h_mj1_mj2_recoil = (TH1F*)f->Get("h_mj1_mj2_recoil");
-  TH1F *h_y12_recoil = (TH1F*)f->Get("h_y12_recoil");
-  TH1F *h_y23_recoil = (TH1F*)f->Get("h_y23_recoil");
-  TH1F *h_egamma_recoil = (TH1F*)f->Get("h_egamma_recoil");
-  TH1F *h_oblateness_recoil = (TH1F*)f->Get("h_oblateness_recoil");
-  TH1F *h_sphericity_recoil = (TH1F*)f->Get("h_sphericity_recoil");
+  TH1F *h_mjj_radreturn = (TH1F*)f->Get("h_mjj_radreturn");
+  TH1F *h_mj1_mj2_radreturn = (TH1F*)f->Get("h_mj1_mj2_radreturn");
+  TH1F *h_y12_radreturn = (TH1F*)f->Get("h_y12_radreturn");
+  TH1F *h_y23_radreturn = (TH1F*)f->Get("h_y23_radreturn");
+  TH1F *h_egamma_radreturn = (TH1F*)f->Get("h_egamma_radreturn");
+  TH1F *h_oblateness_radreturn = (TH1F*)f->Get("h_oblateness_radreturn");
+  TH1F *h_sphericity_radreturn = (TH1F*)f->Get("h_sphericity_radreturn");
   
   if(pol=="eL" ) { 
     h_mjj_bb->Scale(250./266.5);
@@ -76,11 +76,11 @@ void selection_smallset() {
     h_egamma_qq->Scale(250./266.5);
     h_oblateness_qq->Scale(250./266.5);
 
-    h_mjj_recoil->Scale(250./266.5);
-    h_mj1_mj2_recoil->Scale(250./266.5);
-    h_y23_recoil->Scale(250./266.5);
-    h_egamma_recoil->Scale(250./266.5);
-    h_oblateness_recoil->Scale(250./266.5);
+    h_mjj_radreturn->Scale(250./266.5);
+    h_mj1_mj2_radreturn->Scale(250./266.5);
+    h_y23_radreturn->Scale(250./266.5);
+    h_egamma_radreturn->Scale(250./266.5);
+    h_oblateness_radreturn->Scale(250./266.5);
   }
 
   if(pol=="eR" ) { 
@@ -96,11 +96,11 @@ void selection_smallset() {
     h_egamma_qq->Scale(250./276.9);
     h_oblateness_qq->Scale(250./276.9);
 
-    h_mjj_recoil->Scale(250./276.9);
-    h_mj1_mj2_recoil->Scale(250./276.9);
-    h_y23_recoil->Scale(250./276.9);
-    h_egamma_recoil->Scale(250./276.9);
-    h_oblateness_recoil->Scale(250./276.9);
+    h_mjj_radreturn->Scale(250./276.9);
+    h_mj1_mj2_radreturn->Scale(250./276.9);
+    h_y23_radreturn->Scale(250./276.9);
+    h_egamma_radreturn->Scale(250./276.9);
+    h_oblateness_radreturn->Scale(250./276.9);
   }
   
   TFile *f2 = new TFile(folder+"bkg_"+kt+"_WW"+sel+"250GeV_"+pol+"_btag1_0.9_btag2_0.2.root");
@@ -154,7 +154,7 @@ void selection_smallset() {
   //Efficiency y23.
   float bb_integral=0;
   float qq_integral=0;
-  float recoil_integral=0;
+  float radreturn_integral=0;
   float zz_integral=0;
   float ww_integral=0;
   float hz_integral=0;
@@ -162,16 +162,16 @@ void selection_smallset() {
   for(int i=0; i<100; i++) {
     bb_integral+=h_y23_bb->GetBinContent(i+1);
     qq_integral+=h_y23_qq->GetBinContent(i+1);
-    recoil_integral+=h_y23_recoil->GetBinContent(i+1);
+    radreturn_integral+=h_y23_radreturn->GetBinContent(i+1);
     zz_integral+=h_y23_zz->GetBinContent(i+1);
     hz_integral+=h_y23_hz->GetBinContent(i+1);
     ww_integral+=h_y23_ww->GetBinContent(i+1);
   }
-  cout<< "selection"<<cuts<<" "<< bb_integral<<" "<<qq_integral<<" "<<recoil_integral<<" "<< ww_integral<<" "<< zz_integral<<" "<< hz_integral<<endl;
-  // else cout<< "selection"<<cuts<<" "<< bb_integral<<" "<<qq_integral<<" "<<recoil_integral<<" "<< ww_integral<<" "<< zz_integral<<" "<< 0<<endl;
+  cout<< "selection"<<cuts<<" "<< bb_integral<<" "<<qq_integral<<" "<<radreturn_integral<<" "<< ww_integral<<" "<< zz_integral<<" "<< hz_integral<<endl;
+  // else cout<< "selection"<<cuts<<" "<< bb_integral<<" "<<qq_integral<<" "<<radreturn_integral<<" "<< ww_integral<<" "<< zz_integral<<" "<< 0<<endl;
   //  cout<< bb_integral<<endl;
   //cout<< qq_integral<<" "<<100.*qq_integral/bb_integral<<"%"<<endl;
-  //cout<< recoil_integral<<" "<<100.*recoil_integral/bb_integral<<"%"<<endl;
+  //cout<< radreturn_integral<<" "<<100.*radreturn_integral/bb_integral<<"%"<<endl;
   //cout<< ww_integral<<" "<<100.*ww_integral/bb_integral<<"%"<<endl;
   //cout<< zz_integral<<" "<<100.*zz_integral/bb_integral<<"%"<<endl;
   //cout<< hz_integral<<" "<<100.*hz_integral/bb_integral<<"%"<<endl;
@@ -200,8 +200,8 @@ void selection_smallset() {
 
   h_y23_qq->SetLineColor(1);
   h_y23_qq->Draw("histosame");
-  h_y23_recoil->SetLineColor(2);
-  h_y23_recoil->Draw("histosame");
+  h_y23_radreturn->SetLineColor(2);
+  h_y23_radreturn->Draw("histosame");
   h_y23_ww->SetLineColor(5);
   h_y23_ww->Draw("histosame");
   h_y23_zz->SetLineColor(6);
@@ -223,8 +223,8 @@ void selection_smallset() {
 
   h_y12_qq->SetLineColor(1);
   h_y12_qq->Draw("histosame");
-  h_y12_recoil->SetLineColor(2);
-  h_y12_recoil->Draw("histosame");
+  h_y12_radreturn->SetLineColor(2);
+  h_y12_radreturn->Draw("histosame");
   h_y12_ww->SetLineColor(5);
   h_y12_ww->Draw("histosame");
   h_y12_zz->SetLineColor(6);
@@ -245,8 +245,8 @@ void selection_smallset() {
 
   h_egamma_qq->SetLineColor(1);
   h_egamma_qq->Draw("histosame");
-  h_egamma_recoil->SetLineColor(2);
-  h_egamma_recoil->Draw("histosame");
+  h_egamma_radreturn->SetLineColor(2);
+  h_egamma_radreturn->Draw("histosame");
   h_egamma_ww->SetLineColor(5);
   h_egamma_ww->Draw("histosame");
   h_egamma_zz->SetLineColor(6);
@@ -258,7 +258,7 @@ void selection_smallset() {
   TLegend *leg0 = new TLegend(0.2,0.2,0.9,0.9);
   leg0->AddEntry(h_y23_bb,"b#bar{b}","l");
   leg0->AddEntry(h_y23_qq,TString::Format("q#bar{q}, %0.1f",100.*qq_integral/bb_integral)+"%","l");
-  leg0->AddEntry(h_y23_recoil,TString::Format("Z-recoil, %0.1f",100.*recoil_integral/bb_integral)+"%","l");
+  leg0->AddEntry(h_y23_radreturn,TString::Format("Z-radreturn, %0.1f",100.*radreturn_integral/bb_integral)+"%","l");
   leg0->AddEntry(h_y23_zz,TString::Format("ZZ, %0.1f",100.*zz_integral/bb_integral)+"%","l");
   leg0->AddEntry(h_y23_ww,TString::Format("WW, %0.1f",100.*ww_integral/bb_integral)+"%","l");
   leg0->AddEntry(h_y23_hz,TString::Format("HZ, %0.1f",100.*hz_integral/bb_integral)+"%","l");
@@ -285,8 +285,8 @@ void selection_smallset() {
 
   h_mjj_qq->SetLineColor(1);
   h_mjj_qq->Draw("histosame");
-  h_mjj_recoil->SetLineColor(2);
-  h_mjj_recoil->Draw("histosame");
+  h_mjj_radreturn->SetLineColor(2);
+  h_mjj_radreturn->Draw("histosame");
   h_mjj_ww->SetLineColor(5);
   h_mjj_ww->Draw("histosame");
   h_mjj_zz->SetLineColor(6);
@@ -307,8 +307,8 @@ void selection_smallset() {
 
   h_mj1_mj2_qq->SetLineColor(1);
   h_mj1_mj2_qq->Draw("histosame");
-  h_mj1_mj2_recoil->SetLineColor(2);
-  h_mj1_mj2_recoil->Draw("histosame");
+  h_mj1_mj2_radreturn->SetLineColor(2);
+  h_mj1_mj2_radreturn->Draw("histosame");
   h_mj1_mj2_ww->SetLineColor(5);
   h_mj1_mj2_ww->Draw("histosame");
   h_mj1_mj2_zz->SetLineColor(6);
@@ -328,8 +328,8 @@ void selection_smallset() {
 
   h_sphericity_qq->SetLineColor(1);
   h_sphericity_qq->Draw("histosame");
-  h_sphericity_recoil->SetLineColor(2);
-  h_sphericity_recoil->Draw("histosame");
+  h_sphericity_radreturn->SetLineColor(2);
+  h_sphericity_radreturn->Draw("histosame");
   h_sphericity_ww->SetLineColor(5);
   h_sphericity_ww->Draw("histosame");
   h_sphericity_zz->SetLineColor(6);
@@ -341,7 +341,7 @@ void selection_smallset() {
   TLegend *leg = new TLegend(0.2,0.2,0.9,0.9);
   leg->AddEntry(h_sphericity_bb,"b#bar{b}","l");
   leg->AddEntry(h_sphericity_qq,TString::Format("q#bar{q}, %0.1f",100.*qq_integral/bb_integral)+"%","l");
-  leg->AddEntry(h_sphericity_recoil,TString::Format("Z-recoil, %0.1f",100.*recoil_integral/bb_integral)+"%","l");
+  leg->AddEntry(h_sphericity_radreturn,TString::Format("Z-radreturn, %0.1f",100.*radreturn_integral/bb_integral)+"%","l");
   leg->AddEntry(h_sphericity_zz,TString::Format("ZZ, %0.1f",100.*zz_integral/bb_integral)+"%","l");
   leg->AddEntry(h_sphericity_ww,TString::Format("WW, %0.1f",100.*ww_integral/bb_integral)+"%","l");
   leg->AddEntry(h_sphericity_hz,TString::Format("HZ, %0.1f",100.*hz_integral/bb_integral)+"%","l");
@@ -356,14 +356,14 @@ void selection_smallset() {
 
   // float bb_integral2=0;
   // float qq_integral2=0;
-  // float recoil_integral2=0;
+  // float radreturn_integral2=0;
   // float zz_integral2=0;
   // float ww_integral2=0;
 
   // for(int i=0; i<100; i++) {
   //   if(h_mjj_bb->GetBinCenter(i+1)>180)  bb_integral2+=h_mjj_bb->GetBinContent(i+1);
   //   if(h_mjj_qq->GetBinCenter(i+1)>180)  qq_integral2+=h_mjj_qq->GetBinContent(i+1);
-  //   if(h_mjj_recoil->GetBinCenter(i+1)>180)  recoil_integral2+=h_mjj_recoil->GetBinContent(i+1);
+  //   if(h_mjj_radreturn->GetBinCenter(i+1)>180)  radreturn_integral2+=h_mjj_radreturn->GetBinContent(i+1);
   //   if(h_mjj_zz->GetBinCenter(i+1)>180)  zz_integral2+=h_mjj_zz->GetBinContent(i+1);
   //   if(h_mjj_ww->GetBinCenter(i+1)>180)  ww_integral2+=h_mjj_ww->GetBinContent(i+1);
   // }
@@ -371,34 +371,34 @@ void selection_smallset() {
   // cout<< " after a cut in m(jj) of 180 "<<endl;
   // cout<< "bb: "<<bb_integral2<<" "<<100*bb_integral2/bb_integral<<"%"<<endl;
   // cout<< "qq: "<<100.*qq_integral2/bb_integral2<<"%"<<endl;
-  // cout<< "recoil: "<<100.*recoil_integral2/bb_integral2<<"%"<<endl;
+  // cout<< "radreturn: "<<100.*radreturn_integral2/bb_integral2<<"%"<<endl;
   // cout<< "ww: "<<100.*ww_integral2/bb_integral2<<"%"<<endl;
   // cout<< "zz: "<<100.*zz_integral2/bb_integral2<<"%"<<endl;
 
   // bb_integral2=0;
   // qq_integral2=0;
-  // recoil_integral2=0;
+  // radreturn_integral2=0;
   // zz_integral2=0;
   // ww_integral2=0;
 
   // for(int i=0; i<100; i++) {
   //   if(h_sphericity_bb->GetBinCenter(i+1)<0.18)  bb_integral2+=h_sphericity_bb->GetBinContent(i+1);
   //   if(h_sphericity_qq->GetBinCenter(i+1)<0.18)  qq_integral2+=h_sphericity_qq->GetBinContent(i+1);
-  //   if(h_sphericity_recoil->GetBinCenter(i+1)<0.18)  recoil_integral2+=h_sphericity_recoil->GetBinContent(i+1);
+  //   if(h_sphericity_radreturn->GetBinCenter(i+1)<0.18)  radreturn_integral2+=h_sphericity_radreturn->GetBinContent(i+1);
   //   if(h_sphericity_zz->GetBinCenter(i+1)<0.18)  zz_integral2+=h_sphericity_zz->GetBinContent(i+1);
   //   if(h_sphericity_ww->GetBinCenter(i+1)<0.18)  ww_integral2+=h_sphericity_ww->GetBinContent(i+1);
   // }
 
   // bb_integral2=0;
   // qq_integral2=0;
-  // recoil_integral2=0;
+  // radreturn_integral2=0;
   // zz_integral2=0;
   // ww_integral2=0;
 
   // for(int i=0; i<100; i++) {
   //   if(h_egamma_bb->GetBinCenter(i+1)<40)  bb_integral2+=h_egamma_bb->GetBinContent(i+1);
   //   if(h_egamma_qq->GetBinCenter(i+1)<40)  qq_integral2+=h_egamma_qq->GetBinContent(i+1);
-  //   if(h_egamma_recoil->GetBinCenter(i+1)<40)  recoil_integral2+=h_egamma_recoil->GetBinContent(i+1);
+  //   if(h_egamma_radreturn->GetBinCenter(i+1)<40)  radreturn_integral2+=h_egamma_radreturn->GetBinContent(i+1);
   //   if(h_egamma_zz->GetBinCenter(i+1)<40)  zz_integral2+=h_egamma_zz->GetBinContent(i+1);
   //   if(h_egamma_ww->GetBinCenter(i+1)<40)  ww_integral2+=h_egamma_ww->GetBinContent(i+1);
   // }
@@ -406,20 +406,20 @@ void selection_smallset() {
   // cout<< " after a cut in egamma of 40"<<endl;
   // cout<< "bb: "<<bb_integral2<<" "<<100*bb_integral2/bb_integral<<"%"<<endl;
   // cout<< "qq: "<<100.*qq_integral2/bb_integral2<<"%"<<endl;
-  // cout<< "recoil: "<<100.*recoil_integral2/bb_integral2<<"%"<<endl;
+  // cout<< "radreturn: "<<100.*radreturn_integral2/bb_integral2<<"%"<<endl;
   // cout<< "ww: "<<100.*ww_integral2/bb_integral2<<"%"<<endl;
   // cout<< "zz: "<<100.*zz_integral2/bb_integral2<<"%"<<endl;
 
   // bb_integral2=0;
   // qq_integral2=0;
-  // recoil_integral2=0;
+  // radreturn_integral2=0;
   // zz_integral2=0;
   // ww_integral2=0;
 
   // for(int i=0; i<100; i++) {
   //   if(h_sphericity_bb->GetBinCenter(i+1)<0.18)  bb_integral2+=h_sphericity_bb->GetBinContent(i+1);
   //   if(h_sphericity_qq->GetBinCenter(i+1)<0.18)  qq_integral2+=h_sphericity_qq->GetBinContent(i+1);
-  //   if(h_sphericity_recoil->GetBinCenter(i+1)<0.18)  recoil_integral2+=h_sphericity_recoil->GetBinContent(i+1);
+  //   if(h_sphericity_radreturn->GetBinCenter(i+1)<0.18)  radreturn_integral2+=h_sphericity_radreturn->GetBinContent(i+1);
   //   if(h_sphericity_zz->GetBinCenter(i+1)<0.18)  zz_integral2+=h_sphericity_zz->GetBinContent(i+1);
   //   if(h_sphericity_ww->GetBinCenter(i+1)<0.18)  ww_integral2+=h_sphericity_ww->GetBinContent(i+1);
   // }
@@ -427,21 +427,21 @@ void selection_smallset() {
   // cout<< " after a cut in sphericity of 0.18 "<<endl;
   // cout<< "bb: "<<bb_integral2<<" "<<100*bb_integral2/bb_integral<<"%"<<endl;
   // cout<< "qq: "<<100.*qq_integral2/bb_integral2<<"%"<<endl;
-  // cout<< "recoil: "<<100.*recoil_integral2/bb_integral2<<"%"<<endl;
+  // cout<< "radreturn: "<<100.*radreturn_integral2/bb_integral2<<"%"<<endl;
   // cout<< "ww: "<<100.*ww_integral2/bb_integral2<<"%"<<endl;
   // cout<< "zz: "<<100.*zz_integral2/bb_integral2<<"%"<<endl;
 
 
   // bb_integral2=0;
   // qq_integral2=0;
-  // recoil_integral2=0;
+  // radreturn_integral2=0;
   // zz_integral2=0;
   // ww_integral2=0;
 
   // for(int i=0; i<100; i++) {
   //   if(h_sphericity_bb->GetBinCenter(i+1)<0.03)  bb_integral2+=h_sphericity_bb->GetBinContent(i+1);
   //   if(h_sphericity_qq->GetBinCenter(i+1)<0.03)  qq_integral2+=h_sphericity_qq->GetBinContent(i+1);
-  //   if(h_sphericity_recoil->GetBinCenter(i+1)<0.03)  recoil_integral2+=h_sphericity_recoil->GetBinContent(i+1);
+  //   if(h_sphericity_radreturn->GetBinCenter(i+1)<0.03)  radreturn_integral2+=h_sphericity_radreturn->GetBinContent(i+1);
   //   if(h_sphericity_zz->GetBinCenter(i+1)<0.03)  zz_integral2+=h_sphericity_zz->GetBinContent(i+1);
   //   if(h_sphericity_ww->GetBinCenter(i+1)<0.03)  ww_integral2+=h_sphericity_ww->GetBinContent(i+1);
   // }
@@ -449,21 +449,21 @@ void selection_smallset() {
   // cout<< " after a cut in sphericity of 0.03 "<<endl;
   // cout<< "bb: "<<bb_integral2<<" "<<100*bb_integral2/bb_integral<<"%"<<endl;
   // cout<< "qq: "<<100.*qq_integral2/bb_integral2<<"%"<<endl;
-  // cout<< "recoil: "<<100.*recoil_integral2/bb_integral2<<"%"<<endl;
+  // cout<< "radreturn: "<<100.*radreturn_integral2/bb_integral2<<"%"<<endl;
   // cout<< "ww: "<<100.*ww_integral2/bb_integral2<<"%"<<endl;
   // cout<< "zz: "<<100.*zz_integral2/bb_integral2<<"%"<<endl;
 
   
   // bb_integral2=0;
   // qq_integral2=0;
-  // recoil_integral2=0;
+  // radreturn_integral2=0;
   // zz_integral2=0;
   // ww_integral2=0;
 
   // for(int i=0; i<100; i++) {
   //   if(h_mj1_mj2_bb->GetBinCenter(i+1)<120)  bb_integral2+=h_mj1_mj2_bb->GetBinContent(i+1);
   //   if(h_mj1_mj2_qq->GetBinCenter(i+1)<120)  qq_integral2+=h_mj1_mj2_qq->GetBinContent(i+1);
-  //   if(h_mj1_mj2_recoil->GetBinCenter(i+1)<120)  recoil_integral2+=h_mj1_mj2_recoil->GetBinContent(i+1);
+  //   if(h_mj1_mj2_radreturn->GetBinCenter(i+1)<120)  radreturn_integral2+=h_mj1_mj2_radreturn->GetBinContent(i+1);
   //   if(h_mj1_mj2_zz->GetBinCenter(i+1)<120)  zz_integral2+=h_mj1_mj2_zz->GetBinContent(i+1);
   //   if(h_mj1_mj2_ww->GetBinCenter(i+1)<120)  ww_integral2+=h_mj1_mj2_ww->GetBinContent(i+1);
   // }
@@ -471,7 +471,7 @@ void selection_smallset() {
   // cout<< " after a cut in m1+m2 of 120 "<<endl;
   // cout<< "bb: "<<bb_integral2<<" "<<100*bb_integral2/bb_integral<<"%"<<endl;
   // cout<< "qq: "<<100.*qq_integral2/bb_integral2<<"%"<<endl;
-  // cout<< "recoil: "<<100.*recoil_integral2/bb_integral2<<"%"<<endl;
+  // cout<< "radreturn: "<<100.*radreturn_integral2/bb_integral2<<"%"<<endl;
   // cout<< "ww: "<<100.*ww_integral2/bb_integral2<<"%"<<endl;
   // cout<< "zz: "<<100.*zz_integral2/bb_integral2<<"%"<<endl;
 }

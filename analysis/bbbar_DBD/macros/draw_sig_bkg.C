@@ -44,13 +44,13 @@ void draw_sig_bkg() {
   cout<<" ######################## "<<endl;
   cout<<"Left Handed polarization "<< endl;
 
-  TString pol="eR";
+  TString pol="eL";
  
   TFile *f = new TFile("../output/bbbar_genkt_restorer_cuts6_250GeV_"+pol+"_btag1_0.9_btag2_0.2_nbins40.root");
   TH1F *h_parton = (TH1F*)f->Get("parton");
   TH1F *h_reco = (TH1F*)f->Get("reco");
   TH1F *h_bkg_qq = (TH1F*)f->Get("bkg_qq");
-  TH1F *h_bkg_recoil = (TH1F*)f->Get("bkg_recoil");
+  TH1F *h_bkg_radreturn = (TH1F*)f->Get("bkg_radreturn");
 
   f = new TFile("../output/bkg_ZZ_genkt_restorer_cuts6_250GeV_"+pol+"_btag1_0.9_btag2_0.2_nbins40.root");
   TH1F *h_bkg_zz = (TH1F*)f->Get("reco");
@@ -62,18 +62,22 @@ void draw_sig_bkg() {
   TH1F *h_bkg_hz = (TH1F*)f->Get("reco");
 
   if(pol=="eL") {
-    h_bkg_qq->Scale(250./266.5);
-    h_bkg_recoil->Scale(250./266.5);
+    h_parton->Scale(250./266.5);
     h_reco->Scale(250./266.5);
+    h_bkg_qq->Scale(250./266.5);
+    h_bkg_radreturn->Scale(250./266.5);
+    
     h_bkg_ww->Scale(250./72.2);
     h_bkg_zz->Scale(250./1000.);
     h_bkg_hz->Scale(250./1000.);
   }
 
   if(pol=="eR") {
-    h_bkg_qq->Scale(250./276.9);
-    h_bkg_recoil->Scale(250./276.9);
+    h_parton->Scale(250./276.9);
     h_reco->Scale(250./276.9);
+    h_bkg_qq->Scale(250./276.9);
+    h_bkg_radreturn->Scale(250./276.9);
+    
     h_bkg_ww->Scale(250./72.2);
     h_bkg_zz->Scale(250./1000.);
     h_bkg_hz->Scale(250./1000.);
@@ -81,37 +85,37 @@ void draw_sig_bkg() {
 
   double reco=100.*h_reco->Integral()/h_parton->Integral();
   double qq=100.*h_bkg_qq->Integral()/h_reco->Integral();
-  double recoil=100.*h_bkg_recoil->Integral()/h_reco->Integral();
+  double radreturn=100.*h_bkg_radreturn->Integral()/h_reco->Integral();
   double zz=100.*h_bkg_zz->Integral()/h_reco->Integral();
   double ww=100.*h_bkg_ww->Integral()/h_reco->Integral();
   double hz=100.*h_bkg_hz->Integral()/h_reco->Integral();
 
   h_reco->Add(h_bkg_qq);
-  h_reco->Add(h_bkg_recoil);
+  h_reco->Add(h_bkg_radreturn);
   h_reco->Add(h_bkg_zz);
   h_reco->Add(h_bkg_ww);
   h_reco->Add(h_bkg_hz);
 
   h_bkg_hz->Add(h_bkg_ww);
   h_bkg_hz->Add(h_bkg_zz);
-  h_bkg_hz->Add(h_bkg_recoil);
+  h_bkg_hz->Add(h_bkg_radreturn);
   h_bkg_hz->Add(h_bkg_qq);
 
   h_bkg_ww->Add(h_bkg_zz);
-  h_bkg_ww->Add(h_bkg_recoil);
+  h_bkg_ww->Add(h_bkg_radreturn);
   h_bkg_ww->Add(h_bkg_qq);
 
-  h_bkg_zz->Add(h_bkg_recoil);
+  h_bkg_zz->Add(h_bkg_radreturn);
   h_bkg_zz->Add(h_bkg_qq);
   
-  h_bkg_recoil->Add(h_bkg_qq);
+  h_bkg_radreturn->Add(h_bkg_qq);
 
   if(pol=="eL") {
     h_bkg_hz->Scale(10);
     h_bkg_zz->Scale(10);
     h_bkg_ww->Scale(10);
     h_bkg_qq->Scale(10);
-    h_bkg_recoil->Scale(10);
+    h_bkg_radreturn->Scale(10);
   }
 
   if(pol=="eR") {
@@ -119,7 +123,7 @@ void draw_sig_bkg() {
     h_bkg_zz->Scale(2);
     h_bkg_ww->Scale(2);
     h_bkg_qq->Scale(2);
-    h_bkg_recoil->Scale(2);
+    h_bkg_radreturn->Scale(2);
   }
   
   TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
@@ -151,10 +155,10 @@ void draw_sig_bkg() {
   h_bkg_zz->SetFillStyle(1001);
   h_bkg_zz->Draw("histosame");
 
-  h_bkg_recoil->SetLineColor(4);
-  h_bkg_recoil->SetFillColor(4);
-  h_bkg_recoil->SetFillStyle(1001);
-  h_bkg_recoil->Draw("histosame");
+  h_bkg_radreturn->SetLineColor(4);
+  h_bkg_radreturn->SetFillColor(4);
+  h_bkg_radreturn->SetFillStyle(1001);
+  h_bkg_radreturn->Draw("histosame");
   
   h_bkg_qq->SetLineColor(6);
   h_bkg_qq->SetFillColor(6);
@@ -166,10 +170,9 @@ void draw_sig_bkg() {
   TLegend *leg = new TLegend(0.2,0.6,0.55,0.8);
   if(pol=="eL")leg->SetHeader("e_{L}^{-}e_{R}^{+} #rightarrow b#bar{b}, 250GeV, 250fb^{-1}");
   if(pol=="eR")leg->SetHeader("e_{R}^{-}e_{L}^{+} #rightarrow b#bar{b}, 250GeV, 250fb^{-1}");
-  if(pol=="eL") leg->AddEntry(h_reco,TString::Format("Signal, selection eff: %0.1f",29.8)+"%","lpe");
-  if(pol=="eR") leg->AddEntry(h_reco,TString::Format("Signal, selection eff: %0.1f",29.8)+"%","lpe");
+  leg->AddEntry(h_reco,TString::Format("Signal, selection eff: %0.1f",reco)+"%","lpe");
   leg->AddEntry(h_bkg_qq,TString::Format("q#bar{q} %0.2f",qq)+"%","f");
-  leg->AddEntry(h_bkg_recoil,TString::Format("Radiative return %0.2f",recoil)+"%","f");
+  leg->AddEntry(h_bkg_radreturn,TString::Format("Radiative return %0.2f",radreturn)+"%","f");
   leg->AddEntry(h_bkg_ww,TString::Format("WW %0.2f",ww)+"%","f");
   leg->AddEntry(h_bkg_zz,TString::Format("ZZ %0.2f",zz)+"%","f");
   leg->AddEntry(h_bkg_hz,TString::Format("HZ %0.2f",hz)+"%","f");

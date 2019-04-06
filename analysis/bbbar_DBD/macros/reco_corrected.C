@@ -43,9 +43,9 @@ void reco_corrected() {
   TH1F *h_parton = (TH1F*)f->Get("parton");
   TH1F *h_parton_recocuts = (TH1F*)f->Get("parton_recocuts");
 
-  TH1F *h_truth = (TH1F*)f->Get("truth");
+  TH1F *h_cheatedcharge = (TH1F*)f->Get("cheatedcharge");
 
-  h_truth->Sumw2();
+  h_cheatedcharge->Sumw2();
   
   TH1F *h_noncorrected = new TH1F("h_noncorrected","h_noncorrected",40,-1,1);
 
@@ -66,8 +66,8 @@ void reco_corrected() {
   acceptance_parton->Scale(1./min);
       
   double integtral_parton= h_parton->Integral(5,20);//10,30);
-  double integtral_truth= h_parton_recocuts->Integral(5,20);//10,30);
-  h_parton->Scale(integtral_truth/integtral_parton);
+  double integtral_cheatedcharge= h_parton_recocuts->Integral(5,20);//10,30);
+  h_parton->Scale(integtral_cheatedcharge/integtral_parton);
   
   TString lumi= "250fb-1,";
 
@@ -110,11 +110,11 @@ void reco_corrected() {
   h_parton->SetFillStyle(3001);
   h_parton->Draw("histo");
     
-  //h_truth->SetLineColor(4);
-  //h_truth->SetLineWidth(2);
-  //h_truth->SetMarkerColor(4);
-  //h_truth->SetMarkerStyle(1);
-  //h_truth->Draw("pesame");
+  //h_cheatedcharge->SetLineColor(4);
+  //h_cheatedcharge->SetLineWidth(2);
+  //h_cheatedcharge->SetMarkerColor(4);
+  //h_cheatedcharge->SetMarkerStyle(1);
+  //h_cheatedcharge->Draw("pesame");
 
   h_reco->SetLineColor(1);
   h_reco->SetLineWidth(2);
@@ -145,11 +145,11 @@ void reco_corrected() {
   h_parton->SetFillStyle(3001);
   h_parton->Draw("histo");
     
-  //h_truth->SetLineColor(4);
-  //h_truth->SetLineWidth(2);
-  //h_truth->SetMarkerColor(4);
-  //h_truth->SetMarkerStyle(1);
-  //h_truth->Draw("pesame");
+  //h_cheatedcharge->SetLineColor(4);
+  //h_cheatedcharge->SetLineWidth(2);
+  //h_cheatedcharge->SetMarkerColor(4);
+  //h_cheatedcharge->SetMarkerStyle(1);
+  //h_cheatedcharge->Draw("pesame");
 
   h_parton_recocuts->SetLineColor(1);
   h_parton_recocuts->SetLineWidth(2);
@@ -176,18 +176,18 @@ void reco_corrected() {
 
   TCanvas * canvas2 = new TCanvas ("canvas2","canvas2",1000,800);
   canvas2->cd(1);
-  if(pol=="eL") h_truth->SetTitle("e_{L}^{+}e_{R}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
-  else h_truth->SetTitle("e_{R}^{+}e_{L}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
-  h_truth->GetXaxis()->SetTitle("cos(#theta)");
-  h_truth->GetYaxis()->SetTitle("entries / 0.05 rad");
-  h_truth->GetYaxis()->SetTitleOffset(2.05);
-  h_truth->GetYaxis()->SetRangeUser(0,h_truth->GetMaximum()*1.1);
+  if(pol=="eL") h_cheatedcharge->SetTitle("e_{L}^{+}e_{R}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
+  else h_cheatedcharge->SetTitle("e_{R}^{+}e_{L}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
+  h_cheatedcharge->GetXaxis()->SetTitle("cos(#theta)");
+  h_cheatedcharge->GetYaxis()->SetTitle("entries / 0.05 rad");
+  h_cheatedcharge->GetYaxis()->SetTitleOffset(2.05);
+  h_cheatedcharge->GetYaxis()->SetRangeUser(0,h_cheatedcharge->GetMaximum()*1.1);
    
-  h_truth->SetLineColor(4);
-  h_truth->SetLineWidth(1);
-  h_truth->SetMarkerColor(4);
-  h_truth->SetMarkerStyle(1);
-  h_truth->Draw("histo");
+  h_cheatedcharge->SetLineColor(4);
+  h_cheatedcharge->SetLineWidth(1);
+  h_cheatedcharge->SetMarkerColor(4);
+  h_cheatedcharge->SetMarkerStyle(1);
+  h_cheatedcharge->Draw("histo");
 
   h_reco->SetLineColor(1);
   h_reco->SetLineWidth(2);
@@ -206,7 +206,7 @@ void reco_corrected() {
   TLegend *leg2 = new TLegend(0.2,0.65,0.55,0.8);
   leg2->AddEntry(h_reco,"signal (raw)","lep");
   leg2->AddEntry(h_noncorrected,"signal (+ charge correction)","lep");
-  leg2->AddEntry(h_truth,"signal (cheated charge)","lep");
+  leg2->AddEntry(h_cheatedcharge,"signal (cheated charge)","lep");
   leg2->SetFillColor(0);
   leg2->SetLineColor(0);
   leg2->SetShadowColor(0);
