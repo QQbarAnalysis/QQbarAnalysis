@@ -333,14 +333,29 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> r
   asymm_all[44]->SetName("parton_recocuts");
   asymm_all[44]->Write();
 
-  // write rejected events per category (for the p-value calculation offline)
+  // Name rejected events per category (for the p-value calculation offline)
   asymm_all[45]->SetName("rejected_BcBc");
   asymm_all[46]->SetName("rejected_KcKc");
   asymm_all[47]->SetName("rejected_BcKc");
   asymm_all[48]->SetName("rejected_KcBc");
   asymm_all[49]->SetName("rejected_BcKc_same1");
-  asymm_all[50]->SetName("rejected_BcKc_same2");
-  for( int i=45; i<51; i++) asymm_all[i]->Write();
+  asymm_all[50]->SetName("rejected_BcKc_same2"); 
+
+  asymm_all[51]->SetName("bkg_qq_rejected_BcBc");
+  asymm_all[52]->SetName("bkg_qq_rejected_KcKc");
+  asymm_all[53]->SetName("bkg_qq_rejected_BcKc");
+  asymm_all[54]->SetName("bkg_qq_rejected_KcBc");
+  asymm_all[55]->SetName("bkg_qq_rejected_BcKc_same1");
+  asymm_all[56]->SetName("bkg_qq_rejected_BcKc_same2");
+
+  asymm_all[57]->SetName("bkg_radreturn_rejected_BcBc");
+  asymm_all[58]->SetName("bkg_radreturn_rejected_KcKc");
+  asymm_all[59]->SetName("bkg_radreturn_rejected_BcKc");
+  asymm_all[60]->SetName("bkg_radreturn_rejected_KcBc");
+  asymm_all[61]->SetName("bkg_radreturn_rejected_BcKc_same1");
+  asymm_all[62]->SetName("bkg_radreturn_rejected_BcKc_same2");
+  
+  for( int i=45; i<63; i++) asymm_all[i]->Write();
   
   
   for(unsigned i=0; i<resolution.size(); i++) resolution[i]->Write();
@@ -354,7 +369,6 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> r
 
 void observable::SaveRootFile(std::vector<TH1F*> asymm_all, TString polarization="eL"){
 
-    
 
   TFile *MyFile = new TFile(TString::Format("%s_250GeV_%s_btag1_%0.1f_btag2_%0.1f_nbins%i.root",process.Data(),polarization.Data(),btag1,btag2,nbins),"RECREATE");
   MyFile->cd();
@@ -386,7 +400,7 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, TString polarization
   asymm_all[0]->SetName("reco");
   asymm_all[0]->Write();
 
-    // write rejected events per category (for the p-value calculation offline)
+  // write rejected events per category (for the p-value calculation offline)
   asymm_all[6]->SetName("rejected_BcBc");
   asymm_all[7]->SetName("rejected_KcKc");
   asymm_all[8]->SetName("rejected_BcKc");
@@ -394,7 +408,7 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, TString polarization
   asymm_all[10]->SetName("rejected_BcKc_same1");
   asymm_all[11]->SetName("rejected_BcKc_same2");
   for( int i=6; i<12; i++) asymm_all[i]->Write();
-  
+
 
   MyFile->Close();
   
@@ -405,7 +419,22 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 {
 
   InitializeHistos(n);
+
+  TH1F* h_radreturn_BcBc_rejected = new TH1F("h_radreturn_BcBc_rejected","h_radreturn_BcBc_rejected",nbins,-1.0,1.0);
+  TH1F* h_radreturn_KcKc_rejected = new TH1F("h_radreturn_KcKc_rejected","h_radreturn_KcKc_rejected",nbins,-1.0,1.0);
+  TH1F* h_radreturn_BcKc_rejected = new TH1F("h_radreturn_BcKc_rejected","h_radreturn_BcKc_rejected",nbins,-1.0,1.0);
+  TH1F* h_radreturn_KcBc_rejected = new TH1F("h_radreturn_KcBc_rejected","h_radreturn_KcBc_rejected",nbins,-1.0,1.0);
+  TH1F* h_radreturn_BcKc_same1_rejected = new TH1F("h_radreturn_BcKc_same1_rejected","h_radreturn_BcKc_same1_rejected",nbins,-1.0,1.0);
+  TH1F* h_radreturn_BcKc_same2_rejected = new TH1F("h_radreturn_BcKc_same2_rejected","h_radreturn_BcKc_same2_rejected",nbins,-1.0,1.0);
   
+  TH1F* h_qq_BcBc_rejected = new TH1F("h_qq_BcBc_rejected","h_qq_BcBc_rejected",nbins,-1.0,1.0);
+  TH1F* h_qq_KcKc_rejected = new TH1F("h_qq_KcKc_rejected","h_qq_KcKc_rejected",nbins,-1.0,1.0);
+  TH1F* h_qq_BcKc_rejected = new TH1F("h_qq_BcKc_rejected","h_qq_BcKc_rejected",nbins,-1.0,1.0);
+  TH1F* h_qq_KcBc_rejected = new TH1F("h_qq_KcBc_rejected","h_qq_KcBc_rejected",nbins,-1.0,1.0);
+  TH1F* h_qq_BcKc_same1_rejected = new TH1F("h_qq_BcKc_same1_rejected","h_qq_BcKc_same1_rejected",nbins,-1.0,1.0);
+  TH1F* h_qq_BcKc_same2_rejected = new TH1F("h_qq_BcKc_same2_rejected","h_qq_BcKc_same2_rejected",nbins,-1.0,1.0);
+  
+   
   Long64_t nentries;
   if(n_entries>0) nentries= n_entries;
   else nentries= fChain->GetEntriesFast();
@@ -572,9 +601,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 
 	if(fabs(mc_quark_pdg[0])!=5) {
 	  asymm_BcBc[3]->Fill(cos_reco);
+	  h_qq_BcBc_rejected->Fill(cos_reco);   
 	}
 	if(fabs(mc_quark_pdg[0])==5 && bbmass<180) {
 	  asymm_BcBc[4]->Fill(cos_reco);
+	  h_radreturn_KcKc_rejected->Fill(cos_reco);   
 	}
 	
 	taken = true;
@@ -610,9 +641,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	  
 	if(fabs(mc_quark_pdg[0])!=5) {
 	  asymm_KcKc[3]->Fill(cos_reco);
+	  h_qq_KcKc_rejected->Fill(cos_reco);   
 	}
 	if(fabs(mc_quark_pdg[0])==5 && bbmass<180) {
 	  asymm_KcKc[4]->Fill(cos_reco);
+	  h_radreturn_KcKc_rejected->Fill(cos_reco);   
 	}		
 	taken = true;	  
       }
@@ -648,9 +681,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	  
 	if(fabs(mc_quark_pdg[0])!=5) {
 	  asymm_BcKc[3]->Fill(cos_reco);
+	  h_qq_BcKc_rejected->Fill(cos_reco);   
 	}
 	if(fabs(mc_quark_pdg[0])==5 && bbmass<180) {
 	  asymm_BcKc[4]->Fill(cos_reco);
+	  h_radreturn_BcKc_rejected->Fill(cos_reco);   
 	}
 	taken = true;
       }
@@ -686,9 +721,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	
 	if(fabs(mc_quark_pdg[0])!=5) {
 	  asymm_KcBc[3]->Fill(cos_reco);
+	  h_qq_KcBc_rejected->Fill(cos_reco);   
 	}
 	if(fabs(mc_quark_pdg[0])==5 && bbmass<180) {
 	  asymm_KcBc[4]->Fill(cos_reco);
+	  h_radreturn_KcBc_rejected->Fill(cos_reco);   
 	}
 	taken = true;
       }
@@ -726,9 +763,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	
 	if(fabs(mc_quark_pdg[0])!=5) {
 	  asymm_BcKc_same1[3]->Fill(cos_reco);
+	  h_qq_BcKc_same1_rejected->Fill(cos_reco);   
 	}
 	if(fabs(mc_quark_pdg[0])==5 && bbmass<180) {
 	  asymm_BcKc_same1[4]->Fill(cos_reco);
+	  h_radreturn_BcKc_same1_rejected->Fill(cos_reco);   
 	}
 	
 	taken = true;
@@ -763,9 +802,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	  
 	if(fabs(mc_quark_pdg[0])!=5) {
 	  asymm_BcKc_same2[3]->Fill(cos_reco);
+	  h_qq_BcKc_same2_rejected->Fill(cos_reco);   
 	}
 	if(fabs(mc_quark_pdg[0])==5 && bbmass<180) {
 	  asymm_BcKc_same2[4]->Fill(cos_reco);
+	  h_radreturn_BcKc_same2_rejected->Fill(cos_reco);   
 	}
 	
 	taken = true;
@@ -852,8 +893,23 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
   result.push_back(h_bbbar_KcBc_rejected);
   result.push_back(h_bbbar_BcKc_same1_rejected);
   result.push_back(h_bbbar_BcKc_same2_rejected);
-  
 
+  //Rejected qq
+  result.push_back(h_qq_BcBc_rejected);
+  result.push_back(h_qq_KcKc_rejected);
+  result.push_back(h_qq_BcKc_rejected);
+  result.push_back(h_qq_KcBc_rejected);
+  result.push_back(h_qq_BcKc_same1_rejected);
+  result.push_back(h_qq_BcKc_same2_rejected);
+  //Rejected radreturn
+  result.push_back(h_radreturn_BcBc_rejected);
+  result.push_back(h_radreturn_KcKc_rejected);
+  result.push_back(h_radreturn_BcKc_rejected);
+  result.push_back(h_radreturn_KcBc_rejected);
+  result.push_back(h_radreturn_BcKc_same1_rejected);
+  result.push_back(h_radreturn_BcKc_same2_rejected);
+
+  
   std::vector<TH2F*> result2;
   result2.push_back(h_resolution_BcBc);
   result2.push_back(h_resolution_KcKc);
