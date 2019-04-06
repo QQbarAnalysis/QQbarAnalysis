@@ -26,7 +26,7 @@
 #include "../../style/Labels.C"
 
 int nbins=40;
-TString pol = "eR";
+TString pol = "eL";
 TString folder = "../output";//output/kt_20190202";
 Double_t asymmetry_f(Double_t *x, Double_t *par)
 {
@@ -78,8 +78,8 @@ TF1 * fit_histo(TH1F * histo, float lumi_factor) {
   }
 
   TGraphErrors * g_histo = new TGraphErrors(nbins,x,y,ex,ey);
-  float range_up=0.8;
-  float range_down=-0.8;
+  float range_up=0.80;
+  float range_down=-0.80;
 
   TF1 *func_fit = new TF1("asymmetry_f",asymmetry_f,range_down,range_up,2);
   func_fit->SetParNames("S","A");
@@ -115,7 +115,7 @@ TF1 * fit_histo(TH1F * histo, float lumi_factor) {
   cout << "Chi2 = "<<func_fit->GetChisquare()<<", NDF ="<<func_fit->GetNDF()<<" Chi2/NDF= "<<func_fit->GetChisquare()/func_fit->GetNDF()<<endl;
 
 
-  TF1 *func_return = new TF1("asymmetry_f",asymmetry_f,-0.8,0.8,2);
+  TF1 *func_return = new TF1("asymmetry_f",asymmetry_f,-0.80,0.80,2);
   func_return->SetParNames("S","A");
   func_return->SetParameter(0,func_fit->GetParameter(0));
   func_return->SetParameter(1,func_fit->GetParameter(1));
@@ -147,8 +147,8 @@ TF1 * fit_histo_bkg(TH1F * histo, TH1F * bkg, float lumi_factor) {
   }
 
   TGraphErrors * g_histo = new TGraphErrors(40,x,y,ex,ey);
-  float range_up=0.81;
-  float range_down=-0.81;
+  float range_up=0.801;
+  float range_down=-0.801;
 
   TF1 *func_fit = new TF1("asymmetry_f",asymmetry_f,range_down,range_up,2);
   func_fit->SetParNames("S","A");
@@ -281,19 +281,27 @@ void fit() {
     h_noncorrected->SetBinContent(i,h_corrected->GetBinContent(i));
     h_noncorrected->SetBinError(i,h_corrected->GetBinError(i));
     
-    double error = sqrt( pow((h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*
-			     sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow(h_eff->GetBinError(i)/h_eff->GetBinContent(i),2)),2) + 0.1*0.1*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+    //    double error = sqrt( pow((h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*
+    //			     sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2))));//+0.25*pow(h_eff->GetBinError(i)/h_eff->GetBinContent(i),2)),2) + 0.0000001*0.0000001*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+
+    //double error = (h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow( sqrt(pow(h_eff->GetBinError(i),2)+0.01*0.01*pow(h_eff->GetBinContent(i),2)) /h_eff->GetBinContent(i),2));// + 0.01*0.01*pow(/h_eff->GetBinContent(i),2);
+
+    double error = (h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow(h_eff->GetBinError(i) /h_eff->GetBinContent(i),2));
+    error= sqrt(error*error +  0.0*0.01*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+    ///h_eff->GetBinContent(i),2);
+    //pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
     h_corrected->SetBinError(i,error);
      
     h_corrected->SetBinContent(i,h_corrected->GetBinContent(i)/(h_eff->GetBinContent(i)));
   
   }
+  //h_corrected->Divide(h_eff);
 
   //  h_corrected->Divide(h_eff);
   
-  double integtral_parton= h_parton->Integral(5,35);//nbins/2-nbins/3,nbins/2+nbins/3);//
-  double integtral_truth= h_corrected->Integral(5,35);
-  h_parton->Scale(integtral_truth/integtral_parton);
+  double integral_parton= h_parton->Integral(8,32);//nbins/2-nbins/3,nbins/2+nbins/3);//
+  double integral_cheatedcharge= h_corrected->Integral(8,32);
+  h_parton->Scale(integral_cheatedcharge/integral_parton);
   
   TString lumi= "250fb-1,";
   int ilumi=1;
