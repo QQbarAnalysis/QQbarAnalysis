@@ -207,12 +207,12 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> r
   asymm_all[24]->Write();
   asymm_all[30]->Write();
   //truth level, categories
-  asymm_all[1]->SetName("truth_BcBc");
-  asymm_all[7]->SetName("truth_KcKc");
-  asymm_all[13]->SetName("truth_BcKc");
-  asymm_all[19]->SetName("truth_KcBc");
-  asymm_all[25]->SetName("truth_BcKc_same1");
-  asymm_all[31]->SetName("truth_BcKc_same2");
+  asymm_all[1]->SetName("cheatedcharge_BcBc");
+  asymm_all[7]->SetName("cheatedcharge_KcKc");
+  asymm_all[13]->SetName("cheatedcharge_BcKc");
+  asymm_all[19]->SetName("cheatedcharge_KcBc");
+  asymm_all[25]->SetName("cheatedcharge_BcKc_same1");
+  asymm_all[31]->SetName("cheatedcharge_BcKc_same2");
   asymm_all[1]->Write();
   asymm_all[7]->Write();
   asymm_all[13]->Write();
@@ -245,13 +245,13 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> r
   asymm_all[21]->Write();
   asymm_all[27]->Write();
   asymm_all[33]->Write();
-  //bkg Z-recoil level, categories
-  asymm_all[4]->SetName("bkg_recoil_BcBc");
-  asymm_all[10]->SetName("bkg_recoil_KcKc");
-  asymm_all[16]->SetName("bkg_recoil_BcKc");
-  asymm_all[22]->SetName("bkg_recoil_KcBc");
-  asymm_all[28]->SetName("bkg_recoil_BcKc_same1");
-  asymm_all[34]->SetName("bkg_recoil_BcKc_same2");
+  //bkg Z-radreturn level, categories
+  asymm_all[4]->SetName("bkg_radreturn_BcBc");
+  asymm_all[10]->SetName("bkg_radreturn_KcKc");
+  asymm_all[16]->SetName("bkg_radreturn_BcKc");
+  asymm_all[22]->SetName("bkg_radreturn_KcBc");
+  asymm_all[28]->SetName("bkg_radreturn_BcKc_same1");
+  asymm_all[34]->SetName("bkg_radreturn_BcKc_same2");
   asymm_all[4]->Write();
   asymm_all[10]->Write();
   asymm_all[16]->Write();
@@ -300,7 +300,7 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> r
   asymm_all[3]->Add(asymm_all[27]);//bckc_same
   asymm_all[3]->Add(asymm_all[33]);//kcbc_same
 
-  //bkg-recoil
+  //bkg-radreturn
   asymm_all[4]->Add(asymm_all[10]);//kckc
   asymm_all[4]->Add(asymm_all[16]);//bckc
   asymm_all[4]->Add(asymm_all[22]);//kcbc
@@ -311,7 +311,7 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> r
   asymm_all[1]->SetName("truth");
   asymm_all[2]->SetName("corrected");
   asymm_all[3]->SetName("bkg_qq");
-  asymm_all[4]->SetName("bkg_recoil");
+  asymm_all[4]->SetName("bkg_radreturn");
 
   for(int i=0; i<5; i++) asymm_all[i]->Write();
 
@@ -328,10 +328,20 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> r
   asymm_all[29]->Write();
   asymm_all[35]->Write();
 
-  if(asymm_all.size()>44) {
-    asymm_all[44]->SetName("parton_recocuts");
-    asymm_all[44]->Write();
-  }
+
+  // write parton level distribution for reconstructed events
+  asymm_all[44]->SetName("parton_recocuts");
+  asymm_all[44]->Write();
+
+  // write rejected events per category (for the p-value calculation offline)
+  asymm_all[45]->SetName("rejected_BcBc");
+  asymm_all[46]->SetName("rejected_KcKc");
+  asymm_all[47]->SetName("rejected_BcKc");
+  asymm_all[48]->SetName("rejected_KcBc");
+  asymm_all[49]->SetName("rejected_BcKc_same1");
+  asymm_all[50]->SetName("rejected_BcKc_same2");
+  for( int i=45; i<51; i++) asymm_all[i]->Write();
+  
   
   for(unsigned i=0; i<resolution.size(); i++) resolution[i]->Write();
   
@@ -375,6 +385,16 @@ void observable::SaveRootFile(std::vector<TH1F*> asymm_all, TString polarization
 
   asymm_all[0]->SetName("reco");
   asymm_all[0]->Write();
+
+    // write rejected events per category (for the p-value calculation offline)
+  asymm_all[6]->SetName("rejected_BcBc");
+  asymm_all[7]->SetName("rejected_KcKc");
+  asymm_all[8]->SetName("rejected_BcKc");
+  asymm_all[9]->SetName("rejected_KcBc");
+  asymm_all[10]->SetName("rejected_BcKc_same1");
+  asymm_all[11]->SetName("rejected_BcKc_same2");
+  for( int i=6; i<12; i++) asymm_all[i]->Write();
+  
 
   MyFile->Close();
   
@@ -680,15 +700,15 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 
     if(taken == false ) {
       
-    if(Bc[0]*Kc[0]<0  ){
-      h_bbbar_BcKc_same1_rejected->Fill( costheta_BcKc_same1);
-      h_bbbar_BcKc_same1_rejected->Fill( -costheta_BcKc_same1);
-    }
+      if(Bc[0]*Kc[0]<0  ){
+	h_bbbar_BcKc_same1_rejected->Fill( costheta_BcKc_same1);
+	h_bbbar_BcKc_same1_rejected->Fill( -costheta_BcKc_same1);
+      }
       
-    if( Bc[0]*Kc[0]>0 && (Bc[1]==0 && Kc[1]==0) ) {
-
-      if(Bc[0] < 0) h_bbbar_BcKc_same1_reco->Fill( costheta_BcKc_same1);
-      else h_bbbar_BcKc_same1_reco->Fill( -costheta_BcKc_same1);
+      if( Bc[0]*Kc[0]>0 && (Bc[1]==0 && Kc[1]==0) ) {
+	
+	if(Bc[0] < 0) h_bbbar_BcKc_same1_reco->Fill( costheta_BcKc_same1);
+	else h_bbbar_BcKc_same1_reco->Fill( -costheta_BcKc_same1);
  	
 	float cos_reco=  (Bc[0] < 0) ? costheta_BcKc_same1: -costheta_BcKc_same1;
 	
@@ -699,7 +719,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	if( fabs(mc_quark_pdg[0]==5) && bbmass>180) {
 	  h_resolution_BcKc_same1->Fill(cos_truth,cos_reco_truth);
 	  h_resolution_jettrack_BcKc_same1->Fill(cos_truth,cos_trackreco_truth);
-
+	  
 	  asymm_BcKc_same1[0]->Fill(cos_reco);
 	  asymm_BcKc_same1[1]->Fill(cos_reco_truth);
 	}
@@ -714,11 +734,11 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	taken = true;
       }
     }
-
+    
     // --------------------------------------------------------------------------
     // Same side 2
     //Information to calculate p, for BcKc category
-
+    
     if(taken == false) {      
       if(Bc[1]*Kc[1]<0){
 	h_bbbar_BcKc_same2_rejected->Fill( costheta_BcKc_same2);
@@ -774,42 +794,42 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
   result.push_back(asymm_BcBc[1]);//truth
   result.push_back(asymm_BcBc[2]);//corrected
   result.push_back(asymm_BcBc[3]);//bkg_qq
-  result.push_back(asymm_BcBc[4]);//bkg_recoil
+  result.push_back(asymm_BcBc[4]);//bkg_radreturn
   result.push_back(p_b_histo);
 
   result.push_back(asymm_KcKc[0]);//reco
   result.push_back(asymm_KcKc[1]);//truth
   result.push_back(asymm_KcKc[2]);//corrected
   result.push_back(asymm_KcKc[3]);//bkg_qq
-  result.push_back(asymm_KcKc[4]);//bkg_recoil
+  result.push_back(asymm_KcKc[4]);//bkg_radreturn
   result.push_back(p_k_histo);
 
   result.push_back(asymm_BcKc[0]);//reco
   result.push_back(asymm_BcKc[1]);//truth
   result.push_back(asymm_BcKc[2]);//corrected
   result.push_back(asymm_BcKc[3]);//bkg_qq
-  result.push_back(asymm_BcKc[4]);//bkg_recoil
+  result.push_back(asymm_BcKc[4]);//bkg_radreturn
   result.push_back(p_bk_histo);
 
   result.push_back(asymm_KcBc[0]);//reco
   result.push_back(asymm_KcBc[1]);//truth
   result.push_back(asymm_KcBc[2]);//corrected
   result.push_back(asymm_KcBc[3]);//bkg_qq
-  result.push_back(asymm_KcBc[4]);//bkg_recoil
+  result.push_back(asymm_KcBc[4]);//bkg_radreturn
   result.push_back(p_kb_histo);
 
   result.push_back(asymm_BcKc_same1[0]);//reco
   result.push_back(asymm_BcKc_same1[1]);//truth
   result.push_back(asymm_BcKc_same1[2]);//corrected
   result.push_back(asymm_BcKc_same1[3]);//bkg_qq
-  result.push_back(asymm_BcKc_same1[4]);//bkg_recoil
+  result.push_back(asymm_BcKc_same1[4]);//bkg_radreturn
   result.push_back(p_bk_same1_histo);
 
   result.push_back(asymm_BcKc_same2[0]);//reco
   result.push_back(asymm_BcKc_same2[1]);//truth
   result.push_back(asymm_BcKc_same2[2]);//corrected
   result.push_back(asymm_BcKc_same2[3]);//bkg_qq
-  result.push_back(asymm_BcKc_same2[4]);//bkg_recoil
+  result.push_back(asymm_BcKc_same2[4]);//bkg_radreturn
   result.push_back(p_bk_same2_histo); 
 
 
@@ -824,6 +844,15 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
   result.push_back(h_cos_charge_BcKc_same2);
 
   result.push_back(h_bbbar_recocuts);
+
+  //Rejected
+  result.push_back(h_bbbar_BcBc_rejected);
+  result.push_back(h_bbbar_KcKc_rejected);
+  result.push_back(h_bbbar_BcKc_rejected);
+  result.push_back(h_bbbar_KcBc_rejected);
+  result.push_back(h_bbbar_BcKc_same1_rejected);
+  result.push_back(h_bbbar_BcKc_same2_rejected);
+  
 
   std::vector<TH2F*> result2;
   result2.push_back(h_resolution_BcBc);
@@ -867,12 +896,19 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
     if(PreSelectionTest(cuts)==false) continue; 
     preselection++;
 
+    /// charge calculation
     int Kc[2];
     Kc[0]=0; Kc[1]=0;
 
     int Bc[2];
     Bc[0]=0; Bc[1]=0;
       
+    for(int ijet=0; ijet<2; ijet++) {
+      Bc[ijet]=ChargeBcJet(ijet);
+      Kc[ijet]=ChargeKcJet(ijet);
+    }
+
+    //angle calculation
     float costheta_KcKc;
     float costheta_BcBc;
     float costheta_BcKc;
@@ -880,23 +916,51 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
     float costheta_BcKc_same1;
     float costheta_BcKc_same2;
 
-    std::vector<float> p;
+    /*std::vector<float> p;
     p.push_back(jet_px[0]-jet_px[1]);
     p.push_back(jet_py[0]-jet_py[1]);
     p.push_back(jet_pz[0]-jet_pz[1]);
+
     
     costheta_BcBc=GetCostheta(p);
     costheta_KcKc=GetCostheta(p);
     costheta_BcKc=GetCostheta(p);
     costheta_KcBc=GetCostheta(p);
     costheta_BcKc_same1=GetCostheta(p);
-    costheta_BcKc_same2=GetCostheta(p);
+    costheta_BcKc_same2=GetCostheta(p);*/
 
-    for(int ijet=0; ijet<2; ijet++) {
-      Bc[ijet]=ChargeBcJet(ijet);
-      Kc[ijet]=ChargeKcJet(ijet);
+    // angle for jets reconstructed only with secondary vertex tracks
+    float ptrack_x=0;
+    float ptrack_y=0;
+    float ptrack_z=0;
+
+    for(int ivtx=0; ivtx<jet_nvtx[0]; ivtx++) {
+      for(int itrack=0; itrack<jet_vtx_ntrack[0][ivtx]; itrack++) {
+	ptrack_x+=jet_track_px[0][ivtx][itrack];
+	ptrack_y+=jet_track_py[0][ivtx][itrack];
+	ptrack_z+=jet_track_pz[0][ivtx][itrack];
+      }
     }
 
+    for(int ivtx=0; ivtx<jet_nvtx[1]; ivtx++) {
+      for(int itrack=0; itrack<jet_vtx_ntrack[1][ivtx]; itrack++) {
+	ptrack_x-=jet_track_px[1][ivtx][itrack];
+	ptrack_y-=jet_track_py[1][ivtx][itrack];
+	ptrack_z-=jet_track_pz[1][ivtx][itrack];
+      }
+    }
+    std::vector<float> ptracks;
+    ptracks.push_back(ptrack_x);
+    ptracks.push_back(ptrack_y);
+    ptracks.push_back(ptrack_z);
+    float costheta_tracks=GetCostheta(ptracks);
+
+    costheta_BcBc=costheta_tracks;
+    costheta_KcKc=costheta_tracks;
+    costheta_BcKc=costheta_tracks;
+    costheta_KcBc=costheta_tracks;
+    costheta_BcKc_same1=costheta_tracks;
+    costheta_BcKc_same2=costheta_tracks;
    
 
 
@@ -907,7 +971,11 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
     // Bc Bc case
     // calculate asymmetry for the different categories
     //Information to calculate p, for BcBc category
-    if(taken ==false) {    
+    if(taken ==false) {
+      if(Bc[0]*Bc[1]>0) {
+	h_bbbar_BcBc_rejected->Fill( costheta_BcBc);
+	h_bbbar_BcBc_rejected->Fill( -costheta_BcBc);
+      }
       if(Bc[0]*Bc[1]<0) {
 	float cos_reco=  (Bc[0] < 0) ? costheta_BcBc: -costheta_BcBc;
 	asymm_BcBc[0]->Fill(cos_reco);
@@ -919,7 +987,10 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
     // -------------------------------------------------------------------------
     //Information to calculate p, for KcKc category      
     if(taken == false ) {	
-	
+      if(Kc[0]*Kc[1]>0) {
+	h_bbbar_KcKc_rejected->Fill( costheta_KcKc);
+	h_bbbar_KcKc_rejected->Fill( -costheta_KcKc);
+      }
       if(Kc[0]*Kc[1]<0) {
 	float cos_reco=  (Kc[0] < 0) ? costheta_KcKc: -costheta_KcKc;
 	asymm_KcKc[0]->Fill(cos_reco);
@@ -929,6 +1000,10 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
     }
     // ------------------------------------------------------------------------
     //Information to calculate p, for BcKc category
+    if(Bc[0]*Kc[1]>0 && Bc[1]==0 && Kc[0]==0 ){
+      h_bbbar_BcKc_rejected->Fill(costheta_BcKc);
+      h_bbbar_BcKc_rejected->Fill(-costheta_BcKc);
+    }
     if(taken == false) {
       if( Bc[0]*Kc[1]<0 && Bc[1]==0 && Kc[0]==0) {
 	float cos_reco=  (Bc[0] < 0) ? costheta_BcKc: -costheta_BcKc;
@@ -939,11 +1014,14 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
 
     // ------------------------------------------------------------------------
     //Information to calculate p, for KcBc category
+    if(Kc[0]*Bc[1]>0 && Bc[0]==0 && Kc[1]==0) {
+      h_bbbar_KcBc_rejected->Fill( costheta_KcBc);
+      h_bbbar_KcBc_rejected->Fill( -costheta_KcBc);
+    }
     if(taken == false) {
       if( Kc[0]*Bc[1]<0 && Bc[0]==0 && Kc[1]==0)  {
 	float cos_reco=  (Kc[0] < 0) ? costheta_KcBc: -costheta_KcBc;
 	asymm_KcBc[0]->Fill(cos_reco);
-
 	taken = true;
       }
     }
@@ -953,8 +1031,11 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
     // Same side 1
     //Information to calculate p, for BcKc category
     if(taken == false) {
-      if( Bc[0]*Kc[0]>0) {
-	
+      if(Bc[0]*Kc[0]<0  ){
+	h_bbbar_BcKc_same1_rejected->Fill( costheta_BcKc_same1);
+	h_bbbar_BcKc_same1_rejected->Fill( -costheta_BcKc_same1);
+      }
+      if( Bc[0]*Kc[0]>0 && (Bc[1]==0 && Kc[1]==0) ) {	
 	float cos_reco=  (Bc[0] < 0) ? costheta_BcKc_same1: -costheta_BcKc_same1;
 	asymm_BcKc_same1[0]->Fill(cos_reco);
 	 
@@ -966,8 +1047,11 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
     // Same side 2
     //Information to calculate p, for BcKc category 
     if(taken == false) {
-
-      if( Bc[1]*Kc[1]>0) {
+      if(Bc[1]*Kc[1]<0){
+	h_bbbar_BcKc_same2_rejected->Fill( costheta_BcKc_same2);
+	h_bbbar_BcKc_same2_rejected->Fill( -costheta_BcKc_same2);
+      }
+      if( Bc[1]*Kc[1]>0 && Bc[0]==0 && Kc[0]==0 ) {
 	float cos_reco=  (Bc[1] > 0) ? costheta_BcKc_same2: -costheta_BcKc_same2;
 	asymm_BcKc_same2[0]->Fill(cos_reco);
 	taken = true;
@@ -984,6 +1068,14 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
   result.push_back(asymm_KcBc[0]);
   result.push_back(asymm_BcKc_same1[0]);
   result.push_back(asymm_BcKc_same2[0]);
+  
+  //Rejected
+  result.push_back(h_bbbar_BcBc_rejected);
+  result.push_back(h_bbbar_KcKc_rejected);
+  result.push_back(h_bbbar_BcKc_rejected);
+  result.push_back(h_bbbar_KcBc_rejected);
+  result.push_back(h_bbbar_BcKc_same1_rejected);
+  result.push_back(h_bbbar_BcKc_same2_rejected);
   
   SaveRootFile(result,polarization);
   
@@ -1009,7 +1101,7 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
   gStyle->SetMarkerSize(0.3);
        
   bbbar_gen=0;
-  bbbar_gen_recoil=0;
+  bbbar_gen_radreturn=0;
   qqbar_gen=0;
 
   TH1F * h_mjj_bb = new TH1F("h_mjj_bb","h_mjj_bb",100,0,500);
@@ -1018,11 +1110,11 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
   TH2F * h_mj1_mj2_bb = new TH2F("h_mj1_mj2_bb","h_mj1_mj2_bb",100,0,500,100,0,500);
   TH2F * h_pj1_pj2_bb = new TH2F("h_pj1_pj2_bb","h_pj1_pj2_bb",100,0,500,100,0,500);
 
-  TH1F * h_mjj_recoil = new TH1F("h_mjj_recoil","h_mjj_recoil",100,0,500);
-  TH1F * h_egamma_recoil = new TH1F("h_egamma_recoil","h_egamma_recoil",100,0,500);
-  TH2F * h_btag1_btag2_recoil = new TH2F("h_btag1_btag2_recoil","h_btag1_btag2_recoil",100,0,1,100,0,1);
-  TH2F * h_mj1_mj2_recoil = new TH2F("h_mj1_mj2_recoil","h_mj1_mj2_recoil",100,0,500,100,0,500);
-  TH2F * h_pj1_pj2_recoil = new TH2F("h_pj1_pj2_recoil","h_pj1_pj2_recoil",100,0,500,100,0,500);
+  TH1F * h_mjj_radreturn = new TH1F("h_mjj_radreturn","h_mjj_radreturn",100,0,500);
+  TH1F * h_egamma_radreturn = new TH1F("h_egamma_radreturn","h_egamma_radreturn",100,0,500);
+  TH2F * h_btag1_btag2_radreturn = new TH2F("h_btag1_btag2_radreturn","h_btag1_btag2_radreturn",100,0,1,100,0,1);
+  TH2F * h_mj1_mj2_radreturn = new TH2F("h_mj1_mj2_radreturn","h_mj1_mj2_radreturn",100,0,500,100,0,500);
+  TH2F * h_pj1_pj2_radreturn = new TH2F("h_pj1_pj2_radreturn","h_pj1_pj2_radreturn",100,0,500,100,0,500);
 
   TH1F * h_mjj_qq = new TH1F("h_mjj_qq","h_mjj_qq",100,0,500);
   TH1F * h_egamma_qq = new TH1F("h_egamma_qq","h_egamma_qq",100,0,500);
@@ -1061,11 +1153,11 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
   h_pj1_pj2_bb->Fill(jet0_p,jet1_p);
   }
   if(abs(mc_quark_pdg[0])==5 && bbmass<180) {
-  h_mjj_recoil->Fill(reco_bbmass);
-  h_egamma_recoil->Fill(maxenergy_photon_E);
-  h_btag1_btag2_recoil->Fill(jet_btag[0],jet_btag[1]);
-  h_mj1_mj2_recoil->Fill(reco_b1mass,reco_b2mass);
-  h_pj1_pj2_recoil->Fill(jet0_p,jet1_p);
+  h_mjj_radreturn->Fill(reco_bbmass);
+  h_egamma_radreturn->Fill(maxenergy_photon_E);
+  h_btag1_btag2_radreturn->Fill(jet_btag[0],jet_btag[1]);
+  h_mj1_mj2_radreturn->Fill(reco_b1mass,reco_b2mass);
+  h_pj1_pj2_radreturn->Fill(jet0_p,jet1_p);
   }
   if(abs(mc_quark_pdg[0])!=5) {
   h_mjj_qq->Fill(reco_bbmass);
@@ -1084,16 +1176,16 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
   h_mjj_qq->DrawNormalized("histo");
   h_mjj_bb->SetLineColor(2);
   h_mjj_bb->DrawNormalized("histosame");
-  h_mjj_recoil->SetLineColor(4);
-  h_mjj_recoil->DrawNormalized("histosame");
+  h_mjj_radreturn->SetLineColor(4);
+  h_mjj_radreturn->DrawNormalized("histosame");
 
   canvas->cd(2);
   h_egamma_qq->SetLineColor(1);
   h_egamma_qq->DrawNormalized("histo");
   h_egamma_bb->SetLineColor(2);
   h_egamma_bb->DrawNormalized("histosame");
-  h_egamma_recoil->SetLineColor(4);
-  h_egamma_recoil->DrawNormalized("histosame");
+  h_egamma_radreturn->SetLineColor(4);
+  h_egamma_radreturn->DrawNormalized("histosame");
 
 
   canvas->cd(3);
@@ -1101,15 +1193,15 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
   h_mj1_mj2_qq->Draw("p");
   h_mj1_mj2_bb->SetMarkerColor(2);
   h_mj1_mj2_bb->Draw("psame");
-  h_mj1_mj2_recoil->SetMarkerColor(4);
-  h_mj1_mj2_recoil->Draw("psame");
+  h_mj1_mj2_radreturn->SetMarkerColor(4);
+  h_mj1_mj2_radreturn->Draw("psame");
 
 
   canvas->cd(4);
   h_btag1_btag2_qq->SetMarkerColor(1);
   h_btag1_btag2_qq->Draw("p");
-  h_btag1_btag2_recoil->SetMarkerColor(4);
-  h_btag1_btag2_recoil->Draw("psame");
+  h_btag1_btag2_radreturn->SetMarkerColor(4);
+  h_btag1_btag2_radreturn->Draw("psame");
   h_btag1_btag2_bb->SetMarkerColor(2);
   h_btag1_btag2_bb->Draw("psame");
 
@@ -1119,8 +1211,8 @@ void observable::AnalysisBKG(int n_entries=-1, TString polarization="eL", int n=
   h_pj1_pj2_qq->Draw("p");
   h_pj1_pj2_bb->SetMarkerColor(2);
   h_pj1_pj2_bb->Draw("psame");
-  h_pj1_pj2_recoil->SetMarkerColor(4);
-  h_pj1_pj2_recoil->Draw("psame");
+  h_pj1_pj2_radreturn->SetMarkerColor(4);
+  h_pj1_pj2_radreturn->Draw("psame");
 
    
   }*/
@@ -1146,60 +1238,60 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
   gStyle->SetMarkerSize(0.3);
        
   bbbar_gen=0;
-  bbbar_gen_recoil=0;
+  bbbar_gen_radreturn=0;
   qqbar_gen=0;
 
   TH1F * h_mjj_bb = new TH1F("h_mjj_bb","h_mjj_bb",100,0,500);
-  TH1F * h_mjj_recoil = new TH1F("h_mjj_recoil","h_mjj_recoil",100,0,500);
+  TH1F * h_mjj_radreturn = new TH1F("h_mjj_radreturn","h_mjj_radreturn",100,0,500);
   TH1F * h_mjj_qq = new TH1F("h_mjj_qq","h_mjj_qq",100,0,500);
   
   TH1F * h_egamma_bb = new TH1F("h_egamma_bb","h_egamma_bb",100,0,500);
-  TH1F * h_egamma_recoil = new TH1F("h_egamma_recoil","h_egamma_recoil",100,0,500);
+  TH1F * h_egamma_radreturn = new TH1F("h_egamma_radreturn","h_egamma_radreturn",100,0,500);
   TH1F * h_egamma_qq = new TH1F("h_egamma_qq","h_egamma_qq",100,0,500);
 
   TH1F * h_mj1_mj2_bb = new TH1F("h_mj1_mj2_bb","h_mj1_mj2_bb",100,0,500);
-  TH1F * h_mj1_mj2_recoil = new TH1F("h_mj1_mj2_recoil","h_mj1_mj2_recoil",100,0,500);
+  TH1F * h_mj1_mj2_radreturn = new TH1F("h_mj1_mj2_radreturn","h_mj1_mj2_radreturn",100,0,500);
   TH1F * h_mj1_mj2_qq = new TH1F("h_mj1_mj2_qq","h_mj1_mj2_qq",100,0,500);
 
   TH1F * h_pj1_pj2_bb = new TH1F("h_pj1_pj2_bb","h_pj1_pj2_bb",100,0,500);
-  TH1F * h_pj1_pj2_recoil = new TH1F("h_pj1_pj2_recoil","h_pj1_pj2_recoil",100,0,500);
+  TH1F * h_pj1_pj2_radreturn = new TH1F("h_pj1_pj2_radreturn","h_pj1_pj2_radreturn",100,0,500);
   TH1F * h_pj1_pj2_qq = new TH1F("h_pj1_pj2_qq","h_pj1_pj2_qq",100,0,500);
 
   //jet variables
   TH1F * h_d23_bb = new TH1F("h_d23_bb","h_d23_bb",100,0,500);
-  TH1F * h_d23_recoil = new TH1F("h_d23_recoil","h_d23_recoil",100,0,500);
+  TH1F * h_d23_radreturn = new TH1F("h_d23_radreturn","h_d23_radreturn",100,0,500);
   TH1F * h_d23_qq = new TH1F("h_d23_qq","h_d23_qq",100,0,500);
 
   TH1F * h_d12_bb = new TH1F("h_d12_bb","h_d12_bb",100,0,100000);
-  TH1F * h_d12_recoil = new TH1F("h_d12_recoil","h_d12_recoil",100,0,100000);
+  TH1F * h_d12_radreturn = new TH1F("h_d12_radreturn","h_d12_radreturn",100,0,100000);
   TH1F * h_d12_qq = new TH1F("h_d12_qq","h_d12_qq",100,0,100000);
 
   TH1F * h_y23_bb = new TH1F("h_y23_bb","h_y23_bb",100,0,0.35);
-  TH1F * h_y23_recoil = new TH1F("h_y23_recoil","h_y23_recoil",100,0,0.35);
+  TH1F * h_y23_radreturn = new TH1F("h_y23_radreturn","h_y23_radreturn",100,0,0.35);
   TH1F * h_y23_qq = new TH1F("h_y23_qq","h_y23_qq",100,0,0.35);
 
   TH1F * h_y12_bb = new TH1F("h_y12_bb","h_y12_bb",100,0,1);
-  TH1F * h_y12_recoil = new TH1F("h_y12_recoil","h_y12_recoil",100,0,1);
+  TH1F * h_y12_radreturn = new TH1F("h_y12_radreturn","h_y12_radreturn",100,0,1);
   TH1F * h_y12_qq = new TH1F("h_y12_qq","h_y12_qq",100,0,1);
 
   //EVENT SHAPE variables
   TH1F * h_oblateness_bb = new TH1F("h_oblateness_bb","h_oblateness_bb",100,0,0.8);
-  TH1F * h_oblateness_recoil = new TH1F("h_oblateness_recoil","h_oblateness_recoil",100,0,0.8);
+  TH1F * h_oblateness_radreturn = new TH1F("h_oblateness_radreturn","h_oblateness_radreturn",100,0,0.8);
   TH1F * h_oblateness_qq = new TH1F("h_oblateness_qq","h_oblateness_qq",100,0,0.8);
 
   TH1F * h_aplanarity_bb = new TH1F("h_aplanarity_bb","h_aplanarity_bb",100,-0.4e-6,0.4e-6);
-  TH1F * h_aplanarity_recoil = new TH1F("h_aplanarity_recoil","h_aplanarity_recoil",100,-0.4e-6,0.4e-6);
+  TH1F * h_aplanarity_radreturn = new TH1F("h_aplanarity_radreturn","h_aplanarity_radreturn",100,-0.4e-6,0.4e-6);
   TH1F * h_aplanarity_qq = new TH1F("h_aplanarity_qq","h_aplanarity_qq",100,-0.4e-6,0.4e-6);
 
   TH1F * h_sphericity_bb = new TH1F("h_sphericity_bb","h_sphericity_bb",100,0,0.8);
-  TH1F * h_sphericity_recoil = new TH1F("h_sphericity_recoil","h_sphericity_recoil",100,0,0.8);
+  TH1F * h_sphericity_radreturn = new TH1F("h_sphericity_radreturn","h_sphericity_radreturn",100,0,0.8);
   TH1F * h_sphericity_qq = new TH1F("h_sphericity_qq","h_sphericity_qq",100,0,0.8);
   
   Long64_t nentries;
   if(n_entries>0) nentries= n_entries;
   else nentries= fChain->GetEntriesFast();
 
-  int bb_counter=0, recoil_counter=0, qq_counter=0;
+  int bb_counter=0, radreturn_counter=0, qq_counter=0;
   
   Long64_t nbytes = 0, nb = 0;
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -1209,7 +1301,7 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
 
     double bbmass= sqrt(pow(mc_quark_E[0]+mc_quark_E[1],2)-pow(mc_quark_px[0]+mc_quark_px[1],2)-pow(mc_quark_py[0]+mc_quark_py[1],2)-pow(mc_quark_pz[0]+mc_quark_pz[1],2));
     if(abs(mc_quark_pdg[0])==5 && bbmass>180) bb_counter++;
-    if(abs(mc_quark_pdg[0])==5 && bbmass<180) recoil_counter++;
+    if(abs(mc_quark_pdg[0])==5 && bbmass<180) radreturn_counter++;
     if(abs(mc_quark_pdg[0])!=5) qq_counter++;
 
 
@@ -1241,17 +1333,17 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
     }
     
     if(abs(mc_quark_pdg[0])==5 && bbmass<180) {
-      h_mjj_recoil->Fill(reco_bbmass);
-      h_egamma_recoil->Fill(maxenergy_photon_E);
-      h_mj1_mj2_recoil->Fill(reco_b1mass+reco_b2mass);
-      h_pj1_pj2_recoil->Fill(jet0_p+jet1_p);
-      h_d23_recoil->Fill(d23);
-      h_d12_recoil->Fill(d12);
-      h_y23_recoil->Fill(y23);
-      h_y12_recoil->Fill(y12);
-      h_oblateness_recoil->Fill(oblateness);
-      h_aplanarity_recoil->Fill(aplanarity);
-      h_sphericity_recoil->Fill(sphericity);
+      h_mjj_radreturn->Fill(reco_bbmass);
+      h_egamma_radreturn->Fill(maxenergy_photon_E);
+      h_mj1_mj2_radreturn->Fill(reco_b1mass+reco_b2mass);
+      h_pj1_pj2_radreturn->Fill(jet0_p+jet1_p);
+      h_d23_radreturn->Fill(d23);
+      h_d12_radreturn->Fill(d12);
+      h_y23_radreturn->Fill(y23);
+      h_y12_radreturn->Fill(y12);
+      h_oblateness_radreturn->Fill(oblateness);
+      h_aplanarity_radreturn->Fill(aplanarity);
+      h_sphericity_radreturn->Fill(sphericity);
     }
     if(abs(mc_quark_pdg[0])!=5) {
       h_mjj_qq->Fill(reco_bbmass);
@@ -1270,53 +1362,53 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
   }
   cout<<TString::Format("selection_%s_250GeV_%s_btag1_%0.1f_btag2_%0.1f.root",process.Data(),polarization.Data(),btag1,btag2)<<endl;
   cout<<" Total generated bbbar events: " << bb_counter<<endl;
-  cout<<" Total generated Z-recoil events: " <<recoil_counter<<endl;
+  cout<<" Total generated Z-radreturn events: " <<radreturn_counter<<endl;
   cout<<" Total generated qqbar events: " << qq_counter<<endl;
 
   // save histograms
   h_mjj_bb->Write();
   h_mjj_qq->Write();
-  h_mjj_recoil->Write();
+  h_mjj_radreturn->Write();
 
   h_egamma_bb->Write();
   h_egamma_qq->Write();
-  h_egamma_recoil->Write();
+  h_egamma_radreturn->Write();
 
   h_mj1_mj2_bb->Write();
   h_mj1_mj2_qq->Write();
-  h_mj1_mj2_recoil->Write();
+  h_mj1_mj2_radreturn->Write();
 
   h_pj1_pj2_bb->Write();
   h_pj1_pj2_qq->Write();
-  h_pj1_pj2_recoil->Write();
+  h_pj1_pj2_radreturn->Write();
 
   h_d23_bb->Write();
   h_d23_qq->Write();
-  h_d23_recoil->Write();
+  h_d23_radreturn->Write();
 
   h_d12_bb->Write();
   h_d12_qq->Write();
-  h_d12_recoil->Write();
+  h_d12_radreturn->Write();
 
   h_y23_bb->Write();
   h_y23_qq->Write();
-  h_y23_recoil->Write();
+  h_y23_radreturn->Write();
 
   h_y12_bb->Write();
   h_y12_qq->Write();
-  h_y12_recoil->Write();
+  h_y12_radreturn->Write();
 
   h_oblateness_bb->Write();
   h_oblateness_qq->Write();
-  h_oblateness_recoil->Write();
+  h_oblateness_radreturn->Write();
 
   h_aplanarity_bb->Write();
   h_aplanarity_qq->Write();
-  h_aplanarity_recoil->Write();
+  h_aplanarity_radreturn->Write();
 
   h_sphericity_bb->Write();
   h_sphericity_qq->Write();
-  h_sphericity_recoil->Write();
+  h_sphericity_radreturn->Write();
 
   // plot histograms
   
@@ -1327,64 +1419,64 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
   h_mjj_bb->Draw("histo");
   h_mjj_qq->SetLineColor(1);
   h_mjj_qq->Draw("histosame");
-  h_mjj_recoil->SetLineColor(4);
-  h_mjj_recoil->Draw("histosame");
+  h_mjj_radreturn->SetLineColor(4);
+  h_mjj_radreturn->Draw("histosame");
 
   canvas->cd(2);
   h_egamma_bb->SetLineColor(2);
   h_egamma_bb->Draw("histo");
   h_egamma_qq->SetLineColor(1);
   h_egamma_qq->Draw("histosame");
-  h_egamma_recoil->SetLineColor(4);
-  h_egamma_recoil->Draw("histosame");
+  h_egamma_radreturn->SetLineColor(4);
+  h_egamma_radreturn->Draw("histosame");
 
   canvas->cd(3);
   h_mj1_mj2_bb->SetLineColor(2);
   h_mj1_mj2_bb->Draw("histo");
   h_mj1_mj2_qq->SetLineColor(1);
   h_mj1_mj2_qq->Draw("histosame");
-  h_mj1_mj2_recoil->SetLineColor(4);
-  h_mj1_mj2_recoil->Draw("histosame");
+  h_mj1_mj2_radreturn->SetLineColor(4);
+  h_mj1_mj2_radreturn->Draw("histosame");
 
   canvas->cd(4);
   h_pj1_pj2_bb->SetLineColor(2);
   h_pj1_pj2_bb->Draw("histo");
   h_pj1_pj2_qq->SetLineColor(1);
   h_pj1_pj2_qq->Draw("histosame");
-  h_pj1_pj2_recoil->SetLineColor(4);
-  h_pj1_pj2_recoil->Draw("histosame");
+  h_pj1_pj2_radreturn->SetLineColor(4);
+  h_pj1_pj2_radreturn->Draw("histosame");
 
   canvas->cd(5);
   h_mjj_bb->SetLineColor(2);
   h_mjj_bb->DrawNormalized("histo");
   h_mjj_qq->SetLineColor(1);
   h_mjj_qq->DrawNormalized("histosame");
-  h_mjj_recoil->SetLineColor(4);
-  h_mjj_recoil->DrawNormalized("histosame");
+  h_mjj_radreturn->SetLineColor(4);
+  h_mjj_radreturn->DrawNormalized("histosame");
 
   canvas->cd(6);
   h_egamma_bb->SetLineColor(2);
   h_egamma_bb->DrawNormalized("histo");
   h_egamma_qq->SetLineColor(1);
   h_egamma_qq->DrawNormalized("histosame");
-  h_egamma_recoil->SetLineColor(4);
-  h_egamma_recoil->DrawNormalized("histosame");
+  h_egamma_radreturn->SetLineColor(4);
+  h_egamma_radreturn->DrawNormalized("histosame");
 
   canvas->cd(7);
   h_mj1_mj2_bb->SetLineColor(2);
   h_mj1_mj2_bb->DrawNormalized("histo");
   h_mj1_mj2_qq->SetLineColor(1);
   h_mj1_mj2_qq->DrawNormalized("histosame");
-  h_mj1_mj2_recoil->SetLineColor(4);
-  h_mj1_mj2_recoil->DrawNormalized("histosame");
+  h_mj1_mj2_radreturn->SetLineColor(4);
+  h_mj1_mj2_radreturn->DrawNormalized("histosame");
 
   canvas->cd(8);
   h_pj1_pj2_bb->SetLineColor(2);
   h_pj1_pj2_bb->DrawNormalized("histo");
   h_pj1_pj2_qq->SetLineColor(1);
   h_pj1_pj2_qq->DrawNormalized("histosame");
-  h_pj1_pj2_recoil->SetLineColor(4);
-  h_pj1_pj2_recoil->DrawNormalized("histosame");
+  h_pj1_pj2_radreturn->SetLineColor(4);
+  h_pj1_pj2_radreturn->DrawNormalized("histosame");
 
 
   TCanvas *canvas_2 = new TCanvas("selection_jetvariables","selection_jetvariables",1600,800);
@@ -1394,64 +1486,64 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
   h_d23_bb->Draw("histo");
   h_d23_qq->SetLineColor(1);
   h_d23_qq->Draw("histosame");
-  h_d23_recoil->SetLineColor(4);
-  h_d23_recoil->Draw("histosame");
+  h_d23_radreturn->SetLineColor(4);
+  h_d23_radreturn->Draw("histosame");
 
   canvas_2->cd(2);
   h_d12_bb->SetLineColor(2);
   h_d12_bb->Draw("histo");
   h_d12_qq->SetLineColor(1);
   h_d12_qq->Draw("histosame");
-  h_d12_recoil->SetLineColor(4);
-  h_d12_recoil->Draw("histosame");
+  h_d12_radreturn->SetLineColor(4);
+  h_d12_radreturn->Draw("histosame");
 
   canvas_2->cd(3);
   h_y23_bb->SetLineColor(2);
   h_y23_bb->Draw("histo");
   h_y23_qq->SetLineColor(1);
   h_y23_qq->Draw("histosame");
-  h_y23_recoil->SetLineColor(4);
-  h_y23_recoil->Draw("histosame");
+  h_y23_radreturn->SetLineColor(4);
+  h_y23_radreturn->Draw("histosame");
 
   canvas_2->cd(4);
   h_y12_bb->SetLineColor(2);
   h_y12_bb->Draw("histo");
   h_y12_qq->SetLineColor(1);
   h_y12_qq->Draw("histosame");
-  h_y12_recoil->SetLineColor(4);
-  h_y12_recoil->Draw("histosame");
+  h_y12_radreturn->SetLineColor(4);
+  h_y12_radreturn->Draw("histosame");
 
   canvas_2->cd(5);
   h_d23_bb->SetLineColor(2);
   h_d23_bb->DrawNormalized("histo");
   h_d23_qq->SetLineColor(1);
   h_d23_qq->DrawNormalized("histosame");
-  h_d23_recoil->SetLineColor(4);
-  h_d23_recoil->DrawNormalized("histosame");
+  h_d23_radreturn->SetLineColor(4);
+  h_d23_radreturn->DrawNormalized("histosame");
 
   canvas_2->cd(6);
   h_d12_bb->SetLineColor(2);
   h_d12_bb->DrawNormalized("histo");
   h_d12_qq->SetLineColor(1);
   h_d12_qq->DrawNormalized("histosame");
-  h_d12_recoil->SetLineColor(4);
-  h_d12_recoil->DrawNormalized("histosame");
+  h_d12_radreturn->SetLineColor(4);
+  h_d12_radreturn->DrawNormalized("histosame");
 
   canvas_2->cd(7);
   h_y23_bb->SetLineColor(2);
   h_y23_bb->DrawNormalized("histo");
   h_y23_qq->SetLineColor(1);
   h_y23_qq->DrawNormalized("histosame");
-  h_y23_recoil->SetLineColor(4);
-  h_y23_recoil->DrawNormalized("histosame");
+  h_y23_radreturn->SetLineColor(4);
+  h_y23_radreturn->DrawNormalized("histosame");
 
   canvas_2->cd(8);
   h_y12_bb->SetLineColor(2);
   h_y12_bb->DrawNormalized("histo");
   h_y12_qq->SetLineColor(1);
   h_y12_qq->DrawNormalized("histosame");
-  h_y12_recoil->SetLineColor(4);
-  h_y12_recoil->DrawNormalized("histosame");
+  h_y12_radreturn->SetLineColor(4);
+  h_y12_radreturn->DrawNormalized("histosame");
 
   TCanvas *canvas_3 = new TCanvas("selection_eventshapes_variables","selection_eventshapes_variables",1600,800);
   canvas_3->Divide(3,2);
@@ -1460,48 +1552,48 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
   h_oblateness_bb->Draw("histo");
   h_oblateness_qq->SetLineColor(1);
   h_oblateness_qq->Draw("histosame");
-  h_oblateness_recoil->SetLineColor(4);
-  h_oblateness_recoil->Draw("histosame");
+  h_oblateness_radreturn->SetLineColor(4);
+  h_oblateness_radreturn->Draw("histosame");
 
   canvas_3->cd(2);
   h_aplanarity_bb->SetLineColor(2);
   h_aplanarity_bb->Draw("histo");
   h_aplanarity_qq->SetLineColor(1);
   h_aplanarity_qq->Draw("histosame");
-  h_aplanarity_recoil->SetLineColor(4);
-  h_aplanarity_recoil->Draw("histosame");
+  h_aplanarity_radreturn->SetLineColor(4);
+  h_aplanarity_radreturn->Draw("histosame");
 
   canvas_3->cd(3);
   h_sphericity_bb->SetLineColor(2);
   h_sphericity_bb->Draw("histo");
   h_sphericity_qq->SetLineColor(1);
   h_sphericity_qq->Draw("histosame");
-  h_sphericity_recoil->SetLineColor(4);
-  h_sphericity_recoil->Draw("histosame");
+  h_sphericity_radreturn->SetLineColor(4);
+  h_sphericity_radreturn->Draw("histosame");
 
   canvas_3->cd(4);
   h_oblateness_bb->SetLineColor(2);
   h_oblateness_bb->DrawNormalized("histo");
   h_oblateness_qq->SetLineColor(1);
   h_oblateness_qq->DrawNormalized("histosame");
-  h_oblateness_recoil->SetLineColor(4);
-  h_oblateness_recoil->DrawNormalized("histosame");
+  h_oblateness_radreturn->SetLineColor(4);
+  h_oblateness_radreturn->DrawNormalized("histosame");
 
   canvas_3->cd(5);
   h_aplanarity_bb->SetLineColor(2);
   h_aplanarity_bb->DrawNormalized("histo");
   h_aplanarity_qq->SetLineColor(1);
   h_aplanarity_qq->DrawNormalized("histosame");
-  h_aplanarity_recoil->SetLineColor(4);
-  h_aplanarity_recoil->DrawNormalized("histosame");
+  h_aplanarity_radreturn->SetLineColor(4);
+  h_aplanarity_radreturn->DrawNormalized("histosame");
 
   canvas_3->cd(6);
   h_sphericity_bb->SetLineColor(2);
   h_sphericity_bb->DrawNormalized("histo");
   h_sphericity_qq->SetLineColor(1);
   h_sphericity_qq->DrawNormalized("histosame");
-  h_sphericity_recoil->SetLineColor(4);
-  h_sphericity_recoil->DrawNormalized("histosame");
+  h_sphericity_radreturn->SetLineColor(4);
+  h_sphericity_radreturn->DrawNormalized("histosame");
  
 
    
@@ -1527,7 +1619,7 @@ void observable::SelectionBKG(int n_entries=-1, int selection_type=0, TString po
   gStyle->SetMarkerSize(0.3);
        
   bbbar_gen=0;
-  bbbar_gen_recoil=0;
+  bbbar_gen_radreturn=0;
   qqbar_gen=0;
 
   TH1F * h_mjj_bb = new TH1F("h_mjj_bb","h_mjj_bb",100,0,500);
@@ -1727,7 +1819,7 @@ void observable::AngularDistributions(int n_entries=-1,  TString polarization="e
   gStyle->SetMarkerSize(0.3);
        
   bbbar_gen=0;
-  bbbar_gen_recoil=0;
+  bbbar_gen_radreturn=0;
   qqbar_gen=0;
 
   TH1F * h_cos_b = new TH1F("h_cos_b","h_cos_b",160,-1,1);
@@ -2097,7 +2189,7 @@ TH1F* observable::MakeCorrection(TString type, TH1F* h_reco, TH1F* h_rejected) {
     p_b->SetBinContent(nbins/2-i,p_b_vect.at(i));
     p_b->SetBinError(nbins/2-i,p_b_vect.at(i+nbins/2));
   }
-  //0=reco, 1=truth, 2=corrected,  3=bkg_q, 4=bkg_recoil
+  //0=reco, 1=truth, 2=corrected,  3=bkg_q, 4=bkg_radreturn
   if(type=="BcBc") asymm_BcBc[2]=CorrectHistoDoubleTag(asymm_BcBc[0],p_b_vect);
   if(type=="KcKc") asymm_KcKc[2]=CorrectHistoDoubleTag(asymm_KcKc[0],p_b_vect);
   if(type=="BcKc") asymm_BcKc[2]=CorrectHistoDoubleTag(asymm_BcKc[0],p_b_vect);

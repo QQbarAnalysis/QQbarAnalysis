@@ -251,7 +251,7 @@ public :
    int bbbar_gen;
    int preselection;
    int bkg;
-   int bbbar_gen_recoil;
+   int bbbar_gen_radreturn;
    int qqbar_gen;
   
    int bbbar_KcKc_reco;
