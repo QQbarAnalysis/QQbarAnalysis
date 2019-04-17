@@ -146,6 +146,15 @@ namespace QQbarProcessor
 
   void QQbarProcessor::processEvent( LCEvent * evt )
   {
+
+		#if 0 // include with yyxylv samples
+			int nisoe   = evt->getParameters().getIntVal("nIsoE");  // isolated electron
+			int nisomu  = evt->getParameters().getIntVal("nIsoMu"); // isolated muon
+			int nisotau = evt->getParameters().getIntVal("nIsoTau"); // isolated tau
+
+			if (!(nisomu==1&&nisoe==0&&nisotau==0)) throw marlin::SkipEventException(this);
+		#endif
+
     switch(_analysisType)
       {
       case TTbarSemileptonic:
