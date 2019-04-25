@@ -28,7 +28,7 @@
 int nbins=20;
 TString pol = "eL";
 TString folder = "../output/";//output/kt_20190202";
-TString model = "l5_valencia1.4";
+TString model = "l5_valencia2.0";
 
 Double_t asymmetry_f(Double_t *x, Double_t *par)
 {
@@ -79,8 +79,8 @@ TF1 * fit_histo(TH1F * histo, float lumi_factor) {
   }
 
   TGraphErrors * g_histo = new TGraphErrors(nbins,x,y,ex,ey);
-  float range_up=0.8;
-  float range_down=-0.8;
+  float range_up=0.7;
+  float range_down=-0.7;
 
   TF1 *func_fit = new TF1("asymmetry_f",asymmetry_f,range_down,range_up,2);
   func_fit->SetParNames("S","A");
@@ -116,7 +116,7 @@ TF1 * fit_histo(TH1F * histo, float lumi_factor) {
   cout << "Chi2 = "<<func_fit->GetChisquare()<<", NDF ="<<func_fit->GetNDF()<<" Chi2/NDF= "<<func_fit->GetChisquare()/func_fit->GetNDF()<<endl;
 
 
-  TF1 *func_return = new TF1("asymmetry_f",asymmetry_f,-0.8,0.8,2);
+  TF1 *func_return = new TF1("asymmetry_f",asymmetry_f,-0.7,0.7,2);
   func_return->SetParNames("S","A");
   func_return->SetParameter(0,func_fit->GetParameter(0));
   func_return->SetParameter(1,func_fit->GetParameter(1));
@@ -130,7 +130,7 @@ TF1 * fit_histo(TH1F * histo, float lumi_factor) {
 void fit() {
 
  
-  TString filename = TString::Format("%s/bbbar_%s_cuts4_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),model.Data(),pol.Data(),nbins);
+  TString filename = TString::Format("%s/bbbar_%s_cuts3_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),model.Data(),pol.Data(),nbins);
   TFile *f = new TFile(filename);
   TH1F *h_corrected = (TH1F*)f->Get("corrected");
   h_corrected->Sumw2();
@@ -160,9 +160,11 @@ void fit() {
       h_noncorrected->SetBinContent(i,h_corrected->GetBinContent(i));
       h_noncorrected->SetBinError(i,h_corrected->GetBinError(i));
     }
-    
-    double error = sqrt( pow((h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*
-			     sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow(h_eff->GetBinError(i)/h_eff->GetBinContent(i),2)),2) + 0.1*0.1*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+
+    double error = (h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow(h_eff->GetBinError(i) /h_eff->GetBinContent(i),2));
+    error= sqrt(error*error +  0.0*0.01*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+    //double error = sqrt( pow((h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*
+    //			     sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow(h_eff->GetBinError(i)/h_eff->GetBinContent(i),2)),2) + 0.1*0.1*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
  
     if(h_eff->GetBinContent(i)>0 ) {
       h_corrected->SetBinError(i,error);
@@ -176,8 +178,8 @@ void fit() {
 
   //  h_corrected->Divide(h_eff);
   
-  double integtral_parton= h_parton->Integral(3,17);//nbins/2-nbins/3,nbins/2+nbins/3);//
-  double integtral_truth= h_corrected->Integral(3,17);
+  double integtral_parton= h_parton->Integral(4,16);//nbins/2-nbins/3,nbins/2+nbins/3);//
+  double integtral_truth= h_corrected->Integral(4,16);
   h_parton->Scale(integtral_truth/integtral_parton);
   
   TString lumi= "46fb-1,";
@@ -309,8 +311,8 @@ void fit() {
   gPad->SetGridy();
   gPad->SetGridx();
 
-  if(model=="l5") pull->SetTitle("e_{L}^{+}e_{R}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
-  else pull->SetTitle("e_{R}^{+}e_{L}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
+  if(model=="l5") pull->SetTitle("IDR-L");
+  else pull->SetTitle("IDR-S");
   pull->SetLineColor(4);
   pull->SetLineWidth(2);
   pull->GetXaxis()->SetTitle("#pm cos(#theta)");

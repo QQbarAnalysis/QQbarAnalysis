@@ -385,7 +385,7 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 {
 
   InitializeHistos(n);
- 
+
   Long64_t nentries;
   if(n_entries>0) nentries= n_entries;
   else nentries= fChain->GetEntriesFast();
@@ -422,8 +422,9 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
     if(PreSelectionTest(cuts)==false) continue; 
     if(fabs(mc_quark_pdg[0])==5 && bbmass>180)    preselection++;
     else bkg++;
-    //    if(fabs(mc_quark_pdg[0])!=5) bkg++;
-    
+
+
+         
     // angle for jets reconstructed only with secondary vertex tracks
     float ptrack_x=0;
     float ptrack_y=0;
@@ -761,10 +762,8 @@ void observable::Analysis(int n_entries=-1, TString polarization="eL", int n=20,
 	taken = true;
       }
     }
-    //    if(taken==true &&	fabs(mc_quark_pdg[0])==5 && bbmass>180 ) h_bbbar_recocuts->Fill(costheta_bbbar);
-          
+                 
   }//end loop
-
 
   // ***************************************************************  
 
@@ -1184,13 +1183,13 @@ void observable::Selection(int n_entries=-1, int selection_type=0, TString polar
   TH1F * h_d12_recoil = new TH1F("h_d12_recoil","h_d12_recoil",100,0,100000);
   TH1F * h_d12_qq = new TH1F("h_d12_qq","h_d12_qq",100,0,100000);
 
-  TH1F * h_y23_bb = new TH1F("h_y23_bb","h_y23_bb",5000,0,10000);
-  TH1F * h_y23_recoil = new TH1F("h_y23_recoil","h_y23_recoil",5000,0,10000);
-  TH1F * h_y23_qq = new TH1F("h_y23_qq","h_y23_qq",5000,0,10000);
+  TH1F * h_y23_bb = new TH1F("h_y23_bb","h_y23_bb",500,0,10000);
+  TH1F * h_y23_recoil = new TH1F("h_y23_recoil","h_y23_recoil",500,0,10000);
+  TH1F * h_y23_qq = new TH1F("h_y23_qq","h_y23_qq",500,0,10000);
 
-  TH1F * h_y12_bb = new TH1F("h_y12_bb","h_y12_bb",10000,0,100000);
-  TH1F * h_y12_recoil = new TH1F("h_y12_recoil","h_y12_recoil",10000,0,100000);
-  TH1F * h_y12_qq = new TH1F("h_y12_qq","h_y12_qq",10000,0,100000);
+  TH1F * h_y12_bb = new TH1F("h_y12_bb","h_y12_bb",1000,0,100000);
+  TH1F * h_y12_recoil = new TH1F("h_y12_recoil","h_y12_recoil",1000,0,100000);
+  TH1F * h_y12_qq = new TH1F("h_y12_qq","h_y12_qq",1000,0,100000);
   
   //EVENT SHAPE variables
   TH1F * h_oblateness_bb = new TH1F("h_oblateness_bb","h_oblateness_bb",100,0,0.8);
@@ -2378,7 +2377,7 @@ bool observable::PreSelectionTest(int type=0) {
   if(type ==0 ) return true;
   if(type ==1 )  if(  jet_btag[0]>btag1 && jet_btag[1]>btag2  ) return true;
   if(type ==2 )  if(  jet_btag[0]>btag1 && jet_btag[1]>btag2 &&  bbmass>200) return true;
-  if(type ==3 )  if(  jet_btag[0]>btag1 && jet_btag[1]>btag2 && y12>4000 && bbmass>200) return true;
+  if(type ==3 )  if(  jet_btag[0]>btag1 && jet_btag[1]>btag2 && maxenergy_photon_E<100 && bbmass>200) return true; 
   if(type ==4 )  if(  jet_btag[0]>btag1 && jet_btag[1]>btag2 && y12>4000 && maxenergy_photon_E<100 && bbmass>200) return true;
   /*  if(type ==3 )  if(  jet_btag[0]>btag1 && jet_btag[1]>btag2 && y12>0.1 && y23<0.04 && bbmass>200) return true;
   if(type ==4 )  if(  jet_btag[0]>btag1 && jet_btag[1]>btag2 && y12>0.1 && y23<0.04 && maxenergy_photon_E<100 && bbmass>200) return true;
@@ -2410,10 +2409,12 @@ float observable::ChargeKcJet(int ijet){//, int eff=0.88) {
 
   for(int ivtx=0; ivtx<jet_nvtx[ijet]; ivtx++) {
     for(int itrack=0; itrack<jet_vtx_ntrack[ijet][ivtx]; itrack++) {
-      //double mom = sqrt(pow(jet_track_px[ijet][ivtx][itrack],2)+pow(jet_track_py[ijet][ivtx][itrack],2)+pow(jet_track_pz[ijet][ivtx][itrack],2));
-      if(jet_track_iskaon[ijet][ivtx][itrack]==1) charge+=jet_track_charge[ijet][ivtx][itrack];
+      double mom = sqrt(pow(jet_track_px[ijet][ivtx][itrack],2)+pow(jet_track_py[ijet][ivtx][itrack],2)+pow(jet_track_pz[ijet][ivtx][itrack],2));
+      if(mom>2 && jet_track_iskaon[ijet][ivtx][itrack]==1) charge+=jet_track_charge[ijet][ivtx][itrack];
     }
   }
+
+  
   
   return charge;
 }
