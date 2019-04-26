@@ -31,7 +31,7 @@ void draw_sig_bkg() {
   SetQQbarStyle();
   gStyle->SetOptFit(0); 
   gStyle->SetOptStat(0);
-  gStyle->SetOptTitle(1);
+  gStyle->SetOptTitle(0);
   gStyle->SetTitleX(0.25); 
   gStyle->SetTitleY(1); 
 
@@ -41,9 +41,6 @@ void draw_sig_bkg() {
   gStyle->SetLegendFont(42);
 
     
-  cout<<" ######################## "<<endl;
-  cout<<"Left Handed polarization "<< endl;
-
   TString pol="eL";
  
   TFile *f = new TFile("../output/bbbar_genkt_restorer_cuts6_250GeV_"+pol+"_btag1_0.9_btag2_0.2_nbins40.root");
@@ -90,11 +87,14 @@ void draw_sig_bkg() {
   double ww=100.*h_bkg_ww->Integral()/h_reco->Integral();
   double hz=100.*h_bkg_hz->Integral()/h_reco->Integral();
 
+  
   h_reco->Add(h_bkg_qq);
   h_reco->Add(h_bkg_radreturn);
   h_reco->Add(h_bkg_zz);
   h_reco->Add(h_bkg_ww);
   h_reco->Add(h_bkg_hz);
+
+  /*
 
   h_bkg_hz->Add(h_bkg_ww);
   h_bkg_hz->Add(h_bkg_zz);
@@ -108,7 +108,15 @@ void draw_sig_bkg() {
   h_bkg_zz->Add(h_bkg_radreturn);
   h_bkg_zz->Add(h_bkg_qq);
   
-  h_bkg_radreturn->Add(h_bkg_qq);
+  h_bkg_radreturn->Add(h_bkg_qq);*/
+
+  THStack * hreco = new THStack("Reco","Reco");
+  hreco->Add(h_bkg_hz);
+  hreco->Add(h_bkg_ww);
+  hreco->Add(h_bkg_zz);
+  hreco->Add(h_bkg_radreturn);
+  hreco->Add(h_bkg_qq);
+  hreco->Add(h_reco);
 
   if(pol=="eL") {
     h_bkg_hz->Scale(10);
@@ -125,52 +133,67 @@ void draw_sig_bkg() {
     h_bkg_qq->Scale(2);
     h_bkg_radreturn->Scale(2);
   }
+
+  THStack * bkg = new THStack("BKG","BKG");
+  bkg->Add(h_bkg_hz);
+  bkg->Add(h_bkg_ww);
+  bkg->Add(h_bkg_zz);
+  bkg->Add(h_bkg_radreturn);
+  bkg->Add(h_bkg_qq);
+
   
   TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
   canvas->cd(1);
-  h_reco->GetXaxis()->SetTitle("cos(#theta)");
-  h_reco->GetYaxis()->SetTitle("entries / 0.05 rad");
-  h_reco->GetYaxis()->SetTitleOffset(1.6);
-  h_reco->GetYaxis()->SetRangeUser(0,h_reco->GetMaximum()*1.1);
 
-  h_reco->SetTitle("Before correction & bkg subtraction");
   h_reco->SetLineColor(1);
   h_reco->SetMarkerColor(1);
-  h_reco->SetFillStyle(3002);
-  h_reco->SetFillColor(1);
-  h_reco->Draw("histo");
-
+  
   h_bkg_hz->SetLineColor(3);
   h_bkg_hz->SetFillColor(3);
-  h_bkg_hz->SetFillStyle(1001);
-  h_bkg_hz->Draw("histosame");
+  h_bkg_hz->SetFillStyle(3005);
+  //  h_bkg_hz->Draw("histosame");
   
-  h_bkg_ww->SetLineColor(5);
-  h_bkg_ww->SetFillColor(5);
-  h_bkg_ww->SetFillStyle(1001);
-  h_bkg_ww->Draw("histosame");
+  h_bkg_ww->SetLineColor(kGray+2);
+  h_bkg_ww->SetFillColor(kGray+2);
+  h_bkg_ww->SetFillStyle(3006);
+  // h_bkg_ww->Draw("histosame");
   
   h_bkg_zz->SetLineColor(2);
   h_bkg_zz->SetFillColor(2);
-  h_bkg_zz->SetFillStyle(1001);
-  h_bkg_zz->Draw("histosame");
+  h_bkg_zz->SetFillStyle(3001);
+  // h_bkg_zz->Draw("histosame");
 
   h_bkg_radreturn->SetLineColor(4);
   h_bkg_radreturn->SetFillColor(4);
-  h_bkg_radreturn->SetFillStyle(1001);
-  h_bkg_radreturn->Draw("histosame");
+  h_bkg_radreturn->SetFillStyle(3004);
+  //  h_bkg_radreturn->Draw("histosame");
   
   h_bkg_qq->SetLineColor(6);
   h_bkg_qq->SetFillColor(6);
   h_bkg_qq->SetFillStyle(1001);
-  h_bkg_qq->Draw("histosame");
+  // h_bkg_qq->Draw("histosame");
 
-  QQBARLabel(0.2,0.85,"Work in progress");
+  // bkg->GetYaxis()->SetRangeUser(0,10000);
+  hreco->Draw("histo");
+  hreco->GetXaxis()->SetTitle("cos#theta_{b}");
+  hreco->GetYaxis()->SetTitle("entries / 0.05");
+  hreco->GetYaxis()->SetTitleOffset(1.6);
+  hreco->GetYaxis()->SetRangeUser(0,hreco->GetMaximum()*1.2);
+  hreco->SetTitle("Before correction & bkg subtraction");
+  
+  //h_reco->SetFillStyle(3002);
+  //  h_reco->SetFillColor(1);
+  // h_reco->Draw("histosame");
+
+  // bkg->GetYaxis()->SetRangeUser(0,10000);
+  canvas->Update();
+  
+  QQBARLabel(0.2,0.85,"");
   //  h_bkg_qq->
   TLegend *leg = new TLegend(0.2,0.6,0.55,0.8);
   if(pol=="eL")leg->SetHeader("e_{L}^{-}e_{R}^{+} #rightarrow b#bar{b}, 250GeV, 250fb^{-1}");
   if(pol=="eR")leg->SetHeader("e_{R}^{-}e_{L}^{+} #rightarrow b#bar{b}, 250GeV, 250fb^{-1}");
-  leg->AddEntry(h_reco,TString::Format("Signal, selection eff: %0.1f",reco)+"%","lpe");
+  leg->AddEntry(h_reco,TString::Format("Signal, selection eff: %0.1f",reco)+"%","l");
   leg->AddEntry(h_bkg_qq,TString::Format("q#bar{q} %0.2f",qq)+"%","f");
   leg->AddEntry(h_bkg_radreturn,TString::Format("Radiative return %0.2f",radreturn)+"%","f");
   leg->AddEntry(h_bkg_ww,TString::Format("WW %0.2f",ww)+"%","f");

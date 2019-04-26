@@ -26,7 +26,7 @@
 #include "../../style/Labels.C"
 
 int nbins=40;
-TString pol = "eL";
+TString pol = "eR";
 TString folder = "../output";//output/kt_20190202";
 Double_t asymmetry_f(Double_t *x, Double_t *par)
 {
@@ -404,30 +404,32 @@ void fit() {
   gStyle->SetLegendFont(42);
   gStyle->SetTitleBorderSize(0);
   gStyle->SetTitleStyle(0);
+  gStyle->SetTitleFontSize(0.03);
   gStyle->SetMarkerSize(0.3);
       
   TCanvas * canvas0 = new TCanvas ("canvas0","canvas0",1000,800);
   canvas0->cd(1);
-  if(pol=="eL") h_parton->SetTitle("e_{L}^{+}e_{R}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
-  else h_parton->SetTitle("e_{R}^{+}e_{L}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
-  h_parton->GetXaxis()->SetTitle("cos(#theta)");
-  h_parton->GetYaxis()->SetTitle("entries / 0.05 rad");
+  if(pol=="eL") h_parton->SetTitle("e_{L}^{-}e_{R}^{+}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
+  else h_parton->SetTitle("e_{R}^{-}e_{L}^{+}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
+  h_parton->GetXaxis()->SetTitle("cos#theta_{b}");
+  h_parton->GetYaxis()->SetTitle("entries / 0.05");
   h_parton->GetYaxis()->SetTitleOffset(2.05);
   h_parton->GetYaxis()->SetRangeUser(0,h_parton->GetMaximum()*1.1);
 
-  h_parton->SetLineColor(3);
-  h_parton->SetFillColor(3);
-  h_parton->SetFillStyle(3001);
+  h_parton->SetLineColor(kGreen+1);
+  h_parton->SetFillColor(kGreen+1);
+  h_parton->SetFillStyle(3003);
   h_parton->Draw("histo");
     
   h_corrected->SetLineColor(4);
   h_corrected->SetLineWidth(2);
   h_corrected->SetMarkerColor(4);
-  h_corrected->SetMarkerStyle(1);
+  h_corrected->SetMarkerStyle(4);
+  h_corrected->SetMarkerSize(0.9);
   h_corrected->Draw("pesame");
 
   h_noncorrected->SetLineColor(2);
-  h_noncorrected->SetLineWidth(1);
+  h_noncorrected->SetLineWidth(2);
   h_noncorrected->SetMarkerColor(2);
   h_noncorrected->SetMarkerStyle(1);
   h_noncorrected->Draw("psame");
@@ -438,16 +440,16 @@ void fit() {
   
   fitresult3->SetLineColor(4);
   fitresult3->SetLineStyle(3);
-  fitresult3->SetLineWidth(2);
+  fitresult3->SetLineWidth(3);
   fitresult3->Draw("lsame");
 
-  QQBARLabel(0.6,0.2,"",12);
+  QQBARLabel(0.8,0.2,"");
 
-  TLegend *leg = new TLegend(0.2,0.65,0.55,0.8);
-  leg->AddEntry(h_parton,"parton level","lf");
-  leg->AddEntry(h_corrected,"signal (+ full detector correction)","lep");
+  TLegend *leg = new TLegend(0.2,0.65,0.65,0.8);
+  leg->AddEntry(h_noncorrected,"signal  + charge corr.","lep");
+  leg->AddEntry(h_corrected,"signal + ch. corr. + accep. corr.","lep");
   leg->AddEntry(fitresult3,"fit","l");
-  leg->AddEntry(h_noncorrected,"signal (w/o detector correction)","l");
+  leg->AddEntry(h_parton,"parton level","lf");
   // leg->AddEntry(h_corrected_clone,"not corrected","lep");
   leg->SetFillColor(0);
   leg->SetLineColor(0);
@@ -455,7 +457,7 @@ void fit() {
   leg->Draw();
 
 
-    TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
+  /*   TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
   // canvas->Divide(2,1);
   canvas->cd(1);
   gPad->SetGridy();
@@ -481,7 +483,7 @@ void fit() {
   pull3->SetLineWidth(3);
   pull3->Draw("lsame");
 
-  QQBARLabel(0.2,0.2,"",12);
+  QQBARLabel(0.2,0.2,"");
 
   TLegend *leg2 = new TLegend(0.5,0.25,0.93,0.4);
   leg2->AddEntry(pull,"X = signal + full correction","l");
@@ -511,7 +513,7 @@ void fit() {
   leg3->SetFillColor(0);
   leg3->SetLineColor(0);
   leg3->SetShadowColor(0);
-  leg3->Draw();
+  leg3->Draw();*/
 
     
 
