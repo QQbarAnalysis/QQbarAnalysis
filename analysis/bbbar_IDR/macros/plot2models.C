@@ -138,7 +138,7 @@ void plot2models() {
   h_parton->GetXaxis()->SetLabelSize(0.05);
   h_parton->GetXaxis()->SetLabelOffset(0.015);
 
-  h_parton->GetYaxis()->SetTitle("entries / 0.05");
+  h_parton->GetYaxis()->SetTitle("entries / 0.1");
   h_parton->GetYaxis()->SetTitleOffset(1.4);
   h_parton->GetYaxis()->SetTitleFont(42);
   h_parton->GetYaxis()->SetTitleSize(0.05);
