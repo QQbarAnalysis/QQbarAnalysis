@@ -34,7 +34,7 @@ void acceptance_factor_plot(bool DBD=false) {
   //----------------------------------
   // --- large model
  
-  TString filename = TString::Format("%s/bbbar_l5_valencia1.4_cuts4_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),pol.Data(),nbins);
+  TString filename = TString::Format("%s/bbbar_l5_valencia2.0_cuts3_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),pol.Data(),nbins);
   TFile *f = new TFile(filename);
   TH1F *h_parton = (TH1F*)f->Get("parton");
   h_parton->Sumw2();
@@ -49,7 +49,7 @@ void acceptance_factor_plot(bool DBD=false) {
   //----------------------------------
   // --- small model
   
-  filename = TString::Format("%s/bbbar_s5_valencia1.4_cuts4_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),pol.Data(),nbins);
+  filename = TString::Format("%s/bbbar_s5_valencia2.0_cuts3_500GeV_%s_btag1_0.9_btag2_0.2_nbins%i.root",folder.Data(),pol.Data(),nbins);
 
   f = new TFile(filename);
   TH1F *h_parton2 = (TH1F*)f->Get("parton");
@@ -75,10 +75,10 @@ void acceptance_factor_plot(bool DBD=false) {
   
   TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
   canvas->cd(1);
-  h_eff->GetXaxis()->SetTitle("|cos(#theta_{b#bar{b}})|");
+  h_eff->GetXaxis()->SetTitle("|cos#theta_{b}|");
   h_eff->GetXaxis()->SetRangeUser(0,1);
   h_eff->GetYaxis()->SetTitle("N_{reco cuts}^{parton level} / N^{parton level}");
-  h_eff->GetYaxis()->SetRangeUser(0,0.35);
+  h_eff->GetYaxis()->SetRangeUser(0,h_eff->GetMaximum()*1.1);
 
   h_eff->GetXaxis()->SetTitleOffset(1.1);
   h_eff->GetXaxis()->SetTitleFont(42);
@@ -107,9 +107,9 @@ void acceptance_factor_plot(bool DBD=false) {
   h_eff2->Draw("psame");
 
 
-  QQBARLabel(0.2,0.2,"Work in progress",1);
+  QQBARLabel(0.2,0.2,"",1);
   
-  TLegend *leg = new TLegend(0.2,0.65,0.65,0.8);
+  TLegend *leg = new TLegend(0.2,0.5,0.65,0.65);
   leg->SetTextFont(42);
   leg->AddEntry(h_eff,"IDR-L, 500 GeV","lep");
   leg->AddEntry(h_eff2,"IDR-S, 500 GeV","lep");
@@ -146,7 +146,14 @@ void acceptance_factor_plot(bool DBD=false) {
 
 
   canvas->Update();
-  if(DBD==false) canvas->Print("../plots/acceptance_2models.C");
-  else  canvas->Print("../plots/acceptance_2models_DBD.C");
+  if(DBD==false) {
+    canvas->Print("../plots/acceptance_2models_v2.C");
+    canvas->Print("../plots/acceptance_2models_v2.eps");
+  }
+  else  {
+    canvas->Print("../plots/acceptance_2models_DBD_v2.C");
+    canvas->Print("../plots/acceptance_2models_DBD_v2.eps");
+  }
+
   
 }
