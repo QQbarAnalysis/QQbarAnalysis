@@ -184,24 +184,6 @@ namespace QQbarProcessor
 			LCCollection * pfocol = evt->getCollection(_colName);
 			_stats._Thrust = pfocol->getParameters().getFloatVal("majorThrustValue");
 
-#if 0 // RY Test
-			int nPFO = pfocol->getNumberOfElements()  ;
-			TLorentzVector p4sum;
-			for(int ipfo=0; ipfo< nPFO ; ipfo++){
-				ReconstructedParticle* pfo = dynamic_cast<ReconstructedParticle*>( pfocol->getElementAt( ipfo ) ) ;
-				LCRelationNavigator nav( evt->getCollection( _colRelName) );
-				int nmcr = nav.getRelatedToObjects( pfo ).size();
-				if ( nmcr > 0 ) {
-					MCParticle* mcr = getBestMCParticleOf(pfo,&nav); // pick up a MCParticle having the highest weight (probability) in candidates.
-					if (!mcr->isOverlay()) { // Consider non-overlaid particles only.
-						TVector3 p3(pfo->getMomentum());
-						TLorentzVector p4(p3,pfo->getEnergy());
-						p4sum += p4;
-					}
-				}
-			}
-			_stats._visM = p4sum.M(); // Fill this value into a new histogram.
-#endif
 
 			std::cout << "B jets: \n";
 			QQbarTools::PrintJets(bjets);
