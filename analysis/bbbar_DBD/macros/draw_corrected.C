@@ -56,12 +56,12 @@ void draw_corrected() {
   TH1F *h_reco_BcKc_same1 = (TH1F*)f->Get("reco_BcKc_same1");
   TH1F *h_reco_BcKc_same2 = (TH1F*)f->Get("reco_BcKc_same2");
 
-  TH1F *h_truth_BcBc = (TH1F*)f->Get("truth_BcBc");
-  TH1F *h_truth_KcKc = (TH1F*)f->Get("truth_KcKc");
-  TH1F *h_truth_BcKc = (TH1F*)f->Get("truth_BcKc");
-  TH1F *h_truth_KcBc = (TH1F*)f->Get("truth_KcBc");
-  TH1F *h_truth_BcKc_same1 = (TH1F*)f->Get("truth_BcKc_same1");
-  TH1F *h_truth_BcKc_same2 = (TH1F*)f->Get("truth_BcKc_same2");
+  TH1F *h_cheatedcharge_BcBc = (TH1F*)f->Get("cheatedcharge_BcBc");
+  TH1F *h_cheatedcharge_KcKc = (TH1F*)f->Get("cheatedcharge_KcKc");
+  TH1F *h_cheatedcharge_BcKc = (TH1F*)f->Get("cheatedcharge_BcKc");
+  TH1F *h_cheatedcharge_KcBc = (TH1F*)f->Get("cheatedcharge_KcBc");
+  TH1F *h_cheatedcharge_BcKc_same1 = (TH1F*)f->Get("cheatedcharge_BcKc_same1");
+  TH1F *h_cheatedcharge_BcKc_same2 = (TH1F*)f->Get("cheatedcharge_BcKc_same2");
 
   TH1F *h_corrected_BcBc = (TH1F*)f->Get("corrected_BcBc");
   TH1F *h_corrected_KcKc = (TH1F*)f->Get("corrected_KcKc");
@@ -71,22 +71,22 @@ void draw_corrected() {
   TH1F *h_corrected_BcKc_same2 = (TH1F*)f->Get("corrected_BcKc_same2");
 
   h_corrected_BcBc->Divide(h_parton);
-  h_truth_BcBc->Divide(h_parton);
+  h_cheatedcharge_BcBc->Divide(h_parton);
 
   h_corrected_KcKc->Divide(h_parton);
-  h_truth_KcKc->Divide(h_parton);
+  h_cheatedcharge_KcKc->Divide(h_parton);
 
   h_corrected_BcKc->Divide(h_parton);
-  h_truth_BcKc->Divide(h_parton);
+  h_cheatedcharge_BcKc->Divide(h_parton);
   
   h_corrected_KcBc->Divide(h_parton);
-  h_truth_KcBc->Divide(h_parton);
+  h_cheatedcharge_KcBc->Divide(h_parton);
 
   h_corrected_BcKc_same1->Divide(h_parton);
-  h_truth_BcKc_same1->Divide(h_parton);
+  h_cheatedcharge_BcKc_same1->Divide(h_parton);
   
   h_corrected_BcKc_same2->Divide(h_parton);
-  h_truth_BcKc_same2->Divide(h_parton);
+  h_cheatedcharge_BcKc_same2->Divide(h_parton);
  
   TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
   canvas->Divide(3,2);
@@ -98,7 +98,7 @@ void draw_corrected() {
   h_corrected_BcBc->SetLineColor(2);
   h_corrected_BcBc->SetMarkerColor(2);
   h_corrected_BcBc->Draw("l");
-  h_truth_BcBc->Draw("same");
+  h_cheatedcharge_BcBc->Draw("same");
 
   canvas->cd(2);
   h_corrected_KcKc->GetXaxis()->SetTitle("cos(#theta)");
@@ -108,7 +108,7 @@ void draw_corrected() {
   h_corrected_KcKc->SetLineColor(2);
   h_corrected_KcKc->SetMarkerColor(2);
   h_corrected_KcKc->Draw("l");
-  h_truth_KcKc->Draw("same");
+  h_cheatedcharge_KcKc->Draw("same");
 
   canvas->cd(3);
   h_corrected_BcKc->GetXaxis()->SetTitle("cos(#theta)");
@@ -118,7 +118,7 @@ void draw_corrected() {
   h_corrected_BcKc->SetLineColor(2);
   h_corrected_BcKc->SetMarkerColor(2);
   h_corrected_BcKc->Draw("l");
-  h_truth_BcKc->Draw("same");
+  h_cheatedcharge_BcKc->Draw("same");
 
   canvas->cd(4);
   h_corrected_KcBc->GetXaxis()->SetTitle("cos(#theta)");
@@ -128,7 +128,7 @@ void draw_corrected() {
   h_corrected_KcBc->SetLineColor(2);
   h_corrected_KcBc->SetMarkerColor(2);
   h_corrected_KcBc->Draw("l");
-  h_truth_KcBc->Draw("same");
+  h_cheatedcharge_KcBc->Draw("same");
 
   canvas->cd(5);
   h_corrected_BcKc_same1->GetXaxis()->SetTitle("cos(#theta)");
@@ -138,7 +138,7 @@ void draw_corrected() {
   h_corrected_BcKc_same1->SetLineColor(2);
   h_corrected_BcKc_same1->SetMarkerColor(2);
   h_corrected_BcKc_same1->Draw("l");
-  h_truth_BcKc_same1->Draw("same");
+  h_cheatedcharge_BcKc_same1->Draw("same");
 
 
   canvas->cd(6);
@@ -149,7 +149,7 @@ void draw_corrected() {
   h_corrected_BcKc_same2->SetLineColor(2);
   h_corrected_BcKc_same2->SetMarkerColor(2);
   h_corrected_BcKc_same2->Draw("l");
-  h_truth_BcKc_same2->Draw("same");
+  h_cheatedcharge_BcKc_same2->Draw("same");
  
 
 

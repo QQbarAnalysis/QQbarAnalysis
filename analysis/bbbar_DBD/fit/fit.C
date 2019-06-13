@@ -78,8 +78,8 @@ TF1 * fit_histo(TH1F * histo, float lumi_factor) {
   }
 
   TGraphErrors * g_histo = new TGraphErrors(nbins,x,y,ex,ey);
-  float range_up=0.8;
-  float range_down=-0.8;
+  float range_up=0.80;
+  float range_down=-0.80;
 
   TF1 *func_fit = new TF1("asymmetry_f",asymmetry_f,range_down,range_up,2);
   func_fit->SetParNames("S","A");
@@ -115,7 +115,7 @@ TF1 * fit_histo(TH1F * histo, float lumi_factor) {
   cout << "Chi2 = "<<func_fit->GetChisquare()<<", NDF ="<<func_fit->GetNDF()<<" Chi2/NDF= "<<func_fit->GetChisquare()/func_fit->GetNDF()<<endl;
 
 
-  TF1 *func_return = new TF1("asymmetry_f",asymmetry_f,-0.8,0.8,2);
+  TF1 *func_return = new TF1("asymmetry_f",asymmetry_f,-0.80,0.80,2);
   func_return->SetParNames("S","A");
   func_return->SetParameter(0,func_fit->GetParameter(0));
   func_return->SetParameter(1,func_fit->GetParameter(1));
@@ -147,8 +147,8 @@ TF1 * fit_histo_bkg(TH1F * histo, TH1F * bkg, float lumi_factor) {
   }
 
   TGraphErrors * g_histo = new TGraphErrors(40,x,y,ex,ey);
-  float range_up=0.81;
-  float range_down=-0.81;
+  float range_up=0.801;
+  float range_down=-0.801;
 
   TF1 *func_fit = new TF1("asymmetry_f",asymmetry_f,range_down,range_up,2);
   func_fit->SetParNames("S","A");
@@ -281,19 +281,27 @@ void fit() {
     h_noncorrected->SetBinContent(i,h_corrected->GetBinContent(i));
     h_noncorrected->SetBinError(i,h_corrected->GetBinError(i));
     
-    double error = sqrt( pow((h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*
-			     sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow(h_eff->GetBinError(i)/h_eff->GetBinContent(i),2)),2) + 0.1*0.1*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+    //    double error = sqrt( pow((h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*
+    //			     sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2))));//+0.25*pow(h_eff->GetBinError(i)/h_eff->GetBinContent(i),2)),2) + 0.0000001*0.0000001*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+
+    //double error = (h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow( sqrt(pow(h_eff->GetBinError(i),2)+0.01*0.01*pow(h_eff->GetBinContent(i),2)) /h_eff->GetBinContent(i),2));// + 0.01*0.01*pow(/h_eff->GetBinContent(i),2);
+
+    double error = (h_corrected->GetBinContent(i)/h_eff->GetBinContent(i))*sqrt(pow(h_corrected->GetBinError(i)/h_corrected->GetBinContent(i),2)+0.25*pow(h_eff->GetBinError(i) /h_eff->GetBinContent(i),2));
+    error= sqrt(error*error +  0.0*0.01*pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
+    ///h_eff->GetBinContent(i),2);
+    //pow(h_corrected->GetBinContent(i)/h_eff->GetBinContent(i)-h_corrected->GetBinContent(i),2));
     h_corrected->SetBinError(i,error);
      
     h_corrected->SetBinContent(i,h_corrected->GetBinContent(i)/(h_eff->GetBinContent(i)));
   
   }
+  //h_corrected->Divide(h_eff);
 
   //  h_corrected->Divide(h_eff);
   
-  double integtral_parton= h_parton->Integral(5,35);//nbins/2-nbins/3,nbins/2+nbins/3);//
-  double integtral_truth= h_corrected->Integral(5,35);
-  h_parton->Scale(integtral_truth/integtral_parton);
+  double integral_parton= h_parton->Integral(8,32);//nbins/2-nbins/3,nbins/2+nbins/3);//
+  double integral_cheatedcharge= h_corrected->Integral(8,32);
+  h_parton->Scale(integral_cheatedcharge/integral_parton);
   
   TString lumi= "250fb-1,";
   int ilumi=1;
@@ -396,30 +404,32 @@ void fit() {
   gStyle->SetLegendFont(42);
   gStyle->SetTitleBorderSize(0);
   gStyle->SetTitleStyle(0);
+  gStyle->SetTitleFontSize(0.03);
   gStyle->SetMarkerSize(0.3);
       
   TCanvas * canvas0 = new TCanvas ("canvas0","canvas0",1000,800);
   canvas0->cd(1);
-  if(pol=="eL") h_parton->SetTitle("e_{L}^{+}e_{R}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
-  else h_parton->SetTitle("e_{R}^{+}e_{L}^{-}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
-  h_parton->GetXaxis()->SetTitle("cos(#theta)");
-  h_parton->GetYaxis()->SetTitle("entries / 0.05 rad");
+  if(pol=="eL") h_parton->SetTitle("e_{L}^{-}e_{R}^{+}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
+  else h_parton->SetTitle("e_{R}^{-}e_{L}^{+}#rightarrow b#bar{b} @ 250GeV, 250 fb^{-1}");
+  h_parton->GetXaxis()->SetTitle("cos#theta_{b}");
+  h_parton->GetYaxis()->SetTitle("entries / 0.05");
   h_parton->GetYaxis()->SetTitleOffset(2.05);
   h_parton->GetYaxis()->SetRangeUser(0,h_parton->GetMaximum()*1.1);
 
-  h_parton->SetLineColor(3);
-  h_parton->SetFillColor(3);
-  h_parton->SetFillStyle(3001);
+  h_parton->SetLineColor(kGreen+1);
+  h_parton->SetFillColor(kGreen+1);
+  h_parton->SetFillStyle(3003);
   h_parton->Draw("histo");
     
   h_corrected->SetLineColor(4);
   h_corrected->SetLineWidth(2);
   h_corrected->SetMarkerColor(4);
-  h_corrected->SetMarkerStyle(1);
+  h_corrected->SetMarkerStyle(4);
+  h_corrected->SetMarkerSize(0.9);
   h_corrected->Draw("pesame");
 
   h_noncorrected->SetLineColor(2);
-  h_noncorrected->SetLineWidth(1);
+  h_noncorrected->SetLineWidth(2);
   h_noncorrected->SetMarkerColor(2);
   h_noncorrected->SetMarkerStyle(1);
   h_noncorrected->Draw("psame");
@@ -430,16 +440,16 @@ void fit() {
   
   fitresult3->SetLineColor(4);
   fitresult3->SetLineStyle(3);
-  fitresult3->SetLineWidth(2);
+  fitresult3->SetLineWidth(3);
   fitresult3->Draw("lsame");
 
-  QQBARLabel(0.6,0.2,"",12);
+  QQBARLabel(0.8,0.2,"");
 
-  TLegend *leg = new TLegend(0.2,0.65,0.55,0.8);
-  leg->AddEntry(h_parton,"parton level","lf");
-  leg->AddEntry(h_corrected,"signal (+ full detector correction)","lep");
+  TLegend *leg = new TLegend(0.2,0.65,0.65,0.8);
+  leg->AddEntry(h_noncorrected,"signal  + charge corr.","lep");
+  leg->AddEntry(h_corrected,"signal + ch. corr. + accep. corr.","lep");
   leg->AddEntry(fitresult3,"fit","l");
-  leg->AddEntry(h_noncorrected,"signal (w/o detector correction)","l");
+  leg->AddEntry(h_parton,"parton level","lf");
   // leg->AddEntry(h_corrected_clone,"not corrected","lep");
   leg->SetFillColor(0);
   leg->SetLineColor(0);
@@ -447,7 +457,7 @@ void fit() {
   leg->Draw();
 
 
-    TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
+  /*   TCanvas * canvas = new TCanvas ("canvas","canvas",1000,800);
   // canvas->Divide(2,1);
   canvas->cd(1);
   gPad->SetGridy();
@@ -473,7 +483,7 @@ void fit() {
   pull3->SetLineWidth(3);
   pull3->Draw("lsame");
 
-  QQBARLabel(0.2,0.2,"",12);
+  QQBARLabel(0.2,0.2,"");
 
   TLegend *leg2 = new TLegend(0.5,0.25,0.93,0.4);
   leg2->AddEntry(pull,"X = signal + full correction","l");
@@ -503,7 +513,7 @@ void fit() {
   leg3->SetFillColor(0);
   leg3->SetLineColor(0);
   leg3->SetShadowColor(0);
-  leg3->Draw();
+  leg3->Draw();*/
 
     
 
