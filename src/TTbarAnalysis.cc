@@ -730,7 +730,9 @@ namespace QQbarProcessor
 		//float chi2 = _stats._chiTopMass + _stats._chiTopE + _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 		float chi2 =  _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 		//if (top2->GetComputedCharge().ByLepton &&  _stats._Top1gamma > gammacut1+0.1  && goodcharge.size() == 0) 
-		if (top2->GetComputedCharge().ByLepton &&  chi2 < 15) 
+		
+		//if (top2->GetComputedCharge().ByLepton &&  chi2 < 15) 
+		if (top2->GetComputedCharge().ByLepton) 
 		{
 			int top2lepton = *(top2->GetComputedCharge().ByLepton );
 			//_stats._qCostheta[0] = (top2lepton < 0)? _stats._Top1costheta: -_stats._Top1costheta;
