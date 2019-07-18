@@ -509,6 +509,8 @@ namespace QQbarProcessor
 		//if (e/m > _GammaTparameter -0.1 && top2->GetComputedCharge().ByLepton) 
 		//Track charge * Track charge
 		float gammacut1 = 1.23;
+
+		/* // COMMENTED OUT
 		if (top2->GetComputedCharge().ByTrackCount && top1->GetComputedCharge().ByTrackCount) 
 		{
 			int top1charge = *(top1->GetComputedCharge().ByTrackCount );
@@ -558,7 +560,7 @@ namespace QQbarProcessor
 			{
 				samecharge.push_back(2);
 			}
-		}//*/
+		}//
 		//Track charge + Kaon
 		if (top1->GetComputedCharge().ByTrackCount && top1->GetComputedCharge().ByTVCM) 
 		{
@@ -655,7 +657,7 @@ namespace QQbarProcessor
 			{
 				samecharge.push_back(4);
 			}
-		}//*/
+		}//
 		//LEPTON
 		if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTrackCount)
 		{
@@ -722,6 +724,9 @@ namespace QQbarProcessor
 				samecharge.push_back(6);
 			}
 		}//
+
+		*/ // COMMENTED OUT
+
 		//float chi2 = _stats._chiTopMass + _stats._chiTopE + _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 		float chi2 =  _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 		//if (top2->GetComputedCharge().ByLepton &&  _stats._Top1gamma > gammacut1+0.1  && goodcharge.size() == 0) 
