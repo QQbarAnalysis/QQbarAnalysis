@@ -395,7 +395,9 @@ namespace QQbarProcessor
 		_stats._qCostheta[0] = -2.;
 		_stats._Top1bcharge = top1->GetHadronCharge();
 
-		_stats._Top1bmomentum = top1->GetHadronMomentum();
+		//_stats._Top1bmomentum = top1->GetHadronMomentum();
+		_stats._Top1bmomentum = top1->GetB()->getMomentum();
+
 		_stats._Top1bdistance = top1->GetMinHadronDistance();
 		vector<float> direction = MathOperator::getDirection(top1->getMomentum());
 		_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction)[1] );
@@ -420,7 +422,9 @@ namespace QQbarProcessor
 			<< " top bcostheta: " << _stats._Top1bcostheta
 			<< "\n";
 		//Top Leptonic
-		_stats._Top2bmomentum = top2->GetHadronMomentum();
+		//_stats._Top2bmomentum = top2->GetHadronMomentum();
+		_stats._Top2bmomentum = top2->GetB()->getMomentum();
+
 		_stats._Top2bdistance = top2->GetMinHadronDistance();
 		_stats._Top2bcharge = top2->GetHadronCharge();
 		vector<float> direction2 = MathOperator::getDirection(top2->getMomentum());
@@ -959,7 +963,9 @@ namespace QQbarProcessor
 		//_Top1bcharge = top1->GetHadronCharge();
 		//_Top2bcharge = top2->GetHadronCharge();
 
-		_stats._Top1bmomentum = top1->GetHadronMomentum();
+		//_stats._Top1bmomentum = top1->GetHadronMomentum();
+		_stats._Top1bmomentum = top1->GetB()->getMomentum();
+		
 		vector<float> direction = MathOperator::getDirection(top1->getMomentum());
 		_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction)[1] );
 		_stats._Top1bntracks = top1->GetNumberOfVertexParticles();
@@ -974,7 +980,10 @@ namespace QQbarProcessor
 			<< "\n";
 		//Top Leptonic
 		_stats._Top2bcharge = top2->__GetMCCharge();
-		_stats._Top2bmomentum = top2->GetHadronMomentum();
+
+		//_stats._Top2bmomentum = top2->GetHadronMomentum();
+		_stats._Top2bmomentum = top2->GetB()->getMomentum();
+
 		vector<float> direction2 = MathOperator::getDirection(top2->getMomentum());
 		_stats._Top2costheta =  std::cos( MathOperator::getAngles(direction2)[1] );
 		_stats._Top2bntracks = top2->GetNumberOfVertexParticles();
