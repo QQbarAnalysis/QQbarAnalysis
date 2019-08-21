@@ -395,8 +395,8 @@ namespace QQbarProcessor
 		_stats._qCostheta[0] = -2.;
 		_stats._Top1bcharge = top1->GetHadronCharge();
 
-		//_stats._Top1bmomentum = top1->GetHadronMomentum();
-		_stats._Top1bmomentum = top1->GetB()->getMomentum();
+		_stats._Top1bmomentum = top1->GetHadronMomentum();
+		//_stats._Top1bmomentum = MathOperator::getModule(top1->GetB()->getMomentum());
 
 		_stats._Top1bdistance = top1->GetMinHadronDistance();
 		vector<float> direction = MathOperator::getDirection(top1->getMomentum());
@@ -422,8 +422,8 @@ namespace QQbarProcessor
 			<< " top bcostheta: " << _stats._Top1bcostheta
 			<< "\n";
 		//Top Leptonic
-		//_stats._Top2bmomentum = top2->GetHadronMomentum();
-		_stats._Top2bmomentum = top2->GetB()->getMomentum();
+		_stats._Top2bmomentum = top2->GetHadronMomentum();
+		//_stats._Top2bmomentum = MathOperator::getModule(top2->GetB()->getMomentum());
 
 		_stats._Top2bdistance = top2->GetMinHadronDistance();
 		_stats._Top2bcharge = top2->GetHadronCharge();
@@ -514,7 +514,8 @@ namespace QQbarProcessor
 		//Track charge * Track charge
 		float gammacut1 = 1.23;
 
-		/* // COMMENTED OUT
+		// COMMENTED OUT
+		
 		if (top2->GetComputedCharge().ByTrackCount && top1->GetComputedCharge().ByTrackCount) 
 		{
 			int top1charge = *(top1->GetComputedCharge().ByTrackCount );
@@ -662,6 +663,7 @@ namespace QQbarProcessor
 				samecharge.push_back(4);
 			}
 		}//
+		
 		//LEPTON
 		if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTrackCount)
 		{
@@ -729,14 +731,14 @@ namespace QQbarProcessor
 			}
 		}//
 
-		*/ // COMMENTED OUT
+		// COMMENTED OUT
 
 		//float chi2 = _stats._chiTopMass + _stats._chiTopE + _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 		float chi2 =  _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
 		//if (top2->GetComputedCharge().ByLepton &&  _stats._Top1gamma > gammacut1+0.1  && goodcharge.size() == 0) 
 		
-		//if (top2->GetComputedCharge().ByLepton &&  chi2 < 15) 
-		if (top2->GetComputedCharge().ByLepton) 
+		//if (top2->GetComputedCharge().ByLepton) 
+		if (top2->GetComputedCharge().ByLepton &&  chi2 < 15) 
 		{
 			int top2lepton = *(top2->GetComputedCharge().ByLepton );
 			//_stats._qCostheta[0] = (top2lepton < 0)? _stats._Top1costheta: -_stats._Top1costheta;
@@ -963,8 +965,8 @@ namespace QQbarProcessor
 		//_Top1bcharge = top1->GetHadronCharge();
 		//_Top2bcharge = top2->GetHadronCharge();
 
-		//_stats._Top1bmomentum = top1->GetHadronMomentum();
-		_stats._Top1bmomentum = top1->GetB()->getMomentum();
+		_stats._Top1bmomentum = top1->GetHadronMomentum();
+		//_stats._Top1bmomentum = MathOperator::getModule(top1->GetB()->getMomentum());
 		
 		vector<float> direction = MathOperator::getDirection(top1->getMomentum());
 		_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction)[1] );
@@ -981,8 +983,8 @@ namespace QQbarProcessor
 		//Top Leptonic
 		_stats._Top2bcharge = top2->__GetMCCharge();
 
-		//_stats._Top2bmomentum = top2->GetHadronMomentum();
-		_stats._Top2bmomentum = top2->GetB()->getMomentum();
+		_stats._Top2bmomentum = top2->GetHadronMomentum();
+		//_stats._Top2bmomentum = MathOperator::getModule(top2->GetB()->getMomentum());
 
 		vector<float> direction2 = MathOperator::getDirection(top2->getMomentum());
 		_stats._Top2costheta =  std::cos( MathOperator::getAngles(direction2)[1] );
