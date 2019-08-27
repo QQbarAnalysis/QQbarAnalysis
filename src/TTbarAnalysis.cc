@@ -776,9 +776,13 @@ namespace QQbarProcessor
 		{
 			std::cout << "CHARGE VALUE: ";
 			int sum = 0;
+
 			for (unsigned int i = 0; i < chargevalue.size(); i++) 
 			{
 				std::cout << " " << chargevalue[i];
+
+				_stats._chgValue[i] = chargevalue[i];
+
 				sum += chargevalue[i];
 			}
 			std::cout << "\n";

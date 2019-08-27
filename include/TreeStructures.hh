@@ -83,8 +83,7 @@ namespace QQbarProcessor
     int _Top1Genbcharge;
     float _Top1btag;
     float _Top1gamma;
-    //float _Top1bmomentum;
-    const double* _Top1bmomentum;
+    float _Top1bmomentum;
 		int _Top1bntracks;
     int _Top1Genbntracks;
     float _Top1mass;
@@ -106,8 +105,7 @@ namespace QQbarProcessor
     int _Top2Genbntracks;
     int _Top2bTVCM;
     int _UsedBTVCM;
-    //float _Top2bmomentum;
-    const double* _Top2bmomentum;
+    float _Top2bmomentum;
     float _Top2bdistance;
     float _Top2btag;
     float _Top2mass;
@@ -147,6 +145,8 @@ namespace QQbarProcessor
     float _chiGammaT2;
     float _chiTop2Mass;
     float _chiTop2E;
+
+		int _chgValue[100];
 
 		//Generated
 		int _MCBHadCharge;
