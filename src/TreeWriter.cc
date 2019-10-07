@@ -203,7 +203,6 @@ namespace QQbarProcessor
     _hTree->Branch("chiGammaT2", &data._chiGammaT2, "chiGammaT2/F");
     _hTree->Branch("Thrust", &data._Thrust, "Thrust/F");
 
-//<<<<<<< HEAD
 		_hTree->Branch("MCBHadCharge", &data._MCBHadCharge, "MCBHadCharge/I");
 		_hTree->Branch("MCBHadNtracks", &data._MCBHadNtracks, "MCBHadNtracks/I");
 
@@ -282,7 +281,7 @@ namespace QQbarProcessor
 		_hTree->Branch("methodCorrect", &data._methodCorrect, "methodCorrect/I");
 		_hTree->Branch("methodSameCharge", data._methodSameCharge, "methodSameCharge[methodRefused]/I");
 		_hTree->Branch("methodTaken", data._methodTaken, "methodTaken[methodUsed]/I");
-		_hTree->Branch("chgValue", data._chgValue, "chgValue[methodUsed]/I")
+		_hTree->Branch("chgValue", data._chgValue, "chgValue[methodUsed]/I");
 		_hTree->Branch("qBCostheta", data._qBCostheta, "qBCostheta[2]/F");
 		_hTree->Branch("qCostheta", data._qCostheta, "qCostheta[2]/F");
 		
@@ -298,9 +297,7 @@ namespace QQbarProcessor
 		_hTree->Branch("chiTop2E", &data._chiTop2E, "chiTop2E/F");
 		_hTree->Branch("chiGammaT2", &data._chiGammaT2, "chiGammaT2/F");
 		_hTree->Branch("Thrust", &data._Thrust, "Thrust/F");
-//=======
   }
-//>>>>>>> e3351a0cb4bacd89d6cb27f29cb14dda6d2f6d71
 
   void TreeWriter::InitializeStatsHadronicTree(TTree * _hTree, StatsData & data ){
 
