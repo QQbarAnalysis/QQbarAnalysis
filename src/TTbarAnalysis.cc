@@ -169,7 +169,6 @@ namespace QQbarProcessor
 		{
 			std::cout << "***************Analysis*" <<_summary._nEvt++<<"*****************\n";
 
-
 			LCCollection * isoleptoncol = evt->getCollection(_IsoLeptonColName);
 			LCCollection * jetcol = evt->getCollection(_JetsColName);
 			LCCollection * jetrelcol = evt->getCollection(_JetsRelColName);
@@ -851,6 +850,9 @@ namespace QQbarProcessor
 			_summary._nAfterBtagCuts++;
 			vector< TopQuark * > * wbosons = formW(bjets,wjets);
 			vector< TopQuark * > * tops = composeTops(bjets,wbosons);
+			ComputeTopParameters( tops->at(0), tops->at(1) );
+			ComputeChargeTVCM( tops->at(0), tops->at(1), vtxOperator );
+
 			_hTree->Fill();
 			ClearVariables();
 		}
@@ -922,6 +924,41 @@ namespace QQbarProcessor
 		return result;
 
 
+	}
+
+	float TTbarAnalysis::getChi2(TopQuark * candidate , std::vector<float> & eachchi2 )
+	{
+		float pT = MathOperator::getModule(candidate->getMomentum());
+		float mT = candidate->getMass();
+		float ET = candidate->getEnergy();
+		float pB = MathOperator::getModule(candidate->GetB()->getMomentum());
+		float beta = pT / ET;
+		float gamma =1.0 / std::sqrt( 1.0 - beta * beta);
+		float cosbT = std::cos( MathOperator::getAngle(candidate->getMomentum(), candidate->GetB()->getMomentum()) );
+		float bpstar = gamma * pB * ( 1.0 - beta * cosbT);
+		float cosbW = std::cos( MathOperator::getAngle(candidate->GetB()->getMomentum(), candidate->GetW()->getMomentum()) );
+		float chiTopMass = std::pow(mT - _TopMassparameter, 2) / std::pow( _TopMassSigmaparameter, 2) ;
+		float chiTopE = std::pow(ET - _EBeamparameter , 2) / std::pow( _EBeamSigmaparameter, 2); 
+		float chiPbstar = std::pow( bpstar - _PStarparameter, 2) / std::pow( _PStarSigmaparameter, 2);
+		float chiGammaT = std::pow( gamma - _GammaTparameter, 2) / std::pow( _GammaTSigmaparameter, 2); 
+		float chiCosWb = std::pow( cosbW - _CosbWparameter, 2) / std::pow( _CosbWSigmaparameter, 2);
+		float chi2 = chiTopMass + chiTopE + chiPbstar; // + chiCosWb + chiGammaT ;
+		//float chi2 = std::pow( mT - _stats._TopMassparameter, 2) / std::pow( _stats._TopMassSigmaparameter, 2) + 
+		//	     std::pow(ET - _EBeamparameter , 2) / std::pow( _EBeamSigmaparameter, 2) +
+		//	     std::pow( bpstar - _PStarparameter, 2) / std::pow( _PStarSigmaparameter, 2) +
+		//	     std::pow( gamma - _GammaTparameter, 2) / std::pow( _GammaTSigmaparameter, 2) +
+		//	     std::pow( cosbW - _CosbWparameter, 2) / std::pow( _CosbWSigmaparameter, 2);
+		//std::cout << " chi2: " << chi2
+		//          << " chiTopMass: " << chiTopMass
+		//          << " chiTopE: " << chiTopE
+		//          << " chiPbstar: " << chiPbstar << std::endl;
+		eachchi2.clear() ;
+		eachchi2.push_back(chiTopMass) ;
+		eachchi2.push_back(chiTopE) ;
+		eachchi2.push_back(chiPbstar) ;
+		eachchi2.push_back(chiGammaT) ;
+		eachchi2.push_back(chiCosWb) ;
+		return chi2;
 	}
 
 	float TTbarAnalysis::getChi2(TopQuark * candidate )
@@ -1244,6 +1281,67 @@ namespace QQbarProcessor
 			}
 		}
 	}
+
+	void TTbarAnalysis::ComputeTopParameters(TopQuark * top1, TopQuark * top2){
+			_stats._totalEnergy = top1->getEnergy() + top2->getEnergy();
+			_stats._missedEnergy = 2*_EBeamparameter - _stats._totalEnergy;
+			_stats._W1mass = top1->GetW()->getMass();
+			_stats._W1momentum = MathOperator::getModule(top1->GetW()->getMomentum());
+			vector<float> Wdirection1 = MathOperator::getDirection(top1->GetW()->getMomentum());
+			_stats._W1costheta = std::cos (MathOperator::getAngles(Wdirection1)[1]);
+			_stats._W2mass = top2->GetW()->getMass();
+			_stats._W2momentum = MathOperator::getModule(top2->GetW()->getMomentum());
+			vector<float> Wdirection2 = MathOperator::getDirection(top2->GetW()->getMomentum());
+			_stats._W2costheta = std::cos (MathOperator::getAngles(Wdirection2)[1]);
+			_stats._Top1energy = top1->getEnergy();
+			_stats._Top1bcharge = top1->GetHadronCharge();
+			_stats._Top1bmomentum = top1->GetHadronMomentum();
+			_stats._Top1bdistance = top1->GetMinHadronDistance();
+			vector<float> direction1 = MathOperator::getDirection(top1->getMomentum());
+			_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction1)[1] );
+			_stats._Top1bntracks = top1->GetNumberOfVertexParticles();
+			_stats._Top1btag = top1->GetBTag();
+			vector<float> bdirection1 = MathOperator::getDirection(top1->GetB()->getMomentum());
+			_stats._Top1bcostheta = std::cos( MathOperator::getAngles(bdirection1)[1] );
+			//_stats._Top1bTVCM = top1->GetResultTVCM();
+			_stats._Top1cosWb = std::cos( MathOperator::getAngle(top1->GetB()->getMomentum(), top1->GetW()->getMomentum()) );
+			//_stats._Top1Kaon = (top1->GetComputedCharge().ByTVCM )? 1:0;
+			//std::cout << "Top charge: " << _stats._Top1bcharge
+			//          << " top pB: " << _stats._Top1bmomentum
+			//          << " top W: " <<  MathOperator::getModule(top1->GetW()->getMomentum())
+			//          << " top bntracks: " << _stats._Top1bntracks
+			//          << " top btag: " << _stats._Top1btag
+			//          << " top bcostheta: " << _stats._Top1bcostheta << std::endl;
+			_stats._Top2bcharge = top2->GetHadronCharge();
+			_stats._Top2bmomentum = top2->GetHadronMomentum();
+			_stats._Top2bdistance = top2->GetMinHadronDistance();
+			vector<float> direction2 = MathOperator::getDirection(top2->getMomentum());
+			_stats._Top2costheta =  std::cos( MathOperator::getAngles(direction2)[1] );
+			_stats._Top2bntracks = top2->GetNumberOfVertexParticles();
+			_stats._Top2btag = top2->GetBTag();
+			vector<float> bdirection2 = MathOperator::getDirection(top2->GetB()->getMomentum());
+			_stats._Top2bcostheta = std::cos( MathOperator::getAngles(bdirection2)[1] );
+			//_stats._Top2bTVCM = top2->GetResultTVCM();
+			_stats._Top1cosWb = std::cos( MathOperator::getAngle(top2->GetB()->getMomentum(), top2->GetW()->getMomentum()) );
+			//_stats._Top2Kaon = (top2->GetComputedCharge().ByTVCM )? 1:0;
+			vector<float> eachchi2;
+			_stats._chiHad1 = getChi2(top1, eachchi2);
+			_stats._chiTopMass1 = eachchi2[0] ;
+			_stats._chiTopE1 = eachchi2[1] ;
+			_stats._chiPbstar1 = eachchi2[2] ;
+			_stats._chiCosWb1 = eachchi2[3] ;
+			_stats._chiGammaT1 = eachchi2[4] ;
+			std::cout << "chiHad1:" << _stats._chiHad1 << " chiTopMass1:" << _stats._chiTopMass1 << " chiTopE1:" << _stats._chiTopE1 << " chiPbstar1:" << _stats._chiPbstar1 << std::endl;
+			_stats._chiHad2 = getChi2(top2, eachchi2);
+			_stats._chiTopMass2 = eachchi2[0] ;
+			_stats._chiTopE2 = eachchi2[1] ;
+			_stats._chiPbstar2 = eachchi2[2] ;
+			_stats._chiCosWb2 = eachchi2[3] ;
+			_stats._chiGammaT2 = eachchi2[4] ;
+			std::cout << "chiHad2:" << _stats._chiHad2 << " chiTopMass2:" << _stats._chiTopMass2 << " chiTopE2:" << _stats._chiTopE2 << " chiPbstar2:" << _stats._chiPbstar2 << std::endl;
+			std::cout << "_qMCBcostheta = " << _stats._qMCBcostheta[0] << std::endl;
+	}
+
 	void TTbarAnalysis::ClearVariables()
 	{
 		_stats._qMCcostheta[0] = -2;

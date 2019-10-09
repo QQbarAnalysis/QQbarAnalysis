@@ -85,9 +85,11 @@ namespace QQbarProcessor
 			void Match(std::vector< EVENT::MCParticle * > & mctops, std::vector< EVENT::MCParticle * > & mcbs, std::vector< EVENT::MCParticle * > & mcws, TopQuark * topHadronic,  TopQuark * top2 =NULL );
 			void MatchB(std::vector< RecoJet * > *jets, std::vector< EVENT::MCParticle * > & mcbs, LCCollection * mcvtxcol = NULL);
 			void MatchB(std::vector< EVENT::MCParticle * > & mcbs, TopQuark * topHadronic, TopQuark * top2 =NULL, LCCollection * mcvtxcol = NULL);
+			void ComputeTopParameters(TopQuark * top1, TopQuark * top2);
 			void ComputeCharge(TopQuark * top, TopQuark * top2);
 			void __ComputeChargeCheat(TopQuark * top, TopQuark * top2);
 			void ComputeChargeTVCM(TopQuark * top, TopQuark * top2, VertexChargeOperator & vtxOperator);
+			float getChi2(TopQuark * candidate , std::vector<float> & eachchi2 );
 			float getChi2(TopQuark * c);
 			void DecideOnAsymmetry(TopQuark * top, TopQuark * top2);
 			std::vector<int> getOpposite(int i, int j);
