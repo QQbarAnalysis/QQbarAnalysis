@@ -67,6 +67,7 @@ namespace QQbarProcessor
 	{
 		std::vector< EVENT::MCParticle * > mctops = opera.GetTopPairParticles(_stats._MCTopBangle, _stats._MCTopcosWb);
 
+		std::cout << "run after GetTopPairParticles" << std::endl;
 
 		if (mctops.size() < 2) 
 		{
@@ -340,9 +341,13 @@ namespace QQbarProcessor
 		}
 		//_summary._nKaons += vtxOperator.CountKaons(topHadronic, topLeptonic);
 		//std::cout << "Kaons 1 :\n";
+		
+		int nkchg = 0;
+
 		for (unsigned int i = 0; i < kaons1.size(); i++) 
 		{
 			_stats._Top1KaonCharges[i] = kaons1[i]->getCharge();
+			nkchg += kaons1[i]->getCharge();
 			_stats._Top1KaonMomentum[i] = MathOperator::getModule(kaons1[i]->getMomentum());
 			//std::cout << "\tq: " <<  kaons1[i]->getCharge() << " p: " << MathOperator::getModule(kaons1[i]->getMomentum()) <<"\n";
 
@@ -350,13 +355,21 @@ namespace QQbarProcessor
 			_stats._Top1KaondEdx[i] = kaons1[i]->getTracks()[0]->getdEdx();
 
 		}
+		
+		_stats._Top1TotalKaonCharge = nkchg;
+		nkchg=0;
+
 		//std::cout << "Kaons 2 :\n";
 		for (unsigned int i = 0; i < kaons2.size(); i++) 
 		{
 			_stats._Top2KaonCharges[i] = kaons2[i]->getCharge();
+			nkchg += kaons2[i]->getCharge();
 			_stats._Top2KaonMomentum[i] = MathOperator::getModule(kaons2[i]->getMomentum());
 			//std::cout << "\tq: " <<  kaons2[i]->getCharge() << " p: " << MathOperator::getModule(kaons2[i]->getMomentum()) <<"\n";
 		}
+
+		_stats._Top2TotalKaonCharge = nkchg;
+
 	}
 	void TTbarAnalysis::test(TopQuark * top, TopQuark * top2, vector< RecoJet * > * bjets, vector< RecoJet * > * wjets, ReconstructedParticle * lepton)
 	{	

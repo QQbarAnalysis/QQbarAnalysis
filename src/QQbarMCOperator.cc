@@ -147,7 +147,9 @@ namespace QQbarProcessor
 					{
 						continue;
 					}
+
 					MCParticle * candidate = CombineParticles(final[i],final[j]);
+
 					if (std::abs(candidate->getCharge()) > 0.99 && std::abs(candidate->getCharge()) < 1.01 ) 
 					{
 						if (candidate->getCharge() > 0) 
@@ -162,6 +164,10 @@ namespace QQbarProcessor
 						}
 					}
 				}
+			}
+			if(!wplus || !wminus){
+				std::cout << "CRUNCH\n";
+				return pair;
 			}
 		}
 		myBquarkPair.push_back(b);
