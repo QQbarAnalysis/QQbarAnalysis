@@ -287,7 +287,8 @@ namespace QQbarProcessor
 				topLeptonic = new TopQuark(bjets->at(1));
 				}*/
 
-
+			std::cout << "until here" << std::endl;
+			_stats._cosbjets = std::cos( MathOperator::getAngle(bjets->at(0)->getMomentum(), bjets->at(1)->getMomentum() ));
 
 			_stats._W1mass = wHadronic->getMass();
 			_stats._W1momentum = MathOperator::getModule(wHadronic->getMomentum());
