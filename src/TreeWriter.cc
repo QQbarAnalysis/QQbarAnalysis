@@ -219,6 +219,7 @@ namespace QQbarProcessor
 		_hTree->Branch("MCBHadCharge", &data._MCBHadCharge, "MCBHadCharge/I");
 		_hTree->Branch("MCBHadNtracks", &data._MCBHadNtracks, "MCBHadNtracks/I");
 
+		_hTree->Branch("cosbjets", &data._cosbjets, "cosbjets/F");
 
 		// Jet information
 		_hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");
