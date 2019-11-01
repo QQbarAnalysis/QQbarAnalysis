@@ -98,6 +98,7 @@ namespace QQbarProcessor
     int _Top1Vtx;
     int _Top1Kaon;
     int _Top1KaonNumber;
+		int _Top1TotalKaonCharge;
     int _Top1KaonCharges[10];
     float _Top1KaonMomentum[10];
     int _Top1bTVCM;
@@ -119,6 +120,7 @@ namespace QQbarProcessor
     int _Top2Vtx;
     int _Top2Kaon;
     int _Top2KaonNumber;
+		int _Top2TotalKaonCharge;
     int _Top2KaonCharges[10];
     float _Top2KaonMomentum[10];
     int _Top2leptonCharge;
