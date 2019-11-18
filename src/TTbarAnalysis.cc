@@ -867,6 +867,22 @@ namespace QQbarProcessor
 			ComputeTopParameters( tops->at(0), tops->at(1) );
 			ComputeChargeTVCM( tops->at(0), tops->at(1), vtxOperator );
 
+
+			// jet info
+			_stats._cosbjets = std::cos( MathOperator::getAngle(bjets->at(0)->getMomentum(), bjets->at(1)->getMomentum() ));
+
+			for (unsigned int i = 0; i < bjets->size(); i++) 
+			{
+				ReconstructedParticle * bjet = bjets->at(i)->GetRawRecoJet();
+
+				_stats._jet_E[i] = bjets->at(i)->getEnergy();
+				_stats._jet_px[i]= bjets->at(i)->getMomentum()[0];
+				_stats._jet_py[i]= bjets->at(i)->getMomentum()[1];
+				_stats._jet_pz[i]= bjets->at(i)->getMomentum()[2];
+				_stats._jet_M[i] = bjets->at(i)->getMass();
+			}
+
+
 			_hTree->Fill();
 			ClearVariables();
 		}

@@ -313,8 +313,16 @@ namespace QQbarProcessor
     //_hTree->Branch("methodTaken", data._methodTaken, "methodTaken[methodUsed]/I");
     //_hTree->Branch("qCostheta", data._qCostheta, "qCostheta[2]/F");
 		
+		// Jet information
+		_hTree->Branch("cosbjets", &data._cosbjets, "cosbjets/F");
 
-		
+		_hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");
+		_hTree->Branch("jet_E", data._jet_E, "jet_E[2]/F");
+		_hTree->Branch("jet_px", data._jet_px, "jet_px[2]/F");
+		_hTree->Branch("jet_py", data._jet_py, "jet_py[2]/F");
+		_hTree->Branch("jet_pz", data._jet_pz, "jet_pz[2]/F");
+		_hTree->Branch("jet_M", data._jet_M, "jet_M[2]/F");
+
     _hTree->Branch("chiHad1", &data._chiHad1, "chiHad1/F");
     _hTree->Branch("chiTopMass1", &data._chiTopMass1, "chiTopMass1/F");
     _hTree->Branch("chiTopE1", &data._chiTopE1, "chiTopE1/F");
