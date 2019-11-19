@@ -498,6 +498,10 @@ namespace QQbarProcessor
 	}
 	void TTbarAnalysis::DecideOnAsymmetry(TopQuark * top1, TopQuark * top2, int type)
 	{
+
+		float btagcut = 0.;
+		float pcut = 0.;
+
 		//Print
 		if(type == 0){
 
@@ -511,6 +515,9 @@ namespace QQbarProcessor
 				<< QQbarTools::intToStr(top2->GetComputedCharge().ByLepton) <<"\t"
 				<< _stats._Top2bmomentum <<"\n";
 
+			btagcut = 0.8;
+			pcut = 25.;
+
 		}else if(type == 1){
 
 			std::cout << "\t\tTracks\tTVCM\tp\n";
@@ -521,6 +528,9 @@ namespace QQbarProcessor
 				<< QQbarTools::intToStr(top2->GetComputedCharge().ByTVCM) <<"\t"
 				<< _stats._Top2bmomentum <<"\n";
 
+			btagcut = 0.8;
+			pcut = 15.;
+
 		}
 
 		_stats._qCostheta[0] = -2.;
@@ -529,8 +539,6 @@ namespace QQbarProcessor
 		float costheta =  std::cos( MathOperator::getAngles(direction)[1] );
 		//float m = top1->getMass();
 		//float e = top1->getEnergy();
-		float btagcut = 0.8;
-		float pcut = 25.;
 		vector<int> samecharge;
 		vector<int> goodcharge;
 		vector<int> chargevalue;
