@@ -287,7 +287,6 @@ namespace QQbarProcessor
 				topLeptonic = new TopQuark(bjets->at(1));
 				}*/
 
-			std::cout << "until here" << std::endl;
 			_stats._cosbjets = std::cos( MathOperator::getAngle(bjets->at(0)->getMomentum(), bjets->at(1)->getMomentum() ));
 
 			_stats._W1mass = wHadronic->getMass();
@@ -310,7 +309,7 @@ namespace QQbarProcessor
 
 			ComputeChargeTVCM(topHadronic, topLeptonic, vtxOperator);
 
-			DecideOnAsymmetry(topHadronic, topLeptonic);
+			DecideOnAsymmetry(topHadronic, topLeptonic, 0);
 			if (_stats._methodUsed && wHadronic->getMass() < 110 && topHadronic->getMass() < 200) 
 			{
 				_summary._nAfterMassCuts++;
@@ -342,7 +341,7 @@ namespace QQbarProcessor
 		}
 		//_summary._nKaons += vtxOperator.CountKaons(topHadronic, topLeptonic);
 		//std::cout << "Kaons 1 :\n";
-		
+
 		int nkchg = 0;
 
 		for (unsigned int i = 0; i < kaons1.size(); i++) 
@@ -356,7 +355,7 @@ namespace QQbarProcessor
 			_stats._Top1KaondEdx[i] = kaons1[i]->getTracks()[0]->getdEdx();
 
 		}
-		
+
 		_stats._Top1TotalKaonCharge = nkchg;
 		nkchg=0;
 
@@ -470,8 +469,6 @@ namespace QQbarProcessor
 				//_stats._Top1bmomentum > pcut
 				_stats._Top1bntracks > 0 //&& 
 				//_stats._Top1bntracks < 9 //&& 
-
-
 			 )  //  _stats._Top1bntracks < 7 
 		{
 			_stats._Top1Vtx = 1;
@@ -499,19 +496,33 @@ namespace QQbarProcessor
 		}
 		bool useLepton = (_ePolarization > 0)? false : true; //Lepton by default
 	}
-	void TTbarAnalysis::DecideOnAsymmetry(TopQuark * top1, TopQuark * top2)
+	void TTbarAnalysis::DecideOnAsymmetry(TopQuark * top1, TopQuark * top2, int type)
 	{
 		//Print
+		if(type == 0){
 
-		std::cout << "\t\tTracks\tTVCM\tLepton\tp\n";
-		std::cout << "Top1:\t" << QQbarTools::intToStr(top1->GetComputedCharge().ByTrackCount) <<"\t"
-			<< QQbarTools::intToStr(top1->GetComputedCharge().ByTVCM) <<"\t"
-			<< QQbarTools::intToStr(top1->GetComputedCharge().ByLepton) <<"\t"
-			<< _stats._Top1bmomentum <<"\n";
-		std::cout << "Top2:\t" << QQbarTools::intToStr(top2->GetComputedCharge().ByTrackCount) <<"\t"
-			<< QQbarTools::intToStr(top2->GetComputedCharge().ByTVCM) <<"\t"
-			<< QQbarTools::intToStr(top2->GetComputedCharge().ByLepton) <<"\t"
-			<< _stats._Top2bmomentum <<"\n";
+			std::cout << "\t\tTracks\tTVCM\tLepton\tp\n";
+			std::cout << "Top1:\t" << QQbarTools::intToStr(top1->GetComputedCharge().ByTrackCount) <<"\t"
+				<< QQbarTools::intToStr(top1->GetComputedCharge().ByTVCM) <<"\t"
+				<< QQbarTools::intToStr(top1->GetComputedCharge().ByLepton) <<"\t"
+				<< _stats._Top1bmomentum <<"\n";
+			std::cout << "Top2:\t" << QQbarTools::intToStr(top2->GetComputedCharge().ByTrackCount) <<"\t"
+				<< QQbarTools::intToStr(top2->GetComputedCharge().ByTVCM) <<"\t"
+				<< QQbarTools::intToStr(top2->GetComputedCharge().ByLepton) <<"\t"
+				<< _stats._Top2bmomentum <<"\n";
+
+		}else if(type == 1){
+
+			std::cout << "\t\tTracks\tTVCM\tp\n";
+			std::cout << "Top1:\t" << QQbarTools::intToStr(top1->GetComputedCharge().ByTrackCount) <<"\t"
+				<< QQbarTools::intToStr(top1->GetComputedCharge().ByTVCM) <<"\t"
+				<< _stats._Top1bmomentum <<"\n";
+			std::cout << "Top2:\t" << QQbarTools::intToStr(top2->GetComputedCharge().ByTrackCount) <<"\t"
+				<< QQbarTools::intToStr(top2->GetComputedCharge().ByTVCM) <<"\t"
+				<< _stats._Top2bmomentum <<"\n";
+
+		}
+
 		_stats._qCostheta[0] = -2.;
 
 		vector<float> direction = MathOperator::getDirection(top1->getMomentum());
@@ -528,7 +539,7 @@ namespace QQbarProcessor
 		float gammacut1 = 1.23;
 
 		// COMMENTED OUT
-		
+
 		if (top2->GetComputedCharge().ByTrackCount && top1->GetComputedCharge().ByTrackCount) 
 		{
 			int top1charge = *(top1->GetComputedCharge().ByTrackCount );
@@ -676,93 +687,97 @@ namespace QQbarProcessor
 				samecharge.push_back(4);
 			}
 		}//
-		
+
 		//LEPTON
-		if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTrackCount)
-		{
-			int top2lepton = *(top2->GetComputedCharge().ByLepton );
-			int top2charge = *(top2->GetComputedCharge().ByTrackCount );
-			if (top2charge * top2lepton < 0  &&  ((_stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) || _stats._Top1gamma > gammacut1))
+		if(type == 0){
+
+			if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTrackCount)
 			{
-				std::cout << "Vertex + lepton for top2 is used!\n";
-				goodcharge.push_back(5);
-				chargevalue.push_back(-top2charge);
-				_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
+				int top2lepton = *(top2->GetComputedCharge().ByLepton );
+				int top2charge = *(top2->GetComputedCharge().ByTrackCount );
+				if (top2charge * top2lepton < 0  &&  ((_stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) || _stats._Top1gamma > gammacut1))
+				{
+					std::cout << "Vertex + lepton for top2 is used!\n";
+					goodcharge.push_back(5);
+					chargevalue.push_back(-top2charge);
+					_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
+					//_summary._nAfterKinematicCuts++;
+				}
+				if (top2charge * top2lepton > 0 &&  _stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) 
+				{
+					samecharge.push_back(5);
+				}
+			}
+			if (top2->GetComputedCharge().ByLepton && top1->GetComputedCharge().ByTrackCount)
+			{
+				int top2lepton = *(top2->GetComputedCharge().ByLepton );
+				int top1charge = *(top1->GetComputedCharge().ByTrackCount );
+				if (top1charge * top2lepton > 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut)  || _stats._Top1gamma > gammacut1))
+				{
+					std::cout << "Vertex + lepton for top1 is used!\n";
+					goodcharge.push_back(5);
+					chargevalue.push_back(top1charge);
+					_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+				}
+				if (top1charge * top2lepton < 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut) ||_stats._Top1gamma > gammacut1)) 
+				{
+					samecharge.push_back(5);
+				}
+			}//
+			if (top2->GetComputedCharge().ByLepton && top1->GetComputedCharge().ByTVCM)
+			{
+				int top2lepton = *(top2->GetComputedCharge().ByLepton );
+				int top1charge = *(top1->GetComputedCharge().ByTVCM );
+				if (top1charge * top2lepton > 0  && _stats._Top1gamma > gammacut1)
+				{
+					std::cout << "Vertex + lepton for top1 is used!\n";
+					goodcharge.push_back(6);
+					chargevalue.push_back(top1charge);
+					_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+				}
+				if (top1charge * top2lepton < 0 && _stats._Top1gamma > gammacut1) 
+				{
+					samecharge.push_back(6);
+				}
+			}
+			if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTVCM)
+			{
+				int top2lepton = *(top2->GetComputedCharge().ByLepton );
+				int top2charge = *(top2->GetComputedCharge().ByTVCM );
+				if (top2charge * top2lepton < 0 &&  _stats._Top1gamma > gammacut1)
+				{
+					std::cout << "Vertex + lepton for top1 is used!\n";
+					goodcharge.push_back(6);
+					chargevalue.push_back(-top2charge);
+					_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
+				}
+				if (top2charge * top2lepton > 0  && _stats._Top1gamma > gammacut1) 
+				{
+					samecharge.push_back(6);
+				}
+			}//
+
+			// COMMENTED OUT
+
+			//float chi2 = _stats._chiTopMass + _stats._chiTopE + _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
+			float chi2 =  _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
+			//if (top2->GetComputedCharge().ByLepton &&  _stats._Top1gamma > gammacut1+0.1  && goodcharge.size() == 0) 
+
+			//if (top2->GetComputedCharge().ByLepton) 
+			if (top2->GetComputedCharge().ByLepton &&  chi2 < 15) 
+			{
+				int top2lepton = *(top2->GetComputedCharge().ByLepton );
+				//_stats._qCostheta[0] = (top2lepton < 0)? _stats._Top1costheta: -_stats._Top1costheta;
+				goodcharge.push_back(7);
+				chargevalue.push_back(top2lepton);
+				_stats._methodCorrect = _stats._MCBWcorrect == 1;
+				//_stats._methodUsed = 1;
+				//_stats._methodTaken[0] = 7;
 				//_summary._nAfterKinematicCuts++;
-			}
-			if (top2charge * top2lepton > 0 &&  _stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) 
-			{
-				samecharge.push_back(5);
-			}
-		}
-		if (top2->GetComputedCharge().ByLepton && top1->GetComputedCharge().ByTrackCount)
-		{
-			int top2lepton = *(top2->GetComputedCharge().ByLepton );
-			int top1charge = *(top1->GetComputedCharge().ByTrackCount );
-			if (top1charge * top2lepton > 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut)  || _stats._Top1gamma > gammacut1))
-			{
-				std::cout << "Vertex + lepton for top1 is used!\n";
-				goodcharge.push_back(5);
-				chargevalue.push_back(top1charge);
-				_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
-			}
-			if (top1charge * top2lepton < 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut) ||_stats._Top1gamma > gammacut1)) 
-			{
-				samecharge.push_back(5);
-			}
-		}//
-		if (top2->GetComputedCharge().ByLepton && top1->GetComputedCharge().ByTVCM)
-		{
-			int top2lepton = *(top2->GetComputedCharge().ByLepton );
-			int top1charge = *(top1->GetComputedCharge().ByTVCM );
-			if (top1charge * top2lepton > 0  && _stats._Top1gamma > gammacut1)
-			{
-				std::cout << "Vertex + lepton for top1 is used!\n";
-				goodcharge.push_back(6);
-				chargevalue.push_back(top1charge);
-				_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
-			}
-			if (top1charge * top2lepton < 0 && _stats._Top1gamma > gammacut1) 
-			{
-				samecharge.push_back(6);
-			}
-		}
-		if (top2->GetComputedCharge().ByLepton && top2->GetComputedCharge().ByTVCM)
-		{
-			int top2lepton = *(top2->GetComputedCharge().ByLepton );
-			int top2charge = *(top2->GetComputedCharge().ByTVCM );
-			if (top2charge * top2lepton < 0 &&  _stats._Top1gamma > gammacut1)
-			{
-				std::cout << "Vertex + lepton for top1 is used!\n";
-				goodcharge.push_back(6);
-				chargevalue.push_back(-top2charge);
-				_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
-			}
-			if (top2charge * top2lepton > 0  && _stats._Top1gamma > gammacut1) 
-			{
-				samecharge.push_back(6);
-			}
-		}//
+				//return;
+			}//
+		} // if type==0
 
-		// COMMENTED OUT
-
-		//float chi2 = _stats._chiTopMass + _stats._chiTopE + _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
-		float chi2 =  _stats._chiGammaT + _stats._chiCosWb + _stats._chiPbstar;
-		//if (top2->GetComputedCharge().ByLepton &&  _stats._Top1gamma > gammacut1+0.1  && goodcharge.size() == 0) 
-		
-		//if (top2->GetComputedCharge().ByLepton) 
-		if (top2->GetComputedCharge().ByLepton &&  chi2 < 15) 
-		{
-			int top2lepton = *(top2->GetComputedCharge().ByLepton );
-			//_stats._qCostheta[0] = (top2lepton < 0)? _stats._Top1costheta: -_stats._Top1costheta;
-			goodcharge.push_back(7);
-			chargevalue.push_back(top2lepton);
-			_stats._methodCorrect = _stats._MCBWcorrect == 1;
-			//_stats._methodUsed = 1;
-			//_stats._methodTaken[0] = 7;
-			//_summary._nAfterKinematicCuts++;
-			//return;
-		}//
 		_stats._methodRefused = samecharge.size();
 		_stats._methodUsed = goodcharge.size();
 		if (samecharge.size() > 0) 
@@ -867,6 +882,15 @@ namespace QQbarProcessor
 			ComputeTopParameters( tops->at(0), tops->at(1) );
 			ComputeChargeTVCM( tops->at(0), tops->at(1), vtxOperator );
 
+			float momentum[3];
+			for (unsigned int i = 0; i < 3; i++) 
+			{
+				momentum[i] = tops->at(0)->getMomentum()[i]+tops->at(1)->GetB()->getMomentum()[i];
+			}
+
+			_stats._hadMass = std::sqrt(pow(tops->at(0)->getEnergy()+tops->at(1)->GetB()->getEnergy(),2) - momentum[0]* momentum[0]-momentum[1]*momentum[1]-momentum[2]*momentum[2]);
+
+			DecideOnAsymmetry(tops->at(0), tops->at(1), 1);
 
 			// jet info
 			_stats._cosbjets = std::cos( MathOperator::getAngle(bjets->at(0)->getMomentum(), bjets->at(1)->getMomentum() ));
@@ -1038,7 +1062,7 @@ namespace QQbarProcessor
 
 		_stats._Top1bmomentum = top1->GetHadronMomentum();
 		//_stats._Top1bmomentum = MathOperator::getModule(top1->GetB()->getMomentum());
-		
+
 		vector<float> direction = MathOperator::getDirection(top1->getMomentum());
 		_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction)[1] );
 		_stats._Top1bntracks = top1->GetNumberOfVertexParticles();
@@ -1313,63 +1337,89 @@ namespace QQbarProcessor
 	}
 
 	void TTbarAnalysis::ComputeTopParameters(TopQuark * top1, TopQuark * top2){
-			_stats._totalEnergy = top1->getEnergy() + top2->getEnergy();
-			_stats._missedEnergy = 2*_EBeamparameter - _stats._totalEnergy;
-			_stats._W1mass = top1->GetW()->getMass();
-			_stats._W1momentum = MathOperator::getModule(top1->GetW()->getMomentum());
-			vector<float> Wdirection1 = MathOperator::getDirection(top1->GetW()->getMomentum());
-			_stats._W1costheta = std::cos (MathOperator::getAngles(Wdirection1)[1]);
-			_stats._W2mass = top2->GetW()->getMass();
-			_stats._W2momentum = MathOperator::getModule(top2->GetW()->getMomentum());
-			vector<float> Wdirection2 = MathOperator::getDirection(top2->GetW()->getMomentum());
-			_stats._W2costheta = std::cos (MathOperator::getAngles(Wdirection2)[1]);
-			_stats._Top1energy = top1->getEnergy();
-			_stats._Top1bcharge = top1->GetHadronCharge();
-			_stats._Top1bmomentum = top1->GetHadronMomentum();
-			_stats._Top1bdistance = top1->GetMinHadronDistance();
-			vector<float> direction1 = MathOperator::getDirection(top1->getMomentum());
-			_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction1)[1] );
-			_stats._Top1bntracks = top1->GetNumberOfVertexParticles();
-			_stats._Top1btag = top1->GetBTag();
-			vector<float> bdirection1 = MathOperator::getDirection(top1->GetB()->getMomentum());
-			_stats._Top1bcostheta = std::cos( MathOperator::getAngles(bdirection1)[1] );
-			//_stats._Top1bTVCM = top1->GetResultTVCM();
-			_stats._Top1cosWb = std::cos( MathOperator::getAngle(top1->GetB()->getMomentum(), top1->GetW()->getMomentum()) );
-			//_stats._Top1Kaon = (top1->GetComputedCharge().ByTVCM )? 1:0;
-			//std::cout << "Top charge: " << _stats._Top1bcharge
-			//          << " top pB: " << _stats._Top1bmomentum
-			//          << " top W: " <<  MathOperator::getModule(top1->GetW()->getMomentum())
-			//          << " top bntracks: " << _stats._Top1bntracks
-			//          << " top btag: " << _stats._Top1btag
-			//          << " top bcostheta: " << _stats._Top1bcostheta << std::endl;
-			_stats._Top2bcharge = top2->GetHadronCharge();
-			_stats._Top2bmomentum = top2->GetHadronMomentum();
-			_stats._Top2bdistance = top2->GetMinHadronDistance();
-			vector<float> direction2 = MathOperator::getDirection(top2->getMomentum());
-			_stats._Top2costheta =  std::cos( MathOperator::getAngles(direction2)[1] );
-			_stats._Top2bntracks = top2->GetNumberOfVertexParticles();
-			_stats._Top2btag = top2->GetBTag();
-			vector<float> bdirection2 = MathOperator::getDirection(top2->GetB()->getMomentum());
-			_stats._Top2bcostheta = std::cos( MathOperator::getAngles(bdirection2)[1] );
-			//_stats._Top2bTVCM = top2->GetResultTVCM();
-			_stats._Top1cosWb = std::cos( MathOperator::getAngle(top2->GetB()->getMomentum(), top2->GetW()->getMomentum()) );
-			//_stats._Top2Kaon = (top2->GetComputedCharge().ByTVCM )? 1:0;
-			vector<float> eachchi2;
-			_stats._chiHad1 = getChi2(top1, eachchi2);
-			_stats._chiTopMass1 = eachchi2[0] ;
-			_stats._chiTopE1 = eachchi2[1] ;
-			_stats._chiPbstar1 = eachchi2[2] ;
-			_stats._chiCosWb1 = eachchi2[3] ;
-			_stats._chiGammaT1 = eachchi2[4] ;
-			std::cout << "chiHad1:" << _stats._chiHad1 << " chiTopMass1:" << _stats._chiTopMass1 << " chiTopE1:" << _stats._chiTopE1 << " chiPbstar1:" << _stats._chiPbstar1 << std::endl;
-			_stats._chiHad2 = getChi2(top2, eachchi2);
-			_stats._chiTopMass2 = eachchi2[0] ;
-			_stats._chiTopE2 = eachchi2[1] ;
-			_stats._chiPbstar2 = eachchi2[2] ;
-			_stats._chiCosWb2 = eachchi2[3] ;
-			_stats._chiGammaT2 = eachchi2[4] ;
-			std::cout << "chiHad2:" << _stats._chiHad2 << " chiTopMass2:" << _stats._chiTopMass2 << " chiTopE2:" << _stats._chiTopE2 << " chiPbstar2:" << _stats._chiPbstar2 << std::endl;
-			std::cout << "_qMCBcostheta = " << _stats._qMCBcostheta[0] << std::endl;
+		_stats._totalEnergy = top1->getEnergy() + top2->getEnergy();
+		_stats._missedEnergy = 2*_EBeamparameter - _stats._totalEnergy;
+
+		_stats._Top1gamma = top1->getEnergy()/top1->getMass();
+
+		_stats._W1mass = top1->GetW()->getMass();
+		_stats._W1momentum = MathOperator::getModule(top1->GetW()->getMomentum());
+		vector<float> Wdirection1 = MathOperator::getDirection(top1->GetW()->getMomentum());
+		_stats._W1costheta = std::cos (MathOperator::getAngles(Wdirection1)[1]);
+		_stats._W2mass = top2->GetW()->getMass();
+		_stats._W2momentum = MathOperator::getModule(top2->GetW()->getMomentum());
+		vector<float> Wdirection2 = MathOperator::getDirection(top2->GetW()->getMomentum());
+		_stats._W2costheta = std::cos (MathOperator::getAngles(Wdirection2)[1]);
+
+		_stats._Top1energy = top1->getEnergy();
+
+		_stats._Top1bcharge = top1->GetHadronCharge();
+		_stats._Top1bmomentum = top1->GetHadronMomentum();
+		_stats._Top1bdistance = top1->GetMinHadronDistance();
+		vector<float> direction1 = MathOperator::getDirection(top1->getMomentum());
+		_stats._Top1costheta =  std::cos( MathOperator::getAngles(direction1)[1] );
+		_stats._Top1bntracks = top1->GetNumberOfVertexParticles();
+		_stats._Top1btag = top1->GetBTag();
+		vector<float> bdirection1 = MathOperator::getDirection(top1->GetB()->getMomentum());
+		_stats._Top1bcostheta = std::cos( MathOperator::getAngles(bdirection1)[1] );
+		//_stats._Top1bTVCM = top1->GetResultTVCM();
+		_stats._Top1cosWb = std::cos( MathOperator::getAngle(top1->GetB()->getMomentum(), top1->GetW()->getMomentum()) );
+		//_stats._Top1Kaon = (top1->GetComputedCharge().ByTVCM )? 1:0;
+		//std::cout << "Top charge: " << _stats._Top1bcharge
+		//          << " top pB: " << _stats._Top1bmomentum
+		//          << " top W: " <<  MathOperator::getModule(top1->GetW()->getMomentum())
+		//          << " top bntracks: " << _stats._Top1bntracks
+		//          << " top btag: " << _stats._Top1btag
+		//          << " top bcostheta: " << _stats._Top1bcostheta << std::endl;
+		
+		
+		_stats._Top2bcharge = top2->GetHadronCharge();
+		_stats._Top2bmomentum = top2->GetHadronMomentum();
+		_stats._Top2bdistance = top2->GetMinHadronDistance();
+		vector<float> direction2 = MathOperator::getDirection(top2->getMomentum());
+		_stats._Top2costheta =  std::cos( MathOperator::getAngles(direction2)[1] );
+		_stats._Top2bntracks = top2->GetNumberOfVertexParticles();
+		_stats._Top2btag = top2->GetBTag();
+		vector<float> bdirection2 = MathOperator::getDirection(top2->GetB()->getMomentum());
+		_stats._Top2bcostheta = std::cos( MathOperator::getAngles(bdirection2)[1] );
+		//_stats._Top2bTVCM = top2->GetResultTVCM();
+		_stats._Top1cosWb = std::cos( MathOperator::getAngle(top2->GetB()->getMomentum(), top2->GetW()->getMomentum()) );
+		//_stats._Top2Kaon = (top2->GetComputedCharge().ByTVCM )? 1:0;
+		
+		if ( abs( _stats._Top1bcharge) > 0 && _stats._Top1bntracks > 0 )
+		{
+			_stats._Top1Vtx = 1;
+			JetCharge & topCharge = top1->GetComputedCharge();
+			topCharge.ByTrackCount = new int(top1->GetHadronCharge());
+		}
+		if ( abs( _stats._Top2bcharge) > 0 && _stats._Top2bntracks > 0 ) 
+		{
+			_stats._Top2Vtx = 1;
+			JetCharge & topCharge = top2->GetComputedCharge();
+			topCharge.ByTrackCount = new int(top2->GetHadronCharge());
+		}
+
+		if ( _stats._Top2bcharge != 0 ||  _stats._Top1bcharge != 0) 
+		{
+			_summary._nChargedB++;
+		}
+
+		vector<float> eachchi2;
+		_stats._chiHad1 = getChi2(top1, eachchi2);
+		_stats._chiTopMass1 = eachchi2[0] ;
+		_stats._chiTopE1 = eachchi2[1] ;
+		_stats._chiPbstar1 = eachchi2[2] ;
+		_stats._chiCosWb1 = eachchi2[3] ;
+		_stats._chiGammaT1 = eachchi2[4] ;
+		std::cout << "chiHad1:" << _stats._chiHad1 << " chiTopMass1:" << _stats._chiTopMass1 << " chiTopE1:" << _stats._chiTopE1 << " chiPbstar1:" << _stats._chiPbstar1 << std::endl;
+		_stats._chiHad2 = getChi2(top2, eachchi2);
+		_stats._chiTopMass2 = eachchi2[0] ;
+		_stats._chiTopE2 = eachchi2[1] ;
+		_stats._chiPbstar2 = eachchi2[2] ;
+		_stats._chiCosWb2 = eachchi2[3] ;
+		_stats._chiGammaT2 = eachchi2[4] ;
+		std::cout << "chiHad2:" << _stats._chiHad2 << " chiTopMass2:" << _stats._chiTopMass2 << " chiTopE2:" << _stats._chiTopE2 << " chiPbstar2:" << _stats._chiPbstar2 << std::endl;
+		std::cout << "_qMCBcostheta = " << _stats._qMCBcostheta[0] << std::endl;
 	}
 
 	void TTbarAnalysis::ClearVariables()

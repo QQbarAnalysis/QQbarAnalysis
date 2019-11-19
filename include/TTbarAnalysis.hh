@@ -91,7 +91,7 @@ namespace QQbarProcessor
 			void ComputeChargeTVCM(TopQuark * top, TopQuark * top2, VertexChargeOperator & vtxOperator);
 			float getChi2(TopQuark * candidate , std::vector<float> & eachchi2 );
 			float getChi2(TopQuark * c);
-			void DecideOnAsymmetry(TopQuark * top, TopQuark * top2);
+			void DecideOnAsymmetry(TopQuark * top, TopQuark * top2, int type);
 			std::vector<int> getOpposite(int i, int j);
 			void test(TopQuark * top, TopQuark * top2, std::vector< RecoJet * > *jets = NULL, std::vector< RecoJet * > *jets2 = NULL, EVENT::ReconstructedParticle * particlei = NULL);
 #if 1 //RY Test
