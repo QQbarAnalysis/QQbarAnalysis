@@ -887,6 +887,13 @@ namespace QQbarProcessor
 			_summary._nAfterBtagCuts++;
 			vector< TopQuark * > * wbosons = formW(bjets,wjets);
 			vector< TopQuark * > * tops = composeTops(bjets,wbosons);
+
+			// compare Gen and Reco top, b, w info
+			vector< EVENT::MCParticle * > mcbquarks = opera.GetBquarkPair();
+			vector< EVENT::MCParticle * > mcws = opera.GetWPair();
+			Match(mctops, mcbquarks, mcws, tops->at(0));
+
+
 			ComputeTopParameters( tops->at(0), tops->at(1) );
 			ComputeChargeTVCM( tops->at(0), tops->at(1), vtxOperator );
 
