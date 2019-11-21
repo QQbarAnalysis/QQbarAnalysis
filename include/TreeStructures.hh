@@ -148,6 +148,8 @@ namespace QQbarProcessor
     float _chiTop2Mass;
     float _chiTop2E;
 
+		float _angleB;
+		float _angleW;
 		float _cosbjets;
 
 		int _chgValue[100];

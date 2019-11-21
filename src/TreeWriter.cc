@@ -219,6 +219,8 @@ namespace QQbarProcessor
 		_hTree->Branch("MCBHadCharge", &data._MCBHadCharge, "MCBHadCharge/I");
 		_hTree->Branch("MCBHadNtracks", &data._MCBHadNtracks, "MCBHadNtracks/I");
 
+		_hTree->Branch("angleB", &data._angleB, "angleB/F");
+		_hTree->Branch("angleW", &data._angleW, "angleW/F");
 		_hTree->Branch("cosbjets", &data._cosbjets, "cosbjets/F");
 
 		// Jet information
@@ -304,16 +306,16 @@ namespace QQbarProcessor
     _hTree->Branch("Top2KaonCharges", data._Top2KaonCharges, "Top2KaonCharges[Top2KaonNumber]/I");
     _hTree->Branch("Top2KaonMomentum", data._Top2KaonMomentum, "Top2KaonMomentum[Top2KaonNumber]/F");
 	 
-
-	  // method
-	  _hTree->Branch("UsedBTVCM", &data._UsedBTVCM, "UsedBTVCM/I");
+		// methods
+    _hTree->Branch("UsedBTVCM", &data._UsedBTVCM, "UsedBTVCM/I");
     _hTree->Branch("methodUsed", &data._methodUsed, "methodUsed/I");
     _hTree->Branch("methodRefused", &data._methodRefused, "methodRefused/I");
     _hTree->Branch("methodCorrect", &data._methodCorrect, "methodCorrect/I");
     _hTree->Branch("methodSameCharge", data._methodSameCharge, "methodSameCharge[methodRefused]/I");
     _hTree->Branch("methodTaken", data._methodTaken, "methodTaken[methodUsed]/I");
+		_hTree->Branch("chgValue", data._chgValue, "chgValue[methodUsed]/I");
+    _hTree->Branch("qBCostheta", data._qBCostheta, "qBCostheta[2]/F");
     _hTree->Branch("qCostheta", data._qCostheta, "qCostheta[2]/F");
-		
 
 		// Jet information
 		_hTree->Branch("cosbjets", &data._cosbjets, "cosbjets/F");

@@ -1159,6 +1159,9 @@ namespace QQbarProcessor
 			float angleW =  MathOperator::getAngle(mcws[i]->getMomentum(), topHadronic->GetW()->getMomentum());
 			std::cout << "\tB angle: " << angleB << "\n";
 			std::cout << "\tW angle: " << angleW << "\n";
+			_stats._angleB = angleB;
+			_stats._angleW = angleW;
+
 			if (angleW < minwangle) 
 			{
 				whad = mcws[i];
