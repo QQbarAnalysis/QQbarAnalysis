@@ -249,6 +249,7 @@ namespace QQbarProcessor
     _hTree->Branch("MCTopBarcostheta", &data._MCTopBarcostheta, "MCTopBarcostheta/F");
     _hTree->Branch("MCTopBangle", &data._MCTopBangle, "MCTopBangle/F");
     _hTree->Branch("MCTopcosWb", &data._MCTopcosWb, "MCTopcosWb/F");
+    _hTree->Branch("Top1pstarb", &data._Top1pstarb, "Top1pstarb/F");
     //_hTree->Branch("MCNeutrinoEnergy", &data._MCNeutrinoEnergy, "MCNeutrinoEnergy/F");
     //_hTree->Branch("MCBOscillation", &data._MCBOscillation, "MCBOscillation/I");
     //_hTree->Branch("MCBBarOscillation", &data._MCBBarOscillation, "MCBBarOscillation/I");
@@ -318,6 +319,8 @@ namespace QQbarProcessor
     _hTree->Branch("qCostheta", data._qCostheta, "qCostheta[2]/F");
 
 		// Jet information
+		_hTree->Branch("angleB", &data._angleB, "angleB/F");
+		_hTree->Branch("angleW", &data._angleW, "angleW/F");
 		_hTree->Branch("cosbjets", &data._cosbjets, "cosbjets/F");
 
 		_hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");
