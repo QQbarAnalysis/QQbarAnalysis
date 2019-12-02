@@ -885,6 +885,7 @@ namespace QQbarProcessor
 				return;	
 			}
 			_summary._nAfterBtagCuts++;
+			
 			vector< TopQuark * > * wbosons = formW(bjets,wjets);
 			vector< TopQuark * > * tops = composeTops(bjets,wbosons);
 
@@ -962,6 +963,44 @@ namespace QQbarProcessor
 
 
 	}
+
+	vector< TopQuark * > * TTbarAnalysis::formW(vector< RecoJet * > * wjets)
+	{
+
+		std::cout << "test form W" << std::endl;
+
+		// construction
+/*
+		vector< TopQuark * > * result = new vector< TopQuark * > ();
+		TopQuark * candidatew0w0 = new TopQuark(bjets->at(0), wjets->at(0));
+		TopQuark * candidatew1w1 = new TopQuark(bjets->at(1), wjets->at(1));
+		float chi00 = getChi2(candidateb0w0);
+		float chi11 = getChi2(candidateb1w1);
+		std::cout << "Chi2: " << chi00 << " " << chi11 << "\n";
+		//vs
+		TopQuark * candidateb0w1 = new TopQuark(bjets->at(0), wjets->at(1));
+		TopQuark * candidateb1w0 = new TopQuark(bjets->at(1), wjets->at(0));
+		float chi01 = getChi2(candidateb0w1);
+		float chi10 = getChi2(candidateb1w0);
+		if (chi00 + chi11 < chi01 + chi10) 
+		{
+			result->push_back(candidateb0w0);
+			result->push_back(candidateb1w1);
+			_stats._Top1mass = candidateb0w0->getMass();
+			_stats._Top2mass = candidateb1w1->getMass();
+		}
+		else 
+		{
+			result->push_back(candidateb0w1);
+			result->push_back(candidateb1w0);
+			_stats._Top1mass = candidateb0w1->getMass();
+			_stats._Top2mass = candidateb1w0->getMass();
+		}
+		std::cout << "Chi2: " << chi01 << " " << chi10 << "\n";
+		return result;
+*/
+	}
+
 	vector< TopQuark * > * TTbarAnalysis::formW(vector< RecoJet * > * bjets,vector< RecoJet * > * wjets)
 	{
 		vector< TopQuark * > * result = new vector< TopQuark * > ();

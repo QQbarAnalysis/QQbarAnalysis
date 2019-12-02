@@ -72,6 +72,7 @@ namespace QQbarProcessor
 
 			// METHODS
 			std::vector< TopQuark * > * formW(std::vector< RecoJet * > * bjets,std::vector< RecoJet * > * wjets);
+			std::vector< TopQuark * > * formW(std::vector< RecoJet * > * wjets);
 			std::vector< TopQuark * > * composeTops(std::vector< RecoJet * > * bjets, std::vector< TopQuark * > * wjets);
 
 			//void Match(std::vector< EVENT::MCParticle * > & mctops, TopQuark * topHadronic, TopQuark * top2 = NULL);
