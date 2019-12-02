@@ -154,9 +154,6 @@ namespace QQbarProcessor
 
 		int _chgValue[100];
 
-		//Generated
-		int _MCBHadCharge;
-		int _MCBHadNtracks;
 		
 		// jet information
 		int   _jet_nvtx[2];
@@ -169,7 +166,7 @@ namespace QQbarProcessor
 		// kaon information
  		float _Top1KaondEdx[10];
 						
-
+		// MC Top info
     int _MCBOscillation;
     int _MCBWcorrect;
     int _MCBBarOscillation;
@@ -193,6 +190,20 @@ namespace QQbarProcessor
     float _MCPt;
     float _qMCBcostheta[2];
     float _MCNeutrinoEnergy;
+
+		// MC B Had info
+		int _MCBHadCharge;
+		int _MCBHadNtracks;
+
+		// MC W info
+		float _MCWplusmass;
+		float _MCWminusmass;
+
+		// MC b quark info
+		float _MCBmass;
+		float _MCBbarmass;
+
+
     float _totalEnergy;
     float _missedEnergy;
     float _gammaT;

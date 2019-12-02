@@ -76,14 +76,13 @@ namespace QQbarProcessor
 		}
 
 		_summary._nGenUsed++;
-		MCParticle * top = mctops[0];
+		MCParticle * top    = mctops[0];
 		MCParticle * topbar = mctops[1];
 
 		//std::cout << "mcB0 size = " << mcB0.size() << "\n";
 		//std::cout << "mcBplus size = " << mcBplus.size() << "\n";
 
 		BHadronHandler(opera);
-
 
 		vector<float> direction = MathOperator::getDirection(top->getMomentum());
 		vector<float> directionbar = MathOperator::getDirection(topbar->getMomentum());
@@ -104,14 +103,15 @@ namespace QQbarProcessor
 		{
 			_stats._mctag = 0;
 		}
-		vector< EVENT::MCParticle * > mcb = opera.GetBquarkPair();
-		vector<float> bdirection = MathOperator::getDirection(mcb[0]->getMomentum());
-		vector<float> bdirectionbar = MathOperator::getDirection(mcb[1]->getMomentum());
+		vector< EVENT::MCParticle * > mcbs = opera.GetBquarkPair();
+		vector<float> bdirection = MathOperator::getDirection(mcbs[0]->getMomentum());
+		vector<float> bdirectionbar = MathOperator::getDirection(mcbs[1]->getMomentum());
 		_stats._qMCBcostheta[0] =  std::cos( MathOperator::getAngles(bdirection)[1] );
 		_stats._qMCBcostheta[1] =  -std::cos( MathOperator::getAngles(bdirectionbar)[1] );
 		_stats._qMCcostheta[0] = _stats._MCTopcostheta;//(std::abs(_stats._qMCBcostheta[0]) < 0.9 )? _stats._MCTopcostheta: -2;
 		_stats._qMCcostheta[1] = -_stats._MCTopBarcostheta;//(std::abs(_stats._qMCBcostheta[1]) < 0.9 )? -_stats._MCTopBarcostheta : -2;
 		_hGenTree->Fill();
+
 		vector <MCParticle *> final = opera.GetFinalState();
 		for (unsigned int i = 0; i < final.size(); i++) 
 		{
@@ -875,38 +875,58 @@ namespace QQbarProcessor
 			LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName);
 			QQbarMCOperator opera(mccol);
 			VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
+
 			vector < MCParticle * > mctops = AnalyseGenerator(opera);
 			vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
-			//std::sort(jets->begin(), jets->end(), sortByBtag);
 			vector< RecoJet * > * wjets = new vector< RecoJet * >();
 			vector< RecoJet * > * bjets = QQbarTools::getBTagJets(jets, wjets);
+
 			if ( bjets->at(0)->GetBTag() < _highBTagCutparameter ||  bjets->at(1)->GetBTag() < _lowBTagCutparameter) 
 			{
 				return;	
 			}
 			_summary._nAfterBtagCuts++;
 			
-			vector< TopQuark * > * wbosons = formW(bjets,wjets);
-			vector< TopQuark * > * tops = composeTops(bjets,wbosons);
-
 			// compare Gen and Reco top, b, w info
 			vector< EVENT::MCParticle * > mcbquarks = opera.GetBquarkPair();
 			vector< EVENT::MCParticle * > mcws = opera.GetWPair();
-			Match(mctops, mcbquarks, mcws, tops->at(0));
+
+			MCParticle * mcb    = mcbquarks[0];
+			MCParticle * mcbbar = mcbquarks[1];
+
+			MCParticle * mcWplus  = mcws[0];
+			MCParticle * mcWminus = mcws[1];
+
+			_stats._MCWplusmass = mcWplus->getMass();
+			_stats._MCWminusmass = mcWminus->getMass();
+			_stats._MCBmass = mcb->getMass();
+			_stats._MCBbarmass = mcbbar->getMass();
 
 
-			ComputeTopParameters( tops->at(0), tops->at(1) );
-			ComputeChargeTVCM( tops->at(0), tops->at(1), vtxOperator );
+			// Reco w and top
+			vector< TopQuark * > * wbosons = formW(bjets,wjets);
+			vector< TopQuark * > * tops    = composeTops(bjets,wbosons);
+
+			TopQuark * top1 = tops->at(0);
+			TopQuark * top2 = tops->at(1);
+
+			// Compares MC top angle with reconstructed b and W directions
+			Match(mctops, mcbquarks, mcws, top1);
+
+
+			ComputeTopParameters( top1, top2 );
+			ComputeChargeTVCM( top1, top2, vtxOperator );
 
 			float momentum[3];
 			for (unsigned int i = 0; i < 3; i++) 
 			{
-				momentum[i] = tops->at(0)->getMomentum()[i]+tops->at(1)->GetB()->getMomentum()[i];
+				momentum[i] = top1->getMomentum()[i]+top2->GetB()->getMomentum()[i];
 			}
 
-			_stats._hadMass = std::sqrt(pow(tops->at(0)->getEnergy()+tops->at(1)->GetB()->getEnergy(),2) - momentum[0]* momentum[0]-momentum[1]*momentum[1]-momentum[2]*momentum[2]);
+			_stats._hadMass = std::sqrt(pow(top1->getEnergy()+top2->GetB()->getEnergy(),2) - momentum[0]* momentum[0]-momentum[1]*momentum[1]-momentum[2]*momentum[2]);
 
-			DecideOnAsymmetry(tops->at(0), tops->at(1), 1);
+			DecideOnAsymmetry(top1, top2, 1);
+
 
 			// jet info
 			_stats._cosbjets = std::cos( MathOperator::getAngle(bjets->at(0)->getMomentum(), bjets->at(1)->getMomentum() ));
@@ -921,7 +941,6 @@ namespace QQbarProcessor
 				_stats._jet_pz[i]= bjets->at(i)->getMomentum()[2];
 				_stats._jet_M[i] = bjets->at(i)->getMass();
 			}
-
 
 			_hTree->Fill();
 			ClearVariables();
@@ -1185,6 +1204,7 @@ namespace QQbarProcessor
 		if(mcBOmegaminusb.size()) getBHadrons(mcBOmegaminusb); nHadrons += mcBOmegaminusb.size();
 
 		std::cout << "nHadrons = " << nHadrons << std::endl;
+
 	}
 
 	void TTbarAnalysis::Match(vector< MCParticle * > & mctops,vector< MCParticle * > &  mcbs, vector< MCParticle * > & mcws, TopQuark * topHadronic,  TopQuark * top2)

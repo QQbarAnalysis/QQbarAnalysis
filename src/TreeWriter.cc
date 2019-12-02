@@ -256,6 +256,15 @@ namespace QQbarProcessor
     _hTree->Branch("qMCBcostheta", data._qMCBcostheta, "qMCBcostheta[2]/F");
     _hTree->Branch("qMCcostheta", data._qMCcostheta, "qMCcostheta[2]/F");
 
+		// MC W info
+    _hTree->Branch("MCWplusmass", &data._MCWplusmass, "MCWplusmass/F");
+    _hTree->Branch("MCWminusmass", &data._MCWminusmass, "MCWminusmass/F");
+
+		// MC b quark info
+    _hTree->Branch("MCBmass", &data._MCBmass, "MCBmass/F");
+    _hTree->Branch("MCBbarmass", &data._MCBbarmass, "MCBbarmass/F");
+
+
     //Reconstructed
     _hTree->Branch("totalEnergy", &data._totalEnergy, "totalEnergy/F");
     _hTree->Branch("missedEnergy", &data._missedEnergy, "missedEnergy/F");
