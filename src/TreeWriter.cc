@@ -261,8 +261,6 @@ namespace QQbarProcessor
     _hTree->Branch("MCWminusmass", &data._MCWminusmass, "MCWminusmass/F");
 
 		// MC b quark info
-    _hTree->Branch("MCBmass", &data._MCBmass, "MCBmass/F");
-    _hTree->Branch("MCBbarmass", &data._MCBbarmass, "MCBbarmass/F");
 
 
     //Reconstructed

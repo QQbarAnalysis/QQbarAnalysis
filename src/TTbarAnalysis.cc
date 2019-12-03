@@ -67,8 +67,6 @@ namespace QQbarProcessor
 	{
 		std::vector< EVENT::MCParticle * > mctops = opera.GetTopPairParticles(_stats._MCTopBangle, _stats._MCTopcosWb);
 
-		std::cout << "run after GetTopPairParticles" << std::endl;
-
 		if (mctops.size() < 2) 
 		{
 			_stats._mctag = 0;
@@ -103,9 +101,21 @@ namespace QQbarProcessor
 		{
 			_stats._mctag = 0;
 		}
+
 		vector< EVENT::MCParticle * > mcbs = opera.GetBquarkPair();
-		vector<float> bdirection = MathOperator::getDirection(mcbs[0]->getMomentum());
-		vector<float> bdirectionbar = MathOperator::getDirection(mcbs[1]->getMomentum());
+		vector< EVENT::MCParticle * > mcws = opera.GetWPair();
+
+		MCParticle * mcb    = mcbs[0];
+		MCParticle * mcbbar = mcbs[1];
+
+		MCParticle * mcWplus  = mcws[0];
+		MCParticle * mcWminus = mcws[1];
+
+		_stats._MCWplusmass = mcWplus->getMass();
+		_stats._MCWminusmass = mcWminus->getMass();
+
+		vector<float> bdirection = MathOperator::getDirection(mcb->getMomentum());
+		vector<float> bdirectionbar = MathOperator::getDirection(mcbbar->getMomentum());
 		_stats._qMCBcostheta[0] =  std::cos( MathOperator::getAngles(bdirection)[1] );
 		_stats._qMCBcostheta[1] =  -std::cos( MathOperator::getAngles(bdirectionbar)[1] );
 		_stats._qMCcostheta[0] = _stats._MCTopcostheta;//(std::abs(_stats._qMCBcostheta[0]) < 0.9 )? _stats._MCTopcostheta: -2;
@@ -891,17 +901,21 @@ namespace QQbarProcessor
 			vector< EVENT::MCParticle * > mcbquarks = opera.GetBquarkPair();
 			vector< EVENT::MCParticle * > mcws = opera.GetWPair();
 
+/*
+			std::cout << "mcb->size() = " << mcbquarks.size() << std::endl;
+
 			MCParticle * mcb    = mcbquarks[0];
 			MCParticle * mcbbar = mcbquarks[1];
 
 			MCParticle * mcWplus  = mcws[0];
 			MCParticle * mcWminus = mcws[1];
 
+
 			_stats._MCWplusmass = mcWplus->getMass();
 			_stats._MCWminusmass = mcWminus->getMass();
 			_stats._MCBmass = mcb->getMass();
 			_stats._MCBbarmass = mcbbar->getMass();
-
+*/
 
 			// Reco w and top
 			vector< TopQuark * > * wbosons = formW(bjets,wjets);

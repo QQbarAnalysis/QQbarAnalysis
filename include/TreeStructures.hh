@@ -200,8 +200,6 @@ namespace QQbarProcessor
 		float _MCWminusmass;
 
 		// MC b quark info
-		float _MCBmass;
-		float _MCBbarmass;
 
 
     float _totalEnergy;
