@@ -170,6 +170,10 @@ namespace QQbarProcessor
 				return pair;
 			}
 		}
+
+		std::cout << "b found: q " << b->getCharge() << " m " << b->getMass() << "\n";
+		std::cout << "bbar found: q " << bbar->getCharge() << " m " << bbar->getMass() << "\n";
+
 		myBquarkPair.push_back(b);
 		myBquarkPair.push_back(bbar);
 		myWPair.push_back(wplus);

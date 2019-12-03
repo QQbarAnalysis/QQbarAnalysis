@@ -95,6 +95,9 @@ namespace QQbarProcessor
 			void DecideOnAsymmetry(TopQuark * top, TopQuark * top2, int type);
 			std::vector<int> getOpposite(int i, int j);
 			void test(TopQuark * top, TopQuark * top2, std::vector< RecoJet * > *jets = NULL, std::vector< RecoJet * > *jets2 = NULL, EVENT::ReconstructedParticle * particlei = NULL);
+
+			void SingleTopAnalyzer( std::vector< EVENT::MCParticle * > mctops, std::vector< EVENT::MCParticle * > mcbs, std::vector< EVENT::MCParticle * > mcws);
+
 #if 1 //RY Test
 			MCParticle* getBestMCParticleOf(ReconstructedParticle* p, LCRelationNavigator* nav);
 #endif

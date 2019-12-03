@@ -255,6 +255,7 @@ namespace QQbarProcessor
     //_hTree->Branch("MCBBarOscillation", &data._MCBBarOscillation, "MCBBarOscillation/I");
     _hTree->Branch("qMCBcostheta", data._qMCBcostheta, "qMCBcostheta[2]/F");
     _hTree->Branch("qMCcostheta", data._qMCcostheta, "qMCcostheta[2]/F");
+    _hTree->Branch("singletopFlag", &data._singletopFlag, "singletopFlag/I");
 
 		// MC W info
     _hTree->Branch("MCWplusmass", &data._MCWplusmass, "MCWplusmass/F");

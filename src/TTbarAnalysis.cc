@@ -105,6 +105,8 @@ namespace QQbarProcessor
 		vector< EVENT::MCParticle * > mcbs = opera.GetBquarkPair();
 		vector< EVENT::MCParticle * > mcws = opera.GetWPair();
 
+		SingleTopAnalyzer(mctops, mcbs, mcws);
+
 		MCParticle * mcb    = mcbs[0];
 		MCParticle * mcbbar = mcbs[1];
 
@@ -1524,7 +1526,6 @@ namespace QQbarProcessor
 		_stats.Clear();
 	}
 
-
 	vector<int>  TTbarAnalysis::getOpposite(int icandidate, int jcandidate)
 	{
 		vector<int> result;
@@ -1544,6 +1545,66 @@ namespace QQbarProcessor
 		result.push_back(kcandidate);
 		result.push_back(lcandidate);
 		return result;
+	}
+
+	void TTbarAnalysis::SingleTopAnalyzer( std::vector< EVENT::MCParticle * > mctops, std::vector< EVENT::MCParticle * > mcbs, std::vector< EVENT::MCParticle * > mcws)
+	{
+		// get mc partiles
+		MCParticle * mctop    = mctops[0];
+		MCParticle * mctopbar = mctops[1];
+
+		MCParticle * mcb    = mcbs[0];
+		MCParticle * mcbbar = mcbs[1];
+
+		MCParticle * mcWplus  = mcws[0];
+		MCParticle * mcWminus = mcws[1];
+
+		// get mc particle momentum
+		
+		float bWp_momentum = 0;
+		float bbarWm_momentum = 0;
+		float bWp_energy = 0;
+		float bbarWm_energy = 0;
+		
+		// b/W+ energy / momentum
+		bWp_energy = mcb->getEnergy() + mcWplus->getEnergy();
+		for (int i = 0; i < 3; i++)
+		{
+			float p = 0;
+			p = mcb->getMomentum()[i] + mcWplus->getMomentum()[i];
+			bWp_momentum += p*p;
+		}
+
+		// bbar/W- energy / momentum
+		bbarWm_energy = mcbbar->getEnergy() + mcWminus->getEnergy();
+		for (int i = 0; i < 3; i++)
+		{
+			float p = 0;
+			p = mcbbar->getMomentum()[i] + mcWminus->getMomentum()[i];
+			bbarWm_momentum += p*p;
+		}
+
+		float bWp_mass = 0;
+		float bbarWm_mass = 0;
+
+		float mctop_mass = mctop->getMass();
+		float mctopbar_mass = mctopbar->getMass();
+
+		bWp_mass = std::sqrt( bWp_energy*bWp_energy - bWp_momentum );
+		bbarWm_mass = std::sqrt( bbarWm_energy*bbarWm_energy - bbarWm_momentum );
+
+		float dtop_mass = abs( bWp_mass - mctop_mass );
+		float dtopbar_mass = abs( bbarWm_mass - mctopbar_mass);
+
+		std::cout << "dtop_mass = " << dtop_mass << std::endl;
+		std::cout << "dtopber_mass = " << dtopbar_mass << std::endl;
+
+		if( (dtop_mass > 15) || (dtopbar_mass > 15) ){
+			_stats._singletopFlag = 1;
+		}else{
+			_stats._singletopFlag = 0;
+		}
+
 	}
 
 #if 1 // RY Test
