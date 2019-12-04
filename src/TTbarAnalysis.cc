@@ -30,6 +30,7 @@ namespace QQbarProcessor
 		_hGenTree->Branch("MCquarkAngle", &_stats._MCquarkAngle, "MCMass/F");
 		_hGenTree->Branch("qMCBcostheta", _stats._qMCBcostheta, "qMCBcostheta[2]/F");
 		_hGenTree->Branch("MCLeptonPDG", &_stats._MCLeptonPDG, "MCLeptonPDG/I");
+		_hGenTree->Branch("singletopFlag", &_stats._singletopFlag, "singletopFlag/I");
 		_hTree = new TTree( "Stats", "tree" );
 
 
