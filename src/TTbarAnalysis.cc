@@ -1593,8 +1593,11 @@ namespace QQbarProcessor
 		bWp_mass = std::sqrt( bWp_energy*bWp_energy - bWp_momentum );
 		bbarWm_mass = std::sqrt( bbarWm_energy*bbarWm_energy - bbarWm_momentum );
 
-		float dtop_mass = abs( bWp_mass - mctop_mass );
-		float dtopbar_mass = abs( bbarWm_mass - mctopbar_mass);
+		//float dtop_mass = abs( bWp_mass - mctop_mass );
+		//float dtopbar_mass = abs( bbarWm_mass - mctopbar_mass);
+
+		float dtop_mass = abs( bWp_mass - _TopMassparameter );
+		float dtopbar_mass = abs( bbarWm_mass - _TopMassparameter);
 
 		std::cout << "dtop_mass = " << dtop_mass << std::endl;
 		std::cout << "dtopber_mass = " << dtopbar_mass << std::endl;

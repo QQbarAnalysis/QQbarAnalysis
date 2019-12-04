@@ -190,6 +190,7 @@ namespace QQbarProcessor
     float _MCPt;
     float _qMCBcostheta[2];
     float _MCNeutrinoEnergy;
+		int _singletopFlag;
 
 		// MC B Had info
 		int _MCBHadCharge;
