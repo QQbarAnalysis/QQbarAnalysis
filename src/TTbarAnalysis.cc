@@ -42,6 +42,7 @@ namespace QQbarProcessor
 		_lowBTagCutparameter = 0.3;
 		_highBTagCutparameter = 0.8;
 		_WMassparameter = 80.3;
+		_WMassSigmaparameter = 6.3;
 		_TopMassparameter = 174;
 		_TopMassSigmaparameter = 6.3;
 		_EBeamparameter = 250.0;
@@ -552,6 +553,7 @@ namespace QQbarProcessor
 		float costheta =  std::cos( MathOperator::getAngles(direction)[1] );
 		//float m = top1->getMass();
 		//float e = top1->getEnergy();
+		vector<int> IsMethodCorrect;
 		vector<int> samecharge;
 		vector<int> goodcharge;
 		vector<int> chargevalue;
@@ -573,6 +575,8 @@ namespace QQbarProcessor
 				chargevalue.push_back(top1charge);
 				goodcharge.push_back(1);
 				_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+				IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				if (!_stats._methodCorrect) 
 				{
 					std::cout << "Not Correct!\n";
@@ -599,6 +603,8 @@ namespace QQbarProcessor
 				//_stats._methodUsed = 2;
 				goodcharge.push_back(2);
 				_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+				IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				if (!_stats._methodCorrect) 
 				{
 					std::cout << "Not Correct!\n";
@@ -624,6 +630,8 @@ namespace QQbarProcessor
 				chargevalue.push_back(top1charge);
 				goodcharge.push_back(3);
 				_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+				IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				if (!_stats._methodCorrect) 
 				{
 					std::cout << "Not Correct!\n";
@@ -648,6 +656,8 @@ namespace QQbarProcessor
 				goodcharge.push_back(3);
 				chargevalue.push_back(-top2charge);
 				_stats._methodCorrect = top1->__GetMCCharge() * top2charge > 0;
+				IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				if (!_stats._methodCorrect) 
 				{
 					std::cout << "Not Correct!\n";
@@ -672,6 +682,8 @@ namespace QQbarProcessor
 				chargevalue.push_back(top1charge);
 				goodcharge.push_back(4);
 				_stats._methodCorrect = top1->__GetMCCharge() *  top1charge < 0;
+				IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				if (!_stats._methodCorrect) 
 				{
 					std::cout << "Not Correct!\n";
@@ -696,6 +708,8 @@ namespace QQbarProcessor
 				goodcharge.push_back(4);
 				chargevalue.push_back(-top2charge);
 				_stats._methodCorrect = top1->__GetMCCharge() * top1kaon< 0;
+				IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				if (!_stats._methodCorrect) 
 				{
 					std::cout << "Not Correct!\n";
@@ -722,6 +736,8 @@ namespace QQbarProcessor
 					goodcharge.push_back(5);
 					chargevalue.push_back(-top2charge);
 					_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
+					IsMethodCorrect.push_back(_stats._methodCorrect);
+
 					//_summary._nAfterKinematicCuts++;
 				}
 				if (top2charge * top2lepton > 0 &&  _stats._Top2btag > btagcut && _stats._Top2bmomentum > pcut) 
@@ -739,6 +755,8 @@ namespace QQbarProcessor
 					goodcharge.push_back(5);
 					chargevalue.push_back(top1charge);
 					_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+					IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				}
 				if (top1charge * top2lepton < 0 &&  ((_stats._Top1btag > btagcut && _stats._Top1bmomentum > pcut) ||_stats._Top1gamma > gammacut1)) 
 				{
@@ -755,6 +773,8 @@ namespace QQbarProcessor
 					goodcharge.push_back(6);
 					chargevalue.push_back(top1charge);
 					_stats._methodCorrect = top1->__GetMCCharge() * top1charge < 0;
+					IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				}
 				if (top1charge * top2lepton < 0 && _stats._Top1gamma > gammacut1) 
 				{
@@ -771,6 +791,8 @@ namespace QQbarProcessor
 					goodcharge.push_back(6);
 					chargevalue.push_back(-top2charge);
 					_stats._methodCorrect = top1->__GetMCCharge() * top2charge < 0;
+					IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				}
 				if (top2charge * top2lepton > 0  && _stats._Top1gamma > gammacut1) 
 				{
@@ -792,6 +814,8 @@ namespace QQbarProcessor
 				goodcharge.push_back(7);
 				chargevalue.push_back(top2lepton);
 				_stats._methodCorrect = _stats._MCBWcorrect == 1;
+				IsMethodCorrect.push_back(_stats._methodCorrect);
+
 				//_stats._methodUsed = 1;
 				//_stats._methodTaken[0] = 7;
 				//_summary._nAfterKinematicCuts++;
@@ -818,6 +842,7 @@ namespace QQbarProcessor
 			{
 				std::cout << " " << goodcharge[i];
 				_stats._methodTaken[i] = goodcharge[i];
+				_stats._methodCheck[i] = IsMethodCorrect[i];
 			}
 			std::cout << "\n";
 		}
@@ -904,24 +929,11 @@ namespace QQbarProcessor
 			vector< EVENT::MCParticle * > mcbquarks = opera.GetBquarkPair();
 			vector< EVENT::MCParticle * > mcws = opera.GetWPair();
 
-/*
-			std::cout << "mcb->size() = " << mcbquarks.size() << std::endl;
-
-			MCParticle * mcb    = mcbquarks[0];
-			MCParticle * mcbbar = mcbquarks[1];
-
-			MCParticle * mcWplus  = mcws[0];
-			MCParticle * mcWminus = mcws[1];
-
-
-			_stats._MCWplusmass = mcWplus->getMass();
-			_stats._MCWminusmass = mcWminus->getMass();
-			_stats._MCBmass = mcb->getMass();
-			_stats._MCBbarmass = mcbbar->getMass();
-*/
 
 			// Reco w and top
-			vector< TopQuark * > * wbosons = formW(bjets,wjets);
+			//vector< TopQuark * > * wbosons = formW(bjets,wjets);
+			vector< TopQuark * > * wbosons = formW(wjets);
+			std::cout << "running " << wbosons->size() << std::endl;
 			vector< TopQuark * > * tops    = composeTops(bjets,wbosons);
 
 			TopQuark * top1 = tops->at(0);
@@ -967,11 +979,14 @@ namespace QQbarProcessor
 			std::cout << e.what() <<"\n";
 		}
 	}
+
 	vector< TopQuark * > * TTbarAnalysis::composeTops(vector< RecoJet * > * bjets, vector< TopQuark * > * wjets)
 	{
 		vector< TopQuark * > * result = new vector< TopQuark * > ();
+			std::cout << "running2" << std::endl;
 		TopQuark * candidateb0w0 = new TopQuark(bjets->at(0), wjets->at(0));
 		TopQuark * candidateb1w1 = new TopQuark(bjets->at(1), wjets->at(1));
+			std::cout << "running3" << std::endl;
 		float chi00 = getChi2(candidateb0w0);
 		float chi11 = getChi2(candidateb1w1);
 		std::cout << "Chi2: " << chi00 << " " << chi11 << "\n";
@@ -997,47 +1012,75 @@ namespace QQbarProcessor
 		std::cout << "Chi2: " << chi01 << " " << chi10 << "\n";
 		return result;
 
+	}
 
+	RecoJet * TTbarAnalysis::formQQ(RecoJet * qjet1, RecoJet * qjet2)
+	{
+		std::cout << "test" << std::endl;
 	}
 
 	vector< TopQuark * > * TTbarAnalysis::formW(vector< RecoJet * > * wjets)
 	{
+		vector< TopQuark * > * result = new vector< TopQuark * >();
 
-		std::cout << "test form W" << std::endl;
 
-		// construction
-/*
-		vector< TopQuark * > * result = new vector< TopQuark * > ();
-		TopQuark * candidatew0w0 = new TopQuark(bjets->at(0), wjets->at(0));
-		TopQuark * candidatew1w1 = new TopQuark(bjets->at(1), wjets->at(1));
-		float chi00 = getChi2(candidateb0w0);
-		float chi11 = getChi2(candidateb1w1);
-		std::cout << "Chi2: " << chi00 << " " << chi11 << "\n";
-		//vs
-		TopQuark * candidateb0w1 = new TopQuark(bjets->at(0), wjets->at(1));
-		TopQuark * candidateb1w0 = new TopQuark(bjets->at(1), wjets->at(0));
-		float chi01 = getChi2(candidateb0w1);
-		float chi10 = getChi2(candidateb1w0);
-		if (chi00 + chi11 < chi01 + chi10) 
-		{
-			result->push_back(candidateb0w0);
-			result->push_back(candidateb1w1);
-			_stats._Top1mass = candidateb0w0->getMass();
-			_stats._Top2mass = candidateb1w1->getMass();
+		if( wjets->size() < 4 ){
+			return result;
+		}else{
+
+			float chi2vec[3];
+			
+			TopQuark * candidatew0w1 = new TopQuark(wjets->at(0), wjets->at(1));
+			TopQuark * candidatew2w3 = new TopQuark(wjets->at(2), wjets->at(3));
+
+			float chi0123 = getChi2W(candidatew0w1, candidatew2w3);
+			chi2vec[0] = chi0123;
+
+			TopQuark * candidatew0w2 = new TopQuark(wjets->at(0), wjets->at(2));
+			TopQuark * candidatew1w3 = new TopQuark(wjets->at(1), wjets->at(3));
+
+			float chi0213 = getChi2W(candidatew0w2, candidatew1w3);
+			chi2vec[1] = chi0213;
+
+			TopQuark * candidatew0w3 = new TopQuark(wjets->at(0), wjets->at(3));
+			TopQuark * candidatew1w2 = new TopQuark(wjets->at(1), wjets->at(2));
+
+			float chi0312 = getChi2W(candidatew0w3, candidatew1w2);
+			chi2vec[2] = chi0312;
+
+			float minchi2 = 10000;
+			int minIndex = -1;
+			for(int i=0; i < 3; i++){
+				if(chi2vec[i] < minchi2){
+					minchi2 = chi2vec[i];
+					minIndex = i;
+				}
+			}
+
+			switch(minIndex) {
+				case 0 :
+					result->push_back(candidatew0w1);
+					result->push_back(candidatew2w3);
+					break;
+				case 1 :
+					result->push_back(candidatew0w2);
+					result->push_back(candidatew1w3);
+					break;
+				case 2 :
+					result->push_back(candidatew0w3);
+					result->push_back(candidatew1w2);
+					break;
+			}
+
+			std::cout << "minIndex = " << minIndex << std::endl;
+
+			return result;
 		}
-		else 
-		{
-			result->push_back(candidateb0w1);
-			result->push_back(candidateb1w0);
-			_stats._Top1mass = candidateb0w1->getMass();
-			_stats._Top2mass = candidateb1w0->getMass();
-		}
-		std::cout << "Chi2: " << chi01 << " " << chi10 << "\n";
-		return result;
-*/
+
 	}
 
 	vector< TopQuark * > * TTbarAnalysis::formW(vector< RecoJet * > * bjets,vector< RecoJet * > * wjets)
+
 	{
 		vector< TopQuark * > * result = new vector< TopQuark * > ();
 		TopQuark * candidateb0w0 = new TopQuark(bjets->at(0), wjets->at(0));
@@ -1136,6 +1179,19 @@ namespace QQbarProcessor
 			<< " bpstar: " << bpstar
 			<< " cosw: " << cosbW 
 			<< "\n";
+		return chi2;
+	}
+
+	float TTbarAnalysis::getChi2W( RecoJet * candidate1, RecoJet * candidate2 )
+	{
+		float mW1 = candidate1->getMass();
+		float mW2 = candidate2->getMass();
+
+		_stats._chiWMass1 = std::pow(mW1 - _WMassparameter, 2) / std::pow( _WMassSigmaparameter, 2);
+		_stats._chiWMass2 = std::pow(mW2 - _WMassparameter, 2) / std::pow( _WMassSigmaparameter, 2);
+
+		float chi2 = _stats._chiWMass1 + _stats._chiWMass2;
+
 		return chi2;
 	}
 

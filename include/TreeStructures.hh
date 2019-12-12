@@ -135,6 +135,7 @@ namespace QQbarProcessor
     int _methodRefused;
     int _methodZero;
     int _methodCorrect;
+    int _methodCheck[12];
     int _methodTaken[12];
     int _methodSameCharge[12];
     int _methodZeroCharge[12];
@@ -210,12 +211,14 @@ namespace QQbarProcessor
     //hadronic
     float _chiHad1;
     float _chiTopMass1;
+    float _chiWMass1;
     float _chiTopE1;
     float _chiPbstar1;
     float _chiCosWb1;
     float _chiGammaT1;
     float _chiHad2;
     float _chiTopMass2;
+    float _chiWMass2;
     float _chiTopE2;
     float _chiPbstar2;
     float _chiCosWb2;
@@ -268,11 +271,12 @@ namespace QQbarProcessor
       _qCostheta[1] = -2.0;
       _ZZMass1 = -1;
       _ZZMass2 = -1;
-      for (unsigned int i = 0; i < 6; i++) {
-	_methodTaken[i] = -1;
-	_methodSameCharge[i] = -1;
-	_methodZeroCharge[i] = -1;
-      }
+			for (unsigned int i = 0; i < 7; i++) {
+				_methodCheck[i] = -1;
+				_methodTaken[i] = -1;
+				_methodSameCharge[i] = -1;
+				_methodZeroCharge[i] = -1;
+			}
     }
   };
 

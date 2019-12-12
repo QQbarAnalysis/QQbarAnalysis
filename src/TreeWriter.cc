@@ -197,6 +197,7 @@ namespace QQbarProcessor
     _hTree->Branch("methodUsed", &data._methodUsed, "methodUsed/I");
     _hTree->Branch("methodRefused", &data._methodRefused, "methodRefused/I");
     _hTree->Branch("methodCorrect", &data._methodCorrect, "methodCorrect/I");
+    _hTree->Branch("methodCheck", data._methodCheck, "methodCheck[methodUsed]/I");
     _hTree->Branch("methodSameCharge", data._methodSameCharge, "methodSameCharge[methodRefused]/I");
     _hTree->Branch("methodTaken", data._methodTaken, "methodTaken[methodUsed]/I");
 		_hTree->Branch("chgValue", data._chgValue, "chgValue[methodUsed]/I");
@@ -320,6 +321,7 @@ namespace QQbarProcessor
     _hTree->Branch("methodUsed", &data._methodUsed, "methodUsed/I");
     _hTree->Branch("methodRefused", &data._methodRefused, "methodRefused/I");
     _hTree->Branch("methodCorrect", &data._methodCorrect, "methodCorrect/I");
+    _hTree->Branch("methodCheck", data._methodCheck, "methodCheck[methodUsed]/I");
     _hTree->Branch("methodSameCharge", data._methodSameCharge, "methodSameCharge[methodRefused]/I");
     _hTree->Branch("methodTaken", data._methodTaken, "methodTaken[methodUsed]/I");
 		_hTree->Branch("chgValue", data._chgValue, "chgValue[methodUsed]/I");
@@ -341,12 +343,14 @@ namespace QQbarProcessor
 
     _hTree->Branch("chiHad1", &data._chiHad1, "chiHad1/F");
     _hTree->Branch("chiTopMass1", &data._chiTopMass1, "chiTopMass1/F");
+    _hTree->Branch("chiWMass1", &data._chiWMass1, "chiWMass1/F");
     _hTree->Branch("chiTopE1", &data._chiTopE1, "chiTopE1/F");
     _hTree->Branch("chiPbstar1", &data._chiPbstar1, "chiPbstar1/F");
     _hTree->Branch("chiCosWb1", &data._chiCosWb1, "chiCosWb1/F");
     _hTree->Branch("chiGammaT1", &data._chiGammaT1, "chiGammaT1/F");
     _hTree->Branch("chiHad2", &data._chiHad2, "chiHad2/F");
     _hTree->Branch("chiTopMass2", &data._chiTopMass2, "chiTopMass2/F");
+    _hTree->Branch("chiWMass2", &data._chiWMass1, "chiWMass1/F");
     _hTree->Branch("chiTopE2", &data._chiTopE2, "chiTopE2/F");
     _hTree->Branch("chiPbstar2", &data._chiPbstar2, "chiPbstar2/F");
     _hTree->Branch("chiCosWb2", &data._chiCosWb2, "chiCosWb2/F");
