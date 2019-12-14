@@ -1129,7 +1129,9 @@ namespace QQbarProcessor
 		float chiPbstar = std::pow( bpstar - _PStarparameter, 2) / std::pow( _PStarSigmaparameter, 2);
 		float chiGammaT = std::pow( gamma - _GammaTparameter, 2) / std::pow( _GammaTSigmaparameter, 2); 
 		float chiCosWb = std::pow( cosbW - _CosbWparameter, 2) / std::pow( _CosbWSigmaparameter, 2);
-		float chi2 = chiTopMass + chiTopE + chiPbstar; // + chiCosWb + chiGammaT ;
+
+		//float chi2 = chiTopMass + chiTopE + chiPbstar; // + chiCosWb + chiGammaT ;
+		float chi2 = chiTopMass + chiTopE + chiPbstar + chiCosWb + chiGammaT ;
 
 
 		_stats._Top1pstarb = bpstar;
