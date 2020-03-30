@@ -1,4 +1,10 @@
 #include "QQbarProcessor.hh"
+#include "IMPL/LCEventImpl.h"
+#include "IMPL/LCRunHeaderImpl.h"
+#include "IMPL/LCGenericObjectImpl.h"
+#include "IMPL/LCCollectionVec.h"
+#include <marlin/ProcessorMgr.h> 
+#include "marlin/Exceptions.h"
 
 using namespace lcio ;
 using namespace marlin ;
@@ -7,6 +13,7 @@ using std::string;
 using std::abs;
 using EVENT::Track;
 using IMPL::ReconstructedParticleImpl;
+using IMPL::MCParticleImpl;
 using EVENT::ParticleID;
 using IMPL::ParticleIDImpl;
 
@@ -21,7 +28,6 @@ namespace QQbarProcessor
     // modify processor description
 
     // register steering parameters: name, description, class-variable, default value
-
     registerProcessorParameter( "ROOTFileName",
 				"Output ROOT File Name",
 				_hfilename,
@@ -35,38 +41,53 @@ namespace QQbarProcessor
 				_massCutparameter,
 				(float)200. );
     registerProcessorParameter( "AnalysisType",
-				"Analysis Type",
+				"Analysis Type (0=ttbar semileptonic, 1=ttbar hadronic, 2=bbbar)",
 				_type,
 				_type );
+    registerProcessorParameter( "DBDanalysis",
+				"It is a DBD analysis? Only for bbbar.",
+				_boolDBDanalysis,
+				true
+				);
+    registerProcessorParameter( "KaonCheat",
+				"Do we cheat in the kaon identification?",
+				_boolkaoncheat,
+				false
+				);
+    registerProcessorParameter( "KaonTaggerName",
+				"Kaon Tagger PIDHandler name",
+				_KaonTaggerName,
+				string("KaonTagger")
+				);
     registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE , 
 			     "PFOCollection",
-			     "Name of the Calorimeter hit collection"  ,
+			     "PFO collection name"  ,
 			     _colName ,
-			     string("PandoraPFOs") ) ;
-
+			     string("PandoraPFOs")
+			     ) ;
     registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
-			     "JetCollectionName" , 
-			     "Name of the Jet collection"  ,
-			     _JetsColName ,
+			     "JetCollectionName",
+                             "Name of the Jet collection",
+			     _JetsColName,
 			     std::string("FinalJets")
-			     );
+                             );
     registerInputCollection( LCIO::LCRELATION,
 			     "JetRelCollectionName" , 
 			     "Name of the PrimaryVertex collection"  ,
 			     _JetsRelColName ,
 			     std::string("FinalJets_rel")
 			     );
-		registerInputCollection( LCIO::VERTEX,
-			"GenVtxCollectionName" , 
-			"Name of the PrimaryVertex collection"  ,
-			_MCVtxColName ,
-			std::string("MCVertex")
-		);
+    registerInputCollection( LCIO::VERTEX,
+			     "GenVtxCollectionName" , 
+			     "Name of the PrimaryVertex collection"  ,
+			     _MCVtxColName ,
+			     std::string("MCVertex")
+			     );
     registerInputCollection( LCIO::MCPARTICLE,
 			     "MCCollectionName" , 
 			     "Name of the MC collection"  ,
 			     _MCColName ,
-			     std::string("MCParticlesSkimmed")
+			     std::string("MCParticles")
 			     );
     registerInputCollection( LCIO::MCPARTICLE,
 			     "IsoLeptonCollectionName" , 
@@ -80,7 +101,12 @@ namespace QQbarProcessor
 			     _colRelName ,
 			     std::string("RecoMCTruthLink")
 			     );
-	
+    registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
+			     "initialJetCollectionName" , 
+			     "Name of the initialJet collection, only used for DBD-bbbar analysis"  ,
+			     _initialJetsColName ,
+			     std::string("InitialJets")
+			     );
   }
 	
   void QQbarProcessor::init() 
@@ -133,13 +159,20 @@ namespace QQbarProcessor
 						_colRelName);
        	break;
 
-      case BBbar:
-	_bbbaranalysis.AnalyseBBbar(evt,
-				    _colName ,
-				    _JetsColName ,
-				    _JetsRelColName ,
-				    _MCColName ,
-				    _colRelName);
+      case BBbar: 
+	{ 
+	  _bbbaranalysis.AnalyseBBbar(evt,
+				      _boolDBDanalysis,
+				      _boolkaoncheat,
+				      _colName ,
+				      _colRelName,
+				      _initialJetsColName,
+				      _JetsColName ,
+				      _JetsRelColName ,
+				      _MCColName,
+				      _KaonTaggerName
+				      );
+	}
 	break;
 
       case TTbarHadronic:
@@ -159,7 +192,7 @@ namespace QQbarProcessor
   }
 
 
-   void QQbarProcessor::end()
+  void QQbarProcessor::end()
   {   
 
     switch(_analysisType)
