@@ -26,7 +26,7 @@ namespace QQbarProcessor
   {
 	  
     // modify processor description
-
+    
     // register steering parameters: name, description, class-variable, default value
     registerProcessorParameter( "ROOTFileName",
 				"Output ROOT File Name",
@@ -52,7 +52,7 @@ namespace QQbarProcessor
     registerProcessorParameter( "KaonCheat",
 				"Do we cheat in the kaon identification?",
 				_boolkaoncheat,
-				false
+				true
 				);
     registerProcessorParameter( "KaonTaggerName",
 				"Kaon Tagger PIDHandler name",
