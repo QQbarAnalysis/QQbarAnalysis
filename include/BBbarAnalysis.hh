@@ -26,9 +26,13 @@
 #include "QQbarTools.hh"
 #include "QQbarMCOperator.hh"
 
+//---- Fastjet stuff
+#include "fastjet/PseudoJet.hh"
+#include "fastjet/ClusterSequence.hh"
+
 using namespace lcio ;
 using namespace marlin ;
-
+using namespace fastjet;
 
 namespace QQbarProcessor 
 {

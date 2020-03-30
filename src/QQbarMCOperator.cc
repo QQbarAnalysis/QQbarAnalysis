@@ -54,6 +54,14 @@ namespace QQbarProcessor
 
 	  bbbar_ps.push_back(b);
 	  bbbar_ps.push_back(bbar);
+
+	  //remove all repeated particles in the PS
+	  vector< MCParticle * >::iterator end = ps.end();
+	  for (vector<MCParticle *>::iterator it = ps.begin(); it != end; ++it) {
+	    end = std::remove(it + 1, end, *it);
+	  }
+	  ps.erase(end, ps.end());
+	  // save the PS particles
 	  for(int k=0; k< ps.size(); k++) bbbar_ps.push_back(ps.at(k));
 	  
 	  

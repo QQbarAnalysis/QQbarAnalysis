@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include <EVENT/MCParticle.h>
 #include <IMPL/MCParticleImpl.h>
 #include <EVENT/LCCollection.h>

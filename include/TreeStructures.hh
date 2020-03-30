@@ -146,22 +146,6 @@ namespace QQbarProcessor
     float _chiTop2Mass;
     float _chiTop2E;
 
-		//Generated
-		int _MCBHadCharge;
-		int _MCBHadNtracks;
-		
-		// jet information
-		int   _jet_nvtx[2];
-		float _jet_E[2];
-		float _jet_px[2];
-		float _jet_py[2];
-		float _jet_pz[2];
-		float _jet_M[2];
-																		
-		// kaon information
- 		float _Top1KaondEdx[10];
-						
-
     int _MCBOscillation;
     int _MCBWcorrect;
     int _MCBBarOscillation;
@@ -283,6 +267,12 @@ namespace QQbarProcessor
     float _mc_quark_ps_pdg[300];
     float _mc_quark_ps_charge[300];
     int _mc_quark_ps_n;
+    float _mc_quark_ps_y23;
+    float _mc_quark_ps_jet_E[2];
+    float _mc_quark_ps_jet_px[2];
+    float _mc_quark_ps_jet_py[2];
+    float _mc_quark_ps_jet_pz[2];
+    int _mc_quark_ps_jet_nparticles[2];
 
     int _MCBOscillation;
     int _MCBBarOscillation;
@@ -312,6 +302,7 @@ namespace QQbarProcessor
     float _jet_pz[2];
     float _jet_m[2];
     float _jet_btag[2];
+    float _jet_ctag[2];
 
 
     int _jet_nvtx[2];
@@ -345,7 +336,6 @@ namespace QQbarProcessor
 	_mc_quark_ps_charge[i]=-1000;
 
       }
-
       _mc_quark_ps_n=0;
 
       for (unsigned int i = 0; i < 2; i++) {
@@ -396,6 +386,7 @@ namespace QQbarProcessor
 	_jet_pz[i]=0;
 	_jet_m[i]=0;
 	_jet_btag[i]=0;
+	_jet_ctag[i]=0;
 
 	_jet_nvtx[i]=0;
 	_jet_ntrack[i]=-1;

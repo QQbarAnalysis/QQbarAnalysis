@@ -270,8 +270,18 @@ namespace QQbarProcessor
     if (!myPIDHandler) {
       return false;
     }
-    
-    int pid = myPIDHandler->getAlgorithmID(myAlgorithmName);
+   
+    int pid=0;
+    try                                                                                          
+      {                                              
+	pid = myPIDHandler->getAlgorithmID(myAlgorithmName); 
+      }                                             
+    catch(UTIL::UnknownAlgorithm &e) 
+      {
+	streamlog_out(DEBUG) << e.what() <<"\n";                                                
+	return false;
+    }    
+    //    int pid = myPIDHandler->getAlgorithmID(myAlgorithmName);
     int pdg = myPIDHandler->getParticleID(particle, pid).getPDG();
     if (abs(pdg) == 321 && abs(particle->getType()) != 11 && abs(particle->getType()) != 13) {
       streamlog_out(DEBUG) << "\t Kaons p: " << MathOperator::getModule(particle->getMomentum()) << " q: " << particle->getCharge() << "\n";
@@ -328,13 +338,22 @@ vector< ReconstructedParticle * > VertexChargeOperator::getKaons(const vector< R
   for (unsigned int i = 0; i < particles.size(); i++) 
     {
       ReconstructedParticle * particle = particles[i];
-      int pid = myPIDHandler->getAlgorithmID(myAlgorithmName);
-      int pdg = myPIDHandler->getParticleID(particle, pid).getPDG();
-      if (abs(pdg) == 321 && abs(particle->getType()) != 11 && abs(particle->getType()) != 13) 
-	{
-	  std::cout << "\t Kaons p: " << MathOperator::getModule(particle->getMomentum()) << " q: " << particle->getCharge() << "\n";
-	  result.push_back(particle);
-	}		
+      int pid = 0;//myPIDHandler->getAlgorithmID(myAlgorithmName);
+    try                                                                                 
+      {                                                                                      
+	pid = myPIDHandler->getAlgorithmID(myAlgorithmName);                
+      }                                                                                             
+    catch(UTIL::UnknownAlgorithm &e)
+      {                                                                 
+	streamlog_out(DEBUG) << e.what() <<"\n";                                                   
+	return result;                                                                              
+      }  
+    int pdg = myPIDHandler->getParticleID(particle, pid).getPDG();
+    if (abs(pdg) == 321 && abs(particle->getType()) != 11 && abs(particle->getType()) != 13) 
+      {
+	std::cout << "\t Kaons p: " << MathOperator::getModule(particle->getMomentum()) << " q: " << particle->getCharge() << "\n";
+	result.push_back(particle);
+      }		
     }
   return result;
 }

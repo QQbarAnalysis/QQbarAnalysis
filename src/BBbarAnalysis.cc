@@ -67,21 +67,34 @@ namespace QQbarProcessor
   void BBbarAnalysis::AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera)
   {
 
+    vector<PseudoJet> particles;
+    JetDefinition jet_def(ee_genkt_algorithm,1.5,1);
+
     vector <MCParticle *> bbbar_ps = opera.GetBBbarQuarksPS();
     streamlog_out(DEBUG) << "Hard Process + PS Level \n";
+
+    int quark_idx[2];
+    quark_idx[0]=-1; //b-quark
+    quark_idx[1]=-1; //anti b-quark
     for(int i=0; i<bbbar_ps.size(); i++) {
       if(bbbar_ps.at(i)!=NULL) {
 	_stats._mc_quark_ps_n++;
 	_stats._mc_quark_ps_E[i]=bbbar_ps.at(i)->getEnergy();
-	_stats._mc_quark_ps_px[i]=bbbar_ps.at(i)->getMomentum()[i];
+	_stats._mc_quark_ps_px[i]=bbbar_ps.at(i)->getMomentum()[0];
 	_stats._mc_quark_ps_py[i]=bbbar_ps.at(i)->getMomentum()[1];
 	_stats._mc_quark_ps_pz[i]=bbbar_ps.at(i)->getMomentum()[2];
 	_stats._mc_quark_ps_pdg[i]=bbbar_ps.at(i)->getPDG();
+	if(bbbar_ps.at(i)->getPDG()==5) quark_idx[0]=i;
+        if(bbbar_ps.at(i)->getPDG()==-5) quark_idx[1]=i;    
 	_stats._mc_quark_ps_charge[i]=bbbar_ps.at(i)->getCharge();
 	_stats._mc_quark_ps_m[i]=bbbar_ps.at(i)->getMass();
-	_stats._mc_quark_ps_pt[i]=std::sqrt( std::pow(bbbar_ps.at(i)->getMomentum()[i],2) + std::pow(bbbar_ps.at(i)->getMomentum()[1],2) );
+	_stats._mc_quark_ps_pt[i]=std::sqrt( std::pow(bbbar_ps.at(i)->getMomentum()[0],2) + std::pow(bbbar_ps.at(i)->getMomentum()[1],2) );
+
+	particles.push_back(PseudoJet(bbbar_ps.at(i)->getMomentum()[0],bbbar_ps.at(i)->getMomentum()[1],bbbar_ps.at(i)->getMomentum()[2],bbbar_ps.at(i)->getEnergy()));
+
 	QQbarTools::PrintParticle(bbbar_ps.at(i));
       } else {
+        _stats._mc_quark_ps_n=0;                                                                                                                                                                        
 	_stats._mc_quark_ps_E[i]=0;
 	_stats._mc_quark_ps_px[i]=0;
 	_stats._mc_quark_ps_py[i]=0;
@@ -92,7 +105,26 @@ namespace QQbarProcessor
 	_stats._mc_quark_ps_pt[i]=0;
       }
     }
-    
+
+    ClusterSequence cs(particles,jet_def);
+    const int njets=2;
+
+    vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));
+    double ymerge= cs.exclusive_ymerge(njets);
+    double ymerge_max= cs.exclusive_ymerge_max(njets);
+    streamlog_out(DEBUG) << "y23 (parton + PS)= "<<ymerge <<std::endl;
+
+    _stats._mc_quark_ps_y23=ymerge;
+    for(unsigned i=0; i< jets.size(); i++) {
+      _stats._mc_quark_ps_jet_E[i]=jets[i].E();
+      _stats._mc_quark_ps_jet_px[i]=jets[i].px();
+      _stats._mc_quark_ps_jet_py[i]=jets[i].py();
+      _stats._mc_quark_ps_jet_pz[i]=jets[i].pz();
+      //vector<PseudoJet> constituents = jets[i].constituents();
+      //_stats._mc_quark_ps_jet_nparticles[i]=constituents.size();
+    }
+
+
   }
 
   void BBbarAnalysis::AnalyseBBbar(LCEvent * evt,
@@ -132,10 +164,13 @@ namespace QQbarProcessor
         VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName)); 
 	vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
 
+	ClearVariables();
 	//MC bbbar Analysis
 	QQbarMCOperator opera(mccol);
 	vector < MCParticle * > mcbs = AnalyseGeneratorBBbar(opera);//Hard Process
 	//	vector < MCParticle * > mcbs_ps =
+	//	ClearVariables(); 
+
 	AnalyseGeneratorBBbar_PS(opera);
 	
 	std::sort(jets->begin(), jets->end(), QQbarTools::sortByBtag);
@@ -145,10 +180,8 @@ namespace QQbarProcessor
 	  return;
 	}
 
-
 	// get jet reconstruction variables (merging distances)
 	if(_boolDBDanalysis==true) {
-	  //in DBD, these are output from the FastJet clustering
 	  LCCollection * originaljets = evt->getCollection(_initialJetsColName); 
 	  
 	  _stats._d23 = originaljets->getParameters().getFloatVal("d_{n,n+1}");
@@ -167,35 +200,35 @@ namespace QQbarProcessor
 	    vector<float> params = pid.getParameters();
 	    _stats._y23 = params[pidh.getParameterIndex(alid,"y23")];
 	    _stats._y12 = params[pidh.getParameterIndex(alid,"y12")];
-	    streamlog_out(DEBUG) << "y23= "<<_stats._y23<<"\n";
+	    streamlog_out(DEBUG) << "y23 (reco)= "<<_stats._y23<<"\n";
 	  } catch(UTIL::UnknownAlgorithm &e){ 
 	    streamlog_out(DEBUG) << "No algorithm yth!\n"; 
 	    streamlog_out(WARNING)<< e.what() << "\n";
 	  }
 	}
 
+
 	//get the event shape variables. Needs that we run before the following processors
 	//<!-- ========== EventShapes ========================== -->
 	//  <processor name="MySphere"/>
 	//<processor name="MyThrustReconstruction"/>
-
-	_stats._oblateness = jetcol->getParameters().getFloatVal("Oblateness");
-	_stats._aplanarity = jetcol->getParameters().getFloatVal("aplanarity");
-	_stats._major_thrust_value = jetcol->getParameters().getFloatVal("majorThrustValue");
-	_stats._minor_thrust_value = jetcol->getParameters().getFloatVal("minorThrustValue");
-	_stats._principle_thrust_value = jetcol->getParameters().getFloatVal("principleThrustValue");
+	_stats._oblateness = pfocol->getParameters().getFloatVal("Oblateness");
+	_stats._aplanarity = pfocol->getParameters().getFloatVal("aplanarity");
+	_stats._major_thrust_value = pfocol->getParameters().getFloatVal("majorThrustValue");
+	_stats._minor_thrust_value = pfocol->getParameters().getFloatVal("minorThrustValue");
+	_stats._principle_thrust_value = pfocol->getParameters().getFloatVal("principleThrustValue");
 	std::vector<float> minoraxis;
-	jetcol->getParameters().getFloatVals( "minorThrustAxis" , minoraxis) ;
+	pfocol->getParameters().getFloatVals( "minorThrustAxis" , minoraxis) ;
 	_stats._minor_thrust_axis[0]=minoraxis[0];
 	_stats._minor_thrust_axis[1]=minoraxis[1];
 	_stats._minor_thrust_axis[2]=minoraxis[2];
 	std::vector<float> majoraxis;
-	jetcol->getParameters().getFloatVals( "majorThrustAxis" , majoraxis) ;
+	pfocol->getParameters().getFloatVals( "majorThrustAxis" , majoraxis) ;
 	_stats._major_thrust_axis[0]=majoraxis[0];
 	_stats._major_thrust_axis[1]=majoraxis[1];
 	_stats._major_thrust_axis[2]=majoraxis[2];
 	std::vector<float> principleaxis;
-	jetcol->getParameters().getFloatVals( "principleThrustAxis" , principleaxis) ;
+	pfocol->getParameters().getFloatVals( "principleThrustAxis" , principleaxis) ;
 	_stats._principle_thrust_axis[0]=principleaxis[0];
 	_stats._principle_thrust_axis[1]=principleaxis[1];
 	_stats._principle_thrust_axis[2]=principleaxis[2];
@@ -216,6 +249,7 @@ namespace QQbarProcessor
 	  _stats._maxenergy_photon_E = maxenergy_reco_photon->getEnergy();
 	  if(maxenergy_reco_photon->getEnergy()>40)  streamlog_out(DEBUG)<<" Radiative return candidate with Egamma= = "<<maxenergy_reco_photon->getEnergy()<<std::endl;
 	}
+
 
 	//match reco jets with quarks BEFORE radiation
 	MatchB(jets, mcbs, mcvtxcol);
@@ -244,6 +278,7 @@ namespace QQbarProcessor
 	  _stats._jet_pz[ijet]=jets->at(ijet)->getMomentum()[2];
 	  _stats._jet_m[ijet]=jets->at(ijet)->getMass();
 	  _stats._jet_btag[ijet]=jets->at(ijet)->GetBTag();
+          _stats._jet_ctag[ijet]=jets->at(ijet)->GetCTag();
 	  
 	  //Get all secondary vertexes associated to secondary tracks in each jet
 	  vector< Vertex * > * vertices = jets->at(ijet)->GetRecoVertices();
