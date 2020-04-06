@@ -291,6 +291,23 @@ namespace QQbarProcessor
     return false;
   }
   
+  int VertexChargeOperator::getPDGtrack(ReconstructedParticle *particle) {                                                                                                                   
+
+    LCRelationNavigator navigator(myRelCollection);
+
+    vector< LCObject * > obj = navigator.getRelatedToObjects(particle);
+    vector< float > weights = navigator.getRelatedToWeights(particle);
+    MCParticle * winner = NULL;
+    float maxweight = 0.50;
+    for (unsigned int i = 0; i < obj.size(); i++) {
+      if (weights[i] > maxweight) { 
+	winner = dynamic_cast< MCParticle * >(obj[i]);
+	maxweight = weights[i];
+      }
+    }
+    if(!winner) return 0;
+    return abs(winner->getPDG());
+  }
   bool VertexChargeOperator::isKaonCheat(ReconstructedParticle *particle) {
 
     LCRelationNavigator navigator(myRelCollection);
@@ -325,6 +342,7 @@ namespace QQbarProcessor
     
   return false;
 }
+
 
 
 

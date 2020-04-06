@@ -47,7 +47,11 @@ namespace QQbarProcessor
     registerProcessorParameter( "DBDanalysis",
 				"It is a DBD analysis? Only for bbbar.",
 				_boolDBDanalysis,
+<<<<<<< HEAD
 				true
+=======
+				false
+>>>>>>> 77fb0f379405d41845eca64323030825a07b43b0
 				);
     registerProcessorParameter( "KaonCheat",
 				"Do we cheat in the kaon identification?",
@@ -89,7 +93,7 @@ namespace QQbarProcessor
 			     _MCColName ,
 			     std::string("MCParticles")
 			     );
-    registerInputCollection( LCIO::MCPARTICLE,
+    registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			     "IsoLeptonCollectionName" , 
 			     "Name of the isolepton collection"  ,
 			     _IsoLeptonColName ,

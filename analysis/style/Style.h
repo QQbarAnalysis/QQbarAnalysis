@@ -1,17 +1,17 @@
 //
-//   @file    IrlesStyle.h         
+//   @file    QQbarStyle.h         
 //   
-//            IRLES Style, based on a style file from BaBar
+//            QQBAR Style, based on a style file from BaBar
 //
 
 
-#ifndef  __IRLESSTYLE_H
-#define __IRLESSTYLE_H
+#ifndef  __QQBARSTYLE_H
+#define __QQBARSTYLE_H
 
 #include "TStyle.h"
 
-void SetIrlesStyle();
+void SetQQbarStyle();
 
-TStyle* IrlesStyle(); 
+TStyle* QQbarStyle(); 
 
-#endif // __IRLESSTYLE_H
+#endif // __QQBARSTYLE_H

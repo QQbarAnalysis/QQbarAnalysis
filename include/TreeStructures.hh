@@ -317,8 +317,10 @@ namespace QQbarProcessor
     float _jet_track_pz[2][10][20];
     float _jet_track_p[2][10][20];
     float _jet_track_charge[2][10][20];
+    float _jet_track_dedx[2][10][20];
     int _jet_track_iskaon[2][10][20];
     int _jet_track_iskaoncheat[2][10][20];
+    int _jet_track_pdg[2][10][20];
     float _jet_track_z0[2][10][20];
     float _jet_track_d0[2][10][20];
     float _jet_track_phi[2][10][20];
@@ -403,8 +405,10 @@ namespace QQbarProcessor
 	    _jet_track_pz[i][ivx][itr]=0;
 	    _jet_track_p[i][ivx][itr]=0;
 	    _jet_track_charge[i][ivx][itr]=-1000;
+	    _jet_track_dedx[i][ivx][itr]=0;
 	    _jet_track_iskaon[i][ivx][itr]=-1;
 	    _jet_track_iskaoncheat[i][ivx][itr]=-1;
+	    _jet_track_pdg[i][ivx][itr]=0;
 	    _jet_track_z0[i][ivx][itr]=-1000;
 	    _jet_track_d0[i][ivx][itr]=-1000;
 	    _jet_track_phi[i][ivx][itr]=-1000;

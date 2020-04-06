@@ -105,8 +105,10 @@ namespace QQbarProcessor
     _hTree->Branch("jet_track_pz", data._jet_track_pz, "jet_track_pz[2][10][20]/F");
     _hTree->Branch("jet_track_p", data._jet_track_p, "jet_track_p[2][10][20]/F");
     _hTree->Branch("jet_track_charge", data._jet_track_charge, "jet_track_charge[2][10][20]/F");
+    _hTree->Branch("jet_track_dedx", data._jet_track_dedx, "jet_track_dedx[2][10][20]/F");
     _hTree->Branch("jet_track_iskaon", data._jet_track_iskaon, "jet_track_iskaon[2][10][20]/I");
     _hTree->Branch("jet_track_iskaoncheat", data._jet_track_iskaoncheat, "jet_track_iskaoncheat[2][10][20]/I");
+    _hTree->Branch("jet_track_pdg", data._jet_track_pdg, "jet_track_pdg[2][10][20]/I");    
     _hTree->Branch("jet_track_z0", data._jet_track_z0, "jet_track_z0[2][10][20]/F");
     _hTree->Branch("jet_track_d0", data._jet_track_d0, "jet_track_d0[2][10][20]/F");
     _hTree->Branch("jet_track_phi", data._jet_track_phi, "jet_track_phi[2][10][20]/F");

@@ -106,22 +106,25 @@ namespace QQbarProcessor
       }
     }
 
-    ClusterSequence cs(particles,jet_def);
-    const int njets=2;
+    if(particles.size()>1) {
+      ClusterSequence cs(particles,jet_def);
+      const int njets=2;
+      
+      vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));
+      double ymerge= cs.exclusive_ymerge(njets);
+      double ymerge_max= cs.exclusive_ymerge_max(njets);
+      streamlog_out(DEBUG) << "y23 (parton + PS)= "<<ymerge <<std::endl;
+      _stats._mc_quark_ps_y23=ymerge;
+    
 
-    vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));
-    double ymerge= cs.exclusive_ymerge(njets);
-    double ymerge_max= cs.exclusive_ymerge_max(njets);
-    streamlog_out(DEBUG) << "y23 (parton + PS)= "<<ymerge <<std::endl;
-
-    _stats._mc_quark_ps_y23=ymerge;
-    for(unsigned i=0; i< jets.size(); i++) {
-      _stats._mc_quark_ps_jet_E[i]=jets[i].E();
-      _stats._mc_quark_ps_jet_px[i]=jets[i].px();
-      _stats._mc_quark_ps_jet_py[i]=jets[i].py();
-      _stats._mc_quark_ps_jet_pz[i]=jets[i].pz();
-      //vector<PseudoJet> constituents = jets[i].constituents();
-      //_stats._mc_quark_ps_jet_nparticles[i]=constituents.size();
+      for(unsigned i=0; i< jets.size(); i++) {
+	_stats._mc_quark_ps_jet_E[i]=jets[i].E();
+	_stats._mc_quark_ps_jet_px[i]=jets[i].px();
+	_stats._mc_quark_ps_jet_py[i]=jets[i].py();
+	_stats._mc_quark_ps_jet_pz[i]=jets[i].pz();
+	//vector<PseudoJet> constituents = jets[i].constituents();
+	//_stats._mc_quark_ps_jet_nparticles[i]=constituents.size();
+      }
     }
 
 
@@ -183,11 +186,11 @@ namespace QQbarProcessor
 	// get jet reconstruction variables (merging distances)
 	if(_boolDBDanalysis==true) {
 	  LCCollection * originaljets = evt->getCollection(_initialJetsColName); 
-	  
 	  _stats._d23 = originaljets->getParameters().getFloatVal("d_{n,n+1}");
 	  _stats._d12 = originaljets->getParameters().getFloatVal("d_{n-1,n}");
 	  _stats._y23 = originaljets->getParameters().getFloatVal("y_{n,n+1}");
 	  _stats._y12 = originaljets->getParameters().getFloatVal("y_{n-1,n}");
+	  streamlog_out(DEBUG) << "y23 (reco)= "<<_stats._y23<<"\n";                                                                                  
 
 	} else {
 	  //for the IDR we use the jet reconstruction from LCFIPlus, that includes the yth variable calculation
@@ -206,7 +209,6 @@ namespace QQbarProcessor
 	    streamlog_out(WARNING)<< e.what() << "\n";
 	  }
 	}
-
 
 	//get the event shape variables. Needs that we run before the following processors
 	//<!-- ========== EventShapes ========================== -->
@@ -249,7 +251,6 @@ namespace QQbarProcessor
 	  _stats._maxenergy_photon_E = maxenergy_reco_photon->getEnergy();
 	  if(maxenergy_reco_photon->getEnergy()>40)  streamlog_out(DEBUG)<<" Radiative return candidate with Egamma= = "<<maxenergy_reco_photon->getEnergy()<<std::endl;
 	}
-
 
 	//match reco jets with quarks BEFORE radiation
 	MatchB(jets, mcbs, mcvtxcol);
@@ -310,7 +311,7 @@ namespace QQbarProcessor
 	      _stats._jet_track_p[ijet][ivtx][itr]=MathOperator::getModule(found_track_particle->getMomentum());
 	      _stats._jet_track_charge[ijet][ivtx][itr]=found_track_particle->getCharge();
 
-	      streamlog_out(DEBUG)<<"      Tracks Test  --  "<<ivtx<<" "<<itr<<" "<<found_track_particle->getTracks().size()<<" "<<found_track_particle->getEnergy()<< " " <<found_track_particle->getTracks()[0]->getZ0()<<" "<<found_track_particle->getCharge()<<std::endl;
+	      streamlog_out(DEBUG)<<"      Tracks Test  --  "<<ivtx<<" "<<itr<<" "<<found_track_particle->getTracks().size()<<" "<<found_track_particle->getEnergy()<< " " <<found_track_particle->getTracks()[0]->getZ0()<<" "<<found_track_particle->getCharge()<<"  dEdx: "<< found_track_particle->getTracks()[0]->getdEdx()*1e6<<" pdg: "<<vtxOperator.getPDGtrack(found_track_particle) <<std::endl;
 
 	      _stats._jet_track_z0[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getZ0();
 	      _stats._jet_track_d0[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getD0();
@@ -319,6 +320,11 @@ namespace QQbarProcessor
 
 	      _stats._jet_track_iskaon[ijet][ivtx][itr]=0;   
 	      _stats._jet_track_iskaoncheat[ijet][ivtx][itr]=0; 
+
+	      _stats._jet_track_dedx[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getdEdx()*1e6;
+	      _stats._jet_track_pdg[ijet][ivtx][itr]=vtxOperator.getPDGtrack(found_track_particle);
+
+
 	      // identified kaons
 	      if( _boolkaoncheat==false && vtxOperator.isKaon(found_track_particle)==true) _stats._jet_track_iskaon[ijet][ivtx][itr]=1;   
 	      if( vtxOperator.isKaonCheat(found_track_particle)==true)  _stats._jet_track_iskaoncheat[ijet][ivtx][itr]=1;   

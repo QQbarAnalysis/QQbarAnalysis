@@ -1,0 +1,69 @@
+
+Processing test_selection.cc("eR","genkt_restorer",2)...
+ 
+ ######################################################################### 
+ --------------------  btag1= 0.9, btag2=0.2   ---------------------------- 
+ 
+/home/irles/WorkArea/BBbar_tests/ntuples/bkg_WW_250GeV_DBD_eR_260fb_genkt_restorer.root
+
+Applying QQBAR style settings...
+
+selection_cuts2_bkg_genkt_restorer_WW_250GeV_eR_btag1_0.9_btag2_0.2.root
+ Total generated events: 34576
+ 
+/home/irles/WorkArea/BBbar_tests/ntuples/bkg_ZZ_250GeV_DBD_eR_260fb_genkt_restorer.root
+
+Applying QQBAR style settings...
+
+selection_cuts2_bkg_genkt_restorer_ZZ_250GeV_eR_btag1_0.9_btag2_0.2.root
+ Total generated events: 151328
+ 
+/home/irles/WorkArea/BBbar_tests/ntuples/bkg_HZ_250GeV_DBD_eR_1000fb_genkt_restorer.root
+ --------------------  btag1= 0.9, btag2=0.2   ---------------------------- 
+
+Applying QQBAR style settings...
+
+selection_cuts2_bkg_genkt_restorer_HZ_250GeV_eR_btag1_0.9_btag2_0.2.root
+ Total generated events: 122044
+ 
+/home/irles/WorkArea/BBbar_tests/ntuples/bbbar_250GeV_DBD_eR_260fb_genkt_restorer.root
+ --------------------  btag1= 0.9, btag2=0.2   ---------------------------- 
+
+Applying QQBAR style settings...
+
+Progress: 6.035 %
+Progress: 9.0525 %
+Progress: 12.07 %
+Progress: 15.0875 %
+Progress: 18.105 %
+Progress: 21.1225 %
+Progress: 24.14 %
+Progress: 27.1575 %
+Progress: 30.175 %
+Progress: 33.1925 %
+Progress: 36.21 %
+Progress: 39.2275 %
+Progress: 42.245 %
+Progress: 45.2625 %
+Progress: 48.28 %
+Progress: 51.2975 %
+Progress: 54.315 %
+Progress: 57.3325 %
+Progress: 60.35 %
+Progress: 63.3675 %
+Progress: 66.385 %
+Progress: 69.4025 %
+Progress: 72.42 %
+Progress: 75.4375 %
+Progress: 78.455 %
+Progress: 81.4725 %
+Progress: 84.49 %
+Progress: 87.5075 %
+Progress: 90.525 %
+Progress: 93.5425 %
+Progress: 96.56 %
+Progress: 99.5775 %
+selection_cuts2_bbbar_genkt_restorer_250GeV_eR_btag1_0.9_btag2_0.2.root
+ Total generated bbbar events: 366529
+ Total generated Z-recoil events: 43509
+ Total generated qqbar events: 2903962
