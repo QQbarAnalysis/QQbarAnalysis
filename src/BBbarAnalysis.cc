@@ -311,8 +311,8 @@ namespace QQbarProcessor
 	//using all pfos as input particles
 	//-----------------------------------------------------------------------------------
 	vector<PseudoJet> particles_pfos;
-	for (int ipfcool = 0; ipfcool < pfocol.size(); ipfcool++) {
-	  ReconstructedParticle * particle_pfo = dynamic_cast< ReconstructedParticle * >(pfocol->getElementAt(ipfcool));
+	for (int ipfcol = 0; ipfcol < pfocol->getNumberOfElements(); ipfcol++) {
+	  ReconstructedParticle * particle_pfo = dynamic_cast< ReconstructedParticle * >(pfocol->getElementAt(ipfcol));
 	  particles_pfos.push_back(PseudoJet(particle_pfo->getMomentum()[0],particle_pfo->getMomentum()[1],particle_pfo->getMomentum()[2],particle_pfo->getEnergy()));
 	}
 	JetDefinition jet_def_pfos(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
