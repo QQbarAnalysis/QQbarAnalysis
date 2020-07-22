@@ -35,8 +35,8 @@ public :
   float btag1=0.8;
   float btag2=0.8;
 
-  float ctag1=0.875;
-  float ctag2=0.875;
+  float ctag1=0.225;
+  float ctag2=0.225;
   
   Int_t nbins=40;
   TString process="bbbar";
@@ -45,7 +45,7 @@ public :
 
 
    // Declaration of leaf types
-   Float_t         mc_quark_E[2];
+ Float_t         mc_quark_E[2];
    Float_t         mc_quark_px[2];
    Float_t         mc_quark_py[2];
    Float_t         mc_quark_pz[2];
@@ -53,6 +53,14 @@ public :
    Float_t         mc_quark_m[2];
    Float_t         mc_quark_pdg[2];
    Float_t         mc_quark_charge[2];
+   Float_t         mc_ISR_E[2];
+   Float_t         mc_ISR_px[2];
+   Float_t         mc_ISR_py[2];
+   Float_t         mc_ISR_pz[2];
+   Float_t         mc_ISR_pt[2];
+   Float_t         mc_ISR_m[2];
+   Float_t         mc_ISR_pdg[2];
+   Float_t         mc_ISR_charge[2];
    Float_t         mc_qqbar_m;
    Float_t         mc_qqbar_pt;
    Float_t         mc_quark_ps_E[300];
@@ -63,12 +71,28 @@ public :
    Float_t         mc_quark_ps_m[300];
    Float_t         mc_quark_ps_pdg[300];
    Float_t         mc_quark_ps_charge[300];
+   Int_t           mc_quark_ps_n;
+   Float_t         jet_R_norm;
+   Float_t         mc_quark_ps_y12;
+   Float_t         mc_quark_ps_y23;   
+   Float_t         mc_quark_ps_d12;
+   Float_t         mc_quark_ps_d23;
+   Float_t         mc_quark_ps_ycut[50];
+   Float_t         mc_quark_ps_njets_ycut[50];
    Float_t         mc_quark_ps_jet_E[2];
    Float_t         mc_quark_ps_jet_px[2];
    Float_t         mc_quark_ps_jet_py[2];
    Float_t         mc_quark_ps_jet_pz[2];
-   Float_t         mc_quark_ps_y23;
-   Int_t           mc_quark_ps_n;
+   Int_t           mc_quark_ps_jet_nparticles[2];
+   Float_t         mc_quark_ps_isr_y12;
+   Float_t         mc_quark_ps_isr_y23;
+   Float_t         mc_quark_ps_isr_d12;
+   Float_t         mc_quark_ps_isr_d23;
+   Float_t         mc_quark_ps_isr_jet_E[2];
+   Float_t         mc_quark_ps_isr_jet_px[2];
+   Float_t         mc_quark_ps_isr_jet_py[2];
+   Float_t         mc_quark_ps_isr_jet_pz[2];
+   Int_t           mc_quark_ps_isr_jet_nparticles[2];
    Int_t           MCBOscillation;
    Int_t           MCBBarOscillation;
    Int_t           mc_matching;
@@ -85,6 +109,8 @@ public :
    Float_t         y12;
    Float_t         d23;
    Float_t         d12;
+   Float_t         ycut[50];
+   Float_t         njets_ycut[50];
    Float_t         oblateness;
    Float_t         aplanarity;
    Float_t         major_thrust_value;
@@ -95,6 +121,14 @@ public :
    Float_t         principle_thrust_axis[3];
    Float_t         sphericity;
    Float_t         sphericity_tensor[3];
+   Float_t         jet_pfo_E[2][100];
+   Float_t         jet_pfo_px[2][100];
+   Float_t         jet_pfo_py[2][100];
+   Float_t         jet_pfo_pz[2][100];
+   Float_t         jet_pfo_m[2][100];
+   Int_t           jet_pfo_type[2][100];
+   Int_t           jet_pfo_charge[2][100];
+   Int_t           jet_pfo_n[2];
    Int_t           jet_nvtx[2];
    Int_t           jet_vtx_isprimary[2][10];
    Int_t           jet_ntrack[2];
@@ -106,8 +140,10 @@ public :
    Float_t         jet_track_pz[2][10][20];
    Float_t         jet_track_p[2][10][20];
    Float_t         jet_track_charge[2][10][20];
+   Float_t         jet_track_dedx[2][10][20];
    Int_t           jet_track_iskaon[2][10][20];
    Int_t           jet_track_iskaoncheat[2][10][20];
+   Int_t           jet_track_pdg[2][10][20];
    Float_t         jet_track_z0[2][10][20];
    Float_t         jet_track_d0[2][10][20];
    Float_t         jet_track_phi[2][10][20];
@@ -121,6 +157,14 @@ public :
    TBranch        *b_mc_quark_m;   //!
    TBranch        *b_mc_quark_pdg;   //!
    TBranch        *b_mc_quark_charge;   //!
+   TBranch        *b_mc_ISR_E;   //!
+   TBranch        *b_mc_ISR_px;   //!
+   TBranch        *b_mc_ISR_py;   //!
+   TBranch        *b_mc_ISR_pz;   //!
+   TBranch        *b_mc_ISR_pt;   //!
+   TBranch        *b_mc_ISR_m;   //!
+   TBranch        *b_mc_ISR_pdg;   //!
+   TBranch        *b_mc_ISR_charge;   //!
    TBranch        *b_mc_qqbar_m;   //!
    TBranch        *b_mc_qqbar_pt;   //!
    TBranch        *b_mc_quark_ps_E;   //!
@@ -132,11 +176,27 @@ public :
    TBranch        *b_mc_quark_ps_pdg;   //!
    TBranch        *b_mc_quark_ps_charge;   //!
    TBranch        *b_mc_quark_ps_n;   //!
+   TBranch        *b_jet_R_norm;   //!
+   TBranch        *b_mc_quark_ps_y12;   //!
+   TBranch        *b_mc_quark_ps_y23;   //!
+   TBranch        *b_mc_quark_ps_d12;   //!
+   TBranch        *b_mc_quark_ps_d23;   //!
+   TBranch        *b_mc_quark_ps_ycut;   //!
+   TBranch        *b_mc_quark_ps_njets_ycut;   //!
    TBranch        *b_mc_quark_ps_jet_E;   //!
    TBranch        *b_mc_quark_ps_jet_px;   //!
    TBranch        *b_mc_quark_ps_jet_py;   //!
    TBranch        *b_mc_quark_ps_jet_pz;   //!
-   TBranch        *b_mc_quark_ps_y23;   //!
+   TBranch        *b_mc_quark_ps_nparticles;   //!
+   TBranch        *b_mc_quark_ps_isr_y12;   //!
+   TBranch        *b_mc_quark_ps_isr_y23;   //!
+   TBranch        *b_mc_quark_ps_isr_d12;   //!
+   TBranch        *b_mc_quark_ps_isr_d23;   //!
+   TBranch        *b_mc_quark_ps_isr_jet_E;   //!
+   TBranch        *b_mc_quark_ps_isr_jet_px;   //!
+   TBranch        *b_mc_quark_ps_isr_jet_py;   //!
+   TBranch        *b_mc_quark_ps_isr_jet_pz;   //!
+   TBranch        *b_mc_quark_ps_isr_nparticles;   //!
    TBranch        *b_MCBOscillation;   //!
    TBranch        *b_MCBBarOscillation;   //!
    TBranch        *b_mc_matching;   //!
@@ -153,6 +213,8 @@ public :
    TBranch        *b_y12;   //!
    TBranch        *b_d23;   //!
    TBranch        *b_d12;   //!
+   TBranch        *b_ycut;   //!
+   TBranch        *b_njets_ycut;   //!
    TBranch        *b_oblateness;   //!
    TBranch        *b_aplanarity;   //!
    TBranch        *b_major_thrust_value;   //!
@@ -163,6 +225,14 @@ public :
    TBranch        *b_principle_thrust_axis;   //!
    TBranch        *b_sphericity;   //!
    TBranch        *b_sphericity_tensor;   //!
+   TBranch        *b_jet_pfo_E;   //!
+   TBranch        *b_jet_pfo_px;   //!
+   TBranch        *b_jet_pfo_py;   //!
+   TBranch        *b_jet_pfo_pz;   //!
+   TBranch        *b_jet_pfo_m;   //!
+   TBranch        *b_jet_pfo_type;   //!
+   TBranch        *b_jet_pfo_charge;   //!
+   TBranch        *b_jet_pfo_n;   //!
    TBranch        *b_jet_nvtx;   //!
    TBranch        *b_jet_vtx_isprimary;   //!
    TBranch        *b_jet_ntrack;   //!
@@ -174,12 +244,13 @@ public :
    TBranch        *b_jet_track_pz;   //!
    TBranch        *b_jet_track_p;   //!
    TBranch        *b_jet_track_charge;   //!
+   TBranch        *b_jet_track_dedx;   //!
    TBranch        *b_jet_track_iskaon;   //!
    TBranch        *b_jet_track_iskaoncheat;   //!
+   TBranch        *b_jet_track_pdg;   //!
    TBranch        *b_jet_track_z0;   //!
    TBranch        *b_jet_track_d0;   //!
    TBranch        *b_jet_track_phi;   //!
-
   
    observable(TString tree_s);
    observable(TList *f=0);
@@ -192,9 +263,16 @@ public :
 
    //analysis
    virtual void     AnalysisY23(int n);
+   virtual void     AnalysisR3(int n, bool cond);
+   virtual void     AnalysisR3_y23(int n);
+   
+   virtual void     Efficiencies(int n);
+   virtual bool     JetBtag(int i);
+   virtual bool     JetCantitag(int i);
+   
 
    //preselection and charge measurement and correction
-   virtual bool     PreSelection(float costheta);
+   virtual bool     PreSelection(int type, float egamma);
    
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
@@ -397,7 +475,7 @@ void observable::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
   
-   fChain->SetBranchAddress("mc_quark_E", mc_quark_E, &b_mc_quark_E);
+ fChain->SetBranchAddress("mc_quark_E", mc_quark_E, &b_mc_quark_E);
    fChain->SetBranchAddress("mc_quark_px", mc_quark_px, &b_mc_quark_px);
    fChain->SetBranchAddress("mc_quark_py", mc_quark_py, &b_mc_quark_py);
    fChain->SetBranchAddress("mc_quark_pz", mc_quark_pz, &b_mc_quark_pz);
@@ -405,6 +483,14 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("mc_quark_m", mc_quark_m, &b_mc_quark_m);
    fChain->SetBranchAddress("mc_quark_pdg", mc_quark_pdg, &b_mc_quark_pdg);
    fChain->SetBranchAddress("mc_quark_charge", mc_quark_charge, &b_mc_quark_charge);
+   fChain->SetBranchAddress("mc_ISR_E", mc_ISR_E, &b_mc_ISR_E);
+   fChain->SetBranchAddress("mc_ISR_px", mc_ISR_px, &b_mc_ISR_px);
+   fChain->SetBranchAddress("mc_ISR_py", mc_ISR_py, &b_mc_ISR_py);
+   fChain->SetBranchAddress("mc_ISR_pz", mc_ISR_pz, &b_mc_ISR_pz);
+   fChain->SetBranchAddress("mc_ISR_pt", mc_ISR_pt, &b_mc_ISR_pt);
+   fChain->SetBranchAddress("mc_ISR_m", mc_ISR_m, &b_mc_ISR_m);
+   fChain->SetBranchAddress("mc_ISR_pdg", mc_ISR_pdg, &b_mc_ISR_pdg);
+   fChain->SetBranchAddress("mc_ISR_charge", mc_ISR_charge, &b_mc_ISR_charge);
    fChain->SetBranchAddress("mc_qqbar_m", &mc_qqbar_m, &b_mc_qqbar_m);
    fChain->SetBranchAddress("mc_qqbar_pt", &mc_qqbar_pt, &b_mc_qqbar_pt);
    fChain->SetBranchAddress("mc_quark_ps_E", mc_quark_ps_E, &b_mc_quark_ps_E);
@@ -416,11 +502,27 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("mc_quark_ps_pdg", mc_quark_ps_pdg, &b_mc_quark_ps_pdg);
    fChain->SetBranchAddress("mc_quark_ps_charge", mc_quark_ps_charge, &b_mc_quark_ps_charge);
    fChain->SetBranchAddress("mc_quark_ps_n", &mc_quark_ps_n, &b_mc_quark_ps_n);
+   fChain->SetBranchAddress("jet_R_norm", &jet_R_norm, &b_jet_R_norm);
+   fChain->SetBranchAddress("mc_quark_ps_y12", &mc_quark_ps_y12, &b_mc_quark_ps_y12);
+   fChain->SetBranchAddress("mc_quark_ps_y23", &mc_quark_ps_y23, &b_mc_quark_ps_y23);
+   fChain->SetBranchAddress("mc_quark_ps_d12", &mc_quark_ps_d12, &b_mc_quark_ps_d12);
+   fChain->SetBranchAddress("mc_quark_ps_d23", &mc_quark_ps_d23, &b_mc_quark_ps_d23);
+   fChain->SetBranchAddress("mc_quark_ps_ycut", mc_quark_ps_ycut, &b_mc_quark_ps_ycut);
+   fChain->SetBranchAddress("mc_quark_ps_njets_ycut", mc_quark_ps_njets_ycut, &b_mc_quark_ps_njets_ycut);
    fChain->SetBranchAddress("mc_quark_ps_jet_E", mc_quark_ps_jet_E, &b_mc_quark_ps_jet_E);
    fChain->SetBranchAddress("mc_quark_ps_jet_px", mc_quark_ps_jet_px, &b_mc_quark_ps_jet_px);
    fChain->SetBranchAddress("mc_quark_ps_jet_py", mc_quark_ps_jet_py, &b_mc_quark_ps_jet_py);
    fChain->SetBranchAddress("mc_quark_ps_jet_pz", mc_quark_ps_jet_pz, &b_mc_quark_ps_jet_pz);
-   fChain->SetBranchAddress("mc_quark_ps_y23", &mc_quark_ps_y23, &b_mc_quark_ps_y23);
+   fChain->SetBranchAddress("mc_quark_ps_jet_nparticles", mc_quark_ps_jet_nparticles, &b_mc_quark_ps_nparticles);
+   fChain->SetBranchAddress("mc_quark_ps_isr_y12", &mc_quark_ps_isr_y12, &b_mc_quark_ps_isr_y12);
+   fChain->SetBranchAddress("mc_quark_ps_isr_y23", &mc_quark_ps_isr_y23, &b_mc_quark_ps_isr_y23);
+   fChain->SetBranchAddress("mc_quark_ps_isr_d12", &mc_quark_ps_isr_d12, &b_mc_quark_ps_isr_d12);
+   fChain->SetBranchAddress("mc_quark_ps_isr_d23", &mc_quark_ps_isr_d23, &b_mc_quark_ps_isr_d23);
+   fChain->SetBranchAddress("mc_quark_ps_isr_jet_E", mc_quark_ps_isr_jet_E, &b_mc_quark_ps_isr_jet_E);
+   fChain->SetBranchAddress("mc_quark_ps_isr_jet_px", mc_quark_ps_isr_jet_px, &b_mc_quark_ps_isr_jet_px);
+   fChain->SetBranchAddress("mc_quark_ps_isr_jet_py", mc_quark_ps_isr_jet_py, &b_mc_quark_ps_isr_jet_py);
+   fChain->SetBranchAddress("mc_quark_ps_isr_jet_pz", mc_quark_ps_isr_jet_pz, &b_mc_quark_ps_isr_jet_pz);
+   fChain->SetBranchAddress("mc_quark_ps_isr_jet_nparticles", mc_quark_ps_isr_jet_nparticles, &b_mc_quark_ps_isr_nparticles);
    fChain->SetBranchAddress("MCBOscillation", &MCBOscillation, &b_MCBOscillation);
    fChain->SetBranchAddress("MCBBarOscillation", &MCBBarOscillation, &b_MCBBarOscillation);
    fChain->SetBranchAddress("mc_matching", &mc_matching, &b_mc_matching);
@@ -437,6 +539,8 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("y12", &y12, &b_y12);
    fChain->SetBranchAddress("d23", &d23, &b_d23);
    fChain->SetBranchAddress("d12", &d12, &b_d12);
+   fChain->SetBranchAddress("ycut", ycut, &b_ycut);
+   fChain->SetBranchAddress("njets_ycut", njets_ycut, &b_njets_ycut);
    fChain->SetBranchAddress("oblateness", &oblateness, &b_oblateness);
    fChain->SetBranchAddress("aplanarity", &aplanarity, &b_aplanarity);
    fChain->SetBranchAddress("major_thrust_value", &major_thrust_value, &b_major_thrust_value);
@@ -447,6 +551,14 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("principle_thrust_axis", principle_thrust_axis, &b_principle_thrust_axis);
    fChain->SetBranchAddress("sphericity", &sphericity, &b_sphericity);
    fChain->SetBranchAddress("sphericity_tensor", sphericity_tensor, &b_sphericity_tensor);
+   fChain->SetBranchAddress("jet_pfo_E", jet_pfo_E, &b_jet_pfo_E);
+   fChain->SetBranchAddress("jet_pfo_px", jet_pfo_px, &b_jet_pfo_px);
+   fChain->SetBranchAddress("jet_pfo_py", jet_pfo_py, &b_jet_pfo_py);
+   fChain->SetBranchAddress("jet_pfo_pz", jet_pfo_pz, &b_jet_pfo_pz);
+   fChain->SetBranchAddress("jet_pfo_m", jet_pfo_m, &b_jet_pfo_m);
+   fChain->SetBranchAddress("jet_pfo_type", jet_pfo_type, &b_jet_pfo_type);
+   fChain->SetBranchAddress("jet_pfo_charge", jet_pfo_charge, &b_jet_pfo_charge);
+   fChain->SetBranchAddress("jet_pfo_n", jet_pfo_n, &b_jet_pfo_n);
    fChain->SetBranchAddress("jet_nvtx", jet_nvtx, &b_jet_nvtx);
    fChain->SetBranchAddress("jet_vtx_isprimary", jet_vtx_isprimary, &b_jet_vtx_isprimary);
    fChain->SetBranchAddress("jet_ntrack", jet_ntrack, &b_jet_ntrack);
@@ -458,8 +570,10 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("jet_track_pz", jet_track_pz, &b_jet_track_pz);
    fChain->SetBranchAddress("jet_track_p", jet_track_p, &b_jet_track_p);
    fChain->SetBranchAddress("jet_track_charge", jet_track_charge, &b_jet_track_charge);
+   fChain->SetBranchAddress("jet_track_dedx", jet_track_dedx, &b_jet_track_dedx);
    fChain->SetBranchAddress("jet_track_iskaon", jet_track_iskaon, &b_jet_track_iskaon);
    fChain->SetBranchAddress("jet_track_iskaoncheat", jet_track_iskaoncheat, &b_jet_track_iskaoncheat);
+   fChain->SetBranchAddress("jet_track_pdg", jet_track_pdg, &b_jet_track_pdg);
    fChain->SetBranchAddress("jet_track_z0", jet_track_z0, &b_jet_track_z0);
    fChain->SetBranchAddress("jet_track_d0", jet_track_d0, &b_jet_track_d0);
    fChain->SetBranchAddress("jet_track_phi", jet_track_phi, &b_jet_track_phi);
