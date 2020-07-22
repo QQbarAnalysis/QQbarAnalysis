@@ -122,7 +122,7 @@ namespace QQbarProcessor
       if (bbar) pair.push_back(bbar);
     }
     
-    std::cout<<pair.size()<<"\n";
+    //    std::cout<<pair.size()<<"\n";
     return pair;
   }
   vector< MCParticle * > QQbarMCOperator::GetTopPairParticles(float & topBangle, float & topcosWb)

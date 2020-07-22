@@ -62,8 +62,8 @@ namespace QQbarProcessor
     _hTree->Branch("mc_quark_ps_y23", &data._mc_quark_ps_y23, "mc_quark_ps_y23/F");
     _hTree->Branch("mc_quark_ps_d12", &data._mc_quark_ps_d12, "mc_quark_ps_d12/F");
     _hTree->Branch("mc_quark_ps_d23", &data._mc_quark_ps_d23, "mc_quark_ps_d23/F");
-    _hTree->Branch("mc_quark_ps_ycut", data._mc_quark_ps_ycut, "mc_quark_ps_ycut[25]/F");
-    _hTree->Branch("mc_quark_ps_njets_ycut", data._mc_quark_ps_njets_ycut, "mc_quark_ps_njets_ycut[25]/F");
+    _hTree->Branch("mc_quark_ps_ycut", data._mc_quark_ps_ycut, "mc_quark_ps_ycut[50]/F");
+    _hTree->Branch("mc_quark_ps_njets_ycut", data._mc_quark_ps_njets_ycut, "mc_quark_ps_njets_ycut[50]/F");
     _hTree->Branch("mc_quark_ps_jet_E", data._mc_quark_ps_jet_E, "mc_quark_ps_jet_E[2]/F");
     _hTree->Branch("mc_quark_ps_jet_px", data._mc_quark_ps_jet_px, "mc_quark_ps_jet_px[2]/F");
     _hTree->Branch("mc_quark_ps_jet_py", data._mc_quark_ps_jet_py, "mc_quark_ps_jet_py[2]/F");
@@ -107,8 +107,8 @@ namespace QQbarProcessor
     _hTree->Branch("y12", &data._y12, "y12/F");
     _hTree->Branch("d23", &data._d23, "d23/F");
     _hTree->Branch("d12", &data._d12, "d12/F");
-    _hTree->Branch("ycut", data._ycut, "ycut[25]/F");
-    _hTree->Branch("njets_ycut", data._njets_ycut, "njets_ycut[25]/F");
+    _hTree->Branch("ycut", data._ycut, "ycut[50]/F");
+    _hTree->Branch("njets_ycut", data._njets_ycut, "njets_ycut[50]/F");
     _hTree->Branch("oblateness", &data._oblateness, "oblateness/F");
     _hTree->Branch("aplanarity", &data._aplanarity, "aplanarity/F");
     _hTree->Branch("major_thrust_value", &data._major_thrust_value, "major_thrust_value/F");

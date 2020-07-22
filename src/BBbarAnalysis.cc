@@ -106,6 +106,7 @@ namespace QQbarProcessor
 
     vector <MCParticle *> bbbar_ps = opera.GetBBbarQuarksPS();
     streamlog_out(DEBUG) << "Hard Process + PS Level \n";
+    
 
     for(int i=0; i<bbbar_ps.size(); i++) {
       if(bbbar_ps.at(i)!=NULL) {
@@ -120,6 +121,7 @@ namespace QQbarProcessor
 	_stats._mc_quark_ps_pt[i]=std::sqrt( std::pow(bbbar_ps.at(i)->getMomentum()[0],2) + std::pow(bbbar_ps.at(i)->getMomentum()[1],2) );
 
 	particles.push_back(PseudoJet(bbbar_ps.at(i)->getMomentum()[0],bbbar_ps.at(i)->getMomentum()[1],bbbar_ps.at(i)->getMomentum()[2],bbbar_ps.at(i)->getEnergy()));
+
 
 	QQbarTools::PrintParticle(bbbar_ps.at(i));
       } else {
@@ -163,11 +165,12 @@ namespace QQbarProcessor
 	_stats._mc_quark_ps_jet_pz[i]=jets[i].pz();
       }
 
-      for(int iycut=0; iycut<25; iycut++) {
-	float ycut=float(iycut)*0.0005*_stats._jet_R_norm;
-	vector<PseudoJet> jets_ycut = sorted_by_E(cs.exclusive_jets(ycut));
+
+      for(int iycut=0; iycut<50; iycut++) {
+	float ycut=float(iycut)*0.001;///_stats._jet_R_norm;
+	//	vector<PseudoJet> jets_ycut = sorted_by_E(cs.exclusive_jets_ycut(ycut));
 	_stats._mc_quark_ps_ycut[iycut]=ycut;
-	_stats._mc_quark_ps_njets_ycut[iycut]=jets_ycut.size();
+	_stats._mc_quark_ps_njets_ycut[iycut]=cs.n_exclusive_jets_ycut(ycut/_stats._jet_R_norm);
       }
     
     }
@@ -318,11 +321,11 @@ namespace QQbarProcessor
 	JetDefinition jet_def_pfos(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
 	ClusterSequence cs_pfos(particles_pfos,jet_def_pfos);
 
-	for(int iycut=0; iycut<25; iycut++) {
-	  float ycut=float(iycut)*0.0005*_stats._jet_R_norm;
-	  vector<PseudoJet> jets_pfos_ycut = sorted_by_E(cs_pfos.exclusive_jets(ycut));
+	for(int iycut=0; iycut<50; iycut++) {
+	  float ycut=float(iycut)*0.001;//_stats._jet_R_norm;
+	  //	  vector<PseudoJet> jets_pfos_ycut = sorted_by_E(cs_pfos.exclusive_jets(ycut));
 	  _stats._ycut[iycut]=ycut;
-	  _stats._njets_ycut[iycut]=jets_pfos_ycut.size();
+	  _stats._njets_ycut[iycut]=cs_pfos.n_exclusive_jets_ycut(ycut/_stats._jet_R_norm); //jets_pfos_ycut.size();
 	}
 
 	
