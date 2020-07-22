@@ -94,7 +94,7 @@ namespace QQbarProcessor
     return event;
   }
 
-//DO NOT USE THAT ON T-QUARKS!!!
+  //DO NOT USE THAT ON T-QUARKS!!!
   vector< MCParticle * > QQbarMCOperator::GetPairParticles(int pdg) {
     pdg = abs(pdg);
     vector< MCParticle * > pair;

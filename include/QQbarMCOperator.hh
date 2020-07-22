@@ -24,7 +24,7 @@ namespace QQbarProcessor
     //
     //	Constructors
     //
-	  QQbarMCOperator (EVENT::LCCollection * col);
+    QQbarMCOperator (EVENT::LCCollection * col);
     virtual ~QQbarMCOperator () {};
     //
     //	Methods
@@ -32,7 +32,7 @@ namespace QQbarProcessor
     //DO NOT USE THAT ON T-QUARKS!!!
     std::vector< EVENT::MCParticle * > GetBBbarQuarksPS();
     std::vector< EVENT::MCParticle * > GetPairParticles(int pdg);
-    bool IsEvent();
+    bool IsEvent();//function to check that the event is not gamma gamma overlay bkg
     
     //top quark methods
     std::vector< EVENT::MCParticle * > GetTopPairParticles(float & topBangle, float & topBarBangle);
@@ -45,7 +45,7 @@ namespace QQbarProcessor
     EVENT::MCParticle * GetNeutrino();
     EVENT::MCParticle * GetTauLepton();
     
-	private:
+  private:
     //
     //	Data
     //
@@ -54,8 +54,8 @@ namespace QQbarProcessor
     std::vector< EVENT::MCParticle * > myWPair;
     EVENT::MCParticle * myNeutrino;
     //
-	  //	Private methods
-	  //
+    //	Private methods
+    //
   };
 }
 #endif
