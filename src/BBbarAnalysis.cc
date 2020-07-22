@@ -27,9 +27,9 @@ namespace QQbarProcessor
   }
 
 
-  vector< MCParticle * > BBbarAnalysis::AnalyseGeneratorBBbar(QQbarMCOperator & opera)
-  {
-    vector <MCParticle *> genfinalstate;// = opera.GetPairParticles(5);
+  vector< MCParticle * > BBbarAnalysis::AnalyseGeneratorBBbar(QQbarMCOperator & opera) {
+  
+    vector <MCParticle *> genfinalstate;
     for (unsigned int i = 5; i > 0; i--) {
       genfinalstate = opera.GetPairParticles(i);
       if (genfinalstate.size() == 2) break;
@@ -63,19 +63,52 @@ namespace QQbarProcessor
     return genfinalstate;
   }
 
+  void BBbarAnalysis::AnalyseGeneratorISR(QQbarMCOperator & opera) {
   
-  void BBbarAnalysis::AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera)
+    streamlog_out(DEBUG) << "Extract ISR \n";                                                                                                  
+
+    vector <MCParticle *> genfinalstate;
+    genfinalstate = opera.GetPairParticles(22);
+    
+    if (genfinalstate.size() == 2) {
+      
+      MCParticle * mcqqbar = opera.CombineParticles(genfinalstate[0],genfinalstate[1]);
+
+      for (unsigned int i = 0; i < genfinalstate.size(); i++)  {
+	MCParticle * mcb = genfinalstate[i];
+	_stats._mc_ISR_E[i]=mcb->getEnergy();
+	_stats._mc_ISR_px[i]=mcb->getMomentum()[0];
+	_stats._mc_ISR_py[i]=mcb->getMomentum()[1];
+	_stats._mc_ISR_pz[i]=mcb->getMomentum()[2];
+	_stats._mc_ISR_pdg[i]=mcb->getPDG();
+	_stats._mc_ISR_charge[i]=mcb->getCharge();
+	_stats._mc_ISR_m[i]=mcb->getMass();
+	_stats._mc_ISR_pt[i]=std::sqrt( std::pow(mcb->getMomentum()[0],2) + std::pow(mcb->getMomentum()[1],2) );
+      }
+    }
+
+    for (unsigned int i = 0; i < genfinalstate.size(); i++) 
+      {
+	streamlog_out(DEBUG) << "ISR Parton Level \n";
+ 	QQbarTools::PrintParticle(genfinalstate[i]);
+      }
+
+    //    return genfinalstate;
+  }
+
+  
+  void BBbarAnalysis::AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps)
   {
 
+    _stats._jet_R_norm=(1-TMath::Cos(_Rparam_jet_ps));
+    if(_Rparam_jet_ps>TMath::Pi()) _stats._jet_R_norm=(3+TMath::Cos(_Rparam_jet_ps));
+
     vector<PseudoJet> particles;
-    JetDefinition jet_def(ee_genkt_algorithm,1.5,1);
+    JetDefinition jet_def(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
 
     vector <MCParticle *> bbbar_ps = opera.GetBBbarQuarksPS();
     streamlog_out(DEBUG) << "Hard Process + PS Level \n";
 
-    int quark_idx[2];
-    quark_idx[0]=-1; //b-quark
-    quark_idx[1]=-1; //anti b-quark
     for(int i=0; i<bbbar_ps.size(); i++) {
       if(bbbar_ps.at(i)!=NULL) {
 	_stats._mc_quark_ps_n++;
@@ -84,8 +117,6 @@ namespace QQbarProcessor
 	_stats._mc_quark_ps_py[i]=bbbar_ps.at(i)->getMomentum()[1];
 	_stats._mc_quark_ps_pz[i]=bbbar_ps.at(i)->getMomentum()[2];
 	_stats._mc_quark_ps_pdg[i]=bbbar_ps.at(i)->getPDG();
-	if(bbbar_ps.at(i)->getPDG()==5) quark_idx[0]=i;
-        if(bbbar_ps.at(i)->getPDG()==-5) quark_idx[1]=i;    
 	_stats._mc_quark_ps_charge[i]=bbbar_ps.at(i)->getCharge();
 	_stats._mc_quark_ps_m[i]=bbbar_ps.at(i)->getMass();
 	_stats._mc_quark_ps_pt[i]=std::sqrt( std::pow(bbbar_ps.at(i)->getMomentum()[0],2) + std::pow(bbbar_ps.at(i)->getMomentum()[1],2) );
@@ -106,24 +137,88 @@ namespace QQbarProcessor
       }
     }
 
-    ClusterSequence cs(particles,jet_def);
-    const int njets=2;
+    if(particles.size()>1) {
+      ClusterSequence cs(particles,jet_def);
+      const int njets=2;
+      
+      vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));
 
-    vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));
-    double ymerge= cs.exclusive_ymerge(njets);
-    double ymerge_max= cs.exclusive_ymerge_max(njets);
-    streamlog_out(DEBUG) << "y23 (parton + PS)= "<<ymerge <<std::endl;
+      double ymerge_56= cs.exclusive_ymerge(njets+3);
+      double ymerge_45= cs.exclusive_ymerge(njets+2);
+      double ymerge_34= cs.exclusive_ymerge(njets+1);
+      double ymerge_23= cs.exclusive_ymerge(njets);
+      double ymerge_12= cs.exclusive_ymerge(njets-1);
 
-    _stats._mc_quark_ps_y23=ymerge;
-    for(unsigned i=0; i< jets.size(); i++) {
-      _stats._mc_quark_ps_jet_E[i]=jets[i].E();
-      _stats._mc_quark_ps_jet_px[i]=jets[i].px();
-      _stats._mc_quark_ps_jet_py[i]=jets[i].py();
-      _stats._mc_quark_ps_jet_pz[i]=jets[i].pz();
-      //vector<PseudoJet> constituents = jets[i].constituents();
-      //_stats._mc_quark_ps_jet_nparticles[i]=constituents.size();
+      double dmerge_23= cs.exclusive_dmerge(njets);
+      double dmerge_12= cs.exclusive_dmerge(njets-1);
+
+      streamlog_out(DEBUG) << "y12 (parton + PS)= "<<ymerge_12 <<std::endl;
+      streamlog_out(DEBUG) << "y23 (parton + PS)= "<<ymerge_23 <<std::endl;
+      streamlog_out(DEBUG) << "d12 (parton + PS)= "<<dmerge_12 <<std::endl;
+      streamlog_out(DEBUG) << "d23 (parton + PS)= "<<dmerge_23 <<std::endl;
+
+      _stats._mc_quark_ps_y12=ymerge_12;
+      _stats._mc_quark_ps_y23=ymerge_23;
+
+      vector<PseudoJet> jets2 = sorted_by_E(cs.exclusive_jets(0.01*_stats._jet_R_norm));
+      vector<PseudoJet> jets3 = sorted_by_E(cs.exclusive_jets(0.01/_stats._jet_R_norm));
+      vector<PseudoJet> jets4 = sorted_by_E(cs.exclusive_jets(0.01));
+
+      _stats._mc_quark_ps_y34=jets2.size();
+      _stats._mc_quark_ps_y45=jets3.size();
+      _stats._mc_quark_ps_y56=jets4.size();
+      _stats._mc_quark_ps_d12=dmerge_12;
+      _stats._mc_quark_ps_d23=dmerge_23;
+
+      
+    
+
+      for(unsigned i=0; i< jets.size(); i++) {
+	_stats._mc_quark_ps_jet_E[i]=jets[i].E();
+	_stats._mc_quark_ps_jet_px[i]=jets[i].px();
+	_stats._mc_quark_ps_jet_py[i]=jets[i].py();
+	_stats._mc_quark_ps_jet_pz[i]=jets[i].pz();
+      }
     }
 
+
+    //--- same but for PS & ISR
+    vector<PseudoJet> particles2;
+    JetDefinition jet_def2(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps); 
+
+    vector <MCParticle *> ISR = opera.GetPairParticles(22); 
+                                                               
+    for(int i=0; i<ISR.size(); i++)
+      particles2.push_back(PseudoJet(ISR.at(i)->getMomentum()[0],ISR.at(i)->getMomentum()[1],ISR.at(i)->getMomentum()[2],ISR.at(i)->getEnergy()));         
+
+    for(int i=0; i<bbbar_ps.size(); i++) 
+      particles2.push_back(PseudoJet(bbbar_ps.at(i)->getMomentum()[0],bbbar_ps.at(i)->getMomentum()[1],bbbar_ps.at(i)->getMomentum()[2],bbbar_ps.at(i)->getEnergy()));
+
+    if(particles2.size()>1) {                                                                                                                                                            
+      ClusterSequence cs(particles2,jet_def2);
+      const int njets=2;                      
+      vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));                                                                                                      
+      double ymerge_23= cs.exclusive_ymerge(njets);
+      double ymerge_12= cs.exclusive_ymerge(njets-1);
+      double dmerge_23= cs.exclusive_dmerge(njets);  
+      double dmerge_12= cs.exclusive_dmerge(njets-1);                                                                                                                                   
+      streamlog_out(DEBUG) << "y12 (parton + PS + ISR)= "<<ymerge_12 <<std::endl;
+      streamlog_out(DEBUG) << "y23 (parton + PS + ISR)= "<<ymerge_23 <<std::endl;
+      streamlog_out(DEBUG) << "d12 (parton + PS + ISR)= "<<dmerge_12 <<std::endl;
+      streamlog_out(DEBUG) << "d23 (parton + PS + ISR)= "<<dmerge_23 <<std::endl;
+                                                                                                                                                                                       
+      _stats._mc_quark_ps_isr_y12=ymerge_12;                                   
+      _stats._mc_quark_ps_isr_y23=ymerge_23;                                   
+      _stats._mc_quark_ps_isr_d12=dmerge_12;                                   
+      _stats._mc_quark_ps_isr_d23=dmerge_23;                                   
+
+      for(unsigned i=0; i< jets.size(); i++) {
+        _stats._mc_quark_ps_isr_jet_E[i]=jets[i].E();
+        _stats._mc_quark_ps_isr_jet_px[i]=jets[i].px();
+        _stats._mc_quark_ps_isr_jet_py[i]=jets[i].py();
+        _stats._mc_quark_ps_isr_jet_pz[i]=jets[i].pz();
+      }                                                                                                                                                                                 
+    } 
 
   }
 
@@ -136,7 +231,9 @@ namespace QQbarProcessor
 				   std::string _JetsColName ,
 				   std::string _JetsRelColName ,
 				   std::string _MCColName,
-				   std::string _KaonTaggerName
+				   std::string _KaonTaggerName,
+				   float _Rparam_jet_ps, 
+				   float _pparam_jet_ps
 				   )
   {
     LCCollection * mcvtxcol = NULL;
@@ -165,29 +262,38 @@ namespace QQbarProcessor
 	vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
 
 	ClearVariables();
+
+	std::sort(jets->begin(), jets->end(), QQbarTools::sortByBtag);
+        if (jets->size() != 2 ) {
+          _hTree->Fill();
+          ClearVariables();
+          return;          
+        }  
+
 	//MC bbbar Analysis
 	QQbarMCOperator opera(mccol);
-	vector < MCParticle * > mcbs = AnalyseGeneratorBBbar(opera);//Hard Process
-	//	vector < MCParticle * > mcbs_ps =
-	//	ClearVariables(); 
 
-	AnalyseGeneratorBBbar_PS(opera);
-	
-	std::sort(jets->begin(), jets->end(), QQbarTools::sortByBtag);
-	if (jets->size() != 2 ) {
-	  _hTree->Fill();
-	  ClearVariables();
-	  return;
+	if(opera.IsEvent()==true) {
+	  vector < MCParticle * > mcbs = AnalyseGeneratorBBbar(opera);//Hard Process
+	  AnalyseGeneratorISR(opera);
+	  //	vector < MCParticle * > mcbs_ps =
+	  //	ClearVariables(); 
+	  
+	  AnalyseGeneratorBBbar_PS(opera,_Rparam_jet_ps,_pparam_jet_ps);
+
+	  //match reco jets with quarks BEFORE radiation
+	  MatchB(jets, mcbs, mcvtxcol);
 	}
+
 
 	// get jet reconstruction variables (merging distances)
 	if(_boolDBDanalysis==true) {
 	  LCCollection * originaljets = evt->getCollection(_initialJetsColName); 
-	  
 	  _stats._d23 = originaljets->getParameters().getFloatVal("d_{n,n+1}");
 	  _stats._d12 = originaljets->getParameters().getFloatVal("d_{n-1,n}");
 	  _stats._y23 = originaljets->getParameters().getFloatVal("y_{n,n+1}");
 	  _stats._y12 = originaljets->getParameters().getFloatVal("y_{n-1,n}");
+	  streamlog_out(DEBUG) << "y23 (reco)= "<<_stats._y23<<"\n";                                                                                  
 
 	} else {
 	  //for the IDR we use the jet reconstruction from LCFIPlus, that includes the yth variable calculation
@@ -200,13 +306,12 @@ namespace QQbarProcessor
 	    vector<float> params = pid.getParameters();
 	    _stats._y23 = params[pidh.getParameterIndex(alid,"y23")];
 	    _stats._y12 = params[pidh.getParameterIndex(alid,"y12")];
-	    streamlog_out(DEBUG) << "y23 (reco)= "<<_stats._y23<<"\n";
+	    streamlog_out(DEBUG) << "IDR: y23 (reco)= "<<_stats._y23<<"\n";
 	  } catch(UTIL::UnknownAlgorithm &e){ 
 	    streamlog_out(DEBUG) << "No algorithm yth!\n"; 
 	    streamlog_out(WARNING)<< e.what() << "\n";
 	  }
 	}
-
 
 	//get the event shape variables. Needs that we run before the following processors
 	//<!-- ========== EventShapes ========================== -->
@@ -250,27 +355,23 @@ namespace QQbarProcessor
 	  if(maxenergy_reco_photon->getEnergy()>40)  streamlog_out(DEBUG)<<" Radiative return candidate with Egamma= = "<<maxenergy_reco_photon->getEnergy()<<std::endl;
 	}
 
+	// get pFo + type per jet
+	for(int ijet=0; ijet<2; ijet++) {
+	  ReconstructedParticle * jet_reco = dynamic_cast< ReconstructedParticle * >(jetcol->getElementAt(ijet));
+	  vector<ReconstructedParticle*> components = jet_reco->getParticles();             
+	  for(int i=0; i<components.size(); i++) { 
+	    _stats._pfo_E[ijet][i]=components.at(i)->getEnergy();
+	    _stats._pfo_px[ijet][i]=components.at(i)->getMomentum()[0];
+	    _stats._pfo_py[ijet][i]=components.at(i)->getMomentum()[1];
+	    _stats._pfo_pz[ijet][i]=components.at(i)->getMomentum()[2];
+	    _stats._pfo_m[ijet][i]=components.at(i)->getMass();        
+	    _stats._pfo_type[ijet][i]=components.at(i)->getType();     
+	    _stats._pfo_charge[ijet][i]=components.at(i)->getCharge();
+	    _stats._pfo_n[ijet]++; 
+	  }
+	}
 
-	//match reco jets with quarks BEFORE radiation
-	MatchB(jets, mcbs, mcvtxcol);
-
-	// get pFo + type
-	// needs to be done per jet.
-	// TODO
-	/*
-	  for(int ipfo=0; ipfo<pfocol->getNumberOfElements(); ipfo++) {
-	  ReconstructedParticle * particle = dynamic_cast< ReconstructedParticle * >(pfocol->getElementAt(ipfo));
-	  _stats._pfo_E[ipfo]=particle->getEnergy();
-	  _stats._pfo_px[ipfo]=particle->getMomentum()[0];
-	  _stats._pfo_py[ipfo]=particle->getMomentum()[1];
-	  _stats._pfo_pz[ipfo]=particle->getMomentum()[2];
-	  _stats._pfo_m[ipfo]=particle->getMass();
-	  _stats._pfo_type[ipfo]=particle->getType();
-	  _stats._pfo_n++;
-
-	  }*/
-
-	// Save trackjet, vtx, track, kaon info
+	// Save jet, vtx, track, kaon info 
 	for(int ijet=0; ijet<2; ijet++) {
 	  _stats._jet_E[ijet]=jets->at(ijet)->getEnergy();
 	  _stats._jet_px[ijet]=jets->at(ijet)->getMomentum()[0];
@@ -310,7 +411,7 @@ namespace QQbarProcessor
 	      _stats._jet_track_p[ijet][ivtx][itr]=MathOperator::getModule(found_track_particle->getMomentum());
 	      _stats._jet_track_charge[ijet][ivtx][itr]=found_track_particle->getCharge();
 
-	      streamlog_out(DEBUG)<<"      Tracks Test  --  "<<ivtx<<" "<<itr<<" "<<found_track_particle->getTracks().size()<<" "<<found_track_particle->getEnergy()<< " " <<found_track_particle->getTracks()[0]->getZ0()<<" "<<found_track_particle->getCharge()<<std::endl;
+	      streamlog_out(DEBUG)<<"      Tracks Test  --  "<<ivtx<<" "<<itr<<" "<<found_track_particle->getTracks().size()<<" "<<found_track_particle->getEnergy()<< " " <<found_track_particle->getTracks()[0]->getZ0()<<" "<<found_track_particle->getCharge()<<"  dEdx: "<< found_track_particle->getTracks()[0]->getdEdx()*1e6<<" pdg: "<<vtxOperator.getPDGtrack(found_track_particle) <<std::endl;
 
 	      _stats._jet_track_z0[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getZ0();
 	      _stats._jet_track_d0[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getD0();
@@ -319,6 +420,11 @@ namespace QQbarProcessor
 
 	      _stats._jet_track_iskaon[ijet][ivtx][itr]=0;   
 	      _stats._jet_track_iskaoncheat[ijet][ivtx][itr]=0; 
+
+	      _stats._jet_track_dedx[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getdEdx()*1e6;
+	      _stats._jet_track_pdg[ijet][ivtx][itr]=vtxOperator.getPDGtrack(found_track_particle);
+
+
 	      // identified kaons
 	      if( _boolkaoncheat==false && vtxOperator.isKaon(found_track_particle)==true) _stats._jet_track_iskaon[ijet][ivtx][itr]=1;   
 	      if( vtxOperator.isKaonCheat(found_track_particle)==true)  _stats._jet_track_iskaoncheat[ijet][ivtx][itr]=1;   

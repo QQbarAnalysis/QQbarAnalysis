@@ -5,8 +5,8 @@ using std::string;
 namespace QQbarProcessor 
 {
 
-  ReconstructedParticle * QQbarTools::findPhoton(LCCollection * pfocol)
-  {
+  ReconstructedParticle * QQbarTools::findPhoton(LCCollection * pfocol){
+
     int pfonumber = pfocol->getNumberOfElements();
     ReconstructedParticle * winner = NULL;
     float maxenergy = 0.0;

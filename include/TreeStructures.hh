@@ -258,6 +258,15 @@ namespace QQbarProcessor
     float _mc_qqbar_pt;
     int _mc_matching;
 
+    float _mc_ISR_E[2]; 
+    float _mc_ISR_px[2];
+    float _mc_ISR_py[2]; 
+    float _mc_ISR_pz[2]; 
+    float _mc_ISR_pt[2]; 
+    float _mc_ISR_m[2];  
+    float _mc_ISR_pdg[2];
+    float _mc_ISR_charge[2]; 
+
     float _mc_quark_ps_E[300];
     float _mc_quark_ps_px[300];
     float _mc_quark_ps_py[300];
@@ -267,12 +276,29 @@ namespace QQbarProcessor
     float _mc_quark_ps_pdg[300];
     float _mc_quark_ps_charge[300];
     int _mc_quark_ps_n;
+    float _jet_R_norm;
+    float _mc_quark_ps_y12;
     float _mc_quark_ps_y23;
+    float _mc_quark_ps_y34;
+    float _mc_quark_ps_y45;
+    float _mc_quark_ps_y56;
+    float _mc_quark_ps_d12;
+    float _mc_quark_ps_d23;
     float _mc_quark_ps_jet_E[2];
     float _mc_quark_ps_jet_px[2];
     float _mc_quark_ps_jet_py[2];
     float _mc_quark_ps_jet_pz[2];
     int _mc_quark_ps_jet_nparticles[2];
+
+    float _mc_quark_ps_isr_y12;
+    float _mc_quark_ps_isr_y23;
+    float _mc_quark_ps_isr_d12;
+    float _mc_quark_ps_isr_d23;
+    float _mc_quark_ps_isr_jet_E[2];
+    float _mc_quark_ps_isr_jet_px[2];
+    float _mc_quark_ps_isr_jet_py[2];
+    float _mc_quark_ps_isr_jet_pz[2];
+    int _mc_quark_ps_isr_jet_nparticles[2];
 
     int _MCBOscillation;
     int _MCBBarOscillation;
@@ -304,6 +330,14 @@ namespace QQbarProcessor
     float _jet_btag[2];
     float _jet_ctag[2];
 
+    float _pfo_E[2][100];
+    float _pfo_px[2][100];
+    float _pfo_py[2][100];
+    float _pfo_pz[2][100];
+    float _pfo_m[2][100];
+    int _pfo_type[2][100]; 
+    int _pfo_charge[2][100];
+    int _pfo_n[2];
 
     int _jet_nvtx[2];
     int _jet_ntrack[2];
@@ -317,8 +351,10 @@ namespace QQbarProcessor
     float _jet_track_pz[2][10][20];
     float _jet_track_p[2][10][20];
     float _jet_track_charge[2][10][20];
+    float _jet_track_dedx[2][10][20];
     int _jet_track_iskaon[2][10][20];
     int _jet_track_iskaoncheat[2][10][20];
+    int _jet_track_pdg[2][10][20];
     float _jet_track_z0[2][10][20];
     float _jet_track_d0[2][10][20];
     float _jet_track_phi[2][10][20];
@@ -336,7 +372,21 @@ namespace QQbarProcessor
 	_mc_quark_ps_charge[i]=-1000;
 
       }
+
+      _jet_R_norm=0;
       _mc_quark_ps_n=0;
+      _mc_quark_ps_y12=0;
+      _mc_quark_ps_y23=0;
+      _mc_quark_ps_y34=0;
+      _mc_quark_ps_y45=0;
+      _mc_quark_ps_y56=0;
+      _mc_quark_ps_d12=0;
+      _mc_quark_ps_d23=0;
+
+      _mc_quark_ps_isr_y12=0;
+      _mc_quark_ps_isr_y23=0;
+      _mc_quark_ps_isr_d12=0;
+      _mc_quark_ps_isr_d23=0;
 
       for (unsigned int i = 0; i < 2; i++) {
 	_mc_quark_E[i]=0;
@@ -348,6 +398,26 @@ namespace QQbarProcessor
 	_mc_quark_pdg[i]=-1000;
 	_mc_quark_charge[i]=-1000;
 
+	_mc_ISR_E[i]=0;
+        _mc_ISR_px[i]=0;
+        _mc_ISR_py[i]=0;
+        _mc_ISR_pz[i]=0;
+        _mc_ISR_m[i]=0; 
+        _mc_ISR_pt[i]=0;
+        _mc_ISR_pdg[i]=-1000;
+        _mc_ISR_charge[i]=-1000;
+
+	_mc_quark_ps_jet_nparticles[i]=0;
+	_mc_quark_ps_jet_E[i]=0;
+	_mc_quark_ps_jet_px[i]=0; 
+	_mc_quark_ps_jet_py[i]=0; 
+	_mc_quark_ps_jet_pz[i]=0; 
+
+	_mc_quark_ps_isr_jet_nparticles[i]=0;
+        _mc_quark_ps_isr_jet_E[i]=0;
+        _mc_quark_ps_isr_jet_px[i]=0;
+        _mc_quark_ps_isr_jet_py[i]=0;
+        _mc_quark_ps_isr_jet_pz[i]=0;
       }
       _mc_qqbar_m=0;
       _mc_qqbar_pt=0;
@@ -388,8 +458,17 @@ namespace QQbarProcessor
 	_jet_btag[i]=0;
 	_jet_ctag[i]=0;
 
-	_jet_nvtx[i]=0;
-	_jet_ntrack[i]=-1;
+	_pfo_n[i]=0;
+
+	for(int ipfo=0; ipfo<100; ipfo++) {  
+	  _pfo_E[i][ipfo]=0;                                                                                                                
+	  _pfo_px[i][ipfo]=0;                                                                                                               
+	  _pfo_py[i][ipfo]=0;                                                                                                               
+	  _pfo_pz[i][ipfo]=0;                                                                                                               
+	  _pfo_m[i][ipfo]=0;
+	  _pfo_type[i][ipfo]=0;
+	  _pfo_charge[i][ipfo]=-1000;
+	}
 
 	for(int ivx=0; ivx<10; ivx++) {
 	  _jet_vtx_isprimary[i][ivx]=-1;
@@ -403,8 +482,10 @@ namespace QQbarProcessor
 	    _jet_track_pz[i][ivx][itr]=0;
 	    _jet_track_p[i][ivx][itr]=0;
 	    _jet_track_charge[i][ivx][itr]=-1000;
+	    _jet_track_dedx[i][ivx][itr]=0;
 	    _jet_track_iskaon[i][ivx][itr]=-1;
 	    _jet_track_iskaoncheat[i][ivx][itr]=-1;
+	    _jet_track_pdg[i][ivx][itr]=0;
 	    _jet_track_z0[i][ivx][itr]=-1000;
 	    _jet_track_d0[i][ivx][itr]=-1000;
 	    _jet_track_phi[i][ivx][itr]=-1000;

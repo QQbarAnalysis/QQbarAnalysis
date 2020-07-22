@@ -107,6 +107,15 @@ namespace QQbarProcessor
 			     _initialJetsColName ,
 			     std::string("InitialJets")
 			     );
+
+    registerProcessorParameter( "Rparam_jet_ps",
+				"R parameter of the ee_gentkt algorithm (for parton + shower analysis)",
+				_Rparam_jet_ps,
+				(float)1.5 );  
+    registerProcessorParameter( "pparam_jet_ps",
+				"p parameter of the ee_gentkt algorithm (for parton + shower analysis)",
+				_pparam_jet_ps,
+				(float)1.0 );
   }
 	
   void QQbarProcessor::init() 
@@ -170,7 +179,9 @@ namespace QQbarProcessor
 				      _JetsColName ,
 				      _JetsRelColName ,
 				      _MCColName,
-				      _KaonTaggerName
+				      _KaonTaggerName,
+				      _Rparam_jet_ps,
+				      _pparam_jet_ps
 				      );
 	}
 	break;
