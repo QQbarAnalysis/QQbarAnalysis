@@ -100,8 +100,6 @@ namespace QQbarProcessor
   void BBbarAnalysis::AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps)
   {
 
-    _stats._jet_R_norm=(1-TMath::Cos(_Rparam_jet_ps));
-    if(_Rparam_jet_ps>TMath::Pi()) _stats._jet_R_norm=(3+TMath::Cos(_Rparam_jet_ps));
 
     vector<PseudoJet> particles;
     JetDefinition jet_def(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
@@ -143,12 +141,8 @@ namespace QQbarProcessor
       
       vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));
 
-      double ymerge_56= cs.exclusive_ymerge(njets+3);
-      double ymerge_45= cs.exclusive_ymerge(njets+2);
-      double ymerge_34= cs.exclusive_ymerge(njets+1);
       double ymerge_23= cs.exclusive_ymerge(njets);
       double ymerge_12= cs.exclusive_ymerge(njets-1);
-
       double dmerge_23= cs.exclusive_dmerge(njets);
       double dmerge_12= cs.exclusive_dmerge(njets-1);
 
@@ -159,19 +153,8 @@ namespace QQbarProcessor
 
       _stats._mc_quark_ps_y12=ymerge_12;
       _stats._mc_quark_ps_y23=ymerge_23;
-
-      vector<PseudoJet> jets2 = sorted_by_E(cs.exclusive_jets(0.01*_stats._jet_R_norm));
-      vector<PseudoJet> jets3 = sorted_by_E(cs.exclusive_jets(0.01/_stats._jet_R_norm));
-      vector<PseudoJet> jets4 = sorted_by_E(cs.exclusive_jets(0.01));
-
-      _stats._mc_quark_ps_y34=jets2.size();
-      _stats._mc_quark_ps_y45=jets3.size();
-      _stats._mc_quark_ps_y56=jets4.size();
       _stats._mc_quark_ps_d12=dmerge_12;
       _stats._mc_quark_ps_d23=dmerge_23;
-
-      
-    
 
       for(unsigned i=0; i< jets.size(); i++) {
 	_stats._mc_quark_ps_jet_E[i]=jets[i].E();
@@ -179,6 +162,14 @@ namespace QQbarProcessor
 	_stats._mc_quark_ps_jet_py[i]=jets[i].py();
 	_stats._mc_quark_ps_jet_pz[i]=jets[i].pz();
       }
+
+      for(int iycut=0; iycut<25; iycut++) {
+	float ycut=float(iycut)*0.0005*_stats._jet_R_norm;
+	vector<PseudoJet> jets_ycut = sorted_by_E(cs.exclusive_jets(ycut));
+	_stats._mc_quark_ps_ycut[iycut]=ycut;
+	_stats._mc_quark_ps_njets_ycut[iycut]=jets_ycut.size();
+      }
+    
     }
 
 
@@ -273,6 +264,9 @@ namespace QQbarProcessor
 	//MC bbbar Analysis
 	QQbarMCOperator opera(mccol);
 
+	_stats._jet_R_norm=(1-TMath::Cos(_Rparam_jet_ps));
+	if(_Rparam_jet_ps>TMath::Pi()) _stats._jet_R_norm=(3+TMath::Cos(_Rparam_jet_ps));
+    
 	if(opera.IsEvent()==true) {
 	  vector < MCParticle * > mcbs = AnalyseGeneratorBBbar(opera);//Hard Process
 	  AnalyseGeneratorISR(opera);
@@ -312,7 +306,26 @@ namespace QQbarProcessor
 	    streamlog_out(WARNING)<< e.what() << "\n";
 	  }
 	}
+	
+	//Get the number of jets as a function of ycut
+	//using all pfos as input particles
+	//-----------------------------------------------------------------------------------
+	vector<PseudoJet> particles_pfos;
+	for (int ipfcol = 0; ipfcol < pfcol.size(); ipfcol++) {
+	  ReconstructedParticle * particle_pfo = dynamic_cast< ReconstructedParticle * >(pfocol->getElementAt(ipfcol));
+	  particles_pfos.push_back(PseudoJet(particle_pfo->getMomentum()[0],particle_pfo->getMomentum()[1],particle_pfo->getMomentum()[2],particle_pfo->getEnergy()));
+	}
+	JetDefinition jet_def_pfos(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
+	ClusterSequence cs_pfos(particles_pfos,jet_def_pfos);
 
+	for(int iycut=0; iycut<25; iycut++) {
+	  float ycut=float(iycut)*0.0005*_stats._jet_R_norm;
+	  vector<PseudoJet> jets_pfos_ycut = sorted_by_E(cs_pfos.exclusive_jets(ycut));
+	  _stats._ycut[iycut]=ycut;
+	  _stats._njets_ycut[iycut]=jets_pfos_ycut.size();
+	}
+
+	
 	//get the event shape variables. Needs that we run before the following processors
 	//<!-- ========== EventShapes ========================== -->
 	//  <processor name="MySphere"/>

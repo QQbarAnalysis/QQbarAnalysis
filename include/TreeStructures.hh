@@ -279,11 +279,10 @@ namespace QQbarProcessor
     float _jet_R_norm;
     float _mc_quark_ps_y12;
     float _mc_quark_ps_y23;
-    float _mc_quark_ps_y34;
-    float _mc_quark_ps_y45;
-    float _mc_quark_ps_y56;
     float _mc_quark_ps_d12;
     float _mc_quark_ps_d23;
+    float _mc_quark_ps_ycut[25];
+    float _mc_quark_ps_njets_ycut[25];
     float _mc_quark_ps_jet_E[2];
     float _mc_quark_ps_jet_px[2];
     float _mc_quark_ps_jet_py[2];
@@ -310,7 +309,8 @@ namespace QQbarProcessor
     float _y12;
     float _d23;
     float _d12;
-
+    float _ycut[25];
+    float _njets_ycut[25];
     float _oblateness;
     float _aplanarity;
     float _major_thrust_value;
@@ -377,12 +377,12 @@ namespace QQbarProcessor
       _mc_quark_ps_n=0;
       _mc_quark_ps_y12=0;
       _mc_quark_ps_y23=0;
-      _mc_quark_ps_y34=0;
-      _mc_quark_ps_y45=0;
-      _mc_quark_ps_y56=0;
       _mc_quark_ps_d12=0;
       _mc_quark_ps_d23=0;
-
+      for(int i=0; i<25; i++) {
+	_mc_quark_ps_ycut[i]=0.;
+	_mc_quark_ps_njets_ycut[i]=0.;
+      }
       _mc_quark_ps_isr_y12=0;
       _mc_quark_ps_isr_y23=0;
       _mc_quark_ps_isr_d12=0;
@@ -433,7 +433,10 @@ namespace QQbarProcessor
       _y23=0;
       _d12=0;
       _d23=0;
-      
+      for(int i=0; i<25; i++) {
+	_ycut[i]=0.;
+	_njets_ycut[i]=0.;
+      }
       _oblateness=0;
       _aplanarity=0;
       _major_thrust_value=0;
