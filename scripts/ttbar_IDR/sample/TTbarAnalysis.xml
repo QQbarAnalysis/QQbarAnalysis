@@ -1,0 +1,353 @@
+<marlin>
+
+<!--########  Execute  ######################################## -->
+
+<execute>
+  <!-- Kaon Tagging -->
+  <processor name="MyParticleTagger"/>
+  <!-- Isolated Lepton Tagging -->
+  <processor name="MyIsolatedLeptonTaggingProcessor"/>
+  <!-- Jet Clustering/Flavor Tagging -->
+  <processor name="MyFastJetProcessor"/>
+  <processor name="JetClusteringAndFlavorTag"/>
+  <!-- Get Gen Vertex Info -->
+  <processor name="MyTruthVertexFinder"/>
+  <!-- Get Reco Vertex Info Before Recovery -->
+  <processor name="MyTrashRecoProcessorBefore"/>
+  <!-- Vertex Reocovery -->
+  <processor name="VertexRestorerProcessor"/> 
+  <!-- Get Reco Vertex Info After Recovery -->
+  <processor name="MyTrashRecoProcessorAfter"/>
+  <!-- TTbar Analysis -->
+  <processor name="MyQQbarProcessor"/>
+</execute>
+
+<!--########  Global  ######################################## -->
+
+<global>
+	<parameter name="LCIOInputFiles">
+    /hsm/ilc/users/yonamine/physics/lcfiplus/vertexing_6f_ttbar/rv02-00-01.sv02-00-01.mILD_l5_o1_v02.E500-TDR_ws.I108668.Pyyveyx.eL.pR.n001.d_dstm_10271_0_NewVtx.slcio
+	</parameter>
+	<parameter name="GearXMLFile">
+    gear_ILD_l5_v02.xml
+	</parameter>
+	<parameter name="SkipNEvents" value="0"/>
+	<parameter name="SupressCheck" value="false"/>
+	<parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE </parameter>
+	<parameter name="RandomSeed" value="1234567890" />
+</global>
+
+<!--######## Processor  ######################################## -->
+
+<processor name="MyIsolatedLeptonTaggingProcessor" type="IsolatedLeptonTaggingProcessor">
+<!--IsolatedLeptonTaggingProcessor does whatever it does ...-->
+  <!--cosine of the larger cone-->
+  <parameter name="CosConeLarge" type="float">0.95 </parameter>
+  <!--cosine of the smaller cone-->
+  <parameter name="CosConeSmall" type="float">0.98 </parameter>
+  <!--Cut on the mva output of isolated electron selection-->
+  <parameter name="CutOnTheISOElectronMVA" type="float">0.8 </parameter>
+  <!--Cut on the mva output of isolated muon selection-->
+  <parameter name="CutOnTheISOMuonMVA" type="float">0.8 </parameter>
+  <!--Directory of Weights for the Isolated Electron MVA Classification-->
+  <parameter name="DirOfISOElectronWeights" type="string"> isolated_electron_weights </parameter>
+  <!--Directory of Weights for the Isolated Muon MVA Classification-->
+  <parameter name="DirOfISOMuonWeights" type="string"> isolated_muon_weights </parameter>
+  <!--Name of the PandoraPFOs collection-->
+  <parameter name="InputPandoraPFOsCollection" type="string" lcioInType="ReconstructedParticle">PandoraPFOs </parameter>
+  <!--Name of the Primary Vertex collection-->
+  <parameter name="InputPrimaryVertexCollection" type="string" lcioInType="ReconstructedParticle">PrimaryVertex </parameter>
+  <!--flag to select one most like isolated lepton-->
+  <parameter name="IsSelectingOneIsoLep" type="bool">true </parameter>
+  <!--Maximum d0 significance for electron-->
+  <parameter name="MaxD0SigForElectron" type="float">50 </parameter>
+  <!--Maximum D0 significance for muon-->
+  <parameter name="MaxD0SigForMuon" type="float">20 </parameter>
+  <!--Maximum ratio of energy in calorimeters over momentum for electron-->
+  <parameter name="MaxEOverPForElectron" type="float">1.3 </parameter>
+  <!--Maximum ratio of energy in calorimeters over momentum for muon-->
+  <parameter name="MaxEOverPForMuon" type="float">0.3 </parameter>
+  <!--Maximum Z0 significance for electron-->
+  <parameter name="MaxZ0SigForElectron" type="float">50 </parameter>
+  <!--Maximum Z0 significance for muon-->
+  <parameter name="MaxZ0SigForMuon" type="float">20 </parameter>
+  <!--minimum ratio of energy in calorimeters over momentum for electron-->
+  <parameter name="MinEOverPForElectron" type="float">0.5 </parameter>
+  <!--minimum ratio of energy in ecal over energy in ecal+hcal-->
+  <parameter name="MinEecalOverTotEForElectron" type="float">0.9 </parameter>
+  <!--Minimum momentum for electron-->
+  <parameter name="MinPForElectron" type="float">5 </parameter>
+  <!--Minimum momentum for muon-->
+  <parameter name="MinPForMuon" type="float">5 </parameter>
+  <!--Name of collection with the selected isolated lepton-->
+  <parameter name="OutputIsoLeptonsCollection" type="string" lcioOutType="ReconstructedParticle"> SelectedLepton </parameter>
+  <!--Name of the new PFOs collection without isolated lepton-->
+  <parameter name="OutputPFOsWithoutIsoLepCollection" type="string" lcioOutType="ReconstructedParticle"> PandoraPFOs_withoutLepton </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+
+<!--########  MyFastJetProcessor (2nd)  ######################################## -->
+
+<processor name="MyFastJetProcessor" type="FastJetProcessor">
+  <parameter name="algorithm" type="StringVec"> ee_genkt_algorithm 1.50 </parameter>
+  <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 4 </parameter>
+  <parameter name="recombinationScheme" type="string"> E_scheme </parameter>
+  <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs_withoutLepton </parameter>
+  <parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle"> JetsAfterGamGamRemoval </parameter>
+</processor>
+
+<!--########  MyParticleTagger  ######################################## -->
+
+<processor name="MyParticleTagger" type="ParticleTagger">                                                                           
+  <parameter name="ROOTFileName" type="string">
+    ParticleTagger_out.root
+	</parameter>                                              
+  <parameter name="NewPID" type="string"> KaonTagger </parameter>                                                                  
+  <parameter name="PFOCollection" type="string"> PandoraPFOs </parameter>                                                          
+  <parameter name="TrackRelCollection" type="string"> MarlinTrkTracksMCTruthLink </parameter>                                      
+  
+  <parameter name="slope_kaon_selection" type="float">
+    0.0183399
+	</parameter>                                                      
+  
+	<parameter name="upper_limit_kaon_selection" type="float">
+    0.11086
+	</parameter>                                                  
+  
+	<parameter name="lower_limit_kaon_selection" type="float">
+    0.0959317
+	</parameter>         
+  
+	<parameter name="Bfield" type="float">
+    3.5
+	</parameter>
+  
+	<parameter name="Pcut" type="float"> 2.0 </parameter>
+</processor>
+
+
+<!--########  JetClusteringAndFlavorTag  ######################################## -->
+
+<processor name="JetClusteringAndFlavorTag" type="LcfiplusProcessor">
+  <!-- run primary and secondary vertex finders -->
+	<parameter name="Algorithms" type="stringVec">JetVertexRefiner FlavorTag ReadMVA</parameter>
+
+ 	<!-- general parameters -->
+	<!--parameter name="PFOCollection" type="string" value="PandoraPFOs" --> <!-- input PFO collection -->
+  <parameter name="PFOCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs_withoutLepton </parameter>
+	<parameter name="UseMCP" type="int" value="0" /> <!-- MC info not used -->
+	<parameter name="MCPCollection" type="string" value="" /> <!-- not used -->
+	<parameter name="MCPFORelation" type="string" value="" /> <!-- not used -->
+	<parameter name="ReadSubdetectorEnergies" type="int" value="1"/> <!-- true for ILD -->
+	<parameter name="UpdateVertexRPDaughters" type="int" value="0"/> <!-- false for non-updative PandoraPFOs -->
+	<parameter name="TrackHitOrdering" type="int" value="1"/> <!-- Track hit ordering: 0=ILD-LOI,SID-DBD, 1=ILD-DBD -->
+
+	<!-- vertex refiner parameters -->
+	<parameter name="JetVertexRefiner.InputJetCollectionName" type="string" value="JetsAfterGamGamRemoval" />
+	<!-- <parameter name="JetVertexRefiner.InputJetCollectionName" type="string" value="RefinedJets" /> -->
+	<parameter name="JetVertexRefiner.OutputJetCollectionName" type="string" value="FinalJets" />
+	<parameter name="JetVertexRefiner.PrimaryVertexCollectionName" type="string" value="PrimaryVertex_NewVtx" />
+	<parameter name="JetVertexRefiner.InputVertexCollectionName" type="string" value="BuildUpVertex_NewVtx" />
+	<parameter name="JetVertexRefiner.V0VertexCollectionName" type="string" value="BuildUpVertex_V0_NewVtx" />
+	<parameter name="JetVertexRefiner.OutputVertexCollectionName" type="string" value="FinalVertex" />
+
+	<parameter name="JetVertexRefiner.MinPosSingle" type="double" value="0.3" />
+	<parameter name="JetVertexRefiner.MaxPosSingle" type="double" value="30." />
+	<parameter name="JetVertexRefiner.MinEnergySingle" type="double" value="1." />
+	<parameter name="JetVertexRefiner.MaxAngleSingle" type="double" value="0.5" />
+	<parameter name="JetVertexRefiner.MaxSeparationPerPosSingle" type="double" value="0.1" />
+	<parameter name="JetVertexRefiner.mind0sigSingle" type="double" value="5." />
+	<parameter name="JetVertexRefiner.minz0sigSingle" type="double" value="5." />
+	<parameter name="JetVertexRefiner.OneVertexProbThreshold" type="double" value="0.001" />
+	<parameter name="JetVertexRefiner.MaxCharmFlightLengthPerJetEnergy" type="double" value="0.1" />
+
+	<!-- FlavorTag parameters -->
+	<parameter name="PrimaryVertexCollectionName" type="string" value="PrimaryVertex_NewVtx" />
+	<parameter name="FlavorTag.JetCollectionName" type="string" value="FinalJets" />
+	<parameter name="MakeNtuple.AuxiliaryInfo" type="int" value="-1" />
+
+	<parameter name="FlavorTag.WeightsDirectory" type="string" value="/home/ilc/yokugawa/ILDConfig/LCFIPlusConfig/lcfiweights/6q500_ildl5v02_test01_20k" />
+	<parameter name="FlavorTag.WeightsPrefix" type="string" value="6q500_ildl5v02_test01_20k" />
+	<parameter name="FlavorTag.BookName" type="string" value="bdt" />
+	<parameter name="FlavorTag.PIDAlgo" type="string" value="lcfiplus" />
+ 	<parameter name="FlavorTag.ExportAllVariables" type="int" value="1"/>
+	<parameter name="FlavorTag.D0ProbFileName" type="string" value="/home/ilc/yokugawa/lastupdate/jet/data/vtxprob/d0probv2_ildo1v5_qq91.root"/>
+ 	<parameter name="FlavorTag.Z0ProbFileName" type="string" value="/home/ilc/yokugawa/lastupdate/jet/data/vtxprob/z0probv2_ildo1v5_qq91.root"/>
+
+	<parameter name="FlavorTag.CategoryDefinition1" type="string">nvtx==0</parameter>
+	<parameter name="FlavorTag.CategoryPreselection1" type="string">trk1d0sig!=0</parameter>
+	<parameter name="FlavorTag.CategoryVariables1" type="stringVec">
+		trk1d0sig trk2d0sig trk1z0sig trk2z0sig trk1pt_jete trk2pt_jete jprobr25sigma jprobz25sigma
+ 	        d0bprob d0cprob d0qprob z0bprob z0cprob z0qprob nmuon nelectron trkmass
+	</parameter>
+	<parameter name="FlavorTag.CategorySpectators1" type="stringVec">
+		aux nvtx
+	</parameter>
+
+	<parameter name="FlavorTag.CategoryDefinition2" type="string">(nvtx==1)+(nvtxall==1)==2</parameter>
+	<parameter name="FlavorTag.CategoryPreselection2" type="string">trk1d0sig!=0</parameter>
+	<parameter name="FlavorTag.CategoryVariables2" type="stringVec">
+		trk1d0sig trk2d0sig trk1z0sig trk2z0sig trk1pt_jete trk2pt_jete jprobr2 jprobz2
+		vtxlen1_jete vtxsig1_jete vtxdirang1_jete vtxmom1_jete vtxmass1 vtxmult1 vtxmasspc vtxprob
+  	d0bprob d0cprob d0qprob z0bprob z0cprob z0qprob
+  	trkmass nelectron nmuon
+	</parameter>
+	<parameter name="FlavorTag.CategorySpectators2" type="stringVec">
+		aux nvtx
+	</parameter>
+
+	<parameter name="FlavorTag.CategoryDefinition3" type="string">(nvtx==1)+(nvtxall==2)==2</parameter>
+	<parameter name="FlavorTag.CategoryPreselection3" type="string">trk1d0sig!=0</parameter>
+	<parameter name="FlavorTag.CategoryVariables3" type="stringVec">
+		trk1d0sig trk2d0sig trk1z0sig trk2z0sig trk1pt_jete trk2pt_jete jprobr2 jprobz2
+		vtxlen1_jete vtxsig1_jete vtxdirang1_jete vtxmom1_jete vtxmass1 vtxmult1 vtxmasspc vtxprob
+		1vtxprob vtxlen12all_jete vtxmassall
+	</parameter>
+	<parameter name="FlavorTag.CategorySpectators3" type="stringVec">
+		aux nvtx
+	</parameter>
+
+	<parameter name="FlavorTag.CategoryDefinition4" type="string">(nvtx!=0)+(nvtx!=1)==2</parameter>
+	<parameter name="FlavorTag.CategoryPreselection4" type="string">trk1d0sig!=0</parameter>
+	<parameter name="FlavorTag.CategoryVariables4" type="stringVec">
+		trk1d0sig trk2d0sig trk1z0sig trk2z0sig trk1pt_jete trk2pt_jete jprobr2 jprobz2
+		vtxlen1_jete vtxsig1_jete vtxdirang1_jete vtxmom1_jete vtxmass1 vtxmult1 vtxmasspc vtxprob
+		vtxlen2_jete vtxsig2_jete vtxdirang2_jete vtxmom2_jete vtxmass2 vtxmult2
+		vtxlen12_jete vtxsig12_jete vtxdirang12_jete vtxmom_jete vtxmass vtxmult
+		1vtxprob
+	</parameter>
+	<parameter name="FlavorTag.CategorySpectators4" type="stringVec">
+		aux nvtx
+  </parameter>
+</processor>
+
+<!--########  MyTruthVertexFinder  ######################################## -->
+
+<processor name="MyTruthVertexFinder" type="TruthVertexFinderAlpha">
+  <!-- Verbosity of this processor -->
+  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG </parameter>
+  <!-- Input collection name, MCParticlesSkimmed is preferred -->
+  <parameter name="CollectionName" type="string" lcioInType="MCParticle"> MCParticle </parameter>
+  <!-- PDG code of quark pairs in an event, it is used to check if the event contains a pair of quarks of this type -->
+  <parameter name="tagPDG" type="int">6</parameter>
+  <!-- PDG code of initial quark that is used seed a decay chain. Should be consistent with first value of DecayChainPDGs parameter -->
+  <parameter name="initialQuarkPDG" type="int">5</parameter>
+  <!-- Input pdg codes to look for particle decays -->
+  <!-- Possible values: 15 - tau lepton, 500 - B-mesons, 400 - D-mesons, 300 - K-mesons, 5000 - b-baryons, 4000 - c-baryons, 5500 - b-hadrons, 4400 - c-hadrons, 0 - any other particle -->
+  <parameter name="DecayChainPDGs" type="IntVec">5500	4400	0</parameter>
+  <!-- This parameter regulates ROOT output: 0 - no ROOT output, 1 - basic ROOT file, 2 - extended ROOT file only if DecayChainPDGs has 3 parameters! -->
+  <parameter name="writeROOT" type="int">2</parameter>
+  <!-- Name of output ROOT file -->
+  <parameter name="ROOTFileName" type="string">
+    TruthVertexFinder_out.root
+  </parameter>
+  <!-- Name of output collection - MCParticle type -->
+  <parameter name="OutputProngsName" type="string">EGProngs</parameter>
+  <!-- Name of output collection - Vertex type -->
+  <parameter name="OutputCollectionName" type="string">MCVertex</parameter>
+</processor>
+
+<!--########  MyTrashRecoProcessor (Before Vertex Recovery) ######################################## -->
+
+<processor name="MyTrashRecoProcessorBefore" type="TrashRecoProcessor">
+  <parameter name="ROOTFileName" type="string">
+    TrashReco_bfVR_out.root
+  </parameter>
+  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG </parameter>
+  <!-- Input collection name, MCParticlesSkimmed is preferred -->
+  <parameter name="SecondaryCollectionName" type="string" lcioInType="Vertex"> BuildUpVertex_NewVtx </parameter>
+  <parameter name="PFOCollectionName" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs_withoutLepton </parameter> <!-- NOT PandoraPFOs_withoutLepton !!! -->
+  <parameter name="PrimaryCollectionName" type="string" lcioInType="Vertex"> PrimaryVertex_NewVtx </parameter>
+  <parameter name="OutputRelName" type="string" lcioInType="LCRelation"> RecoMCTruthLink </parameter>
+  <parameter name="MCVertexCollectionName" type="string" lcioInType="Vertex"> MCVertex </parameter>
+  <parameter name="JetCollectionName" type="string" lcioInType="ReconstructedParticle"> FinalJets </parameter>
+  <parameter name="JetRelCollectionName" type="string" lcioInType="LCRelation"> FinalJets_rel </parameter>
+  <parameter name="TrackRelCollectionName" type="string" lcioInType="LCRelation"> MarlinTrkTracksMCTruthLink </parameter>
+  <parameter name="QuarksCollectionName" type="string" lcioInType="MCParticle"> MCbquarks </parameter>
+  <parameter name="EGProngsCollectionName" type="string" lcioInType="MCParticle"> EGProngs </parameter>
+</processor>
+
+<!--########  VertexRestorer  ######################################## -->
+
+<processor name="VertexRestorerProcessor" type="VertexRestorer">
+  <parameter name="ROOTFileName" type="string">
+    VertexRestorer_out.root
+  </parameter>
+	<!--<parameter name="PFOCollection" type="string"> PandoraPFOs </parameter>-->
+	<parameter name="PFOCollection" type="string"> PandoraPFOs_withoutLepton </parameter>
+  <parameter name="MCCollectionName" type="string"> MCParticle </parameter>
+  <parameter name="PrimaryCollectionName" type="string"> PrimaryVertex_NewVtx </parameter>
+  <parameter name="OutputCollectionName" type="string"> RecoveredJets_vtx </parameter>
+  <parameter name="OutputJetCollectionName" type="string"> RecoveredJets </parameter>
+  <parameter name="OutputRelCollectionName" type="string"> RecoveredJets_rel </parameter>
+  <parameter name="OutputRelRPCollectionName" type="string"> RecoveredJets_vtx_RP </parameter>
+  <parameter name="SecondaryCollectionName" type="string"> FinalJets_vtx </parameter>
+  <parameter name="SecondaryRPCollectionName" type="string"> FinalJets_vtx_RP </parameter>
+  <parameter name="V0CollectionName" type="string"> BuildUpVertex_V0_NewVtx </parameter>
+  <parameter name="JetCollectionName" type="string"> FinalJets </parameter>
+  <parameter name="MissedCollectionName" type="string"> MissedParticles </parameter>
+  <parameter name="MCMissedCollectionName" type="string"> MCMissedParticles </parameter>
+  <parameter name="NotUsedTracksCollectionName" type="string"> MarlinTrkTracks </parameter>
+  <parameter name="RecoMcTruthCollectionName" type="string"> RecoMCTruthLink </parameter>
+  <parameter name="MissedVtxCollectionName" type="string"> MissedParticlesVtx </parameter>
+  <parameter name="BStarCollectionName" type="string"> BStar </parameter>
+  <parameter name="MCVertexCollectionName" type="string"> MCVertex </parameter>
+  <parameter name="EGProngsCollectionName" type="string"> EGProngs </parameter>
+  <parameter name="JetRelCollectionName" type="string"> FinalJets_rel </parameter>
+  <parameter name="Bfield" type="float">
+    3.5
+	</parameter>
+  <parameter name="UseTracks" type="int" value="1" />
+  <parameter name="TestEfficiency" type="int" value="0" />
+  <parameter name="angleCut" type="float" value="0.05" />
+  <parameter name="offsetCut" type="float" value="0.05" />
+  <parameter name="a" type="float" value="0.005" />
+  <parameter name="b" type="float" value="0.01" />
+</processor>
+
+<!--########  MyTrashRecoProcessor (After Vertex Recovery) ######################################## -->
+
+<processor name="MyTrashRecoProcessorAfter" type="TrashRecoProcessor">
+  <parameter name="ROOTFileName" type="string">
+    TrashReco_afVR_out.root
+  </parameter>
+  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG </parameter>
+  <!-- Input collection name, MCParticlesSkimmed is preferred -->
+  <parameter name="SecondaryCollectionName" type="string" lcioInType="Vertex"> BuildUpVertex_NewVtx </parameter>
+  <parameter name="PFOCollectionName" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs_withoutLepton </parameter> <!-- NOT PandoraPFOs_withoutLepton !!! -->
+  <parameter name="PrimaryCollectionName" type="string" lcioInType="Vertex"> PrimaryVertex_NewVtx </parameter>
+  <parameter name="OutputRelName" type="string" lcioInType="LCRelation"> RecoMCTruthLink </parameter>
+  <parameter name="MCVertexCollectionName" type="string" lcioInType="Vertex"> MCVertex </parameter>
+  <parameter name="JetCollectionName" type="string" lcioInType="ReconstructedParticle"> RecoveredJets </parameter>
+  <parameter name="JetRelCollectionName" type="string" lcioInType="LCRelation"> RecoveredJets_rel </parameter>
+  <parameter name="TrackRelCollectionName" type="string" lcioInType="LCRelation"> MarlinTrkTracksMCTruthLink </parameter>
+  <parameter name="QuarksCollectionName" type="string" lcioInType="MCParticle"> MCbquarks </parameter>
+  <parameter name="EGProngsCollectionName" type="string" lcioInType="MCParticle"> EGProngs </parameter>
+	<!-- Output Collections -->
+	<parameter name="OutputMissedName" type="string" lcioType="ReconstructedParticle"> MissedParticles_Recovered </parameter>
+	<parameter name="OutputMCMissedName" type="string" lcioType="MCParticle"> MCMissedParticles_Recovered </parameter>
+	<parameter name="OutputMissedVtxName" type="string" lcioType="ReconstructedParticle"> MissedParticlesVtx_Recovered </parameter>
+	<parameter name="OutputTaggedName" type="string" lcioType="Vertex"> TaggedVertices_Recovered </parameter>
+	<parameter name="RecoProngsCollectionName" type="string" lcioType="ReconstructedParticle"> RecoProngs_Recovered </parameter>
+	<parameter name="RecoProngsTracksCollectionName" type="string" lcioType="Track"> RecoProngsTracks_Recovered </parameter>
+</processor>
+
+<!--########  TTBarAnalysis  ######################################## -->
+<processor name="MyQQbarProcessor" type="QQbarProcessor">
+  <parameter name="ROOTFileName" type="string">
+  TTbarAnalysis_out.root
+  </parameter>
+  <parameter name="MassCut" type="float"> 200 </parameter>
+  <parameter name="AnalysisType" type="int"> 0 </parameter>
+  <parameter name="PFOCollection" type="string"> PandoraPFOs_withoutLepton </parameter>
+  <parameter name="JetCollectionName" type="string"> RecoveredJets </parameter>
+  <!--parameter name="JetCollectionName" type="string"> FinalJets </parameter> -->
+  <parameter name="JetRelCollectionName" type="string"> RecoveredJets_rel </parameter>
+  <!--parameter name="JetRelCollectionName" type="string"> FinalJets_rel </parameter> -->
+  <parameter name="MCCollectionName" type="string"> MCParticle </parameter>
+  <parameter name="RecoMcTruthCollectionName" type="string"> RecoMCTruthLink </parameter>
+</processor>
+
+
+</marlin>
