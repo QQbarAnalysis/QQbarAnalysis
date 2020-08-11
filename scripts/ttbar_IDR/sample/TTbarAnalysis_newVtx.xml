@@ -147,9 +147,9 @@
 	<parameter name="JetVertexRefiner.InputJetCollectionName" type="string" value="JetsAfterGamGamRemoval" />
 	<!-- <parameter name="JetVertexRefiner.InputJetCollectionName" type="string" value="RefinedJets" /> -->
 	<parameter name="JetVertexRefiner.OutputJetCollectionName" type="string" value="FinalJets" />
-	<parameter name="JetVertexRefiner.PrimaryVertexCollectionName" type="string" value="PrimaryVertex" />
-	<parameter name="JetVertexRefiner.InputVertexCollectionName" type="string" value="BuildUpVertex" />
-	<parameter name="JetVertexRefiner.V0VertexCollectionName" type="string" value="BuildUpVertex_V0" />
+	<parameter name="JetVertexRefiner.PrimaryVertexCollectionName" type="string" value="PrimaryVertex_NewVtx" />
+	<parameter name="JetVertexRefiner.InputVertexCollectionName" type="string" value="BuildUpVertex_NewVtx" />
+	<parameter name="JetVertexRefiner.V0VertexCollectionName" type="string" value="BuildUpVertex_V0_NewVtx" />
 	<parameter name="JetVertexRefiner.OutputVertexCollectionName" type="string" value="FinalVertex" />
 
 	<parameter name="JetVertexRefiner.MinPosSingle" type="double" value="0.3" />
@@ -163,7 +163,7 @@
 	<parameter name="JetVertexRefiner.MaxCharmFlightLengthPerJetEnergy" type="double" value="0.1" />
 
 	<!-- FlavorTag parameters -->
-	<parameter name="PrimaryVertexCollectionName" type="string" value="PrimaryVertex" />
+	<parameter name="PrimaryVertexCollectionName" type="string" value="PrimaryVertex_NewVtx" />
 	<parameter name="FlavorTag.JetCollectionName" type="string" value="FinalJets" />
 	<parameter name="MakeNtuple.AuxiliaryInfo" type="int" value="-1" />
 
@@ -256,9 +256,9 @@
   </parameter>
   <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG </parameter>
   <!-- Input collection name, MCParticlesSkimmed is preferred -->
-  <parameter name="SecondaryCollectionName" type="string" lcioInType="Vertex"> BuildUpVertex </parameter>
+  <parameter name="SecondaryCollectionName" type="string" lcioInType="Vertex"> BuildUpVertex_NewVtx </parameter>
   <parameter name="PFOCollectionName" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs_withoutLepton </parameter> <!-- NOT PandoraPFOs_withoutLepton !!! -->
-  <parameter name="PrimaryCollectionName" type="string" lcioInType="Vertex"> PrimaryVertex </parameter>
+  <parameter name="PrimaryCollectionName" type="string" lcioInType="Vertex"> PrimaryVertex_NewVtx </parameter>
   <parameter name="OutputRelName" type="string" lcioInType="LCRelation"> RecoMCTruthLink </parameter>
   <parameter name="MCVertexCollectionName" type="string" lcioInType="Vertex"> MCVertex </parameter>
   <parameter name="JetCollectionName" type="string" lcioInType="ReconstructedParticle"> FinalJets </parameter>
@@ -277,14 +277,14 @@
 	<!--<parameter name="PFOCollection" type="string"> PandoraPFOs </parameter>-->
 	<parameter name="PFOCollection" type="string"> PandoraPFOs_withoutLepton </parameter>
   <parameter name="MCCollectionName" type="string"> MCParticle </parameter>
-  <parameter name="PrimaryCollectionName" type="string"> PrimaryVertex </parameter>
+  <parameter name="PrimaryCollectionName" type="string"> PrimaryVertex_NewVtx </parameter>
   <parameter name="OutputCollectionName" type="string"> RecoveredJets_vtx </parameter>
   <parameter name="OutputJetCollectionName" type="string"> RecoveredJets </parameter>
   <parameter name="OutputRelCollectionName" type="string"> RecoveredJets_rel </parameter>
   <parameter name="OutputRelRPCollectionName" type="string"> RecoveredJets_vtx_RP </parameter>
   <parameter name="SecondaryCollectionName" type="string"> FinalJets_vtx </parameter>
   <parameter name="SecondaryRPCollectionName" type="string"> FinalJets_vtx_RP </parameter>
-  <parameter name="V0CollectionName" type="string"> BuildUpVertex_V0 </parameter>
+  <parameter name="V0CollectionName" type="string"> BuildUpVertex_V0_NewVtx </parameter>
   <parameter name="JetCollectionName" type="string"> FinalJets </parameter>
   <parameter name="MissedCollectionName" type="string"> MissedParticles </parameter>
   <parameter name="MCMissedCollectionName" type="string"> MCMissedParticles </parameter>
@@ -314,9 +314,9 @@
   </parameter>
   <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG </parameter>
   <!-- Input collection name, MCParticlesSkimmed is preferred -->
-  <parameter name="SecondaryCollectionName" type="string" lcioInType="Vertex"> BuildUpVertex </parameter>
+  <parameter name="SecondaryCollectionName" type="string" lcioInType="Vertex"> BuildUpVertex_NewVtx </parameter>
   <parameter name="PFOCollectionName" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs_withoutLepton </parameter> <!-- NOT PandoraPFOs_withoutLepton !!! -->
-  <parameter name="PrimaryCollectionName" type="string" lcioInType="Vertex"> PrimaryVertex </parameter>
+  <parameter name="PrimaryCollectionName" type="string" lcioInType="Vertex"> PrimaryVertex_NewVtx </parameter>
   <parameter name="OutputRelName" type="string" lcioInType="LCRelation"> RecoMCTruthLink </parameter>
   <parameter name="MCVertexCollectionName" type="string" lcioInType="Vertex"> MCVertex </parameter>
   <parameter name="JetCollectionName" type="string" lcioInType="ReconstructedParticle"> RecoveredJets </parameter>
