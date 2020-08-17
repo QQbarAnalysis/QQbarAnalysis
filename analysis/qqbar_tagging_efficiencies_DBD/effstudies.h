@@ -5,8 +5,8 @@
 // found on file: ../../ntuples/BBbar_20180911_7637.root
 //////////////////////////////////////////////////////////
 
-#ifndef observable_h
-#define observable_h
+#ifndef effstudies_h
+#define effstudies_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -15,6 +15,7 @@
 #include <TH1.h>
 #include <vector>
 #include <TString.h>
+#include <TRandom.h>
 #include <TLegend.h>
 #include <TH2.h>
 #include <TStyle.h>
@@ -23,18 +24,16 @@
 #include "../style/Style.C"
 #include "../style/Labels.C"
 #include "TSystemFile.h"
-#include "TLorentzVector.h"
 
 using namespace std;
-//coment
+
 // Header file for the classes stored in the TTree if any.
 
-class observable {
+class effstudies {
 public :
 
   float btag1=0.8;
   float btag2=0.8;
-
   float ctag1=0.875;
   float ctag2=0.875;
   
@@ -44,7 +43,7 @@ public :
    Int_t           fCurrent; //!current Tree number in a TChain
 
 
-   Float_t         mc_quark_E[2];
+  Float_t         mc_quark_E[2];
    Float_t         mc_quark_px[2];
    Float_t         mc_quark_py[2];
    Float_t         mc_quark_pz[2];
@@ -216,48 +215,32 @@ public :
    TBranch        *b_jet_track_z0;   //!
    TBranch        *b_jet_track_d0;   //!
    TBranch        *b_jet_track_phi;   //!
- 
-   observable(TString tree_s);
-   observable(TList *f=0);
-   virtual ~observable();
+
+
+   effstudies(TString tree_s);
+   effstudies(TList *f=0);
+   virtual ~effstudies();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    //initialize
    virtual void     Init(TTree *tree);
-   virtual void     InitializeHistos(int n);
-   //save and output
-   virtual void     SaveRootFile(std::vector<TH1F*> asymm_all, std::vector<TH2F*> resolution, TString polarization);
-   virtual void     SaveRootFile(std::vector<TH1F*> asymm_all, TString polarization);
-   virtual void     HistoEfficiencies();
-   virtual void     CoutEfficiencies();
-   //analysis
-   virtual void     AFBb_parton(int n_entries, TString polarization);
-   virtual void     Analysis(int n, TString polarization, int nbin,int cuts, float Kcut);  
-   virtual void     AnalysisBKG(int n, TString polarization, int nbin,int cuts, float Kcut);
 
-   //preselection and charge measurement and correction
-   virtual bool     PreSelection(int type,float Kcut);
+   //analysis
+   virtual void     eff_flavour(int n, TString polarization);
+   //   virtual void     Analysis_rho_btag(int n, TString polarization, int quark, int rad);
+   //virtual void     Analysis_rho_ctag(int n, TString polarization, int quark, int rad);
+   virtual void     Analysis_rho_charge(int n, TString polarization, int quark, int rad);
+   virtual void     Analysis_rho_ccharge(int n, TString polarization, int quark, int rad);
+   // virtual void     Analysis_efficiency(int n, TString polarization, int zpole);
+   virtual void     QuarkTaggingTests(int, TString);
+   //tools
+   virtual bool     PreSelection(int, float);
    virtual float    ChargeBcJet(int ijet);
    virtual float    ChargeKcJet(int ijet);
-   virtual bool    JetCtag(int ijet);
-   virtual bool    JetBtag(int ijet);
-   
    virtual std::vector<float>    Error(double,double,double,double);
    virtual std::vector<float>    ErrorLEP(double,double,double,double);
-   virtual std::vector<float>    CalculateP(TH1F* a, TH1F* r);
-   TH1F*    CorrectHistoSingleTag(TH1F* histo, std::vector<float> p);
-   TH1F*    CorrectHistoDoubleTag(TH1F* histo, std::vector<float> p);
-   TH1F*    MakeCorrection(TString type, TH1F* reco, TH1F* rejected);
-   TH1F*    MakeCorrectionSingle(TString type, TH1F* reco, TH1F* rejected);
-   
 
-   //pre-analysis
-   virtual void      KStudy(int, int, TString,float);
-   virtual void      Selection(int, int, TString,float);
-   virtual void      IdentifyRR(int, int, TString,float);
-       
-   virtual void      SelectionBKG(int, int, TString,float);
    
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
@@ -307,132 +290,22 @@ public :
      costheta1 =  std::cos( getAngles(d1).at(1) );
      return costheta1;
    }
-
    float GetSinacol(TVector3 v1, TVector3 v2){
      float sinacol =  -2.0;
      TVector3 v= v1.Cross(v2);
-     sinacol = (v.Mag()/(v1.Mag()*v2.Mag()));// * v2.Mag()/(v1+v2).Mag(); 
+     sinacol = (v.Mag()/(v1.Mag()*v2.Mag()));// * v2.Mag()/(v1+v2).Mag();
      return sinacol;
    }
-
-   float GetThrust(TVector3 v1, TVector3 v2){
-
-     float t_x=0, t_y=0, t_z=0;
-     double T=-1;
-     for(int i=0; i<5000; i++) {
-       TRandom1 *rx = new TRandom1();
-       double genx=rx->Uniform(-1,1);
-       
-       //TRandom2 *ry = new TRandom2();
-       double geny=rx->Uniform(-1,1);
-              
-       //TRandom2 *rz = new TRandom2();
-       double genz=rx->Uniform(-1,1);
-       delete rx; 
-       //       cout<<genx<<" "<<geny<<" "<<genz<<endl;
-       float norm=sqrt(genx*genx+geny*geny+genz*genz);
-       genx/=norm;
-       geny/=norm;
-       genz/=norm;
-
-       float pmodule=sqrt(pow(v1.X()+v2.X(),2)+pow(v1.Y()+v2.Y(),2)+pow(v1.Z()+v2.Z(),2));
-       float T_temp= (1.0/pmodule) * ( genx*(v1.X()+v2.X()) + geny*(v1.Y()+v2.Y()) + genz*(v1.Z()+v2.Z()) );
-       if(T_temp>T) {
-	 T=T_temp;
-	 t_x=genx;
-	 t_y=geny;
-	 t_z=genz;
-	 //cout << i<<" --  "<<T<< " "<<t_x<<" "<<t_y<<" "<<t_z<<endl;
-       }
-     }
-     //     cout << T<< " "<<t_x<<" "<<t_y<<" "<<t_z<<endl;
-     return T;//sqrt(t_x*t_x+t_y*t_y);
-   }
-
-
    
-
-   float getAngle2Vec(float px1, float py1, float pz1, float E1, float px2, float py2, float pz2, float E2) {
-
-     TLorentzVector v1(px1,py1,pz1,E1);
-     TLorentzVector v2(px2,py2,pz2,E2);
-     
-     Double_t a = v1.Angle(v2.Vect());  // get angle between v1 and v2
-     return a;
-   }
    
  private:   
 
-   int bbbar_gen;
-   int preselection;
-   int bkg;
-   int bbbar_gen_radreturn;
-   int qqbar_gen;
-   int qqbar_gen_radreturn;
-   int ccbar_gen;
-   int ccbar_gen_radreturn;
-      
-  
-   int bbbar_KcKc_reco;
-   int bbbar_BcBc_reco;
-   int bbbar_BcKc_reco;
-   int bbbar_KcBc_reco;
-
-   int bbbar_BcKc_same1_reco;
-   int bbbar_BcKc_same2_reco;
-   
-   TH1F * h_bbbar;
-   TH1F * h_bbbar_recocuts;
-   TH1F * h_bbbar_KcKc_reco;
-   TH1F * h_bbbar_KcKc_rejected;
-   TH1F * h_bbbar_BcBc_reco;
-   TH1F * h_bbbar_BcBc_rejected;
-   TH1F * h_bbbar_BcKc_reco;
-   TH1F * h_bbbar_BcKc_rejected;
-   TH1F * h_bbbar_KcBc_reco;
-   TH1F * h_bbbar_KcBc_rejected;
-   TH1F * h_bbbar_BcKc_same1_reco;
-   TH1F * h_bbbar_BcKc_same1_rejected;
-   TH1F * h_bbbar_BcKc_same2_reco;
-   TH1F * h_bbbar_BcKc_same2_rejected;
-   TH1F * asymm_BcBc[6];
-   TH1F * asymm_KcKc[6]; 
-   TH1F * asymm_BcKc[6]; 
-   TH1F * asymm_KcBc[6];   
-   TH1F * asymm_BcKc_same1[6];  
-   TH1F * asymm_BcKc_same2[6];
-
-   //efficiency plots
-   TH1F * h_cos_parton;
-   TH1F * h_cos_preselection;
-   TH1F * h_cos_charge_BcBc;
-   TH1F * h_cos_charge_KcKc;
-   TH1F * h_cos_charge_BcKc;
-   TH1F * h_cos_charge_KcBc;
-   TH1F * h_cos_charge_BcKc_same1;
-   TH1F * h_cos_charge_BcKc_same2;
-
-   //resolution plots
-   TH2F * h_resolution_BcBc;
-   TH2F * h_resolution_KcKc;
-   TH2F * h_resolution_BcKc;
-   TH2F * h_resolution_KcBc;
-   TH2F * h_resolution_BcKc_same1;
-   TH2F * h_resolution_BcKc_same2;
-
-   //resolution_jettrack plots
-   TH2F * h_resolution_jettrack_BcBc;
-   TH2F * h_resolution_jettrack_KcKc;
-   TH2F * h_resolution_jettrack_BcKc;
-   TH2F * h_resolution_jettrack_KcBc;
-   TH2F * h_resolution_jettrack_BcKc_same1;
-   TH2F * h_resolution_jettrack_BcKc_same2;
 
 };
 
 #endif
-#ifdef observable_cxx
-observable::observable(TString tree_s) : fChain(0) 
+#ifdef effstudies_cxx
+effstudies::effstudies(TString tree_s) : fChain(0) 
 {
   
   TFile *f = new TFile(tree_s);
@@ -442,7 +315,7 @@ observable::observable(TString tree_s) : fChain(0)
   
 }
 
-observable::observable(TList *f) : fChain(0) 
+effstudies::effstudies(TList *f) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), use a list of of files provided as input
 
@@ -459,20 +332,20 @@ observable::observable(TList *f) : fChain(0)
 }
 
 
-observable::~observable()
+effstudies::~effstudies()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
 
-Int_t observable::GetEntry(Long64_t entry)
+Int_t effstudies::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t observable::LoadTree(Long64_t entry)
+Long64_t effstudies::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -485,7 +358,7 @@ Long64_t observable::LoadTree(Long64_t entry)
    return centry;
 }
 
-void observable::Init(TTree *tree)
+void effstudies::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -500,8 +373,7 @@ void observable::Init(TTree *tree)
    fChain = tree;
    fCurrent = -1;
    fChain->SetMakeClass(1);
-
-   fChain->SetBranchAddress("mc_quark_E", mc_quark_E, &b_mc_quark_E);
+  fChain->SetBranchAddress("mc_quark_E", mc_quark_E, &b_mc_quark_E);
    fChain->SetBranchAddress("mc_quark_px", mc_quark_px, &b_mc_quark_px);
    fChain->SetBranchAddress("mc_quark_py", mc_quark_py, &b_mc_quark_py);
    fChain->SetBranchAddress("mc_quark_pz", mc_quark_pz, &b_mc_quark_pz);
@@ -587,9 +459,11 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("jet_track_d0", jet_track_d0, &b_jet_track_d0);
    fChain->SetBranchAddress("jet_track_phi", jet_track_phi, &b_jet_track_phi);
    Notify();
+   
+   
 }
 
-Bool_t observable::Notify()
+Bool_t effstudies::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -600,18 +474,18 @@ Bool_t observable::Notify()
    return kTRUE;
 }
 
-void observable::Show(Long64_t entry)
+void effstudies::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t observable::Cut(Long64_t entry)
+Int_t effstudies::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef observable_cxx
+#endif // #ifdef effstudies_cxx
