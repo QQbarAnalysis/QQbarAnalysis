@@ -95,6 +95,8 @@ namespace QQbarProcessor
     bool _boolDBDanalysis;
     std::string _KaonTaggerName;
 
+    float _Rparam_jet_ps;
+    float _pparam_jet_ps;
 
     int _nRun ;
 

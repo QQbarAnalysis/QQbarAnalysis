@@ -13,7 +13,7 @@ PROJECT( QQbarProcessor )
 SET( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 SET( ${PROJECT_NAME}_VERSION_MINOR 1 )
 SET( ${PROJECT_NAME}_VERSION_PATCH 0 )
-
+#SET (CMAKE_CXX_STANDARD 11)
 
 
 ### DEPENDENCIES ############################################################
@@ -27,7 +27,7 @@ INCLUDE( ilcsoft_default_settings )
 FIND_PACKAGE( Marlin 1.0 REQUIRED ) # minimum required Marlin version
 FIND_PACKAGE( ROOT REQUIRED )
 FIND_PACKAGE( LCIO REQUIRED )
-FIND_PACKAGE( FastJet 2.4.2 REQUIRED )
+FIND_PACKAGE( FastJet REQUIRED )
 
 FOREACH( pkg Marlin LCIO FastJet ROOT )
     IF( ${pkg}_FOUND )
@@ -71,8 +71,9 @@ ENDIF()
 ### LIBRARY #################################################################
 
 # definitions to pass to the compiler
-#ADD_DEFINITIONS( "-Wall -ansi -pedantic -std=gnu++11" )
-ADD_DEFINITIONS( "-Wall -ansi -pedantic")
+ADD_DEFINITIONS( "-Wall -ansi -pedantic -std=gnu++11" )
+#ADD_DEFINITIONS( "-Wall -ansi -pedantic -std=c++0x ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs" )
+#ADD_DEFINITIONS( "-Wall -ansi -pedantic")
 ADD_DEFINITIONS( "-Wno-long-long" )
 
 # include directories

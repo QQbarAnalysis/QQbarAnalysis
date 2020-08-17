@@ -5,8 +5,8 @@ using std::string;
 namespace QQbarProcessor 
 {
 
-  ReconstructedParticle * QQbarTools::findPhoton(LCCollection * pfocol)
-  {
+  ReconstructedParticle * QQbarTools::findPhoton(LCCollection * pfocol){
+
     int pfonumber = pfocol->getNumberOfElements();
     ReconstructedParticle * winner = NULL;
     float maxenergy = 0.0;
@@ -63,11 +63,6 @@ namespace QQbarProcessor
 	ReconstructedParticle * jetpart = dynamic_cast< ReconstructedParticle * >(jetcol->getElementAt(j));
 	vector< Vertex * > * vertices = convert(navigator.getRelatedToObjects(jetpart));
 	const vector< ReconstructedParticle * > components = jetpart->getParticles();
-
-  for(int z=0; z<vertices->size(); z++){
-	std::cout << "vertex associate = " << vertices->at(z)->getAssociatedParticle()->getParticles().size() << "\n";
-	}
-
 	int nvtx = vertices->size();
 	float btag = 0.0;
 	float ctag = 0.0;

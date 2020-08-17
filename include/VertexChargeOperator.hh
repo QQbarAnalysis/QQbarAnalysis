@@ -45,7 +45,8 @@ namespace QQbarProcessor
     bool __magicBall(float threshold, float seed = 0.0);
     bool isKaon(EVENT::ReconstructedParticle *particle);
     bool isKaonCheat(EVENT::ReconstructedParticle *particle);
-
+    int getPDGtrack(EVENT::ReconstructedParticle *particle);
+    
   private:
     //
     //	Data
