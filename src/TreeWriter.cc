@@ -57,6 +57,7 @@ namespace QQbarProcessor
     _hTree->Branch("mc_quark_ps_pdg", data._mc_quark_ps_pdg, "mc_quark_ps_pdg[300]/F");
     _hTree->Branch("mc_quark_ps_charge", data._mc_quark_ps_charge, "mc_quark_ps_charge[300]/F");
     _hTree->Branch("mc_quark_ps_n", &data._mc_quark_ps_n, "mc_quark_ps_n/I");
+
     _hTree->Branch("jet_R_norm", &data._jet_R_norm, "jet_R_norm/F");
     _hTree->Branch("mc_quark_ps_y12", &data._mc_quark_ps_y12, "mc_quark_ps_y12/F");
     _hTree->Branch("mc_quark_ps_y23", &data._mc_quark_ps_y23, "mc_quark_ps_y23/F");

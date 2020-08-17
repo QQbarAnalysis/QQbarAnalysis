@@ -47,7 +47,7 @@ namespace QQbarProcessor
     registerProcessorParameter( "DBDanalysis",
 				"It is a DBD analysis? Only for bbbar.",
 				_boolDBDanalysis,
-				true
+  			true
 				);
     registerProcessorParameter( "KaonCheat",
 				"Do we cheat in the kaon identification?",

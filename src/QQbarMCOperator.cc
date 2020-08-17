@@ -65,8 +65,7 @@ namespace QQbarProcessor
     ps.erase(end, ps.end());
     // save the PS particles
     for(int k=0; k< ps.size(); k++) bbbar_ps.push_back(ps.at(k));
-	  
-	  
+  	  
     return bbbar_ps;
 
   }

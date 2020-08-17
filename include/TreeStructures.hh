@@ -380,8 +380,8 @@ namespace QQbarProcessor
       _mc_quark_ps_d12=0;
       _mc_quark_ps_d23=0;
       for(int i=0; i<50; i++) {
-	_mc_quark_ps_ycut[i]=0.;
-	_mc_quark_ps_njets_ycut[i]=0.;
+  	_mc_quark_ps_ycut[i]=0.;
+  	_mc_quark_ps_njets_ycut[i]=0.;
       }
       _mc_quark_ps_isr_y12=0;
       _mc_quark_ps_isr_y23=0;
@@ -472,6 +472,8 @@ namespace QQbarProcessor
 	  _pfo_type[i][ipfo]=0;
 	  _pfo_charge[i][ipfo]=-1000;
 	}
+	_jet_nvtx[i]=0;
+	_jet_ntrack[i]=-1;
 
 	for(int ivx=0; ivx<10; ivx++) {
 	  _jet_vtx_isprimary[i][ivx]=-1;

@@ -100,13 +100,11 @@ namespace QQbarProcessor
   void BBbarAnalysis::AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps)
   {
 
-
     vector<PseudoJet> particles;
     JetDefinition jet_def(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
 
     vector <MCParticle *> bbbar_ps = opera.GetBBbarQuarksPS();
     streamlog_out(DEBUG) << "Hard Process + PS Level \n";
-    
 
     for(int i=0; i<bbbar_ps.size(); i++) {
       if(bbbar_ps.at(i)!=NULL) {
@@ -116,12 +114,13 @@ namespace QQbarProcessor
 	_stats._mc_quark_ps_py[i]=bbbar_ps.at(i)->getMomentum()[1];
 	_stats._mc_quark_ps_pz[i]=bbbar_ps.at(i)->getMomentum()[2];
 	_stats._mc_quark_ps_pdg[i]=bbbar_ps.at(i)->getPDG();
+	if(bbbar_ps.at(i)->getPDG()==5) quark_idx[0]=i;
+        if(bbbar_ps.at(i)->getPDG()==-5) quark_idx[1]=i;    
 	_stats._mc_quark_ps_charge[i]=bbbar_ps.at(i)->getCharge();
 	_stats._mc_quark_ps_m[i]=bbbar_ps.at(i)->getMass();
 	_stats._mc_quark_ps_pt[i]=std::sqrt( std::pow(bbbar_ps.at(i)->getMomentum()[0],2) + std::pow(bbbar_ps.at(i)->getMomentum()[1],2) );
 
 	particles.push_back(PseudoJet(bbbar_ps.at(i)->getMomentum()[0],bbbar_ps.at(i)->getMomentum()[1],bbbar_ps.at(i)->getMomentum()[2],bbbar_ps.at(i)->getEnergy()));
-
 
 	QQbarTools::PrintParticle(bbbar_ps.at(i));
       } else {
@@ -280,8 +279,8 @@ namespace QQbarProcessor
 
 	  //match reco jets with quarks BEFORE radiation
 	  MatchB(jets, mcbs, mcvtxcol);
+    
 	}
-
 
 	// get jet reconstruction variables (merging distances)
 	if(_boolDBDanalysis==true) {
@@ -304,6 +303,7 @@ namespace QQbarProcessor
 	    _stats._y23 = params[pidh.getParameterIndex(alid,"y23")];
 	    _stats._y12 = params[pidh.getParameterIndex(alid,"y12")];
 	    streamlog_out(DEBUG) << "IDR: y23 (reco)= "<<_stats._y23<<"\n";
+
 	  } catch(UTIL::UnknownAlgorithm &e){ 
 	    streamlog_out(DEBUG) << "No algorithm yth!\n"; 
 	    streamlog_out(WARNING)<< e.what() << "\n";
