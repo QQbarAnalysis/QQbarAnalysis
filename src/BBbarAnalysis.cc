@@ -106,6 +106,10 @@ namespace QQbarProcessor
     vector <MCParticle *> bbbar_ps = opera.GetBBbarQuarksPS();
     streamlog_out(DEBUG) << "Hard Process + PS Level \n";
 
+    int quark_idx[2];
+    quark_idx[0]=0;
+    quark_idx[1]=0;
+    
     for(int i=0; i<bbbar_ps.size(); i++) {
       if(bbbar_ps.at(i)!=NULL) {
 	_stats._mc_quark_ps_n++;
@@ -342,7 +346,7 @@ namespace QQbarProcessor
 	  JetDefinition jet_def_eecambridge(&eecambridge);
 	  ClusterSequence cs_eecambridge(particles_pfos,jet_def_eecambridge);
 	  vector<PseudoJet> jets_ee = sorted_by_E(cs_eecambridge.inclusive_jets(0));
-	  _stats._mc_quark_njets_ycut_cambridge[iycut]=jets_ee.size();
+	  _stats._njets_ycut_cambridge[iycut]=jets_ee.size();
 
 	  
 	}
