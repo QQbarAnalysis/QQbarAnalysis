@@ -188,7 +188,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
     for(int j=0; j<50; j++) {
       //b
       if(Rall_b_ps[i]>0 && R3b_ps[i][j]) {
-	eR3b_ps[i][j]=(R3b_ps[i][j]/Rall_b_ps[i]) * sqrt(1./R3b_ps[i][j] + 0.25/Rall_b_ps[i]);
+	eR3b_ps[i][j]=(R3b_ps[i][j]/Rall_b_ps[i]) * sqrt(1./R3b_ps[i][j] + 1./Rall_b_ps[i]);
 	R3b_ps[i][j]=(R3b_ps[i][j]/Rall_b_ps[i]);
       }
       else {
@@ -197,7 +197,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
       }
 
       if(Rall_b_reco[i]>0 && R3b_reco[i][j]) {
-	eR3b_reco[i][j]=(R3b_reco[i][j]/Rall_b_reco[i]) * sqrt(1./R3b_reco[i][j] + 0.25/Rall_b_reco[i]);
+	eR3b_reco[i][j]=(R3b_reco[i][j]/Rall_b_reco[i]) * sqrt(1./R3b_reco[i][j] + 1/Rall_b_reco[i]);
 	R3b_reco[i][j]=(R3b_reco[i][j]/Rall_b_reco[i]);
       }
       else {
@@ -207,7 +207,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
 
       //l
       if(Rall_l_ps[i]>0 && R3l_ps[i][j]) {
-	eR3l_ps[i][j]=(R3l_ps[i][j]/Rall_l_ps[i]) * sqrt(1./R3l_ps[i][j] + 0.25/Rall_l_ps[i]);
+	eR3l_ps[i][j]=(R3l_ps[i][j]/Rall_l_ps[i]) * sqrt(1./R3l_ps[i][j] + 1./Rall_l_ps[i]);
 	R3l_ps[i][j]=(R3l_ps[i][j]/Rall_l_ps[i]);
       }
       else {
@@ -216,7 +216,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
       }
 
       if(Rall_l_reco[i]>0 && R3l_reco[i][j]) {
-	eR3l_reco[i][j]=(R3l_reco[i][j]/Rall_l_reco[i]) * sqrt(1./R3l_reco[i][j] + 0.25/Rall_l_reco[i]);
+	eR3l_reco[i][j]=(R3l_reco[i][j]/Rall_l_reco[i]) * sqrt(1./R3l_reco[i][j] + 1./Rall_l_reco[i]);
 	R3l_reco[i][j]=(R3l_reco[i][j]/Rall_l_reco[i]);
       }
       else {
@@ -268,7 +268,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
     for(int j=0; j<50; j++) {
       //Parton shower
       if(R3b_ps[i][j] && R3l_ps[i][j]>0) {
-	eR3bl_ps[i][j]=(R3b_ps[i][j]/R3l_ps[i][j]) * sqrt(pow(eR3b_ps[i][j]/R3b_ps[i][j],2) + pow(eR3l_ps[i][j]/(2*R3l_ps[i][j]),2));
+	eR3bl_ps[i][j]=(R3b_ps[i][j]/R3l_ps[i][j]) * sqrt(pow(eR3b_ps[i][j]/R3b_ps[i][j],2) + pow(eR3l_ps[i][j]/(R3l_ps[i][j]),2));
 	R3bl_ps[i][j]=(R3b_ps[i][j]/R3l_ps[i][j]);
       }
       else {
@@ -277,7 +277,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
       }
       //reco
       if(R3b_reco[i][j] && R3l_reco[i][j]>0) {
-	eR3bl_reco[i][j]=(R3b_reco[i][j]/R3l_reco[i][j]) * sqrt(pow(eR3b_reco[i][j]/R3b_reco[i][j],2) + pow(eR3l_reco[i][j]/(2*R3l_reco[i][j]),2));
+	eR3bl_reco[i][j]=(R3b_reco[i][j]/R3l_reco[i][j]) * sqrt(pow(eR3b_reco[i][j]/R3b_reco[i][j],2) + pow(eR3l_reco[i][j]/(R3l_reco[i][j]),2));
 	R3bl_reco[i][j]=(R3b_reco[i][j]/R3l_reco[i][j]);
       }
       else {
