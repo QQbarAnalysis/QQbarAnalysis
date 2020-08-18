@@ -27,9 +27,18 @@ INCLUDE( ilcsoft_default_settings )
 FIND_PACKAGE( Marlin 1.0 REQUIRED ) # minimum required Marlin version
 FIND_PACKAGE( ROOT REQUIRED )
 FIND_PACKAGE( LCIO REQUIRED )
-FIND_PACKAGE( FastJet REQUIRED )
 
-FOREACH( pkg Marlin LCIO FastJet ROOT )
+FIND_PACKAGE ( FastJet )
+IF ( NOT ${FastJet_VERSION} VERSION_LESS 3 )
+  FIND_PACKAGE( FastJet 3 REQUIRED COMPONENTS siscone siscone_spherical fastjetplugins fastjetcontribfragile fastjettools)
+ELSEIF ( NOT ${FastJet_VERSION} VERSION_LESS 2.4.2 )
+  FIND_PACKAGE( FastJet 2 REQUIRED COMPONENTS SISConePlugin )
+ENDIF()
+
+INCLUDE_DIRECTORIES( SYSTEM ${FastJet_INCLUDE_DIRS} )
+LINK_LIBRARIES( ${FastJet_LIBRARIES} ${FastJet_COMPONENT_LIBRARIES} )
+
+FOREACH( pkg Marlin LCIO ROOT )
     IF( ${pkg}_FOUND )
         INCLUDE_DIRECTORIES( ${${pkg}_INCLUDE_DIRS} )
         LINK_LIBRARIES( ${${pkg}_LIBRARIES} )

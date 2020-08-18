@@ -30,6 +30,7 @@
 //---- Fastjet stuff
 #include "fastjet/PseudoJet.hh"
 #include "fastjet/ClusterSequence.hh"
+#include <fastjet/EECambridgePlugin.hh>
 
 using namespace lcio ;
 using namespace marlin ;
