@@ -126,8 +126,12 @@ namespace QQbarProcessor
     _hTree->Branch("MCLeptonCostheta", &data._MCLeptonCostheta, "MCLeptonCostheta/F");
     _hTree->Branch("MCBOscillation", &data._MCBOscillation, "MCBOscillation/I");
     _hTree->Branch("MCBBarOscillation", &data._MCBBarOscillation, "MCBBarOscillation/I");
+    _hTree->Branch("MCBEnergy", data._MCBEnergy, "MCBEnergy[2]/F");
     _hTree->Branch("qMCBcostheta", data._qMCBcostheta, "qMCBcostheta[2]/F");
     _hTree->Branch("qMCcostheta", data._qMCcostheta, "qMCcostheta[2]/F");
+    _hTree->Branch("singletopFlag", &data._singletopFlag, "singletopFlag/I");
+    _hTree->Branch("MCTop1charge", &data._MCTop1charge, "MCTop1charge/F");
+    _hTree->Branch("MCTop2charge", &data._MCTop2charge, "MCTop2charge/F");
 
     //Reconstructed
     _hTree->Branch("totalEnergy", &data._totalEnergy, "totalEnergy/F");
@@ -217,23 +221,23 @@ namespace QQbarProcessor
     _hTree->Branch("chiGammaT2", &data._chiGammaT2, "chiGammaT2/F");
     _hTree->Branch("Thrust", &data._Thrust, "Thrust/F");
 
-		_hTree->Branch("MCBHadCharge", &data._MCBHadCharge, "MCBHadCharge/I");
-		_hTree->Branch("MCBHadNtracks", &data._MCBHadNtracks, "MCBHadNtracks/I");
+	_hTree->Branch("MCBHadCharge", &data._MCBHadCharge, "MCBHadCharge/I");
+	_hTree->Branch("MCBHadNtracks", &data._MCBHadNtracks, "MCBHadNtracks/I");
 
-		_hTree->Branch("angleB", &data._angleB, "angleB/F");
-		_hTree->Branch("angleW", &data._angleW, "angleW/F");
-		_hTree->Branch("cosbjets", &data._cosbjets, "cosbjets/F");
+	_hTree->Branch("angleB", &data._angleB, "angleB/F");
+	_hTree->Branch("angleW", &data._angleW, "angleW/F");
+	_hTree->Branch("cosbjets", &data._cosbjets, "cosbjets/F");
 
-		// Jet information
-		_hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");
-		_hTree->Branch("jet_E", data._jet_E, "jet_E[2]/F");
-		_hTree->Branch("jet_px", data._jet_px, "jet_px[2]/F");
-		_hTree->Branch("jet_py", data._jet_py, "jet_py[2]/F");
-		_hTree->Branch("jet_pz", data._jet_pz, "jet_pz[2]/F");
-		_hTree->Branch("jet_M", data._jet_M, "jet_M[2]/F");
+	// Jet information
+	_hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");
+	_hTree->Branch("jet_E", data._jet_E, "jet_E[2]/F");
+	_hTree->Branch("jet_px", data._jet_px, "jet_px[2]/F");
+	_hTree->Branch("jet_py", data._jet_py, "jet_py[2]/F");
+	_hTree->Branch("jet_pz", data._jet_pz, "jet_pz[2]/F");
+	_hTree->Branch("jet_M", data._jet_M, "jet_M[2]/F");
 
-		// kaon information
-		_hTree->Branch("Top1KaondEdx", data._Top1KaondEdx, "Top1KaondEdx[Top1KaonNumber]/F");
+	// kaon information
+	_hTree->Branch("Top1KaondEdx", data._Top1KaondEdx, "Top1KaondEdx[Top1KaonNumber]/F");
 
   }
 
@@ -257,6 +261,8 @@ namespace QQbarProcessor
     _hTree->Branch("qMCBcostheta", data._qMCBcostheta, "qMCBcostheta[2]/F");
     _hTree->Branch("qMCcostheta", data._qMCcostheta, "qMCcostheta[2]/F");
     _hTree->Branch("singletopFlag", &data._singletopFlag, "singletopFlag/I");
+    _hTree->Branch("MCTop1charge", &data._MCTop1charge, "MCTop1charge/F");
+    _hTree->Branch("MCTop2charge", &data._MCTop2charge, "MCTop2charge/F");
 
 		// MC W info
     _hTree->Branch("MCWplusmass", &data._MCWplusmass, "MCWplusmass/F");

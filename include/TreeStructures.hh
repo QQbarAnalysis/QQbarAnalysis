@@ -185,6 +185,7 @@ namespace QQbarProcessor
     float _MCTopBarcostheta;
     float _MCTopcosWb;
     float _MCTopcosWt;
+    float _MCBEnergy[2];
     float _qMCcostheta[2];
     float _MCMass;
     float _MCPDG;
@@ -192,6 +193,9 @@ namespace QQbarProcessor
     float _qMCBcostheta[2];
     float _MCNeutrinoEnergy;
 		int _singletopFlag;
+
+		float _MCTop1charge;
+		float _MCTop2charge;
 
 		// MC B Had info
 		int _MCBHadCharge;
