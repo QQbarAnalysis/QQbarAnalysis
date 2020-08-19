@@ -120,6 +120,10 @@ namespace QQbarProcessor
 
 		vector<float> bdirection = MathOperator::getDirection(mcb->getMomentum());
 		vector<float> bdirectionbar = MathOperator::getDirection(mcbbar->getMomentum());
+
+		_stats._MCBEnergy[0] = mcb->getEnergy();
+		_stats._MCBEnergy[1] = mcbbar->getEnergy();
+
 		_stats._qMCBcostheta[0] =  std::cos( MathOperator::getAngles(bdirection)[1] );
 		_stats._qMCBcostheta[1] =  -std::cos( MathOperator::getAngles(bdirectionbar)[1] );
 		_stats._qMCcostheta[0] = _stats._MCTopcostheta;//(std::abs(_stats._qMCBcostheta[0]) < 0.9 )? _stats._MCTopcostheta: -2;
@@ -318,7 +322,7 @@ namespace QQbarProcessor
 			vector< EVENT::MCParticle * > mcbquarks = opera.GetBquarkPair();
 			vector< EVENT::MCParticle * > mcws = opera.GetWPair();
 			Match(mctops, mcbquarks, mcws, topHadronic);
-			MatchB(mcbquarks, topHadronic, topLeptonic, mcvtxcol);
+			//MatchB(mcbquarks, topHadronic, topLeptonic, mcvtxcol);
 			ComputeCharge(topHadronic, topLeptonic);
 
 			ComputeChargeTVCM(topHadronic, topLeptonic, vtxOperator);
@@ -547,6 +551,8 @@ namespace QQbarProcessor
 
 		}
 
+		_stats._MCTop1charge = top1->__GetMCCharge();
+		_stats._MCTop2charge = top2->__GetMCCharge();
 		_stats._qCostheta[0] = -2.;
 
 		vector<float> direction = MathOperator::getDirection(top1->getMomentum());
@@ -1132,7 +1138,6 @@ namespace QQbarProcessor
 
 		//float chi2 = chiTopMass + chiTopE + chiPbstar; // + chiCosWb + chiGammaT ;
 		float chi2 = chiTopMass + chiTopE + chiPbstar + chiCosWb + chiGammaT ;
-
 
 		_stats._Top1pstarb = bpstar;
 		//float chi2 = std::pow( mT - _stats._TopMassparameter, 2) / std::pow( _stats._TopMassSigmaparameter, 2) + 
