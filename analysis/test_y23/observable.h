@@ -79,6 +79,7 @@ public :
    Float_t         mc_quark_ps_d23;
    Float_t         mc_quark_ps_ycut[50];
    Float_t         mc_quark_ps_njets_ycut[50];
+   Float_t         mc_quark_ps_njets_ycut_cambridge[50];
    Float_t         mc_quark_ps_jet_E[2];
    Float_t         mc_quark_ps_jet_px[2];
    Float_t         mc_quark_ps_jet_py[2];
@@ -111,6 +112,7 @@ public :
    Float_t         d12;
    Float_t         ycut[50];
    Float_t         njets_ycut[50];
+   Float_t         njets_ycut_cambridge[50];
    Float_t         oblateness;
    Float_t         aplanarity;
    Float_t         major_thrust_value;
@@ -183,6 +185,7 @@ public :
    TBranch        *b_mc_quark_ps_d23;   //!
    TBranch        *b_mc_quark_ps_ycut;   //!
    TBranch        *b_mc_quark_ps_njets_ycut;   //!
+   TBranch        *b_mc_quark_ps_njets_ycut_cambridge;   //!
    TBranch        *b_mc_quark_ps_jet_E;   //!
    TBranch        *b_mc_quark_ps_jet_px;   //!
    TBranch        *b_mc_quark_ps_jet_py;   //!
@@ -215,6 +218,7 @@ public :
    TBranch        *b_d12;   //!
    TBranch        *b_ycut;   //!
    TBranch        *b_njets_ycut;   //!
+   TBranch        *b_njets_ycut_cambridge;   //!
    TBranch        *b_oblateness;   //!
    TBranch        *b_aplanarity;   //!
    TBranch        *b_major_thrust_value;   //!
@@ -264,6 +268,7 @@ public :
    //analysis
    virtual void     AnalysisY23(int n);
    virtual void     AnalysisR3(int n, bool cond);
+   virtual void     AnalysisR3_cambridge(int n, bool cond);
    virtual void     AnalysisR3_y23(int n);
    
    virtual void     Efficiencies(int n);
@@ -509,6 +514,7 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("mc_quark_ps_d23", &mc_quark_ps_d23, &b_mc_quark_ps_d23);
    fChain->SetBranchAddress("mc_quark_ps_ycut", mc_quark_ps_ycut, &b_mc_quark_ps_ycut);
    fChain->SetBranchAddress("mc_quark_ps_njets_ycut", mc_quark_ps_njets_ycut, &b_mc_quark_ps_njets_ycut);
+   fChain->SetBranchAddress("mc_quark_ps_njets_ycut_cambridge", mc_quark_ps_njets_ycut_cambridge, &b_mc_quark_ps_njets_ycut_cambridge);
    fChain->SetBranchAddress("mc_quark_ps_jet_E", mc_quark_ps_jet_E, &b_mc_quark_ps_jet_E);
    fChain->SetBranchAddress("mc_quark_ps_jet_px", mc_quark_ps_jet_px, &b_mc_quark_ps_jet_px);
    fChain->SetBranchAddress("mc_quark_ps_jet_py", mc_quark_ps_jet_py, &b_mc_quark_ps_jet_py);
@@ -541,6 +547,7 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("d12", &d12, &b_d12);
    fChain->SetBranchAddress("ycut", ycut, &b_ycut);
    fChain->SetBranchAddress("njets_ycut", njets_ycut, &b_njets_ycut);
+   fChain->SetBranchAddress("njets_ycut_cambridge", njets_ycut_cambridge, &b_njets_ycut_cambridge);
    fChain->SetBranchAddress("oblateness", &oblateness, &b_oblateness);
    fChain->SetBranchAddress("aplanarity", &aplanarity, &b_aplanarity);
    fChain->SetBranchAddress("major_thrust_value", &major_thrust_value, &b_major_thrust_value);

@@ -6,7 +6,6 @@
 #include "observable.h"
 #include "TPad.h"
 
-
 void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
 {
 
@@ -110,7 +109,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
 
 	njets_condition=false;
 	if(inclusive == true && njets_ycut[iycut]>2.5 ) njets_condition=true;
-	if(inclusive == false && njets_ycut[iycut]>2.5 && mc_quark_ps_njets_ycut[iycut]<3.5) njets_condition=true;
+	if(inclusive == false && njets_ycut[iycut]>2.5 && njets_ycut[iycut]<3.5) njets_condition=true;
 
 	//RECO LEVEL level
 	if(njets_condition==true) { // should we save events with EXACTLY 3 jets... or should we save events with >2 jets ??? 
@@ -155,7 +154,7 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
 
 	njets_condition=false;
 	if(inclusive == true && njets_ycut[iycut]>2.5 ) njets_condition=true;
-	if(inclusive == false && njets_ycut[iycut]>2.5 && mc_quark_ps_njets_ycut[iycut]<3.5) njets_condition=true;
+	if(inclusive == false && njets_ycut[iycut]>2.5 && njets_ycut[iycut]<3.5) njets_condition=true;
 
 	//RECO LEVEL level
 	if(njets_condition==true) { // should we save events with EXACTLY 3 jets... or should we save events with >2 jets ??? 
@@ -172,8 +171,303 @@ void observable::AnalysisR3(int n_entries=-1, bool inclusive = false)
 
 
   //Save results in TGraohErrors
-  TString filename="output_y23_inclusive.root";
+  TString filename="output_y23_inclusive_signal.root";
   if(inclusive==false) filename="output_y23_exclusive.root";
+  TFile *MyFile = new TFile(filename,"RECREATE");
+  MyFile->cd();
+  
+  //----------------------------------------------------
+  //calculate R3b and R3q and their errors
+  double eR3b_ps[4][50];
+  double eR3b_reco[4][50];
+  double eR3l_ps[4][50];
+  double eR3l_reco[4][50];
+  
+  for(int i=0; i<4; i++) {
+    for(int j=0; j<50; j++) {
+      //b
+      if(Rall_b_ps[i]>0 && R3b_ps[i][j]) {
+	eR3b_ps[i][j]=(R3b_ps[i][j]/Rall_b_ps[i]) * sqrt(1./R3b_ps[i][j] + 1./Rall_b_ps[i]);
+	R3b_ps[i][j]=(R3b_ps[i][j]/Rall_b_ps[i]);
+      }
+      else {
+	eR3b_ps[i][j]=0;
+	R3b_ps[i][j]=0.;
+      }
+
+      if(Rall_b_reco[i]>0 && R3b_reco[i][j]) {
+	eR3b_reco[i][j]=(R3b_reco[i][j]/Rall_b_reco[i]) * sqrt(1./R3b_reco[i][j] + 1/Rall_b_reco[i]);
+	R3b_reco[i][j]=(R3b_reco[i][j]/Rall_b_reco[i]);
+      }
+      else {
+	eR3b_reco[i][j]=0;
+	R3b_reco[i][j]=0.;
+      }
+
+      //l
+      if(Rall_l_ps[i]>0 && R3l_ps[i][j]) {
+	eR3l_ps[i][j]=(R3l_ps[i][j]/Rall_l_ps[i]) * sqrt(1./R3l_ps[i][j] + 1./Rall_l_ps[i]);
+	R3l_ps[i][j]=(R3l_ps[i][j]/Rall_l_ps[i]);
+      }
+      else {
+	eR3l_ps[i][j]=0;
+	R3l_ps[i][j]=0.;
+      }
+
+      if(Rall_l_reco[i]>0 && R3l_reco[i][j]) {
+	eR3l_reco[i][j]=(R3l_reco[i][j]/Rall_l_reco[i]) * sqrt(1./R3l_reco[i][j] + 1./Rall_l_reco[i]);
+	R3l_reco[i][j]=(R3l_reco[i][j]/Rall_l_reco[i]);
+      }
+      else {
+	eR3l_reco[i][j]=0;
+	R3l_reco[i][j]=0.;
+      }
+    }
+  }
+
+  TGraphErrors * graph_R3b_ps[4];
+  TGraphErrors * graph_R3l_ps[4];
+  TGraphErrors * graph_R3b_reco[4];
+  TGraphErrors * graph_R3l_reco[4];
+  
+  for(int i=0; i<4; i++) {
+    graph_R3b_ps[i]= new TGraphErrors (50, ycut_array,R3b_ps[i],eycut_array,eR3b_ps[i]);
+    graph_R3b_reco[i]= new TGraphErrors (50, ycut_array,R3b_reco[i],eycut_array,eR3b_reco[i]);
+    graph_R3l_ps[i]= new TGraphErrors (50, ycut_array,R3l_ps[i],eycut_array,eR3l_ps[i]);
+    graph_R3l_reco[i]= new TGraphErrors (50, ycut_array,R3l_reco[i],eycut_array,eR3l_reco[i]);
+    graph_R3b_ps[i]->SetName(TString::Format("R3b_PS_step%i",i));
+    graph_R3b_reco[i]->SetName(TString::Format("R3b_reco_step%i",i));
+    graph_R3l_ps[i]->SetName(TString::Format("R3l_PS_step%i",i));
+    graph_R3l_reco[i]->SetName(TString::Format("R3l_reco_step%i",i));
+    graph_R3b_ps[i]->Write();
+    graph_R3b_reco[i]->Write();
+    graph_R3l_ps[i]->Write();
+    graph_R3l_reco[i]->Write();
+  }
+
+  
+  //----------------------------------------------------
+  //calculate R3bl and their errors
+  double R3bl_ps[4][50];
+  double R3bl_reco[4][50];
+
+  double eR3bl_ps[4][50];
+  double eR3bl_reco[4][50];
+  
+  for(int i=0; i<4; i++) {
+    for(int j=0; j<50; j++) {
+      R3bl_ps[i][j]=0;
+      R3bl_reco[i][j]=0;
+      eR3bl_ps[i][j]=0;
+      eR3bl_reco[i][j]=0;
+    }
+  }
+
+  for(int i=0; i<4; i++) {
+    for(int j=0; j<50; j++) {
+      //Parton shower
+      if(R3b_ps[i][j] && R3l_ps[i][j]>0) {
+	eR3bl_ps[i][j]=(R3b_ps[i][j]/R3l_ps[i][j]) * sqrt(pow(eR3b_ps[i][j]/R3b_ps[i][j],2) + pow(eR3l_ps[i][j]/(R3l_ps[i][j]),2));
+	R3bl_ps[i][j]=(R3b_ps[i][j]/R3l_ps[i][j]);
+      }
+      else {
+	eR3bl_ps[i][j]=0;
+	R3bl_ps[i][j]=0.;
+      }
+      //reco
+      if(R3b_reco[i][j]>0 && R3l_reco[i][j]>0) {
+	eR3bl_reco[i][j]=(R3b_reco[i][j]/R3l_reco[i][j]) * sqrt(pow(eR3b_reco[i][j]/R3b_reco[i][j],2) + pow(eR3l_reco[i][j]/(R3l_reco[i][j]),2));
+	R3bl_reco[i][j]=(R3b_reco[i][j]/R3l_reco[i][j]);
+      }
+      else {
+	eR3bl_reco[i][j]=0;
+	R3bl_reco[i][j]=0.;
+      }
+    }
+  }
+
+  TGraphErrors * graph_R3bl_ps[4];
+  TGraphErrors * graph_R3bl_reco[4];
+  
+  for(int i=0; i<4; i++) {
+    graph_R3bl_ps[i]= new TGraphErrors (50, ycut_array,R3bl_ps[i],eycut_array,eR3bl_ps[i]);
+    graph_R3bl_reco[i]= new TGraphErrors (50, ycut_array,R3bl_reco[i],eycut_array,eR3bl_reco[i]);
+    graph_R3bl_ps[i]->SetName(TString::Format("R3bl_PS_step%i",i));
+    graph_R3bl_reco[i]->SetName(TString::Format("R3bl_reco_step%i",i));
+    graph_R3bl_ps[i]->Write();
+    graph_R3bl_reco[i]->Write();
+  }
+ 
+}
+
+
+void observable::AnalysisR3_cambridge(int n_entries=-1, bool inclusive = false)
+{
+
+  double R3b_ps[4][50];// firxt index : step of reconstruction, second index: ycut value (defined in the ntuple)
+  double R3l_ps[4][50];
+  double Rall_b_ps[4];
+  double Rall_l_ps[4];
+
+  double R3b_reco[4][50];
+  double R3l_reco[4][50];
+  double Rall_b_reco[4];
+  double Rall_l_reco[4];
+  
+  double ycut_array[50];
+  double eycut_array[50];
+
+  for(int i=0; i<4; i++) {
+    Rall_b_ps[i]=0;
+    Rall_l_ps[i]=0;
+    Rall_b_reco[i]=0;
+    Rall_l_reco[i]=0;
+    
+    for(int j=0; j<50; j++) {
+      R3b_ps[i][j]=0;
+      R3l_ps[i][j]=0;
+      R3b_reco[i][j]=0;
+      R3l_reco[i][j]=0;
+
+      ycut_array[j]=0;
+      eycut_array[j]=0;
+
+    }
+  }
+
+
+  Long64_t nentries;
+  if(n_entries>0) nentries= n_entries;
+  else nentries= fChain->GetEntriesFast();
+  //  nentries=1000000;
+  Long64_t nbytes = 0, nb = 0;
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
+    Long64_t ientry = LoadTree(jentry);
+    if (ientry < 0) break;
+    nb = fChain->GetEntry(jentry);   nbytes += nb;
+
+    if ( jentry > 100000 && jentry % 100000 ==0 ) std::cout << "Progress: " << 100.*jentry/nentries <<" %"<<endl;
+
+    // Variables to perform cuts at parton level
+    //
+    float ISR_E=mc_ISR_E[0]+mc_ISR_E[1];
+    if(ISR_E>35) continue; // exclude radiative return events from the analysis
+
+    //write the value of ycut_array, just once (it is the same for all the events)
+    if(ycut_array[10] == 0 ) {
+      for(int iycut=0; iycut<50; iycut++) ycut_array[iycut]=ycut[iycut];
+    }
+
+    //how do we define costheta, in absolute value ?
+    std::vector<float> pjet1;
+    pjet1.push_back(jet_px[0]);
+    pjet1.push_back(jet_py[0]);
+    pjet1.push_back(jet_pz[0]);
+    std::vector<float> pjet2;
+    pjet2.push_back(jet_px[1]);
+    pjet2.push_back(jet_py[1]);
+    pjet2.push_back(jet_pz[1]);
+    
+    float costheta_reco=(fabs(GetCostheta(pjet1))+fabs(GetCostheta(pjet2)))/2.;
+
+    //b-quark
+    if(fabs(mc_quark_pdg[0])==5) {
+
+      Rall_b_ps[0]++;
+      Rall_b_reco[0]++;
+      if(PreSelection(1,35)==true) {
+	Rall_b_ps[1]++;
+	Rall_b_reco[1]++;
+      }
+      if(PreSelection(2,35)==true) {
+	Rall_b_ps[2]++;
+	Rall_b_reco[2]++;
+      }
+      if(PreSelection(2,35)==true && costheta_reco<0.8) {
+	Rall_b_ps[3]++;
+	Rall_b_reco[3]++;
+      }
+      
+      //    ------------------------------------------------------------------------
+      for(int iycut=0; iycut<50; iycut++) {
+	bool njets_condition=false;
+	if(inclusive == true && mc_quark_ps_njets_ycut_cambridge[iycut]>2.5 ) njets_condition=true;
+	if(inclusive == false && mc_quark_ps_njets_ycut_cambridge[iycut]>2.5 && mc_quark_ps_njets_ycut_cambridge[iycut]<3.5) njets_condition=true;
+
+	//parton shower level
+	if(njets_condition==true) { // should we save events with EXACTLY 3 jets... or should we save events with >2 jets ???
+	  R3b_ps[0][iycut]++; //step 0, no cuts
+	  if(PreSelection(1,35)==true) R3b_ps[1][iycut]++; //step 1 two hadronic jets selection
+	  if(PreSelection(2,35)==true) R3b_ps[2][iycut]++; //step 2 two b-jets selection
+	  if(PreSelection(2,35)==true && costheta_reco<0.8) R3b_ps[3][iycut]++; //step 2 two b-jets selection but excluding very forward regions
+	}
+
+	njets_condition=false;
+	if(inclusive == true && njets_ycut_cambridge[iycut]>2.5 ) njets_condition=true;
+	if(inclusive == false && njets_ycut_cambridge[iycut]>2.5 && mc_quark_ps_njets_ycut_cambridge[iycut]<3.5) njets_condition=true;
+
+	//RECO LEVEL level
+	if(njets_condition==true) { // should we save events with EXACTLY 3 jets... or should we save events with >2 jets ??? 
+	  R3b_reco[0][iycut]++; //step 0, no cuts
+	  if(PreSelection(1,35)==true) R3b_reco[1][iycut]++; //step 1 two hadronic jets selection
+	  if(PreSelection(2,35)==true) R3b_reco[2][iycut]++; //step 2 two b-jets selection
+	  if(PreSelection(2,35)==true && costheta_reco<0.8) R3b_reco[3][iycut]++; //step 2 two b-jets selection but excluding very forward regions
+	}
+      }
+    }
+
+    //uds-quarks
+    if(fabs(mc_quark_pdg[0])<4) {
+      
+      Rall_l_ps[0]++;
+      Rall_l_reco[0]++;
+      if(PreSelection(1,35)==true) {
+	Rall_l_ps[1]++;
+	Rall_l_reco[1]++;
+      }
+      if(PreSelection(3,35)==true) {
+	Rall_l_ps[2]++;
+	Rall_l_reco[2]++;
+      }
+      if(PreSelection(3,35)==true && costheta_reco<0.8) {
+	Rall_l_ps[3]++;
+	Rall_l_reco[3]++;
+      }
+      //    ------------------------------------------------------------------------
+        for(int iycut=0; iycut<50; iycut++) {
+	bool njets_condition=false;
+	if(inclusive == true && mc_quark_ps_njets_ycut_cambridge[iycut]>2.5 ) njets_condition=true;
+	if(inclusive == false && mc_quark_ps_njets_ycut_cambridge[iycut]>2.5 && mc_quark_ps_njets_ycut_cambridge[iycut]<3.5) njets_condition=true;
+
+	//parton shower level
+	if(njets_condition==true) { // should we save events with EXACTLY 3 jets... or should we save events with >2 jets ???
+	  R3l_ps[0][iycut]++; //step 0, no cuts
+	  if(PreSelection(1,35)==true) R3l_ps[1][iycut]++; //step 1 two hadronic jets selection
+	  if(PreSelection(3,35)==true) R3l_ps[2][iycut]++; //step 2 two uds-jets selection
+	  if(PreSelection(3,35)==true && costheta_reco<0.8) R3l_ps[3][iycut]++; //step 2 two uds-jets selection but excluding very forward regions
+	}
+
+	njets_condition=false;
+	if(inclusive == true && njets_ycut_cambridge[iycut]>2.5 ) njets_condition=true;
+	if(inclusive == false && njets_ycut_cambridge[iycut]>2.5 && mc_quark_ps_njets_ycut_cambridge[iycut]<3.5) njets_condition=true;
+
+	//RECO LEVEL level
+	if(njets_condition==true) { // should we save events with EXACTLY 3 jets... or should we save events with >2 jets ??? 
+	  R3l_reco[0][iycut]++; //step 0, no cuts
+	  if(PreSelection(1,35)==true) R3l_reco[1][iycut]++; //step 1 two hadronic jets selection
+	  if(PreSelection(3,35)==true) R3l_reco[2][iycut]++; //step 2 two uds-jets selection
+	  if(PreSelection(3,35)==true && costheta_reco<0.8) R3l_reco[3][iycut]++; //step 2 two uds-jets selection but excluding very forward regions
+	}
+      }
+    }
+
+      
+  }
+
+
+  //Save results in TGraohErrors
+  TString filename="output_y23_inclusive_cambridge_signal.root";
+  if(inclusive==false) filename="output_y23_exclusive_cambridge_signal.root";
   TFile *MyFile = new TFile(filename,"RECREATE");
   MyFile->cd();
   
