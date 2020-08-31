@@ -31,6 +31,7 @@
 #include "fastjet/PseudoJet.hh"
 #include "fastjet/ClusterSequence.hh"
 #include <fastjet/EECambridgePlugin.hh>
+#include <fastjet/JadePlugin.hh>
 
 using namespace lcio ;
 using namespace marlin ;

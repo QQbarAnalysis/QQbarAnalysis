@@ -173,16 +173,23 @@ namespace QQbarProcessor
 	float ycut=float(iycut)*0.001;///_stats._jet_R_norm;
 	//	vector<PseudoJet> jets_ycut = sorted_by_E(cs.exclusive_jets_ycut(ycut));
 	_stats._mc_quark_ps_ycut[iycut]=ycut;
-	_stats._mc_quark_ps_njets_ycut[iycut]=cs.n_exclusive_jets_ycut(ycut/_stats._jet_R_norm);
+	//_stats._mc_quark_ps_njets_ycut[iycut]=cs.n_exclusive_jets_ycut(ycut/_stats._jet_R_norm);
 
 	//to use this, you need to add the FastJet plugins to the CMakeLists
 	//	FIND_PACKAGE( FastJet 3 REQUIRED COMPONENTS siscone siscone_spherical fastjetplugins fastjetcontribfragile fastjettools)
 	// at least the  : fastjetplugins
+
+	//JADE ANALYSIS
+	fastjet::JadePlugin *eejade;
+	eejade = new fastjet::JadePlugin();
+	fastjet::JetDefinition jet_def_eejade(eejade);
+	ClusterSequence cs_ja(particles,jet_def_eejade);
+        _stats._mc_quark_ps_njets_ycut[iycut]=cs_ja.n_exclusive_jets_ycut(ycut);                                                                                       
+	 
 	EECambridgePlugin eecambridge(ycut);
 	JetDefinition jet_def_eecambridge(&eecambridge);
 	ClusterSequence cs_eecambridge(particles,jet_def_eecambridge);
-	vector<PseudoJet> jets_ee = sorted_by_E(cs_eecambridge.inclusive_jets(0));
-	_stats._mc_quark_ps_njets_ycut_cambridge[iycut]=jets_ee.size();
+	_stats._mc_quark_ps_njets_ycut_cambridge[iycut]=cs_eecambridge.n_exclusive_jets_ycut(ycut);
 	
       }
     
@@ -329,6 +336,21 @@ namespace QQbarProcessor
 	//Get the number of jets as a function of ycut
 	//using all pfos as input particles
 	//-----------------------------------------------------------------------------------
+
+	// get pFo + type per jet                                                                                                                                         
+	vector<PseudoJet> particles_pfos;                                                                                                                                   
+        for(int ijet=0; ijet<2; ijet++) {          
+          ReconstructedParticle * jet_reco = dynamic_cast< ReconstructedParticle * >(jetcol->getElementAt(ijet));                                                                      
+          vector<ReconstructedParticle*> components = jet_reco->getParticles();                                                                                                        
+          for(int i=0; i<components.size(); i++) {                                                                                                                              
+	    particles_pfos.push_back(PseudoJet(
+					       components.at(i)->getMomentum()[0],
+					       components.at(i)->getMomentum()[1],
+					       components.at(i)->getMomentum()[2],
+					       components.at(i)->getEnergy()));
+	  }
+	}
+	/*
 	vector<PseudoJet> particles_pfos;
 	for (int ipfcol = 0; ipfcol < pfocol->getNumberOfElements(); ipfcol++) {
 	  ReconstructedParticle * particle_pfo = dynamic_cast< ReconstructedParticle * >(pfocol->getElementAt(ipfcol));
@@ -336,19 +358,23 @@ namespace QQbarProcessor
 	}
 	JetDefinition jet_def_pfos(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
 	ClusterSequence cs_pfos(particles_pfos,jet_def_pfos);
+	*/
 
 	for(int iycut=0; iycut<50; iycut++) {
 	  float ycut=float(iycut)*0.001;
 	  _stats._ycut[iycut]=ycut;
-	  _stats._njets_ycut[iycut]=cs_pfos.n_exclusive_jets_ycut(ycut/_stats._jet_R_norm);
+	  //	  _stats._njets_ycut[iycut]=cs_pfos.n_exclusive_jets_ycut(ycut/_stats._jet_R_norm);
 
+	  fastjet::JadePlugin *eejade;                                                                                                                                                 
+	  eejade = new fastjet::JadePlugin();                                                                                                                              
+	  fastjet::JetDefinition jet_def_eejade(eejade);                                                                                                
+	  ClusterSequence cs_ja(particles_pfos,jet_def_eejade);                                                                                                          
+	  _stats._mc_quark_ps_njets_ycut[iycut]=cs_ja.n_exclusive_jets_ycut(ycut);
+	 
 	  EECambridgePlugin eecambridge(ycut);
 	  JetDefinition jet_def_eecambridge(&eecambridge);
 	  ClusterSequence cs_eecambridge(particles_pfos,jet_def_eecambridge);
-	  vector<PseudoJet> jets_ee = sorted_by_E(cs_eecambridge.inclusive_jets(0));
-	  _stats._njets_ycut_cambridge[iycut]=jets_ee.size();
-
-	  
+	  _stats._njets_ycut_cambridge[iycut]=cs_eecambridge.n_exclusive_jets_ycut(ycut); 
 	}
 
 	
