@@ -266,14 +266,9 @@ public :
    virtual void     Init(TTree *tree);
 
    //analysis
-   virtual void     AnalysisY23(int n);
-   virtual void     AnalysisR3(int n, bool cond);
-   virtual void     AnalysisR3_cambridge(int n, bool cond);
-   virtual void     AnalysisR3_y23(int n);
-   
+   virtual void     AnalysisR3_cambridge(int n);
    virtual void     Efficiencies(int n);
-   virtual bool     JetBtag(int i);
-   virtual bool     JetCantitag(int i);
+
    
 
    //preselection and charge measurement and correction
