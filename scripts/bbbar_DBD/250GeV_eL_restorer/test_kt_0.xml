@@ -24,8 +24,8 @@
 </global>
 
 <!--########  Processor  ######################################## -->
-<processor name="FirstJetClustering" type="myFastJetProcessor"> 
-  <parameter name="algorithm" type="StringVec"> ee_genkt_algorithm 1.5 1</parameter>                             
+<processor name="FirstJetClustering" type="FastJetProcessor"> 
+  <parameter name="algorithm" type="StringVec"> ee_genkt_algorithm 1.25 1</parameter>                             
   <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 2 </parameter>
   <parameter name="recombinationScheme" type="string"> E_scheme </parameter>
   <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
@@ -168,7 +168,7 @@
   <parameter name="inputCollectionName" type="string"> FinalJets </parameter>
 </processor>
 <processor name="MyThrustReconstruction" type="ThrustReconstruction">  
-  <parameter name="inputCollectionName" type="string"> FinalJets </parameter> 
+  <parameter name="inputCollectionName" type="string"> PandoraPFOs </parameter> 
 </processor>
 
 <processor name="MyQQbarProcessor" type="QQbarProcessor">
@@ -176,8 +176,8 @@
   <parameter name="JetRelCollectionName" type="string" lcioInType="Vertex"> FinalJets_rel </parameter>
   <parameter name="MCCollectionName" type="string" lcioInType="MCParticle"> MCParticlesSkimmed</parameter>
   <parameter name="ROOTFileName" type="string">xNAMEfile.root</parameter>
-  <parameter name="ElectronPolarisation" type="int">1</parameter>
-  <parameter name="MassCut" type="float">200</parameter>
+  <parameter name="Rparam_jet_ps" type="float">1.25</parameter>  
+  <parameter name="pparam_jet_ps" type="float">1</parameter>  
   <parameter name="AnalysisType" type="int">2</parameter>
 </processor>
 
