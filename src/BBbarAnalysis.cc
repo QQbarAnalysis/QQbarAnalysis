@@ -238,6 +238,90 @@ namespace QQbarProcessor
 
   }
 
+    //Added by Seidai in 2020.Sep.17
+  //MC hadron information provider
+  void BBbarAnalysis::AnalyseGeneratorBBbar_Hadron(QQbarMCOperator& opera, float _Rparam_jet_ps, float _pparam_jet_ps) {
+    vector<PseudoJet> particles;
+    JetDefinition jet_def(ee_genkt_algorithm, _Rparam_jet_ps, _pparam_jet_ps);
+    int error=0;
+    
+    //Obtain particles which are appeared after intermediate particle
+    vector<MCParticle*> bbbar_hadron = opera.GetBBbarHadrons();
+    streamlog_out(DEBUG) << "Hadron level \n";
+    
+    for(int i=0; i<bbbar_hadron.size(); i++) {
+      if(bbbar_hadron.at(i)!=NULL) {
+        //They are filled at line:587
+	_stats._mc_hadron_n++;
+	_stats._mc_hadron_E[i]=bbbar_hadron.at(i)->getEnergy();
+	_stats._mc_hadron_px[i]=bbbar_hadron.at(i)->getMomentum()[0];
+	_stats._mc_hadron_py[i]=bbbar_hadron.at(i)->getMomentum()[1];
+	_stats._mc_hadron_pz[i]=bbbar_hadron.at(i)->getMomentum()[2];
+	_stats._mc_hadron_pdg[i]=bbbar_hadron.at(i)->getPDG();
+        //std::cout << "  Filled pdg: " << _stats._mc_hadron_pdg[i] << " |  Energy : " << _stats._mc_hadron_E[i] << std::endl;
+	_stats._mc_hadron_charge[i]=bbbar_hadron.at(i)->getCharge();
+	_stats._mc_hadron_m[i]=bbbar_hadron.at(i)->getMass();
+	
+        //Consists particle object which has 4-momentum
+	particles.push_back(PseudoJet(bbbar_hadron.at(i)->getMomentum()[0], bbbar_hadron.at(i)->getMomentum()[1], bbbar_hadron.at(i)->getMomentum()[2], bbbar_hadron.at(i)->getEnergy()));
+	
+	QQbarTools::PrintParticle(bbbar_hadron.at(i));
+      } else { //If bbbar_hadron is empty(hadrons nothing), entry just zero
+        error++;
+	_stats._mc_hadron_n=0;
+	_stats._mc_hadron_E[i]=0;
+	_stats._mc_hadron_px[i]=0;
+	_stats._mc_hadron_py[i]=0;
+	_stats._mc_hadron_pz[i]=0;
+	_stats._mc_hadron_pdg[i]=0;
+	_stats._mc_hadron_charge[i]=0;
+	_stats._mc_hadron_m[i]=0;
+      }
+    }//hadrons loop
+    //std::cout << "NULL bbbar_hadron:" << error << std::endl;
+
+    if(particles.size()>1) {
+      ClusterSequence cs(particles, jet_def);
+      const int njets=2;
+
+      vector<PseudoJet> jets = sorted_by_E(cs.exclusive_jets(njets));
+      double ymerge_23 = cs.exclusive_ymerge(njets);
+      double ymerge_12 = cs.exclusive_ymerge(njets-1);
+      double dmerge_12 = cs.exclusive_dmerge(njets);
+      double dmerge_23 = cs.exclusive_dmerge(njets-1);
+      
+      streamlog_out(DEBUG) << "y12 (Hadron)= " << ymerge_12 << std::endl;
+      streamlog_out(DEBUG) << "y23 (Hadron)= " << ymerge_23 << std::endl;
+      streamlog_out(DEBUG) << "d12 (Hadron)= " << dmerge_12 << std::endl;
+      streamlog_out(DEBUG) << "d23 (Hadron)= " << dmerge_23 << std::endl;
+      
+      _stats._mc_hadron_y12 = ymerge_12;
+      _stats._mc_hadron_y23 = ymerge_23;
+      _stats._mc_hadron_d12 = dmerge_12;
+      _stats._mc_hadron_d23 = dmerge_23;
+      
+      for(int iycut=0; iycut<50; iycut++) {
+	float ycut = float(iycut)*0.001;
+	_stats._mc_hadron_ycut[iycut]=ycut;
+	
+	//Jade algorithm
+	fastjet::JadePlugin *eejade;
+	eejade = new fastjet::JadePlugin();
+	fastjet::JetDefinition jet_def_eejade(eejade);
+	ClusterSequence cs_ja(particles, jet_def_eejade);
+	_stats._mc_hadron_njets_ycut[iycut] = cs_ja.n_exclusive_jets_ycut(ycut);
+	
+	//Cambridge algorithm
+	EECambridgePlugin eecambridge(ycut);
+	JetDefinition jet_def_eecambridge(&eecambridge);
+	ClusterSequence cs_eecambridge(particles, jet_def_eecambridge);
+	_stats._mc_hadron_njets_ycut_cambridge[iycut] = cs_eecambridge.n_exclusive_jets_ycut(ycut);
+      }//ycut loop
+    }
+  }//AnalyseGeneratorBBbar_Hadron()
+
+
+  
   void BBbarAnalysis::AnalyseBBbar(LCEvent * evt,
 				   bool _boolDBDanalysis,
 				   bool _boolkaoncheat,

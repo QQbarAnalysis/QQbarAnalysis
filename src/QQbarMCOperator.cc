@@ -23,6 +23,7 @@ namespace QQbarProcessor
     // find the process simulated (which quark is in the ps)
     int pdg = 0;
     if(number<3) return bbbar_ps;
+    
     MCParticle * quark1 = dynamic_cast<MCParticle*>(myCollection->getElementAt(2));
     MCParticle * quark2 = dynamic_cast<MCParticle*>(myCollection->getElementAt(3));
     pdg = quark1->getPDG();
@@ -70,6 +71,44 @@ namespace QQbarProcessor
 
   }
 
+  //Added by Seidai in 2020.Sep.16
+  vector<MCParticle*> QQbarMCOperator::GetBBbarHadrons() {
+    //std::cout << "##################################" << std::endl;
+    //std::cout << "##         Hadron level         ##" << std::endl;
+    //std::cout << "##################################" << std::endl;
+
+    int number = myCollection -> getNumberOfElements();
+    vector<MCParticle*> stable_hadrons;
+    if(number<3) return stable_hadrons; //return empty
+    int ihadron;// the border of hadronization
+
+    for(int i=0; i<number; i++) {
+      MCParticle* particle = dynamic_cast<MCParticle*>(myCollection->getElementAt(i));
+      if(particle->getPDG()==91 || particle->getPDG()==92 || particle->getPDG()==93) {
+        ihadron = i;
+        break;
+      } 
+    }
+
+    for(int i=ihadron; i<number; i++) {
+      MCParticle* particle = dynamic_cast<MCParticle*>(myCollection->getElementAt(i));
+      vector<MCParticle*> daughters = particle->getDaughters();
+
+      int stable=0;
+      if(daughters.size()==0) {
+        stable_hadrons.push_back(particle);
+	stable=1;
+      }
+      std::cout << "[" << i << "]  Particle: pdg" << particle.at(i)->getPDG() <<" "<<particle.at(i)->getEnergy() <<" is stable? "<< stable << std::endl;
+      stable=0;
+    }
+
+    std::cout << "### stable_hadrons ###" << std::endl;
+    for(int i=0; i<stable_hadrons.size(); i++) {
+      std::cout << "[" << i << "]  Stable particle: " << stable_hadrons.at(i)->getPDG() << std::endl;
+    }
+    return stable_hadrons;
+  }//GetBBbarHadrons()
 
 
   ///DO NOT USE THAT ON T-QUARKS!!!

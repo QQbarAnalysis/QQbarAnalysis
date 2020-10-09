@@ -81,6 +81,24 @@ namespace QQbarProcessor
     _hTree->Branch("mc_quark_ps_isr_jet_py", data._mc_quark_ps_isr_jet_py, "mc_quark_ps_isr_jet_py[2]/F");
     _hTree->Branch("mc_quark_ps_isr_jet_pz", data._mc_quark_ps_isr_jet_pz, "mc_quark_ps_isr_jet_pz[2]/F");
     _hTree->Branch("mc_quark_ps_isr_jet_nparticles", data._mc_quark_ps_isr_jet_nparticles, "mc_quark_ps_isr_nparticles[2]/I");
+    
+    //Added by Seidai in 2020.Sep.17
+    //hadron level
+    _hTree->Branch("mc_hadron_E", data._mc_hadron_E, "mc_hadron_E[300]/F");
+    _hTree->Branch("mc_hadron_px", data._mc_hadron_px, "mc_hadron_px[300]/F");
+    _hTree->Branch("mc_hadron_py", data._mc_hadron_py, "mc_hadron_py[300]/F");
+    _hTree->Branch("mc_hadron_pz", data._mc_hadron_pz, "mc_hadron_pz[300]/F");
+    _hTree->Branch("mc_hadron_m", data._mc_hadron_m, "mc_hadron_m[300]/F");
+    _hTree->Branch("mc_hadron_pdg", data._mc_hadron_pdg, "mc_hadron_pdg[300]/F");
+    _hTree->Branch("mc_hadron_charge", data._mc_hadron_charge, "mc_hadron_charge[300]/F");
+    _hTree->Branch("mc_hadron_n", &data._mc_hadron_n, "mc_hadron_n/I");
+    _hTree->Branch("mc_hadron_y12", &data._mc_hadron_y12, "mc_hadron_y12/F");
+    _hTree->Branch("mc_hadron_y23", &data._mc_hadron_y23, "mc_hadron_y23/F");
+    _hTree->Branch("mc_hadron_d12", &data._mc_hadron_d12, "mc_hadron_d12/F");
+    _hTree->Branch("mc_hadron_d23", &data._mc_hadron_d23, "mc_hadron_d23/F");
+    _hTree->Branch("mc_hadron_ycut", data._mc_hadron_ycut, "mc_hadron_ycut[50]/F");
+    _hTree->Branch("mc_hadron_njets_ycut", data._mc_hadron_njets_ycut, "mc_hadron_njets_ycut[50]/F");
+    _hTree->Branch("mc_hadron_njets_ycut_cambridge", data._mc_hadron_njets_ycut_cambridge, "mc_hadron_njets_ycut_cambridge[50]/F");
 
     //oscillation
     _hTree->Branch("MCBOscillation", &data._MCBOscillation, "MCBOscillation/I");

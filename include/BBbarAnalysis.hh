@@ -54,6 +54,7 @@ namespace QQbarProcessor
     std::vector< MCParticle * > AnalyseGeneratorBBbar(QQbarMCOperator & opera);
     void AnalyseGeneratorISR(QQbarMCOperator & opera);
     void AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
+    void AnalyseGeneratorBBbar_Hadron(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
     void AnalyseBBbar(LCEvent * evt,
 		      bool _boolDBDanalysis,
 		      bool _kaoncheat,

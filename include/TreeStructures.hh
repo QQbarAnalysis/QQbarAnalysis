@@ -300,6 +300,23 @@ namespace QQbarProcessor
     float _mc_quark_ps_isr_jet_pz[2];
     int _mc_quark_ps_isr_jet_nparticles[2];
 
+    //Member for Hadron (Added by Seidai in 2020.Sep.17)
+    float _mc_hadron_E[300];
+    float _mc_hadron_px[300];
+    float _mc_hadron_py[300];
+    float _mc_hadron_pz[300];
+    float _mc_hadron_m[300];
+    float _mc_hadron_pdg[300];
+    float _mc_hadron_charge[300];
+    int _mc_hadron_n;
+    float _mc_hadron_y12;
+    float _mc_hadron_y23;
+    float _mc_hadron_d12;
+    float _mc_hadron_d23;
+    float _mc_hadron_ycut[50];
+    float _mc_hadron_njets_ycut[50];
+    float _mc_hadron_njets_ycut_cambridge[50];
+
     int _MCBOscillation;
     int _MCBBarOscillation;
 
@@ -422,10 +439,32 @@ namespace QQbarProcessor
         _mc_quark_ps_isr_jet_py[i]=0;
         _mc_quark_ps_isr_jet_pz[i]=0;
       }
+      
       _mc_qqbar_m=0;
       _mc_qqbar_pt=0;
       _mc_matching=-1;
 
+      //Added by Seidai 2020.Sep.21
+      for(int i=0; i<300; i++) {
+        _mc_hadron_E[i]=0;
+        _mc_hadron_pdg[i]=0;
+        _mc_hadron_px[i]=0;
+        _mc_hadron_py[i]=0;
+        _mc_hadron_pz[i]=0;
+        _mc_hadron_m[i]=0;
+        _mc_hadron_charge[i]=0;
+      }
+      _mc_hadron_n=0;
+      _mc_hadron_y12=0;
+      _mc_hadron_y23=0;
+      _mc_hadron_d12=0;
+      _mc_hadron_d23=0;
+      for(int i=0; i<50; i++) {
+        _mc_hadron_ycut[i]=0;
+        _mc_hadron_njets_ycut[i]=0;
+        _mc_hadron_njets_ycut_cambridge[i]=0;
+      }
+      
       _MCBOscillation=0;
       _MCBBarOscillation=0;
 

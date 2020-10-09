@@ -32,6 +32,7 @@ namespace QQbarProcessor
     //DO NOT USE THAT ON T-QUARKS!!!
     std::vector< EVENT::MCParticle * > GetBBbarQuarksPS();
     std::vector< EVENT::MCParticle * > GetPairParticles(int pdg);
+    std::vector<EVENT::MCParticle*> GetBBbarHadrons(); //Added by Seidai
     bool IsEvent();//function to check that the event is not gamma gamma overlay bkg
     
     //top quark methods
