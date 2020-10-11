@@ -349,37 +349,34 @@ namespace QQbarProcessor
     float _jet_btag[2];
     float _jet_ctag[2];
 
-    float _pfo_E[2][1000];
-    float _pfo_px[2][1000];
-    float _pfo_py[2][1000];
-    float _pfo_pz[2][1000];
-    float _pfo_m[2][1000];
-    int _pfo_type[2][1000]; 
-    int _pfo_charge[2][1000];
+    float _pfo_E[2][150];
+    float _pfo_px[2][150];
+    float _pfo_py[2][150];
+    float _pfo_pz[2][150];
+    float _pfo_m[2][150];
+    int _pfo_type[2][150]; 
+    int _pfo_charge[2][150];
     int _pfo_n[2];
-    int _pfo_n_max;
 
     int _jet_nvtx[2];
     int _jet_ntrack[2];
-    int _jet_nvtx_max;  
-    int _jet_vtx_isprimary[2][1000];
-    int _jet_vtx_ntrack[2][1000];
-    int _jet_vtx_ntrack_max;
-    float _jet_vtx_charge[2][1000];
+    int _jet_vtx_isprimary[2][10];
+    int _jet_vtx_ntrack[2][10];
+    float _jet_vtx_charge[2][10];
 
-    float _jet_track_E[2][1000][1000];
-    float _jet_track_px[2][1000][1000];
-    float _jet_track_py[2][1000][1000];
-    float _jet_track_pz[2][1000][1000];
-    float _jet_track_p[2][1000][1000];
-    float _jet_track_charge[2][1000][1000];
-    float _jet_track_dedx[2][1000][1000];
-    int _jet_track_iskaon[2][1000][1000];
-    int _jet_track_iskaoncheat[2][1000][1000];
-    int _jet_track_pdg[2][1000][1000];
-    float _jet_track_z0[2][1000][1000];
-    float _jet_track_d0[2][1000][1000];
-    float _jet_track_phi[2][1000][1000];
+    float _jet_track_E[2][10][30];
+    float _jet_track_px[2][10][30];
+    float _jet_track_py[2][10][30];
+    float _jet_track_pz[2][10][30];
+    float _jet_track_p[2][10][30];
+    float _jet_track_charge[2][10][30];
+    float _jet_track_dedx[2][10][30];
+    int _jet_track_iskaon[2][10][30];
+    int _jet_track_iskaoncheat[2][10][30];
+    int _jet_track_pdg[2][10][30];
+    float _jet_track_z0[2][10][30];
+    float _jet_track_d0[2][10][30];
+    float _jet_track_phi[2][10][30];
 
     void Clear()  {
 
@@ -497,58 +494,46 @@ namespace QQbarProcessor
 	_sphericity_tensor[i]=0;
       }
 
-  	
-      _pfo_n_max=0;
-      _jet_nvtx_max=0;
-      _jet_vtx_ntrack_max=0;
-      for (unsigned int i = 0; i < 2; i++) {
-	_jet_E[i]=0;
-	_jet_px[i]=0;
-	_jet_py[i]=0;
-	_jet_pz[i]=0;
-	_jet_m[i]=0;
-	_jet_btag[i]=0;
-	_jet_ctag[i]=0;
+      _pfo_n[i]=0;
 
-	_pfo_n[i]=0;
-
-	for(int ipfo=0; ipfo<1000; ipfo++) {  
-	  _pfo_E[i][ipfo]=0;                                                                                                                
-	  _pfo_px[i][ipfo]=0;                                                                                                               
-	  _pfo_py[i][ipfo]=0;                                                                                                               
-	  _pfo_pz[i][ipfo]=0;                                                                                                               
-	  _pfo_m[i][ipfo]=0;
-	  _pfo_type[i][ipfo]=0;
-	  _pfo_charge[i][ipfo]=-1000;
-	}
-	_jet_nvtx[i]=0;
-	_jet_ntrack[i]=-1;
-
-	for(int ivx=0; ivx<10; ivx++) {
-	  _jet_vtx_isprimary[i][ivx]=-1;
-	  _jet_vtx_ntrack[i][ivx]=-1;
-	  _jet_vtx_charge[i][ivx]=-1000;
-
-	  for(int itr=0; itr<1000; itr++) {
-	    _jet_track_E[i][ivx][itr]=0;
-	    _jet_track_px[i][ivx][itr]=0;
-	    _jet_track_py[i][ivx][itr]=0;
-	    _jet_track_pz[i][ivx][itr]=0;
-	    _jet_track_p[i][ivx][itr]=0;
-	    _jet_track_charge[i][ivx][itr]=-1000;
-	    _jet_track_dedx[i][ivx][itr]=0;
-	    _jet_track_iskaon[i][ivx][itr]=-1;
-	    _jet_track_iskaoncheat[i][ivx][itr]=-1;
-	    _jet_track_pdg[i][ivx][itr]=0;
-	    _jet_track_z0[i][ivx][itr]=-1000;
-	    _jet_track_d0[i][ivx][itr]=-1000;
-	    _jet_track_phi[i][ivx][itr]=-1000;
-	  }
-
-	}
+      for(int ipfo=0; ipfo<150; ipfo++) {  
+	_pfo_E[i][ipfo]=0; 
+	_pfo_px[i][ipfo]=0;
+	_pfo_py[i][ipfo]=0;
+	_pfo_pz[i][ipfo]=0;
+	_pfo_m[i][ipfo]=0;
+	_pfo_type[i][ipfo]=0;
+	_pfo_charge[i][ipfo]=-1000;
       }
+      _jet_nvtx[i]=0;
+      _jet_ntrack[i]=-1;
 
-    }//end clear
-  };//end StatsData_BBbar
+      for(int ivx=0; ivx<10; ivx++) {
+	_jet_vtx_isprimary[i][ivx]=-1;
+	_jet_vtx_ntrack[i][ivx]=-1;
+	_jet_vtx_charge[i][ivx]=-1000;
+
+	for(int itr=0; itr<30; itr++) {
+	  _jet_track_E[i][ivx][itr]=0;
+	  _jet_track_px[i][ivx][itr]=0;
+	  _jet_track_py[i][ivx][itr]=0;
+	  _jet_track_pz[i][ivx][itr]=0;
+	  _jet_track_p[i][ivx][itr]=0;
+	  _jet_track_charge[i][ivx][itr]=-1000;
+	  _jet_track_dedx[i][ivx][itr]=0;
+	  _jet_track_iskaon[i][ivx][itr]=-1;
+	  _jet_track_iskaoncheat[i][ivx][itr]=-1;
+	  _jet_track_pdg[i][ivx][itr]=0;
+	  _jet_track_z0[i][ivx][itr]=-1000;
+	  _jet_track_d0[i][ivx][itr]=-1000;
+	  _jet_track_phi[i][ivx][itr]=-1000;
+	}
+
+      }
+    }
+
+  }//end clear
+};//end StatsData_BBbar	
+    
 }
 #endif

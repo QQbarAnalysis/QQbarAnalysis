@@ -238,7 +238,7 @@ namespace QQbarProcessor
 
   }
 
-    //Added by Seidai in 2020.Sep.17
+  //Added by Seidai in 2020.Sep.17
   //MC hadron information provider
   void BBbarAnalysis::AnalyseGeneratorBBbar_Hadron(QQbarMCOperator& opera, float _Rparam_jet_ps, float _pparam_jet_ps) {
     vector<PseudoJet> particles;
@@ -443,13 +443,13 @@ namespace QQbarProcessor
 	  }
 	}
 	/*
-	vector<PseudoJet> particles_pfos;
-	for (int ipfcol = 0; ipfcol < pfocol->getNumberOfElements(); ipfcol++) {
+	  vector<PseudoJet> particles_pfos;
+	  for (int ipfcol = 0; ipfcol < pfocol->getNumberOfElements(); ipfcol++) {
 	  ReconstructedParticle * particle_pfo = dynamic_cast< ReconstructedParticle * >(pfocol->getElementAt(ipfcol));
 	  particles_pfos.push_back(PseudoJet(particle_pfo->getMomentum()[0],particle_pfo->getMomentum()[1],particle_pfo->getMomentum()[2],particle_pfo->getEnergy()));
-	}
-	JetDefinition jet_def_pfos(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
-	ClusterSequence cs_pfos(particles_pfos,jet_def_pfos);
+	  }
+	  JetDefinition jet_def_pfos(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
+	  ClusterSequence cs_pfos(particles_pfos,jet_def_pfos);
 	*/
 
 	for(int iycut=0; iycut<50; iycut++) {
@@ -521,7 +521,7 @@ namespace QQbarProcessor
 	// get pFo + type per jet
 	for(int ijet=0; ijet<2; ijet++) {
 	  ReconstructedParticle * jet_reco = dynamic_cast< ReconstructedParticle * >(jetcol->getElementAt(ijet));
-	  vector<ReconstructedParticle*> components = jet_reco->getParticles(); 
+	  vector<ReconstructedParticle*> components = jet_reco->getParticles();
 	  _stats._pfo_n[ijet]=components.size();
 	  if(_stats._pfo_n[ijet]>150) {
 	    _stats._pfo_n[ijet]=150;
@@ -535,6 +535,7 @@ namespace QQbarProcessor
 	    _stats._pfo_m[ijet][i]=components.at(i)->getMass();        
 	    _stats._pfo_type[ijet][i]=components.at(i)->getType();     
 	    _stats._pfo_charge[ijet][i]=components.at(i)->getCharge();
+	    //  _stats._pfo_n[ijet]++; 
 	  }
 	}
 
@@ -555,16 +556,19 @@ namespace QQbarProcessor
 	  streamlog_out(DEBUG)<<"nvertices = "<<vertices->size()<<std::endl;
 
 	  for( int ivtx=0; ivtx<vertices->size(); ivtx++) {
-
 	    streamlog_out(DEBUG)<<"   ivtx = "<<ivtx<<std::endl;
 	    _stats._jet_ntrack[ijet]+=vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 	    _stats._jet_vtx_isprimary[ijet][ivtx]=vertices->at(ivtx)->isPrimary();
 	    _stats._jet_vtx_ntrack[ijet][ivtx]=vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 	    _stats._jet_vtx_charge[ijet][ivtx]=vertices->at(ivtx)->getAssociatedParticle()->getCharge();
 
+
 	    int ntrack = vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 	    streamlog_out(DEBUG)<<"   ntracks = "<<ntrack<<std::endl;
-
+	    if(ntrack>30) {
+	      ntrack=30;
+	      std::cout<<"ERROR: ntrack jet> 30: "<<ntrack<<std::endl;
+	    }
 	    for(int itr=0; itr< ntrack; itr++) {
 	      streamlog_out(DEBUG)<<"      itr= "<<itr<<std::endl;
 	      if(vertices->at(ivtx)->getAssociatedParticle()->getParticles().at(itr)==NULL) continue;
@@ -602,7 +606,7 @@ namespace QQbarProcessor
 
 
 	}//ijet
-	_hTree->Fill();
+	_hTree->Fill();	
 	delete jets;
       }
     catch(DataNotAvailableException &e)

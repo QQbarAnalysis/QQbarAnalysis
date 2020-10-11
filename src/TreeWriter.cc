@@ -143,8 +143,7 @@ namespace QQbarProcessor
     _hTree->Branch("sphericity", &data._sphericity, "sphericity/F");
     _hTree->Branch("sphericity_tensor", data._sphericity_tensor, "sphericity_tensor[3]/F");
 
-    // pfo inside the jets
-    //    _hTree->Branch("jet_pfo_n_max", &data._pfo_n_max, "jet_pfo_n_max/I");
+  // pfo inside the jets
     _hTree->Branch("jet_pfo_E", data._pfo_E, "jet_pfo_E[2][150]/F");
     _hTree->Branch("jet_pfo_px", data._pfo_px, "jet_pfo_px[2][150]/F");
     _hTree->Branch("jet_pfo_py", data._pfo_py, "jet_pfo_py[2][150]/F");
@@ -155,8 +154,6 @@ namespace QQbarProcessor
     _hTree->Branch("jet_pfo_n", data._pfo_n, "jet_pfo_n[2]/I");
 
     // jets reconstructed secondary vtx properties
-    //    _hTree->Branch("jet_nvtx_max", &data._jet_nvtx_max, "jet_nvtx_max/I");
-    //    _hTree->Branch("jet_vtx_ntrack_max", &data._jet_vtx_ntrack_max, "jet_vtx_ntrack_max/I") ;
     _hTree->Branch("jet_nvtx", data._jet_nvtx, "jet_nvtx[2]/I");
     _hTree->Branch("jet_vtx_isprimary", data._jet_vtx_isprimary, "jet_vtx_isprimary[2][10]/I");
     _hTree->Branch("jet_ntrack", data._jet_ntrack, "jet_ntrack[2]/I");
@@ -176,7 +173,7 @@ namespace QQbarProcessor
     _hTree->Branch("jet_track_z0", data._jet_track_z0, "jet_track_z0[2][10][30]/F");
     _hTree->Branch("jet_track_d0", data._jet_track_d0, "jet_track_d0[2][10][30]/F");
     _hTree->Branch("jet_track_phi", data._jet_track_phi, "jet_track_phi[2][10][30]/F");
-	
+		
 
   }
 
