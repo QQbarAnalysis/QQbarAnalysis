@@ -494,46 +494,47 @@ namespace QQbarProcessor
 	_sphericity_tensor[i]=0;
       }
 
-      _pfo_n[i]=0;
-
-      for(int ipfo=0; ipfo<150; ipfo++) {  
-	_pfo_E[i][ipfo]=0; 
-	_pfo_px[i][ipfo]=0;
-	_pfo_py[i][ipfo]=0;
-	_pfo_pz[i][ipfo]=0;
-	_pfo_m[i][ipfo]=0;
-	_pfo_type[i][ipfo]=0;
-	_pfo_charge[i][ipfo]=-1000;
-      }
-      _jet_nvtx[i]=0;
-      _jet_ntrack[i]=-1;
-
-      for(int ivx=0; ivx<10; ivx++) {
-	_jet_vtx_isprimary[i][ivx]=-1;
-	_jet_vtx_ntrack[i][ivx]=-1;
-	_jet_vtx_charge[i][ivx]=-1000;
-
-	for(int itr=0; itr<30; itr++) {
-	  _jet_track_E[i][ivx][itr]=0;
-	  _jet_track_px[i][ivx][itr]=0;
-	  _jet_track_py[i][ivx][itr]=0;
-	  _jet_track_pz[i][ivx][itr]=0;
-	  _jet_track_p[i][ivx][itr]=0;
-	  _jet_track_charge[i][ivx][itr]=-1000;
-	  _jet_track_dedx[i][ivx][itr]=0;
-	  _jet_track_iskaon[i][ivx][itr]=-1;
-	  _jet_track_iskaoncheat[i][ivx][itr]=-1;
-	  _jet_track_pdg[i][ivx][itr]=0;
-	  _jet_track_z0[i][ivx][itr]=-1000;
-	  _jet_track_d0[i][ivx][itr]=-1000;
-	  _jet_track_phi[i][ivx][itr]=-1000;
+      for(int i=0; i<2; i++ ) { 
+	_pfo_n[i]=0;
+	
+	for(int ipfo=0; ipfo<150; ipfo++) {  
+	  _pfo_E[i][ipfo]=0; 
+	  _pfo_px[i][ipfo]=0;
+	  _pfo_py[i][ipfo]=0;
+	  _pfo_pz[i][ipfo]=0;
+	  _pfo_m[i][ipfo]=0;
+	  _pfo_type[i][ipfo]=0;
+	  _pfo_charge[i][ipfo]=-1000;
 	}
-
+	_jet_nvtx[i]=0;
+	_jet_ntrack[i]=-1;
+	
+	for(int ivx=0; ivx<10; ivx++) {
+	  _jet_vtx_isprimary[i][ivx]=-1;
+	  _jet_vtx_ntrack[i][ivx]=-1;
+	  _jet_vtx_charge[i][ivx]=-1000;
+	  
+	  for(int itr=0; itr<30; itr++) {
+	    _jet_track_E[i][ivx][itr]=0;
+	    _jet_track_px[i][ivx][itr]=0;
+	    _jet_track_py[i][ivx][itr]=0;
+	    _jet_track_pz[i][ivx][itr]=0;
+	    _jet_track_p[i][ivx][itr]=0;
+	    _jet_track_charge[i][ivx][itr]=-1000;
+	    _jet_track_dedx[i][ivx][itr]=0;
+	    _jet_track_iskaon[i][ivx][itr]=-1;
+	    _jet_track_iskaoncheat[i][ivx][itr]=-1;
+	    _jet_track_pdg[i][ivx][itr]=0;
+	    _jet_track_z0[i][ivx][itr]=-1000;
+	    _jet_track_d0[i][ivx][itr]=-1000;
+	    _jet_track_phi[i][ivx][itr]=-1000;
+	  }
+	  
+	}
       }
-    }
-
-  }//end clear
-};//end StatsData_BBbar	
-    
+      
+    }//end clear
+  };//end StatsData_BBbar	
+  
 }
 #endif
