@@ -249,7 +249,12 @@ namespace QQbarProcessor
     vector<MCParticle*> bbbar_hadron = opera.GetBBbarHadrons();
     streamlog_out(DEBUG) << "Hadron level \n";
     
-    for(int i=0; i<bbbar_hadron.size(); i++) {
+    int nhadrons=bbbar_hadron.size();
+    //    if(bbbar_hadron.size() > 300 ) {
+    //   std::cout<<" Oversized HADRON COLLECTION, expected max=300, total hadrons in the process: "<<bbbar_hadron.size()<<std::endl;
+    //  nhadrons=300;
+    // }
+    for(int i=0; i<nhadrons; i++) {
       if(bbbar_hadron.at(i)!=NULL) {
         //They are filled at line:587
 	_stats._mc_hadron_n++;
@@ -383,6 +388,7 @@ namespace QQbarProcessor
 	  //	ClearVariables(); 
 	  
 	  AnalyseGeneratorBBbar_PS(opera,_Rparam_jet_ps,_pparam_jet_ps);
+	  AnalyseGeneratorBBbar_Hadron(opera,_Rparam_jet_ps,_pparam_jet_ps);
 
 	  //match reco jets with quarks BEFORE radiation
 	  MatchB(jets, mcbs, mcvtxcol);
@@ -515,7 +521,12 @@ namespace QQbarProcessor
 	// get pFo + type per jet
 	for(int ijet=0; ijet<2; ijet++) {
 	  ReconstructedParticle * jet_reco = dynamic_cast< ReconstructedParticle * >(jetcol->getElementAt(ijet));
-	  vector<ReconstructedParticle*> components = jet_reco->getParticles();             
+	  vector<ReconstructedParticle*> components = jet_reco->getParticles(); 
+	  _stats._pfo_n[ijet]=components.size();
+	  if(_stats._pfo_n[ijet]>150) {
+	    _stats._pfo_n[ijet]=150;
+	    std::cout<<"ERROR: nPFOs> 150: "<<components.size()<<std::endl;
+	  }
 	  for(int i=0; i<components.size(); i++) { 
 	    _stats._pfo_E[ijet][i]=components.at(i)->getEnergy();
 	    _stats._pfo_px[ijet][i]=components.at(i)->getMomentum()[0];
@@ -524,10 +535,10 @@ namespace QQbarProcessor
 	    _stats._pfo_m[ijet][i]=components.at(i)->getMass();        
 	    _stats._pfo_type[ijet][i]=components.at(i)->getType();     
 	    _stats._pfo_charge[ijet][i]=components.at(i)->getCharge();
-	    _stats._pfo_n[ijet]++; 
 	  }
 	}
 
+	
 	// Save jet, vtx, track, kaon info 
 	for(int ijet=0; ijet<2; ijet++) {
 	  _stats._jet_E[ijet]=jets->at(ijet)->getEnergy();
@@ -544,12 +555,12 @@ namespace QQbarProcessor
 	  streamlog_out(DEBUG)<<"nvertices = "<<vertices->size()<<std::endl;
 
 	  for( int ivtx=0; ivtx<vertices->size(); ivtx++) {
+
 	    streamlog_out(DEBUG)<<"   ivtx = "<<ivtx<<std::endl;
 	    _stats._jet_ntrack[ijet]+=vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 	    _stats._jet_vtx_isprimary[ijet][ivtx]=vertices->at(ivtx)->isPrimary();
 	    _stats._jet_vtx_ntrack[ijet][ivtx]=vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 	    _stats._jet_vtx_charge[ijet][ivtx]=vertices->at(ivtx)->getAssociatedParticle()->getCharge();
-
 
 	    int ntrack = vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 	    streamlog_out(DEBUG)<<"   ntracks = "<<ntrack<<std::endl;

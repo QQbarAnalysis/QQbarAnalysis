@@ -82,31 +82,71 @@ namespace QQbarProcessor
     if(number<3) return stable_hadrons; //return empty
     int ihadron;// the border of hadronization
 
-    for(int i=0; i<number; i++) {
+    int isrphotons[2];
+    isrphotons[0]=-1;
+    isrphotons[1]=-1;
+
+    vector<MCParticle*> pairISR;
+    for(int i=2; i<number; i++) {
       MCParticle* particle = dynamic_cast<MCParticle*>(myCollection->getElementAt(i));
+      if (particle->getPDG() == 22 && pairISR.size()<2) {
+	pairISR.push_back(particle);
+	isrphotons[pairISR.size()-1]=i;
+      }
+
       if(particle->getPDG()==91 || particle->getPDG()==92 || particle->getPDG()==93) {
         ihadron = i;
         break;
       } 
     }
 
+
+
     for(int i=ihadron; i<number; i++) {
       MCParticle* particle = dynamic_cast<MCParticle*>(myCollection->getElementAt(i));
       vector<MCParticle*> daughters = particle->getDaughters();
 
       int stable=0;
+      int ISRhadron=0;
+
       if(daughters.size()==0) {
-        stable_hadrons.push_back(particle);
-	stable=1;
+
+	vector<MCParticle*> parents = particle->getParents();
+	for(int j=0; j<parents.size(); j++) {
+	  if(parents.at(j) == pairISR.at(0) || parents.at(j) == pairISR.at(1)) {
+	    ISRhadron=1;
+	  } else {
+	    vector<MCParticle*> parents2 = parents.at(j)->getParents();
+	    for(int j2=0; j2<parents2.size(); j2++) {
+	      if(parents2.at(j2) == pairISR.at(0) || parents2.at(j2) == pairISR.at(1)) { 
+		ISRhadron=1;
+	      } else {
+		vector<MCParticle*> parents3 = parents2.at(j2)->getParents();
+		for(int j3=0; j3<parents3.size(); j3++) {
+		  if(parents3.at(j3) == pairISR.at(0) || parents3.at(j3) == pairISR.at(1)) { 
+		    ISRhadron=1;
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+	
+	if(ISRhadron==0) {
+	  stable_hadrons.push_back(particle);
+	  stable=1;
+	  //	  std::cout << "[" << i << "]  Particle: pdg" << particle->getPDG() <<" "<<particle->getEnergy() <<" is stable? "<< stable << std::endl;                
+	} //else {
+	  //std::cout << "[" << i << "]  is ISRHadron" << particle->getPDG() <<" "<<particle->getEnergy()  << std::endl; 
+	//}
+	stable=0;
       }
-      std::cout << "[" << i << "]  Particle: pdg" << particle.at(i)->getPDG() <<" "<<particle.at(i)->getEnergy() <<" is stable? "<< stable << std::endl;
-      stable=0;
     }
 
-    std::cout << "### stable_hadrons ###" << std::endl;
-    for(int i=0; i<stable_hadrons.size(); i++) {
-      std::cout << "[" << i << "]  Stable particle: " << stable_hadrons.at(i)->getPDG() << std::endl;
-    }
+    //    std::cout << "### stable_hadrons ###" << std::endl;
+    //for(int i=0; i<stable_hadrons.size(); i++) {
+    //  std::cout << "[" << i << "]  Stable particle: " << stable_hadrons.at(i)->getPDG() << std::endl;
+    //}
     return stable_hadrons;
   }//GetBBbarHadrons()
 
@@ -125,10 +165,16 @@ namespace QQbarProcessor
       if(particle->getPDG() !=22) event=false;
     }
  
+    int pdgqqbar=0;
     for (int i = 2; i < 4; i++) { 
-      MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );                                                                
+      MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
+      pdgqqbar+=particle->getPDG();
       if(fabs(particle->getPDG()) >5) event=false;                                                                                                             
     } 
+    if(pdgqqbar!=0)  {
+      event=false;
+      streamlog_out(DEBUG) << "Event is not QQbar: pdgqqbar="<<pdgqqbar<<"\n";                            
+    }
     return event;
   }
 

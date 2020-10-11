@@ -267,15 +267,15 @@ namespace QQbarProcessor
     float _mc_ISR_pdg[2];
     float _mc_ISR_charge[2]; 
 
-    float _mc_quark_ps_E[300];
-    float _mc_quark_ps_px[300];
-    float _mc_quark_ps_py[300];
-    float _mc_quark_ps_pz[300];
-    float _mc_quark_ps_pt[300];
-    float _mc_quark_ps_m[300];
-    float _mc_quark_ps_pdg[300];
-    float _mc_quark_ps_charge[300];
-    int _mc_quark_ps_n;
+    float _mc_quark_ps_E[1000];
+    float _mc_quark_ps_px[1000];
+    float _mc_quark_ps_py[1000];
+    float _mc_quark_ps_pz[1000];
+    float _mc_quark_ps_pt[1000];
+    float _mc_quark_ps_m[1000];
+    float _mc_quark_ps_pdg[1000];
+    float _mc_quark_ps_charge[1000];
+    int  _mc_quark_ps_n;
     float _jet_R_norm;
     float _mc_quark_ps_y12;
     float _mc_quark_ps_y23;
@@ -301,13 +301,13 @@ namespace QQbarProcessor
     int _mc_quark_ps_isr_jet_nparticles[2];
 
     //Member for Hadron (Added by Seidai in 2020.Sep.17)
-    float _mc_hadron_E[300];
-    float _mc_hadron_px[300];
-    float _mc_hadron_py[300];
-    float _mc_hadron_pz[300];
-    float _mc_hadron_m[300];
-    float _mc_hadron_pdg[300];
-    float _mc_hadron_charge[300];
+    float _mc_hadron_E[1000];
+    float _mc_hadron_px[1000];
+    float _mc_hadron_py[1000];
+    float _mc_hadron_pz[1000];
+    float _mc_hadron_m[1000];
+    float _mc_hadron_pdg[1000];
+    float _mc_hadron_charge[1000];
     int _mc_hadron_n;
     float _mc_hadron_y12;
     float _mc_hadron_y23;
@@ -349,38 +349,41 @@ namespace QQbarProcessor
     float _jet_btag[2];
     float _jet_ctag[2];
 
-    float _pfo_E[2][100];
-    float _pfo_px[2][100];
-    float _pfo_py[2][100];
-    float _pfo_pz[2][100];
-    float _pfo_m[2][100];
-    int _pfo_type[2][100]; 
-    int _pfo_charge[2][100];
+    float _pfo_E[2][1000];
+    float _pfo_px[2][1000];
+    float _pfo_py[2][1000];
+    float _pfo_pz[2][1000];
+    float _pfo_m[2][1000];
+    int _pfo_type[2][1000]; 
+    int _pfo_charge[2][1000];
     int _pfo_n[2];
+    int _pfo_n_max;
 
     int _jet_nvtx[2];
     int _jet_ntrack[2];
-    int _jet_vtx_isprimary[2][10];
-    int _jet_vtx_ntrack[2][10];
-    float _jet_vtx_charge[2][10];
+    int _jet_nvtx_max;  
+    int _jet_vtx_isprimary[2][1000];
+    int _jet_vtx_ntrack[2][1000];
+    int _jet_vtx_ntrack_max;
+    float _jet_vtx_charge[2][1000];
 
-    float _jet_track_E[2][10][20];
-    float _jet_track_px[2][10][20];
-    float _jet_track_py[2][10][20];
-    float _jet_track_pz[2][10][20];
-    float _jet_track_p[2][10][20];
-    float _jet_track_charge[2][10][20];
-    float _jet_track_dedx[2][10][20];
-    int _jet_track_iskaon[2][10][20];
-    int _jet_track_iskaoncheat[2][10][20];
-    int _jet_track_pdg[2][10][20];
-    float _jet_track_z0[2][10][20];
-    float _jet_track_d0[2][10][20];
-    float _jet_track_phi[2][10][20];
+    float _jet_track_E[2][1000][1000];
+    float _jet_track_px[2][1000][1000];
+    float _jet_track_py[2][1000][1000];
+    float _jet_track_pz[2][1000][1000];
+    float _jet_track_p[2][1000][1000];
+    float _jet_track_charge[2][1000][1000];
+    float _jet_track_dedx[2][1000][1000];
+    int _jet_track_iskaon[2][1000][1000];
+    int _jet_track_iskaoncheat[2][1000][1000];
+    int _jet_track_pdg[2][1000][1000];
+    float _jet_track_z0[2][1000][1000];
+    float _jet_track_d0[2][1000][1000];
+    float _jet_track_phi[2][1000][1000];
 
     void Clear()  {
 
-      for (unsigned int i = 0; i < 300; i++) {
+      for (unsigned int i = 0; i < 1000; i++) {
 	_mc_quark_ps_E[i]=0;
 	_mc_quark_ps_px[i]=0;
 	_mc_quark_ps_py[i]=0;
@@ -445,7 +448,7 @@ namespace QQbarProcessor
       _mc_matching=-1;
 
       //Added by Seidai 2020.Sep.21
-      for(int i=0; i<300; i++) {
+      for(int i=0; i<1000; i++) {
         _mc_hadron_E[i]=0;
         _mc_hadron_pdg[i]=0;
         _mc_hadron_px[i]=0;
@@ -494,7 +497,10 @@ namespace QQbarProcessor
 	_sphericity_tensor[i]=0;
       }
 
-  		
+  	
+      _pfo_n_max=0;
+      _jet_nvtx_max=0;
+      _jet_vtx_ntrack_max=0;
       for (unsigned int i = 0; i < 2; i++) {
 	_jet_E[i]=0;
 	_jet_px[i]=0;
@@ -506,7 +512,7 @@ namespace QQbarProcessor
 
 	_pfo_n[i]=0;
 
-	for(int ipfo=0; ipfo<100; ipfo++) {  
+	for(int ipfo=0; ipfo<1000; ipfo++) {  
 	  _pfo_E[i][ipfo]=0;                                                                                                                
 	  _pfo_px[i][ipfo]=0;                                                                                                               
 	  _pfo_py[i][ipfo]=0;                                                                                                               
@@ -523,7 +529,7 @@ namespace QQbarProcessor
 	  _jet_vtx_ntrack[i][ivx]=-1;
 	  _jet_vtx_charge[i][ivx]=-1000;
 
-	  for(int itr=0; itr<20; itr++) {
+	  for(int itr=0; itr<1000; itr++) {
 	    _jet_track_E[i][ivx][itr]=0;
 	    _jet_track_px[i][ivx][itr]=0;
 	    _jet_track_py[i][ivx][itr]=0;
