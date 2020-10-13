@@ -264,26 +264,56 @@ namespace QQbarProcessor
 			TopQuark * topLeptonic = NULL;
 			int chosen = -1;
 
-			for (unsigned int i = 0; i < bjets->size(); i++) 
+			for (unsigned int ijet = 0; ijet < bjets->size(); ijet++) 
 			{
-				TopQuark * candidate = new TopQuark(bjets->at(i), wHadronic);
-				ReconstructedParticle * bjet = bjets->at(i)->GetRawRecoJet();
+				TopQuark * candidate = new TopQuark(bjets->at(ijet), wHadronic);
+				ReconstructedParticle * bjet = bjets->at(ijet)->GetRawRecoJet();
 
 				// access jet info
-				_stats._jet_E[i] = bjets->at(i)->getEnergy();
-				_stats._jet_px[i]= bjets->at(i)->getMomentum()[0];
-				_stats._jet_py[i]= bjets->at(i)->getMomentum()[1];
-				_stats._jet_pz[i]= bjets->at(i)->getMomentum()[2];
-				_stats._jet_M[i] = bjets->at(i)->getMass();
+				_stats._jet_E[ijet] = bjets->at(ijet)->getEnergy();
+				_stats._jet_px[ijet]= bjets->at(ijet)->getMomentum()[0];
+				_stats._jet_py[ijet]= bjets->at(ijet)->getMomentum()[1];
+				_stats._jet_pz[ijet]= bjets->at(ijet)->getMomentum()[2];
+				_stats._jet_M[ijet] = bjets->at(ijet)->getMass();
 
 				// access jet vetice info
-				vector< Vertex * > * vertices = bjets->at(i)->GetRecoVertices();
+				vector< Vertex * > * vertices = bjets->at(ijet)->GetRecoVertices();
 				int verticeSize = vertices->size();
-				_stats._jet_nvtx[i]=verticeSize;
+				_stats._jet_nvtx[ijet]=verticeSize;
 				streamlog_out(DEBUG)<<"nvertices = "<<verticeSize<<std::endl;
 
 				for(int ivtx=0; ivtx < verticeSize; ivtx++){
 					streamlog_out(DEBUG)<<"   ivtx = "<<ivtx<<std::endl;
+
+					_stats._jet_ntrack[ijet]+=vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
+					_stats._jet_vtx_isprimary[ijet][ivtx]=vertices->at(ivtx)->isPrimary();
+					_stats._jet_vtx_ntrack[ijet][ivtx]=vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
+					_stats._jet_vtx_charge[ijet][ivtx]=vertices->at(ivtx)->getAssociatedParticle()->getCharge();
+
+					int ntrack = vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
+					streamlog_out(DEBUG)<<"   ntracks = "<<ntrack<<std::endl;
+
+					for(int itr=0; itr< ntrack; itr++) {
+
+						streamlog_out(DEBUG)<<"      itr= "<<itr<<std::endl;
+						if(vertices->at(ivtx)->getAssociatedParticle()->getParticles().at(itr)==NULL) continue;
+
+						ReconstructedParticle * found_track_particle = vertices->at(ivtx)->getAssociatedParticle()->getParticles().at(itr);
+
+						_stats._jet_track_charge[ijet][ivtx][itr]=found_track_particle->getCharge();
+						_stats._jet_track_E[ijet][ivtx][itr]=found_track_particle->getEnergy();
+						_stats._jet_track_px[ijet][ivtx][itr]=found_track_particle->getMomentum()[0];
+						_stats._jet_track_py[ijet][ivtx][itr]=found_track_particle->getMomentum()[1];
+						_stats._jet_track_pz[ijet][ivtx][itr]=found_track_particle->getMomentum()[2];
+						_stats._jet_track_p[ijet][ivtx][itr]=MathOperator::getModule(found_track_particle->getMomentum());
+
+						streamlog_out(DEBUG)<<"      Tracks Test  --  "<<ivtx<<" "<<itr<<" "<<found_track_particle->getTracks().size()<<" "<<found_track_particle->getEnergy()<< " " <<found_track_particle->getTracks()[0]->getZ0()<<" "<<found_track_particle->getCharge()<<std::endl;
+
+						_stats._jet_track_z0[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getZ0();
+						_stats._jet_track_d0[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getD0();
+						_stats._jet_track_phi[ijet][ivtx][itr]=found_track_particle->getTracks()[0]->getPhi();
+
+					}//itr
 
 
 				}
@@ -296,7 +326,7 @@ namespace QQbarProcessor
 				{
 					topHadronic = candidate;
 					chimin = chi2;
-					chosen = i;
+					chosen = ijet;
 					_stats._Top1cosWb = std::cos( MathOperator::getAngle(candidate->GetB()->getMomentum(), candidate->GetW()->getMomentum()) );
 				}
 
