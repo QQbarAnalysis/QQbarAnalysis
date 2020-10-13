@@ -236,6 +236,26 @@ namespace QQbarProcessor
 	_hTree->Branch("jet_pz", data._jet_pz, "jet_pz[2]/F");
 	_hTree->Branch("jet_M", data._jet_M, "jet_M[2]/F");
 
+    // jets reconstructed tracks properties
+    _hTree->Branch("jet_vtx_isprimary", data._jet_vtx_isprimary, "jet_vtx_isprimary[2][10]/I");
+    _hTree->Branch("jet_ntrack", data._jet_ntrack, "jet_ntrack[2]/I");
+    _hTree->Branch("jet_vtx_ntrack", data._jet_vtx_ntrack, "jet_vtx_ntrack[2][10]/I");
+    _hTree->Branch("jet_vtx_charge", data._jet_vtx_charge, "jet_vtx_charge[2][10]/F");
+
+    _hTree->Branch("jet_track_E", data._jet_track_E, "jet_track_E[2][10][20]/F");
+    _hTree->Branch("jet_track_px", data._jet_track_px, "jet_track_px[2][10][20]/F");
+    _hTree->Branch("jet_track_py", data._jet_track_py, "jet_track_py[2][10][20]/F");
+    _hTree->Branch("jet_track_pz", data._jet_track_pz, "jet_track_pz[2][10][20]/F");
+    _hTree->Branch("jet_track_p", data._jet_track_p, "jet_track_p[2][10][20]/F");
+    _hTree->Branch("jet_track_charge", data._jet_track_charge, "jet_track_charge[2][10][20]/F");
+    _hTree->Branch("jet_track_iskaon", data._jet_track_iskaon, "jet_track_iskaon[2][10][20]/I");
+    _hTree->Branch("jet_track_iskaoncheat", data._jet_track_iskaoncheat, "jet_track_iskaoncheat[2][10][20]/I");
+    _hTree->Branch("jet_track_z0", data._jet_track_z0, "jet_track_z0[2][10][20]/F");
+    _hTree->Branch("jet_track_d0", data._jet_track_d0, "jet_track_d0[2][10][20]/F");
+    _hTree->Branch("jet_track_phi", data._jet_track_phi, "jet_track_phi[2][10][20]/F");
+
+
+
 	// kaon information
 	_hTree->Branch("Top1KaondEdx", data._Top1KaondEdx, "Top1KaondEdx[Top1KaonNumber]/F");
 

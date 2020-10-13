@@ -163,6 +163,27 @@ namespace QQbarProcessor
 		float _jet_py[2];
 		float _jet_pz[2];
 		float _jet_M[2];
+
+    // jet vtx info
+    int _jet_ntrack[2];
+    int _jet_vtx_isprimary[2][10];
+    int _jet_vtx_ntrack[2][10];
+    float _jet_vtx_charge[2][10];
+
+    // jet track info
+    float _jet_track_E[2][10][20];
+    float _jet_track_px[2][10][20];
+    float _jet_track_py[2][10][20];
+    float _jet_track_pz[2][10][20];
+    float _jet_track_p[2][10][20];
+    float _jet_track_charge[2][10][20];
+    int _jet_track_iskaon[2][10][20];
+    int _jet_track_iskaoncheat[2][10][20];
+    float _jet_track_z0[2][10][20];
+    float _jet_track_d0[2][10][20];
+    float _jet_track_phi[2][10][20];
+
+
 																		
 		// kaon information
  		float _Top1KaondEdx[10];
@@ -275,13 +296,48 @@ namespace QQbarProcessor
       _qCostheta[1] = -2.0;
       _ZZMass1 = -1;
       _ZZMass2 = -1;
+
 			for (unsigned int i = 0; i < 7; i++) {
 				_methodCheck[i] = -1;
 				_methodTaken[i] = -1;
 				_methodSameCharge[i] = -1;
 				_methodZeroCharge[i] = -1;
 			}
-    }
+
+      for (unsigned int i = 0; i < 2; i++) {
+        _jet_E[i]=0;
+        _jet_px[i]=0;
+        _jet_py[i]=0;
+        _jet_pz[i]=0;
+        _jet_M[i]=0;
+
+        _jet_nvtx[i]=0;
+        _jet_ntrack[i]=-1;
+
+        for(int ivx=0; ivx<10; ivx++) {
+          _jet_vtx_isprimary[i][ivx]=-1;
+          _jet_vtx_ntrack[i][ivx]=-1;
+          _jet_vtx_charge[i][ivx]=-1000;
+
+          for(int itr=0; itr<20; itr++) {
+            _jet_track_E[i][ivx][itr]=0;
+            _jet_track_px[i][ivx][itr]=0;
+            _jet_track_py[i][ivx][itr]=0;
+            _jet_track_pz[i][ivx][itr]=0;
+            _jet_track_p[i][ivx][itr]=0;
+            _jet_track_charge[i][ivx][itr]=-1000;
+            _jet_track_iskaon[i][ivx][itr]=-1;
+            _jet_track_iskaoncheat[i][ivx][itr]=-1;
+            _jet_track_z0[i][ivx][itr]=-1000;
+            _jet_track_d0[i][ivx][itr]=-1000;
+            _jet_track_phi[i][ivx][itr]=-1000;
+          } //end itr
+        } // end ivtx
+      } // end jet
+
+
+
+    } //end clear
   };
 
 

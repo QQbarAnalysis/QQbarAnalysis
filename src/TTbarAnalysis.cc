@@ -263,6 +263,7 @@ namespace QQbarProcessor
 			TopQuark * topHadronic = NULL;
 			TopQuark * topLeptonic = NULL;
 			int chosen = -1;
+
 			for (unsigned int i = 0; i < bjets->size(); i++) 
 			{
 				TopQuark * candidate = new TopQuark(bjets->at(i), wHadronic);
@@ -275,6 +276,21 @@ namespace QQbarProcessor
 				_stats._jet_pz[i]= bjets->at(i)->getMomentum()[2];
 				_stats._jet_M[i] = bjets->at(i)->getMass();
 
+				// access jet vetice info
+				vector< Vertex * > * vertices = bjets->at(i)->GetRecoVertices();
+				int verticeSize = vertices->size();
+				_stats._jet_nvtx[i]=verticeSize;
+				streamlog_out(DEBUG)<<"nvertices = "<<verticeSize<<std::endl;
+
+				for(int ivtx=0; ivtx < verticeSize; ivtx++){
+					streamlog_out(DEBUG)<<"   ivtx = "<<ivtx<<std::endl;
+
+
+				}
+
+
+
+
 				float chi2 = getChi2(candidate);
 				if (chi2 < chimin) 
 				{
@@ -283,7 +299,8 @@ namespace QQbarProcessor
 					chosen = i;
 					_stats._Top1cosWb = std::cos( MathOperator::getAngle(candidate->GetB()->getMomentum(), candidate->GetW()->getMomentum()) );
 				}
-			}
+
+			} // end bjets
 
 			if (chosen && wLeptonic) 
 			{
