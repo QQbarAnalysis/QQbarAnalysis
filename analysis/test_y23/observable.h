@@ -20,8 +20,8 @@
 #include <TStyle.h>
 #include <TCanvas.h>
 #include <TGraphErrors.h>
-#include "../style/Style.C"
-#include "../style/Labels.C"
+//#include "../style/Style.C"
+//#include "../style/Labels.C"
 #include "TSystemFile.h"
 #include "TLorentzVector.h"
 
@@ -45,7 +45,7 @@ public :
 
 
    // Declaration of leaf types
- Float_t         mc_quark_E[2];
+   Float_t         mc_quark_E[2];
    Float_t         mc_quark_px[2];
    Float_t         mc_quark_py[2];
    Float_t         mc_quark_pz[2];
@@ -63,14 +63,14 @@ public :
    Float_t         mc_ISR_charge[2];
    Float_t         mc_qqbar_m;
    Float_t         mc_qqbar_pt;
-   Float_t         mc_quark_ps_E[300];
-   Float_t         mc_quark_ps_px[300];
-   Float_t         mc_quark_ps_py[300];
-   Float_t         mc_quark_ps_pz[300];
-   Float_t         mc_quark_ps_pt[300];
-   Float_t         mc_quark_ps_m[300];
-   Float_t         mc_quark_ps_pdg[300];
-   Float_t         mc_quark_ps_charge[300];
+   Float_t         mc_quark_ps_E[400];
+   Float_t         mc_quark_ps_px[400];
+   Float_t         mc_quark_ps_py[400];
+   Float_t         mc_quark_ps_pz[400];
+   Float_t         mc_quark_ps_pt[400];
+   Float_t         mc_quark_ps_m[400];
+   Float_t         mc_quark_ps_pdg[400];
+   Float_t         mc_quark_ps_charge[400];
    Int_t           mc_quark_ps_n;
    Float_t         jet_R_norm;
    Float_t         mc_quark_ps_y12;
@@ -94,6 +94,22 @@ public :
    Float_t         mc_quark_ps_isr_jet_py[2];
    Float_t         mc_quark_ps_isr_jet_pz[2];
    Int_t           mc_quark_ps_isr_jet_nparticles[2];
+   //Added by Seidai 2020.Sep.21(-line:112)
+   Float_t         mc_hadron_E[400];
+   Float_t         mc_hadron_px[400];
+   Float_t         mc_hadron_py[400];
+   Float_t         mc_hadron_pz[400];
+   Float_t         mc_hadron_m[400];
+   Float_t         mc_hadron_pdg[400];
+   Float_t         mc_hadron_charge[400];
+   Int_t           mc_hadron_n;
+   Float_t         mc_hadron_y12;
+   Float_t         mc_hadron_y23;
+   Float_t         mc_hadron_d12;
+   Float_t         mc_hadron_d23;
+   Float_t         mc_hadron_ycut[50];
+   Float_t         mc_hadron_njets_ycut[50];
+   Float_t         mc_hadron_njets_ycut_cambridge[50];
    Int_t           MCBOscillation;
    Int_t           MCBBarOscillation;
    Int_t           mc_matching;
@@ -123,32 +139,32 @@ public :
    Float_t         principle_thrust_axis[3];
    Float_t         sphericity;
    Float_t         sphericity_tensor[3];
-   Float_t         jet_pfo_E[2][100];
-   Float_t         jet_pfo_px[2][100];
-   Float_t         jet_pfo_py[2][100];
-   Float_t         jet_pfo_pz[2][100];
-   Float_t         jet_pfo_m[2][100];
-   Int_t           jet_pfo_type[2][100];
-   Int_t           jet_pfo_charge[2][100];
+   Float_t         jet_pfo_E[2][150];
+   Float_t         jet_pfo_px[2][150];
+   Float_t         jet_pfo_py[2][150];
+   Float_t         jet_pfo_pz[2][150];
+   Float_t         jet_pfo_m[2][150];
+   Int_t           jet_pfo_type[2][150];
+   Int_t           jet_pfo_charge[2][150];
    Int_t           jet_pfo_n[2];
    Int_t           jet_nvtx[2];
    Int_t           jet_vtx_isprimary[2][10];
    Int_t           jet_ntrack[2];
    Int_t           jet_vtx_ntrack[2][10];
    Float_t         jet_vtx_charge[2][10];
-   Float_t         jet_track_E[2][10][20];
-   Float_t         jet_track_px[2][10][20];
-   Float_t         jet_track_py[2][10][20];
-   Float_t         jet_track_pz[2][10][20];
-   Float_t         jet_track_p[2][10][20];
-   Float_t         jet_track_charge[2][10][20];
-   Float_t         jet_track_dedx[2][10][20];
-   Int_t           jet_track_iskaon[2][10][20];
-   Int_t           jet_track_iskaoncheat[2][10][20];
-   Int_t           jet_track_pdg[2][10][20];
-   Float_t         jet_track_z0[2][10][20];
-   Float_t         jet_track_d0[2][10][20];
-   Float_t         jet_track_phi[2][10][20];
+   Float_t         jet_track_E[2][10][30];
+   Float_t         jet_track_px[2][10][30];
+   Float_t         jet_track_py[2][10][30];
+   Float_t         jet_track_pz[2][10][30];
+   Float_t         jet_track_p[2][10][30];
+   Float_t         jet_track_charge[2][10][30];
+   Float_t         jet_track_dedx[2][10][30];
+   Int_t           jet_track_iskaon[2][10][30];
+   Int_t           jet_track_iskaoncheat[2][10][30];
+   Int_t           jet_track_pdg[2][10][30];
+   Float_t         jet_track_z0[2][10][30];
+   Float_t         jet_track_d0[2][10][30];
+   Float_t         jet_track_phi[2][10][30];
 
    // List of branches
    TBranch        *b_mc_quark_E;   //!
@@ -200,6 +216,22 @@ public :
    TBranch        *b_mc_quark_ps_isr_jet_py;   //!
    TBranch        *b_mc_quark_ps_isr_jet_pz;   //!
    TBranch        *b_mc_quark_ps_isr_nparticles;   //!
+   //Added by Seidai 2020.Sep.21(-line:235)
+   TBranch        *b_mc_hadron_E;
+   TBranch        *b_mc_hadron_px;
+   TBranch        *b_mc_hadron_py;
+   TBranch        *b_mc_hadron_pz;
+   TBranch        *b_mc_hadron_m;
+   TBranch        *b_mc_hadron_pdg;
+   TBranch        *b_mc_hadron_charge;
+   TBranch        *b_mc_hadron_n;
+   TBranch        *b_mc_hadron_y12;
+   TBranch        *b_mc_hadron_y23;
+   TBranch        *b_mc_hadron_d12;
+   TBranch        *b_mc_hadron_d23;
+   TBranch        *b_mc_hadron_ycut;
+   TBranch        *b_mc_hadron_njets_ycut;
+   TBranch        *b_mc_hadron_njets_ycut_cambridge;
    TBranch        *b_MCBOscillation;   //!
    TBranch        *b_MCBBarOscillation;   //!
    TBranch        *b_mc_matching;   //!
@@ -266,13 +298,18 @@ public :
    virtual void     Init(TTree *tree);
 
    //analysis
-   virtual void     AnalysisR3_cambridge(int n);
-   virtual void     Efficiencies(int n);
+   virtual void     ContaminationLightQuarkSelection(int n=-1);
+   virtual void     ContaminationBQuarkSelection(int n=-1);
+   virtual void     AnalysisR3_cambridge(int n=-1, float KISR=35);
+   //   virtual void     AnalysisR3_cambridge_contami(int n=-1, float KISR=35);
+   virtual void     AnalysisR3_y23(int n=-1, float KISR=35);
+   virtual void     Efficiencies(int n=-1);
+   virtual void     matching(int n=-1);
+   virtual void     AnalysisY23(int n=-1);
 
-   
 
    //preselection and charge measurement and correction
-   virtual bool     PreSelection(int type, float egamma);
+   virtual bool     PreSelection(int type=0, float egamma=25);
    
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
@@ -321,6 +358,13 @@ public :
      std::vector< float > d1= getDirection(vectorPoint);
      costheta1 =  std::cos( getAngles(d1).at(1) );
      return costheta1;
+   }
+
+   float GetCosphi(std::vector<float> & vectorPoint){
+    float cosphi= -2.0;
+    std::vector<float> d1 = getDirection(vectorPoint);
+    cosphi = std::cos(getAngles(d1).at(0));
+    return cosphi;
    }
 
    float GetSinacol(TVector3 v1, TVector3 v2){
@@ -524,6 +568,22 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("mc_quark_ps_isr_jet_py", mc_quark_ps_isr_jet_py, &b_mc_quark_ps_isr_jet_py);
    fChain->SetBranchAddress("mc_quark_ps_isr_jet_pz", mc_quark_ps_isr_jet_pz, &b_mc_quark_ps_isr_jet_pz);
    fChain->SetBranchAddress("mc_quark_ps_isr_jet_nparticles", mc_quark_ps_isr_jet_nparticles, &b_mc_quark_ps_isr_nparticles);
+   //Added by Seidai 2020.Sep.21(-line:570)
+   fChain->SetBranchAddress("mc_hadron_E", mc_hadron_E, &b_mc_hadron_E);
+   fChain->SetBranchAddress("mc_hadron_px", mc_hadron_px, &b_mc_hadron_px);
+   fChain->SetBranchAddress("mc_hadron_px", mc_hadron_py, &b_mc_hadron_py);
+   fChain->SetBranchAddress("mc_hadron_px", mc_hadron_pz, &b_mc_hadron_pz);
+   fChain->SetBranchAddress("mc_hadron_m", mc_hadron_m, &b_mc_hadron_m);
+   fChain->SetBranchAddress("mc_hadron_pdg", mc_hadron_pdg, &b_mc_hadron_pdg);
+   fChain->SetBranchAddress("mc_hadron_charge", mc_hadron_charge, &b_mc_hadron_charge);
+   fChain->SetBranchAddress("mc_hadron_n", &mc_hadron_n, &b_mc_hadron_n);
+   fChain->SetBranchAddress("mc_hadron_y12", &mc_hadron_y12, &b_mc_hadron_y12);
+   fChain->SetBranchAddress("mc_hadron_y23", &mc_hadron_y23, &b_mc_hadron_y23);
+   fChain->SetBranchAddress("mc_hadron_d12", &mc_hadron_d12, &b_mc_hadron_d12);
+   fChain->SetBranchAddress("mc_hadron_d23", &mc_hadron_d23, &b_mc_hadron_d23);
+   fChain->SetBranchAddress("mc_hadron_ycut", mc_hadron_ycut, &b_mc_hadron_ycut);
+   fChain->SetBranchAddress("mc_hadron_njets_ycut", mc_hadron_njets_ycut, &b_mc_hadron_njets_ycut);
+   fChain->SetBranchAddress("mc_hadron_njets_ycut_cambridge", mc_hadron_njets_ycut_cambridge, &b_mc_hadron_njets_ycut_cambridge);
    fChain->SetBranchAddress("MCBOscillation", &MCBOscillation, &b_MCBOscillation);
    fChain->SetBranchAddress("MCBBarOscillation", &MCBBarOscillation, &b_MCBBarOscillation);
    fChain->SetBranchAddress("mc_matching", &mc_matching, &b_mc_matching);
