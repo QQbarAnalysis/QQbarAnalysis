@@ -133,6 +133,9 @@ namespace QQbarProcessor
     _hTree->Branch("MCTop1charge", &data._MCTop1charge, "MCTop1charge/F");
     _hTree->Branch("MCTop2charge", &data._MCTop2charge, "MCTop2charge/F");
 
+    _hTree->Branch("nNonBDaughter", &data._nNonBDaughter, "nNonBDaughter/I");
+    _hTree->Branch("NonBDaughterPDG", data._NonBDaughterPDG, "NonBDaughterPDG[nNonBDaughter]/I");
+
     //Reconstructed
     _hTree->Branch("totalEnergy", &data._totalEnergy, "totalEnergy/F");
     _hTree->Branch("bProduct", &data._bProduct, "bProduct/F");

@@ -69,6 +69,23 @@ namespace QQbarProcessor
 	{
 		std::vector< EVENT::MCParticle * > mctops = opera.GetTopPairParticles(_stats._MCTopBangle, _stats._MCTopcosWb);
 
+		// Yuichi test
+		MCParticle * wplus = opera.FindParticle(24);
+		MCParticle * wminus = opera.FindParticle(-24);
+		if (!wplus || !wminus) 
+		{
+			vector< MCParticle * > final = opera.GetFinalState();
+			_stats._nNonBDaughter = final.size();
+
+			for (int i = 0; i < final.size(); i++)
+			{
+				_stats._NonBDaughterPDG[i] = final[i]->getPDG();
+			}
+
+		}
+
+
+
 		if (mctops.size() < 2) 
 		{
 			_stats._mctag = 0;
@@ -78,9 +95,6 @@ namespace QQbarProcessor
 		_summary._nGenUsed++;
 		MCParticle * top    = mctops[0];
 		MCParticle * topbar = mctops[1];
-
-		//std::cout << "mcB0 size = " << mcB0.size() << "\n";
-		//std::cout << "mcBplus size = " << mcBplus.size() << "\n";
 
 		BHadronHandler(opera);
 
@@ -195,7 +209,10 @@ namespace QQbarProcessor
 			//LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName);
 			QQbarMCOperator opera(mccol);
 			VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
+
+			// Analyze Gen Info
 			vector < MCParticle * > mctops = AnalyseGenerator(opera);
+
 			vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
 			vector< RecoJet * > * wjets = new vector< RecoJet * >();
 			vector< RecoJet * > * bjets = QQbarTools::getBTagJets(jets, wjets);
@@ -315,8 +332,7 @@ namespace QQbarProcessor
 
 					}//itr
 
-
-				}
+				}//vtx
 
 
 

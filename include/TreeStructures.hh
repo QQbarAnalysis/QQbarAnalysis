@@ -182,9 +182,7 @@ namespace QQbarProcessor
     float _jet_track_z0[2][10][20];
     float _jet_track_d0[2][10][20];
     float _jet_track_phi[2][10][20];
-
-
-																		
+							
 		// kaon information
  		float _Top1KaondEdx[10];
 						
@@ -227,6 +225,9 @@ namespace QQbarProcessor
 		float _MCWminusmass;
 
 		// MC b quark info
+
+    int _nNonBDaughter;
+    int _NonBDaughterPDG[20];
 
 
     float _totalEnergy;
@@ -297,6 +298,8 @@ namespace QQbarProcessor
       _ZZMass1 = -1;
       _ZZMass2 = -1;
 
+      _nNonBDaughter = 0;
+
 			for (unsigned int i = 0; i < 7; i++) {
 				_methodCheck[i] = -1;
 				_methodTaken[i] = -1;
@@ -334,6 +337,10 @@ namespace QQbarProcessor
           } //end itr
         } // end ivtx
       } // end jet
+
+      for (unsigned int i = 0; i < 20; i++) {
+        _NonBDaughterPDG[i]=0;
+      }
 
 
 
