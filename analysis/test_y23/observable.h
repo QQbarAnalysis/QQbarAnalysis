@@ -299,6 +299,7 @@ public :
 
    //analysis
    virtual void     ContaminationLightQuarkSelection(int n=-1);
+   virtual void     ContaminationQuarkSelectionBKG(int n=-1);
    virtual void     ContaminationBQuarkSelection(int n=-1);
    virtual void     AnalysisR3_cambridge(int n=-1, float KISR=35);
    //   virtual void     AnalysisR3_cambridge_contami(int n=-1, float KISR=35);

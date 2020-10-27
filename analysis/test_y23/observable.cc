@@ -9,6 +9,58 @@
 #include <TTree.h>
 #include <TBranch.h>
 
+void observable::ContaminationQuarkSelectionBKG(int n_entries) {
+  
+  std::cout << "########## ContaminationLightQuarkSelection ##########" << std::endl;
+  int Nbbj[4][10]={0};
+  int Nbb[4][10]={0};
+
+
+ 
+  Long64_t nentries;
+  if(n_entries>0) nentries = n_entries;
+  else nentries = fChain->GetEntriesFast();
+  Long64_t nbytes=0, nb=0;
+  
+  //Event loop
+  for(Long64_t jentry=0; jentry<nentries; jentry++) {
+    Long64_t ientry = LoadTree(jentry);
+    if(ientry<0) break;
+    nb = fChain->GetEntry(jentry); 
+    nbytes += nb;
+    if (jentry>100000 && jentry%100000==0) std::cout << "Progress: " << 100.*jentry/nentries << "%" << std::endl;
+
+    float ISR_E = mc_ISR_E[0]+mc_ISR_E[1];
+    /*    float costheta;
+    std::vector<float> p_bbar;
+    p_bbar.push_back(jet_px[0]-jet_px[1]);
+    p_bbar.push_back(jet_py[0]-jet_py[1]);
+    p_bbar.push_back(jet_pz[0]-jet_pz[1]);
+    costheta=fabs(GetCostheta(p_bbar));
+    */
+    for(int i=0; i<10; i++) {
+      for(int j=0; j<4; j++) {
+	if(  PreSelection(j,(i+1.0)*5.) ==true) {
+	  if(ISR_E<(i+1.0)*5.) {
+	    Nbb[j][i]++;
+	    if(njets_ycut_cambridge[10]==3)  Nbbj[j][i]++;
+	  }
+	}
+      }
+    }
+  }
+  
+
+  for(int j=0; j<4; j++) {
+    cout<<"STEP : "<<j<<endl;
+    for(int i=0; i<10; i++) {
+      cout<<"ISR_E="<<(i+1.0)*5.<<" N: "<<Nbb[j][i]<<" N3j: "<<Nbbj[j][i]<<endl;  
+    }
+  }
+
+}
+  
+
 void observable::ContaminationLightQuarkSelection(int n_entries) {
   
   std::cout << "########## ContaminationLightQuarkSelection ##########" << std::endl;
@@ -40,16 +92,16 @@ void observable::ContaminationLightQuarkSelection(int n_entries) {
     if (jentry>100000 && jentry%100000==0) std::cout << "Progress: " << 100.*jentry/nentries << "%" << std::endl;
 
     float ISR_E = mc_ISR_E[0]+mc_ISR_E[1];
-    float costheta;
+    /*    float costheta;
     std::vector<float> p_bbar;
     p_bbar.push_back(jet_px[0]-jet_px[1]);
     p_bbar.push_back(jet_py[0]-jet_py[1]);
     p_bbar.push_back(jet_pz[0]-jet_pz[1]);
     costheta=fabs(GetCostheta(p_bbar));
-    
+    */
     for(int i=0; i<10; i++) {
       for(int j=0; j<4; j++) {
-	if(  PreSelection(j,(i+1.0)*5.) ==true && costheta<0.8) {
+	if(  PreSelection(j,(i+1.0)*5.) ==true) {
 	  if(ISR_E<(i+1.0)*5.) {
 	    if(fabs(mc_quark_pdg[0])==5) Nbb[j][i]++;
 	    if(fabs(mc_quark_pdg[0])==4) Ncc[j][i]++;
@@ -84,15 +136,15 @@ void observable::ContaminationLightQuarkSelection(int n_entries) {
   }
   cout<<" ---------------- "<<endl;
    for(int i=0; i<10; i++) {
-     cout<<"ISR_E="<<(i+1.0)*5.<<" R3l_signal: "<<float(Nllj[j][i])/(float(Nllj[j][i])+float(Nll[j][i]))<<
-       " R3l_c_cont: "<<(float(Nllj[j][i])+float(Nccj[j][i]))/(float(Nllj[j][i])+float(Nll[j][i])+float(Nccj[j][i])+float(Ncc[j][i]))<<
-       " R3l_b_cont: "<<(float(Nllj[j][i])+float(Nbbj[j][i]))/(float(Nllj[j][i])+float(Nll[j][i])+float(Nbbj[j][i])+float(Nbb[j][i]))<<
-       " R3l_cont: "<<(float(Nllj[j][i])+float(Nccj[j][i])+float(Nbbj[j][i]))/(float(Nllj[j][i])+float(Nll[j][i])+float(Nbbj[j][i])+float(Nbb[j][i])+float(Ncc[j][i])+float(Ncc[j][i]))<<
-       "  |  R3l_l_rad: "<<(float(Nllj[j][i])+float(Nllj_rad[j][i]))/(float(Nllj[j][i])+float(Nll[j][i])+float(Nllj_rad[j][i])+float(Nll_rad[j][i]))<<
-       " R3l_c_rad: "<<(float(Nllj[j][i])+float(Nccj_rad[j][i]))/(float(Nllj[j][i])+float(Nll[j][i])+float(Nccj_rad[j][i])+float(Ncc_rad[j][i]))<<
-       " R3l_b_rad: "<<(float(Nllj[j][i])+float(Nbbj_rad[j][i]))/(float(Nllj[j][i])+float(Nll[j][i])+float(Nbbj_rad[j][i])+float(Nbb_rad[j][i]))<<
-       " R3l_rad: "<<(float(Nllj[j][i])+float(Nllj_rad[j][i])+float(Nccj_rad[j][i])+float(Nbbj_rad[j][i]))/(float(Nllj[j][i])+float(Nllj_rad[j][i])+float(Nll[j][i])+float(Nll_rad[j][i])+float(Nbbj_rad[j][i])+float(Nbb_rad[j][i])+float(Ncc_rad[j][i])+float(Ncc_rad[j][i]))<<
-       " || R3l_all: "<<(float(Nllj[j][i])+float(Nllj_rad[j][i])+float(Nccj[j][i])+float(Nbbj[j][i])+float(Nccj_rad[j][i])+float(Nbbj_rad[j][i]))/(float(Nllj[j][i])+float(Nllj_rad[j][i])+float(Nll[j][i])+float(Nll_rad[j][i])+float(Nbbj[j][i])+float(Nbb[j][i])+float(Ncc[j][i])+float(Ncc[j][i])+float(Nbbj_rad[j][i])+float(Nbb_rad[j][i])+float(Ncc_rad[j][i])+float(Ncc_rad[j][i]))<<endl;
+     cout<<"ISR_E="<<(i+1.0)*5.<<" R3l_signal: "<<float(Nllj[j][i])/float(Nllj[j][i])<<
+       " R3l_c_cont: "<<(float(Nllj[j][i])+float(Nccj[j][i]))/(float(Nll[j][i])+float(Ncc[j][i]))<<
+       " R3l_b_cont: "<<(float(Nllj[j][i])+float(Nbbj[j][i]))/(float(Nll[j][i])+float(Nbb[j][i]))<<
+       " R3l_cont: "<<(float(Nllj[j][i])+float(Nccj[j][i])+float(Nbbj[j][i]))/(float(Nll[j][i])+float(Nbb[j][i])+float(Ncc[j][i]))<<
+       "  |  R3l_l_rad: "<<(float(Nllj[j][i])+float(Nllj_rad[j][i]))/(float(Nll[j][i])+float(Nll_rad[j][i]))<<
+       " R3l_c_rad: "<<(float(Nllj[j][i])+float(Nccj_rad[j][i]))/(float(Nll[j][i])+float(Ncc_rad[j][i]))<<
+       " R3l_b_rad: "<<(float(Nllj[j][i])+float(Nbbj_rad[j][i]))/(float(Nll[j][i])+float(Nbb_rad[j][i]))<<
+       " R3l_rad: "<<(float(Nllj[j][i])+float(Nllj_rad[j][i])+float(Nccj_rad[j][i])+float(Nbbj_rad[j][i]))/(float(Nll[j][i])+float(Nll_rad[j][i])+float(Nbb_rad[j][i])+float(Ncc_rad[j][i])+float(Ncc_rad[j][i]))<<
+       " || R3l_all: "<<(float(Nllj[j][i])+float(Nllj_rad[j][i])+float(Nccj[j][i])+float(Nbbj[j][i])+float(Nccj_rad[j][i])+float(Nbbj_rad[j][i]))/(float(Nll[j][i])+float(Nll_rad[j][i])+float(Nbb[j][i])+float(Ncc[j][i])+float(Nbb_rad[j][i])+float(Ncc_rad[j][i]))<<endl;
    }
   }
 
@@ -129,18 +181,18 @@ void observable::ContaminationBQuarkSelection(int n_entries) {
     if (jentry>100000 && jentry%100000==0) std::cout << "Progress: " << 100.*jentry/nentries << "%" << std::endl;
 
     float ISR_E = mc_ISR_E[0]+mc_ISR_E[1];
-
+    /*
     float costheta;
     std::vector<float> p_bbar;
     p_bbar.push_back(jet_px[0]-jet_px[1]);
     p_bbar.push_back(jet_py[0]-jet_py[1]);
     p_bbar.push_back(jet_pz[0]-jet_pz[1]);
     costheta=fabs(GetCostheta(p_bbar));
-
+    */
 
     for(int i=0; i<10; i++) {
           for(int j=0; j<4; j++) {
-	    if(  PreSelection(j,(i+1.0)*5.) ==true && costheta<0.8) {
+	    if(  PreSelection(j,(i+1.0)*5.) ==true ) {
 	      if(ISR_E<(i+1.0)*5.) {
 		if(fabs(mc_quark_pdg[0])==5) Nbb[j][i]++;
 		if(fabs(mc_quark_pdg[0])==4) Ncc[j][i]++;
@@ -175,15 +227,15 @@ void observable::ContaminationBQuarkSelection(int n_entries) {
     }
     cout<<" ---------------- "<<endl;
     for(int i=0; i<10; i++) {
-      cout<<"ISR_E="<<(i+1.0)*5.<<" R3b_signal: "<<float(Nbbj[j][i])/(float(Nbbj[j][i])+float(Nbb[j][i]))<<
-	" R3b_c_cont: "<<(float(Nbbj[j][i])+float(Nccj[j][i]))/(float(Nbbj[j][i])+float(Nbb[j][i])+float(Nccj[j][i])+float(Ncc[j][i]))<<
-	" R3b_b_cont: "<<(float(Nbbj[j][i])+float(Nllj[j][i]))/(float(Nbbj[j][i])+float(Nbb[j][i])+float(Nllj[j][i])+float(Nll[j][i]))<<
-	" R3b_cont: "<<(float(Nbbj[j][i])+float(Nccj[j][i])+float(Nllj[j][i]))/(float(Nbbj[j][i])+float(Nbb[j][i])+float(Nllj[j][i])+float(Nll[j][i])+float(Ncc[j][i])+float(Ncc[j][i]))<<
-	"  |  R3b_l_rad: "<<(float(Nbbj[j][i])+float(Nbbj_rad[j][i]))/(float(Nbbj[j][i])+float(Nbb[j][i])+float(Nbbj_rad[j][i])+float(Nbb_rad[j][i]))<<
-	" R3b_c_rad: "<<(float(Nbbj[j][i])+float(Nccj_rad[j][i]))/(float(Nbbj[j][i])+float(Nbb[j][i])+float(Nccj_rad[j][i])+float(Ncc_rad[j][i]))<<
-	" R3b_b_rad: "<<(float(Nbbj[j][i])+float(Nllj_rad[j][i]))/(float(Nbbj[j][i])+float(Nbb[j][i])+float(Nllj_rad[j][i])+float(Nll_rad[j][i]))<<
-	" R3b_rad: "<<(float(Nbbj[j][i])+float(Nbbj_rad[j][i])+float(Nccj_rad[j][i])+float(Nllj_rad[j][i]))/(float(Nbbj[j][i])+float(Nbbj_rad[j][i])+float(Nbb[j][i])+float(Nbb_rad[j][i])+float(Nllj_rad[j][i])+float(Nll_rad[j][i])+float(Ncc_rad[j][i])+float(Ncc_rad[j][i]))<<
-	" || R3b_all: "<<(float(Nbbj[j][i])+float(Nbbj_rad[j][i])+float(Nccj[j][i])+float(Nllj[j][i])+float(Nccj_rad[j][i])+float(Nllj_rad[j][i]))/(float(Nbbj[j][i])+float(Nbbj_rad[j][i])+float(Nbb[j][i])+float(Nbb_rad[j][i])+float(Nllj[j][i])+float(Nll[j][i])+float(Ncc[j][i])+float(Ncc[j][i])+float(Nllj_rad[j][i])+float(Nll_rad[j][i])+float(Ncc_rad[j][i])+float(Ncc_rad[j][i]))<<endl;
+      cout<<"ISR_E="<<(i+1.0)*5.<<" R3b_signal: "<<float(Nbbj[j][i])/(float(Nbb[j][i]))<<
+	" R3b_c_cont: "<<(float(Nbbj[j][i])+float(Nccj[j][i]))/(float(Nbb[j][i])+float(Ncc[j][i]))<<
+	" R3b_b_cont: "<<(float(Nbbj[j][i])+float(Nllj[j][i]))/(float(Nbb[j][i])+float(Nll[j][i]))<<
+	" R3b_cont: "<<(float(Nbbj[j][i])+float(Nccj[j][i])+float(Nllj[j][i]))/(float(Nbb[j][i])+float(Nll[j][i])+float(Ncc[j][i])+float(Ncc[j][i]))<<
+	"  |  R3b_l_rad: "<<(float(Nbbj[j][i])+float(Nbbj_rad[j][i]))/(float(Nbb[j][i])+float(Nbb_rad[j][i]))<<
+	" R3b_c_rad: "<<(float(Nbbj[j][i])+float(Nccj_rad[j][i]))/(float(Nbb[j][i])+float(Ncc_rad[j][i]))<<
+	" R3b_b_rad: "<<(float(Nbbj[j][i])+float(Nllj_rad[j][i]))/(float(Nbb[j][i])+float(Nll_rad[j][i]))<<
+	" R3b_rad: "<<(float(Nbbj[j][i])+float(Nbbj_rad[j][i])+float(Nccj_rad[j][i])+float(Nllj_rad[j][i]))/(float(Nbb[j][i])+float(Nbb_rad[j][i])+float(Nll_rad[j][i])+float(Ncc_rad[j][i])+float(Ncc_rad[j][i]))<<
+	" || R3b_all: "<<(float(Nbbj[j][i])+float(Nbbj_rad[j][i])+float(Nccj[j][i])+float(Nllj[j][i])+float(Nccj_rad[j][i])+float(Nllj_rad[j][i]))/(float(Nbb[j][i])+float(Nbb_rad[j][i])+float(Nll[j][i])+float(Ncc[j][i])+float(Nll_rad[j][i])+float(Ncc_rad[j][i]))<<endl;
     }
   }
 
