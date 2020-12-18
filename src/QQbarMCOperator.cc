@@ -212,13 +212,13 @@ namespace QQbarProcessor
   vector< MCParticle * > QQbarMCOperator::GetTopPairParticles(float & topBangle, float & topcosWb)
   {
     vector< MCParticle * > pair;
-    
+
     // particle declaration
     MCParticle * b = FindParticle(5);
     MCParticle * bbar = FindParticle(-5);
     MCParticle * wplus = FindParticle(24);
     MCParticle * wminus = FindParticle(-24);
-    
+
     // B Hadron
     /*
       MCParticle * B0 = FindParticle(511);
@@ -229,7 +229,7 @@ namespace QQbarProcessor
       MCParticle * BXiminusb = FindParticle(5132); 
       MCParticle * BXi0b = FindParticle(5232);
       MCParticle * BOmegaminusb = FindParticle(5332);
-      
+
       MCParticle * B0bar = FindParticle(-511);
       MCParticle * Bplusbar = FindParticle(-521);
       MCParticle * B0sbar = FindParticle(-531);
@@ -239,7 +239,7 @@ namespace QQbarProcessor
       MCParticle * BXi0bbar = FindParticle(-5232);
       MCParticle * BOmegaminusbbar = FindParticle(-5332);
     */
-    
+
     if (!b || !bbar ) 
       {
 	return pair;
@@ -261,7 +261,9 @@ namespace QQbarProcessor
 		  {
 		    continue;
 		  }
+
 		MCParticle * candidate = CombineParticles(final[i],final[j]);
+
 		if (std::abs(candidate->getCharge()) > 0.99 && std::abs(candidate->getCharge()) < 1.01 ) 
 		  {
 		    if (candidate->getCharge() > 0) 
@@ -277,7 +279,15 @@ namespace QQbarProcessor
 		  }
 	      }
 	  }
+	if(!wplus || !wminus){
+	  std::cout << "CRUNCH\n";
+	  return pair;
+	}
       }
+
+    std::cout << "b found: q " << b->getCharge() << " m " << b->getMass() << "\n";
+    std::cout << "bbar found: q " << bbar->getCharge() << " m " << bbar->getMass() << "\n";
+
     myBquarkPair.push_back(b);
     myBquarkPair.push_back(bbar);
     myWPair.push_back(wplus);
@@ -327,7 +337,7 @@ namespace QQbarProcessor
       }*/
     result.push_back(dynamic_cast<MCParticle*>( myCollection->getElementAt( 2)));
     result.push_back(dynamic_cast<MCParticle*>( myCollection->getElementAt( 3)));
-    
+
     MCParticle * higgs = FindParticle(25);
     if (higgs->getDaughters().size() == 2) 
       {
@@ -340,7 +350,7 @@ namespace QQbarProcessor
 	  {
 	    result.push_back(higgs->getDaughters()[0]->getDaughters()[0]);
 	    result.push_back(higgs->getDaughters()[0]->getDaughters()[1]);
-	    
+
 	  }
       }
     return result;
@@ -424,3 +434,4 @@ namespace QQbarProcessor
     return result;
   }
 }
+

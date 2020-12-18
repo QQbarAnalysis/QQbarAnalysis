@@ -87,7 +87,7 @@ namespace QQbarProcessor
     return 0;
   }
 	
-  float VertexChargeOperator::ComputeCharge(RecoJet * top)
+    float VertexChargeOperator::ComputeCharge(RecoJet * top)
   {
     float result = -2.;
     float purity = 0.95;
@@ -130,7 +130,7 @@ namespace QQbarProcessor
 	    sign = -sign;
 	  }
 	topCharge.ByTVCM = new int(sign);
-			
+
       }
     return sum;
   }
@@ -145,7 +145,7 @@ namespace QQbarProcessor
     //ReconstructedParticle * kaon2 = getKaon(vertex2);
     //vector< ReconstructedParticle * > kaons1 = GetKaons(top1);
     //vector< ReconstructedParticle * > kaons2 = GetKaons(top2);
-		
+
     /*if (kaon1) 
       {
       kaons1.push_back(kaon1);
@@ -164,7 +164,7 @@ namespace QQbarProcessor
     result = ComputeCharge(top1);
     std::cout << "Kaons 2 :\n";
     result = ComputeCharge(top2);
-		
+
     return result;
   }
   Vertex * VertexChargeOperator::getTernaryVertex(TopQuark * top)
@@ -223,6 +223,7 @@ namespace QQbarProcessor
       }
     return result;
   }
+  
   ReconstructedParticle * VertexChargeOperator::getKaon(Vertex * ternary)
   {
     if (!ternary) 
