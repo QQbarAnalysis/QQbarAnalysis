@@ -30,7 +30,7 @@ namespace QQbarProcessor
     }
   };
 
-
+ 
   struct StatsData  {
   public:
 
@@ -98,7 +98,7 @@ namespace QQbarProcessor
     int _Top1Vtx;
     int _Top1Kaon;
     int _Top1KaonNumber;
-		int _Top1TotalKaonCharge;
+    int _Top1TotalKaonCharge;
     int _Top1KaonCharges[10];
     float _Top1KaonMomentum[10];
     int _Top1bTVCM;
@@ -120,7 +120,7 @@ namespace QQbarProcessor
     int _Top2Vtx;
     int _Top2Kaon;
     int _Top2KaonNumber;
-		int _Top2TotalKaonCharge;
+    int _Top2TotalKaonCharge;
     int _Top2KaonCharges[10];
     float _Top2KaonMomentum[10];
     int _Top2leptonCharge;
@@ -149,20 +149,20 @@ namespace QQbarProcessor
     float _chiTop2Mass;
     float _chiTop2E;
 
-		float _angleB;
-		float _angleW;
-		float _cosbjets;
+    float _angleB;
+    float _angleW;
+    float _cosbjets;
 
-		int _chgValue[100];
+    int _chgValue[100];
 
 		
-		// jet information
-		int   _jet_nvtx[2];
-		float _jet_E[2];
-		float _jet_px[2];
-		float _jet_py[2];
-		float _jet_pz[2];
-		float _jet_M[2];
+    // jet information
+    int   _jet_nvtx[2];
+    float _jet_E[2];
+    float _jet_px[2];
+    float _jet_py[2];
+    float _jet_pz[2];
+    float _jet_M[2];
 
     // jet vtx info
     int _jet_ntrack[2];
@@ -188,10 +188,10 @@ namespace QQbarProcessor
     float _jet_track_d0[2][10][20];
     float _jet_track_phi[2][10][20];
 							
-		// kaon information
- 		float _Top1KaondEdx[10];
+    // kaon information
+    float _Top1KaondEdx[10];
 						
-		// MC Top info
+    // MC Top info
     int _MCBOscillation;
     int _MCBWcorrect;
     int _MCBBarOscillation;
@@ -216,21 +216,21 @@ namespace QQbarProcessor
     float _MCPt;
     float _qMCBcostheta[2];
     float _MCNeutrinoEnergy;
-		int _singletopFlag;
 
-		float _MCTop1charge;
-		float _MCTop2charge;
+    int _singletopFlag;
 
-		// MC B Had info
-		int _MCBHadCharge;
-		int _MCBHadNtracks;
+    float _MCTop1charge;
+    float _MCTop2charge;
 
-		// MC W info
-		float _MCWplusmass;
-		float _MCWminusmass;
+    // MC B Had info
+    int _MCBHadCharge;
+    int _MCBHadNtracks;
 
-		// MC b quark info
+    // MC W info
+    float _MCWplusmass;
+    float _MCWminusmass;
 
+    // MC b quark info
     int _nNonBDaughter;
     int _NonBDaughterPDG[20];
 
@@ -352,11 +352,13 @@ namespace QQbarProcessor
         _NonBDaughterPDG[i]=0;
       }
 
+    } //end clear
+  };
+
 
 
     } //end clear
   };
-
 
   struct StatsData_BBbar  {
   public:
@@ -373,15 +375,64 @@ namespace QQbarProcessor
     float _mc_qqbar_pt;
     int _mc_matching;
 
-    float _mc_quark_ps_E[300];
-    float _mc_quark_ps_px[300];
-    float _mc_quark_ps_py[300];
-    float _mc_quark_ps_pz[300];
-    float _mc_quark_ps_pt[300];
-    float _mc_quark_ps_m[300];
-    float _mc_quark_ps_pdg[300];
-    float _mc_quark_ps_charge[300];
-    int _mc_quark_ps_n;
+    float _mc_ISR_E[2]; 
+    float _mc_ISR_px[2];
+    float _mc_ISR_py[2]; 
+    float _mc_ISR_pz[2]; 
+    float _mc_ISR_pt[2]; 
+    float _mc_ISR_m[2];  
+    float _mc_ISR_pdg[2];
+    float _mc_ISR_charge[2]; 
+
+    float _mc_quark_ps_E[1000];
+    float _mc_quark_ps_px[1000];
+    float _mc_quark_ps_py[1000];
+    float _mc_quark_ps_pz[1000];
+    float _mc_quark_ps_pt[1000];
+    float _mc_quark_ps_m[1000];
+    float _mc_quark_ps_pdg[1000];
+    float _mc_quark_ps_charge[1000];
+    int  _mc_quark_ps_n;
+    float _jet_R_norm;
+    float _mc_quark_ps_y12;
+    float _mc_quark_ps_y23;
+    float _mc_quark_ps_d12;
+    float _mc_quark_ps_d23;
+    float _mc_quark_ps_ycut[50];
+    float _mc_quark_ps_njets_ycut[50];
+    float _mc_quark_ps_njets_ycut_cambridge[50];
+    float _mc_quark_ps_jet_E[2];
+    float _mc_quark_ps_jet_px[2];
+    float _mc_quark_ps_jet_py[2];
+    float _mc_quark_ps_jet_pz[2];
+    int _mc_quark_ps_jet_nparticles[2];
+
+    float _mc_quark_ps_isr_y12;
+    float _mc_quark_ps_isr_y23;
+    float _mc_quark_ps_isr_d12;
+    float _mc_quark_ps_isr_d23;
+    float _mc_quark_ps_isr_jet_E[2];
+    float _mc_quark_ps_isr_jet_px[2];
+    float _mc_quark_ps_isr_jet_py[2];
+    float _mc_quark_ps_isr_jet_pz[2];
+    int _mc_quark_ps_isr_jet_nparticles[2];
+
+    //Member for Hadron (Added by Seidai in 2020.Sep.17)
+    float _mc_hadron_E[1000];
+    float _mc_hadron_px[1000];
+    float _mc_hadron_py[1000];
+    float _mc_hadron_pz[1000];
+    float _mc_hadron_m[1000];
+    float _mc_hadron_pdg[1000];
+    float _mc_hadron_charge[1000];
+    int _mc_hadron_n;
+    float _mc_hadron_y12;
+    float _mc_hadron_y23;
+    float _mc_hadron_d12;
+    float _mc_hadron_d23;
+    float _mc_hadron_ycut[50];
+    float _mc_hadron_njets_ycut[50];
+    float _mc_hadron_njets_ycut_cambridge[50];
 
     int _MCBOscillation;
     int _MCBBarOscillation;
@@ -393,7 +444,9 @@ namespace QQbarProcessor
     float _y12;
     float _d23;
     float _d12;
-
+    float _ycut[50];
+    float _njets_ycut[50];
+    float _njets_ycut_cambridge[50];
     float _oblateness;
     float _aplanarity;
     float _major_thrust_value;
@@ -411,7 +464,16 @@ namespace QQbarProcessor
     float _jet_pz[2];
     float _jet_m[2];
     float _jet_btag[2];
+    float _jet_ctag[2];
 
+    float _pfo_E[2][150];
+    float _pfo_px[2][150];
+    float _pfo_py[2][150];
+    float _pfo_pz[2][150];
+    float _pfo_m[2][150];
+    int _pfo_type[2][150]; 
+    int _pfo_charge[2][150];
+    int _pfo_n[2];
 
     int _jet_nvtx[2];
     int _jet_ntrack[2];
@@ -419,21 +481,23 @@ namespace QQbarProcessor
     int _jet_vtx_ntrack[2][10];
     float _jet_vtx_charge[2][10];
 
-    float _jet_track_E[2][10][20];
-    float _jet_track_px[2][10][20];
-    float _jet_track_py[2][10][20];
-    float _jet_track_pz[2][10][20];
-    float _jet_track_p[2][10][20];
-    float _jet_track_charge[2][10][20];
-    int _jet_track_iskaon[2][10][20];
-    int _jet_track_iskaoncheat[2][10][20];
-    float _jet_track_z0[2][10][20];
-    float _jet_track_d0[2][10][20];
-    float _jet_track_phi[2][10][20];
+    float _jet_track_E[2][10][30];
+    float _jet_track_px[2][10][30];
+    float _jet_track_py[2][10][30];
+    float _jet_track_pz[2][10][30];
+    float _jet_track_p[2][10][30];
+    float _jet_track_charge[2][10][30];
+    float _jet_track_dedx[2][10][30];
+    int _jet_track_iskaon[2][10][30];
+    int _jet_track_iskaoncheat[2][10][30];
+    int _jet_track_pdg[2][10][30];
+    float _jet_track_z0[2][10][30];
+    float _jet_track_d0[2][10][30];
+    float _jet_track_phi[2][10][30];
 
     void Clear()  {
 
-      for (unsigned int i = 0; i < 300; i++) {
+      for (unsigned int i = 0; i < 1000; i++) {
 	_mc_quark_ps_E[i]=0;
 	_mc_quark_ps_px[i]=0;
 	_mc_quark_ps_py[i]=0;
@@ -445,7 +509,21 @@ namespace QQbarProcessor
 
       }
 
+      _jet_R_norm=0;
       _mc_quark_ps_n=0;
+      _mc_quark_ps_y12=0;
+      _mc_quark_ps_y23=0;
+      _mc_quark_ps_d12=0;
+      _mc_quark_ps_d23=0;
+      for(int i=0; i<50; i++) {
+  	_mc_quark_ps_ycut[i]=0.;
+  	_mc_quark_ps_njets_ycut[i]=0.;
+	_mc_quark_ps_njets_ycut_cambridge[i]=0.;
+      }
+      _mc_quark_ps_isr_y12=0;
+      _mc_quark_ps_isr_y23=0;
+      _mc_quark_ps_isr_d12=0;
+      _mc_quark_ps_isr_d23=0;
 
       for (unsigned int i = 0; i < 2; i++) {
 	_mc_quark_E[i]=0;
@@ -457,11 +535,53 @@ namespace QQbarProcessor
 	_mc_quark_pdg[i]=-1000;
 	_mc_quark_charge[i]=-1000;
 
+	_mc_ISR_E[i]=0;
+        _mc_ISR_px[i]=0;
+        _mc_ISR_py[i]=0;
+        _mc_ISR_pz[i]=0;
+        _mc_ISR_m[i]=0; 
+        _mc_ISR_pt[i]=0;
+        _mc_ISR_pdg[i]=-1000;
+        _mc_ISR_charge[i]=-1000;
+
+	_mc_quark_ps_jet_nparticles[i]=0;
+	_mc_quark_ps_jet_E[i]=0;
+	_mc_quark_ps_jet_px[i]=0; 
+	_mc_quark_ps_jet_py[i]=0; 
+	_mc_quark_ps_jet_pz[i]=0; 
+
+	_mc_quark_ps_isr_jet_nparticles[i]=0;
+        _mc_quark_ps_isr_jet_E[i]=0;
+        _mc_quark_ps_isr_jet_px[i]=0;
+        _mc_quark_ps_isr_jet_py[i]=0;
+        _mc_quark_ps_isr_jet_pz[i]=0;
       }
+      
       _mc_qqbar_m=0;
       _mc_qqbar_pt=0;
       _mc_matching=-1;
 
+      //Added by Seidai 2020.Sep.21
+      for(int i=0; i<1000; i++) {
+        _mc_hadron_E[i]=0;
+        _mc_hadron_pdg[i]=0;
+        _mc_hadron_px[i]=0;
+        _mc_hadron_py[i]=0;
+        _mc_hadron_pz[i]=0;
+        _mc_hadron_m[i]=0;
+        _mc_hadron_charge[i]=0;
+      }
+      _mc_hadron_n=0;
+      _mc_hadron_y12=0;
+      _mc_hadron_y23=0;
+      _mc_hadron_d12=0;
+      _mc_hadron_d23=0;
+      for(int i=0; i<50; i++) {
+        _mc_hadron_ycut[i]=0;
+        _mc_hadron_njets_ycut[i]=0;
+        _mc_hadron_njets_ycut_cambridge[i]=0;
+      }
+      
       _MCBOscillation=0;
       _MCBBarOscillation=0;
 
@@ -472,7 +592,11 @@ namespace QQbarProcessor
       _y23=0;
       _d12=0;
       _d23=0;
-      
+      for(int i=0; i<50; i++) {
+	_ycut[i]=0.;
+	_njets_ycut[i]=0.;
+	_njets_ycut_cambridge[i]=0.;
+      }
       _oblateness=0;
       _aplanarity=0;
       _major_thrust_value=0;
@@ -487,41 +611,47 @@ namespace QQbarProcessor
 	_sphericity_tensor[i]=0;
       }
 
-  		
-      for (unsigned int i = 0; i < 2; i++) {
-	_jet_E[i]=0;
-	_jet_px[i]=0;
-	_jet_py[i]=0;
-	_jet_pz[i]=0;
-	_jet_m[i]=0;
-	_jet_btag[i]=0;
-
+      for(int i=0; i<2; i++ ) { 
+	_pfo_n[i]=0;
+	
+	for(int ipfo=0; ipfo<150; ipfo++) {  
+	  _pfo_E[i][ipfo]=0; 
+	  _pfo_px[i][ipfo]=0;
+	  _pfo_py[i][ipfo]=0;
+	  _pfo_pz[i][ipfo]=0;
+	  _pfo_m[i][ipfo]=0;
+	  _pfo_type[i][ipfo]=0;
+	  _pfo_charge[i][ipfo]=-1000;
+	}
 	_jet_nvtx[i]=0;
 	_jet_ntrack[i]=-1;
-
+	
 	for(int ivx=0; ivx<10; ivx++) {
 	  _jet_vtx_isprimary[i][ivx]=-1;
 	  _jet_vtx_ntrack[i][ivx]=-1;
 	  _jet_vtx_charge[i][ivx]=-1000;
-
-	  for(int itr=0; itr<20; itr++) {
+	  
+	  for(int itr=0; itr<30; itr++) {
 	    _jet_track_E[i][ivx][itr]=0;
 	    _jet_track_px[i][ivx][itr]=0;
 	    _jet_track_py[i][ivx][itr]=0;
 	    _jet_track_pz[i][ivx][itr]=0;
 	    _jet_track_p[i][ivx][itr]=0;
 	    _jet_track_charge[i][ivx][itr]=-1000;
+	    _jet_track_dedx[i][ivx][itr]=0;
 	    _jet_track_iskaon[i][ivx][itr]=-1;
 	    _jet_track_iskaoncheat[i][ivx][itr]=-1;
+	    _jet_track_pdg[i][ivx][itr]=0;
 	    _jet_track_z0[i][ivx][itr]=-1000;
 	    _jet_track_d0[i][ivx][itr]=-1000;
 	    _jet_track_phi[i][ivx][itr]=-1000;
 	  }
-
+	  
 	}
       }
-
+      
     }//end clear
-  };//end StatsData_BBbar
+  };//end StatsData_BBbar	
+  
 }
 #endif

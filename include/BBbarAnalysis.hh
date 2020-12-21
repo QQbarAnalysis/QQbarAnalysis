@@ -23,12 +23,19 @@
 #include <string>
 #include <TFile.h>
 #include <TTree.h>
+#include <TMath.h> 
 #include "QQbarTools.hh"
 #include "QQbarMCOperator.hh"
 
+//---- Fastjet stuff
+#include "fastjet/PseudoJet.hh"
+#include "fastjet/ClusterSequence.hh"
+#include <fastjet/EECambridgePlugin.hh>
+#include <fastjet/JadePlugin.hh>
+
 using namespace lcio ;
 using namespace marlin ;
-
+using namespace fastjet;
 
 namespace QQbarProcessor 
 {
@@ -45,7 +52,9 @@ namespace QQbarProcessor
 	  
     void Init(std::string _hfilename) ;
     std::vector< MCParticle * > AnalyseGeneratorBBbar(QQbarMCOperator & opera);
-    void AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera);
+    void AnalyseGeneratorISR(QQbarMCOperator & opera);
+    void AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
+    void AnalyseGeneratorBBbar_Hadron(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
     void AnalyseBBbar(LCEvent * evt,
 		      bool _boolDBDanalysis,
 		      bool _kaoncheat,
@@ -55,7 +64,9 @@ namespace QQbarProcessor
 		      std::string _JetsColName ,
 		      std::string _JetsRelColName ,
 		      std::string _MCColName,
-		      std::string _KaonTaggerName
+		      std::string _KaonTaggerName,
+		      float _Rparam_jet_ps,
+		      float _pparam_jet_ps
 		      ) ;
 
     void ClearVariables();

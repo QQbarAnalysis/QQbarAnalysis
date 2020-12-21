@@ -3,11 +3,10 @@
 <execute>
   <processor name="FirstJetClustering"/>
   <processor name="JetClusteringAndFlavorTag"/>
-  <!--processor name="VertexRestorerProcessor"/-->
   <processor name="MySphere"/>
   <processor name="MyThrustReconstruction"/>
   <processor name="MyQQbarProcessor"/>
-  <!--processor name="DSTOutput"/-->
+  <processor name="DSTOutput"/>
 </execute>
 
 <!--########  Global  ######################################## -->
@@ -24,8 +23,8 @@
 </global>
 
 <!--########  Processor  ######################################## -->
-<processor name="FirstJetClustering" type="myFastJetProcessor"> 
-  <parameter name="algorithm" type="StringVec"> ee_genkt_algorithm 1.5 1</parameter>                             
+<processor name="FirstJetClustering" type="FastJetProcessor"> 
+  <parameter name="algorithm" type="StringVec"> ee_genkt_algorithm 1.25 1</parameter>                             
   <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 2 </parameter>
   <parameter name="recombinationScheme" type="string"> E_scheme </parameter>
   <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
@@ -123,35 +122,6 @@
   </parameter>
 </processor>
 
-<processor name="VertexRestorerProcessor" type="VertexRestorer">
-  <parameter name="ROOTFileName" type="string"> VertexRestorer_xNAMEfile.root </parameter>
-  <parameter name="PFOCollection" type="string"> PandoraPFOs </parameter>
-  <parameter name="PrimaryCollectionName" type="string"> PrimaryVertex </parameter>
-  <parameter name="OutputCollectionName" type="string"> FinalJets_vtx </parameter>
-  <parameter name="OutputJetCollectionName" type="string"> FinalJets </parameter>
-  <parameter name="OutputRelCollectionName" type="string"> FinalJets_rel </parameter>
-  <parameter name="OutputRelRPCollectionName" type="string"> FinalJets_vtx_RP </parameter>
-  <parameter name="SecondaryCollectionName" type="string"> RefinedJets_vtx </parameter>
-  <parameter name="SecondaryRPCollectionName" type="string"> RefinedJets_vtx_RP </parameter>
-  <parameter name="V0CollectionName" type="string"> BuildUpVertex_V0 </parameter>
-  <parameter name="JetCollectionName" type="string"> RefinedJets </parameter>
-  <parameter name="MissedCollectionName" type="string"> MissedParticles </parameter>
-  <parameter name="MCMissedCollectionName" type="string"> MCMissedParticles </parameter>
-  <parameter name="NotUsedTracksCollectionName" type="string"> MarlinTrkTracks </parameter>
-  <parameter name="RecoMcTruthCollectionName" type="string"> RecoMCTruthLink </parameter>
-  <parameter name="MissedVtxCollectionName" type="string"> MissedParticlesVtx </parameter>
-  <parameter name="BStarCollectionName" type="string"> BStar </parameter>
-  <parameter name="MCVertexCollectionName" type="string"> MCVertex </parameter>
-  <parameter name="EGProngsCollectionName" type="string"> EGProngs </parameter>
-  <parameter name="JetRelCollectionName" type="string"> RefinedJets_rel </parameter>
-  <parameter name="UseTracks" type="int" value="1" />
-  <parameter name="TestEfficiency" type="int" value="0" />
-  <parameter name="angleCut" type="float" value="0.05" />
-  <parameter name="offsetCut" type="float" value="0.05" />
-  <parameter name="a" type="float" value="0.005" />
-  <parameter name="b" type="float" value="0.01" />
-</processor>
-
 <processor name="DSTOutput" type="LCIOOutputProcessor">
   <!--DST output: drop all hits, skim MCParticles and keep final Tracks, Clusters and  ReconstructedParticles-->
   <parameter name="LCIOOutputFile" type="string" > xNAMEfile.slcio </parameter>
@@ -168,7 +138,7 @@
   <parameter name="inputCollectionName" type="string"> RefinedJets </parameter>
 </processor>
 <processor name="MyThrustReconstruction" type="ThrustReconstruction">  
-  <parameter name="inputCollectionName" type="string"> RefinedJets </parameter> 
+  <parameter name="inputCollectionName" type="string"> PandoraPFOs </parameter> 
 </processor>
 
 <processor name="MyQQbarProcessor" type="QQbarProcessor">
@@ -176,8 +146,8 @@
   <parameter name="JetRelCollectionName" type="string" lcioInType="Vertex"> RefinedJets_rel </parameter>
   <parameter name="MCCollectionName" type="string" lcioInType="MCParticle"> MCParticlesSkimmed</parameter>
   <parameter name="ROOTFileName" type="string">xNAMEfile.root</parameter>
-  <parameter name="ElectronPolarisation" type="int">1</parameter>
-  <parameter name="MassCut" type="float">200</parameter>
+  <parameter name="Rparam_jet_ps" type="float">1.25</parameter>  
+  <parameter name="pparam_jet_ps" type="float">1</parameter>  
   <parameter name="AnalysisType" type="int">2</parameter>
 </processor>
 

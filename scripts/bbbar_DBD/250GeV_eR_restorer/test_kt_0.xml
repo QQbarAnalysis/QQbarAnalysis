@@ -13,7 +13,7 @@
 <!--########  Global  ######################################## -->
 <global>
   <parameter name="LCIOInputFiles">
-    /pnfs/desy.de/ilc/prod/ilc/mc-dbd/ild/dst-merged/250-TDR_ws/2f-highM_Z_hadronic/ILD_o1_v05/v01-16-p10_250/rv01-16-p10_250.sv01-14-01-p00.mILD_o1_v05.E250-TDR_ws.I110012.P2f-highM_z_h.eR.pL_dst_xNAMEfile_DST.slcio 
+    /pnfs/desy.de/ilc/prod/ilc/mc-dbd/ild/dst-merged/250-TDR_ws/2f-highM_Z_hadronic/ILD_o1_v05/v01-16-p10_250/rv01-16-p10_250.sv01-14-01-p00.mILD_o1_v05.E250-TDR_ws.I110012.P2f-highM_z_h.eR.pL_dst_xNAMEfile_DST.slcio                                                                                                                                                      
   </parameter>
   <!--parameter name="MaxRecordNumber" value="1000"/-->  
   <parameter name="GearXMLFile" value="GearOutput.xml"/>
@@ -24,8 +24,8 @@
 </global>
 
 <!--########  Processor  ######################################## -->
-<processor name="FirstJetClustering" type="myFastJetProcessor"> 
-  <parameter name="algorithm" type="StringVec"> ee_genkt_algorithm 1.5 1</parameter>  
+<processor name="FirstJetClustering" type="FastJetProcessor"> 
+  <parameter name="algorithm" type="StringVec"> ee_genkt_algorithm 1.25 1</parameter>                             
   <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 2 </parameter>
   <parameter name="recombinationScheme" type="string"> E_scheme </parameter>
   <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
@@ -164,17 +164,20 @@
   <parameter name="r_value" type="float"> 2.0 </parameter>
 </processor>
 
+<processor name="MySelectReconstructedParticle" type="SelectReconstructedParticle"> 
+  <parameter name="inputCollectionName" type="string"> FinalJets </parameter>
+</processor>
 <processor name="MyThrustReconstruction" type="ThrustReconstruction">  
-  <parameter name="inputCollectionName" type="string"> FinalJets </parameter> 
+  <parameter name="inputCollectionName" type="string"> PandoraPFOs </parameter> 
 </processor>
 
 <processor name="MyQQbarProcessor" type="QQbarProcessor">
   <parameter name="JetCollectionName" type="string" lcioInType="Vertex"> FinalJets </parameter>
   <parameter name="JetRelCollectionName" type="string" lcioInType="Vertex"> FinalJets_rel </parameter>
-  <parameter name="DBDanalysis" type="bool"> true </parameter>
-  <parameter name="KaonCheat" type="bool"> true </parameter>
   <parameter name="MCCollectionName" type="string" lcioInType="MCParticle"> MCParticlesSkimmed</parameter>
   <parameter name="ROOTFileName" type="string">xNAMEfile.root</parameter>
+  <parameter name="Rparam_jet_ps" type="float">1.25</parameter>  
+  <parameter name="pparam_jet_ps" type="float">1</parameter>  
   <parameter name="AnalysisType" type="int">2</parameter>
 </processor>
 

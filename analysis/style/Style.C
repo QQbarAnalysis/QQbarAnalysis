@@ -9,7 +9,7 @@
 void SetQQbarStyle ()
 {
   static TStyle* qqbarStyle = 0;
-  std::cout << "\nApplying QQBAR style settings...\n" << std::endl ;
+  //  std::cout << "\nApplying QQBAR style settings...\n" << std::endl ;
   if ( qqbarStyle==0 ) qqbarStyle = QQbarStyle();
   gROOT->SetStyle("QQBAR");
   gROOT->ForceStyle();
@@ -57,7 +57,7 @@ TStyle* QQbarStyle()
   qqbarStyle->SetLabelOffset(0.015,"xyz");
   qqbarStyle->SetTitleFont(42,"xyz");
   qqbarStyle->SetTitleSize(0.05,"xyz");
-  qqbarStyle->SetTitleOffset(1.1,"yz");
+  qqbarStyle->SetTitleOffset(1.35,"yz");
   qqbarStyle->SetTitleOffset(1.1,"x");
   
   /*qqbarStyle->SetTextSize(tsize);
