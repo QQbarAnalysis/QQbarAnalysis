@@ -13,7 +13,7 @@ PROJECT( QQbarProcessor )
 SET( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 SET( ${PROJECT_NAME}_VERSION_MINOR 1 )
 SET( ${PROJECT_NAME}_VERSION_PATCH 0 )
-
+#SET (CMAKE_CXX_STANDARD 11)
 
 
 ### DEPENDENCIES ############################################################
@@ -27,13 +27,32 @@ INCLUDE( ilcsoft_default_settings )
 FIND_PACKAGE( Marlin 1.0 REQUIRED ) # minimum required Marlin version
 FIND_PACKAGE( ROOT REQUIRED )
 FIND_PACKAGE( LCIO REQUIRED )
-INCLUDE_DIRECTORIES( ${Marlin_INCLUDE_DIRS} )
-INCLUDE_DIRECTORIES( ${ROOT_INCLUDE_DIRS} )
-INCLUDE_DIRECTORIES( ${LCIO_INCLUDE_DIRS} )
-LINK_LIBRARIES( ${Marlin_LIBRARIES} )
-LINK_LIBRARIES( ${ROOT_LIBRARIES} )
-LINK_LIBRARIES( ${LCIO_LIBRARIES} )
-ADD_DEFINITIONS( ${Marlin_DEFINITIONS} )
+
+FIND_PACKAGE ( FastJet )
+IF ( NOT ${FastJet_VERSION} VERSION_LESS 3 )
+  FIND_PACKAGE( FastJet 3 REQUIRED COMPONENTS siscone siscone_spherical fastjetplugins fastjetcontribfragile fastjettools)
+ELSEIF ( NOT ${FastJet_VERSION} VERSION_LESS 2.4.2 )
+  FIND_PACKAGE( FastJet 2 REQUIRED COMPONENTS SISConePlugin )
+ENDIF()
+
+INCLUDE_DIRECTORIES( SYSTEM ${FastJet_INCLUDE_DIRS} )
+LINK_LIBRARIES( ${FastJet_LIBRARIES} ${FastJet_COMPONENT_LIBRARIES} )
+
+FOREACH( pkg Marlin LCIO ROOT )
+    IF( ${pkg}_FOUND )
+        INCLUDE_DIRECTORIES( ${${pkg}_INCLUDE_DIRS} )
+        LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
+        ADD_DEFINITIONS ( ${${pkg}_DEFINITIONS} )
+    ENDIF()
+ENDFOREACH()
+
+#INCLUDE_DIRECTORIES( ${Marlin_INCLUDE_DIRS} )
+#INCLUDE_DIRECTORIES( ${ROOT_INCLUDE_DIRS} )
+#INCLUDE_DIRECTORIES( ${LCIO_INCLUDE_DIRS} )
+#LINK_LIBRARIES( ${Marlin_LIBRARIES} )
+#LINK_LIBRARIES( ${ROOT_LIBRARIES} )
+#LINK_LIBRARIES( ${LCIO_LIBRARIES} )
+#ADD_DEFINITIONS( ${Marlin_DEFINITIONS} )
 
 # optional package
 #FIND_PACKAGE( AIDA )
@@ -62,6 +81,8 @@ ENDIF()
 
 # definitions to pass to the compiler
 ADD_DEFINITIONS( "-Wall -ansi -pedantic -std=gnu++11" )
+#ADD_DEFINITIONS( "-Wall -ansi -pedantic -std=c++0x ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs" )
+#ADD_DEFINITIONS( "-Wall -ansi -pedantic")
 ADD_DEFINITIONS( "-Wno-long-long" )
 
 # include directories

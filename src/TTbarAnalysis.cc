@@ -311,7 +311,6 @@ namespace QQbarProcessor
 					_stats._jet_vtx_posY[ijet][ivtx]=vertices->at(ivtx)->getPosition()[1];
 					_stats._jet_vtx_posY[ijet][ivtx]=vertices->at(ivtx)->getPosition()[2];
 
-
 					int ntrack = vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 					streamlog_out(DEBUG)<<"   ntracks = "<<ntrack<<std::endl;
 

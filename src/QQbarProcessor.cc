@@ -26,7 +26,7 @@ namespace QQbarProcessor
   {
 	  
     // modify processor description
-
+    
     // register steering parameters: name, description, class-variable, default value
     registerProcessorParameter( "ROOTFileName",
 				"Output ROOT File Name",
@@ -47,12 +47,12 @@ namespace QQbarProcessor
     registerProcessorParameter( "DBDanalysis",
 				"It is a DBD analysis? Only for bbbar.",
 				_boolDBDanalysis,
-				false
+  			true
 				);
     registerProcessorParameter( "KaonCheat",
 				"Do we cheat in the kaon identification?",
 				_boolkaoncheat,
-				false
+				true
 				);
     registerProcessorParameter( "KaonTaggerName",
 				"Kaon Tagger PIDHandler name",
@@ -89,7 +89,7 @@ namespace QQbarProcessor
 			     _MCColName ,
 			     std::string("MCParticles")
 			     );
-    registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
+    registerInputCollection( LCIO::MCPARTICLE,
 			     "IsoLeptonCollectionName" , 
 			     "Name of the isolepton collection"  ,
 			     _IsoLeptonColName ,
@@ -107,6 +107,15 @@ namespace QQbarProcessor
 			     _initialJetsColName ,
 			     std::string("InitialJets")
 			     );
+
+    registerProcessorParameter( "Rparam_jet_ps",
+				"R parameter of the ee_gentkt algorithm (for parton + shower analysis)",
+				_Rparam_jet_ps,
+				(float)1.5 );  
+    registerProcessorParameter( "pparam_jet_ps",
+				"p parameter of the ee_gentkt algorithm (for parton + shower analysis)",
+				_pparam_jet_ps,
+				(float)1.0 );
   }
 	
   void QQbarProcessor::init() 
@@ -181,7 +190,9 @@ namespace QQbarProcessor
 				      _JetsColName ,
 				      _JetsRelColName ,
 				      _MCColName,
-				      _KaonTaggerName
+				      _KaonTaggerName,
+				      _Rparam_jet_ps,
+				      _pparam_jet_ps
 				      );
 	}
 	break;
