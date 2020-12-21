@@ -170,6 +170,11 @@ namespace QQbarProcessor
     int _jet_vtx_ntrack[2][10];
     float _jet_vtx_charge[2][10];
 
+    // vertex position
+    float _jet_vtx_posX[2][10];
+    float _jet_vtx_posY[2][10];
+    float _jet_vtx_posZ[2][10];
+
     // jet track info
     float _jet_track_E[2][10][20];
     float _jet_track_px[2][10][20];
@@ -321,6 +326,11 @@ namespace QQbarProcessor
           _jet_vtx_isprimary[i][ivx]=-1;
           _jet_vtx_ntrack[i][ivx]=-1;
           _jet_vtx_charge[i][ivx]=-1000;
+
+          _jet_vtx_posX[i][ivx] = -1000;
+          _jet_vtx_posY[i][ivx] = -1000;
+          _jet_vtx_posZ[i][ivx] = -1000;
+
 
           for(int itr=0; itr<20; itr++) {
             _jet_track_E[i][ivx][itr]=0;
