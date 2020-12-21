@@ -1,62 +1,73 @@
-
 #include <unistd.h>
 #include <iostream>
+#include <string>
+#include <vector>
+
 #define MAXV 8
-//void asymmetry(string filename = "TTBarProcessorLeft.root", TCanvas * c1 = NULL)
-void asymmetry_b()
+
+using namespace std;
+void asymmetry()
 {
+
+	// initialize variables
+	int styl = 0;
+	int cx   = 500;
+	double Legx1 = 0.20;
+	double Legx2 = 0.6;
+
 	int token=0;
-	string filename0 = "/home/ilc/yokugawa/run/root_merge/";
-	//string filename0 = "rootfile/"; 
-	string filename1;
-
-	cout << "0 = yyxylv/small" 	  << endl;
-	cout << "1 = yyxylv/large" 	  << endl;
-	cout << "2 = yyxyev/small" << endl;
-	cout << "3 = yyxyev/large" << endl;
-	cout << "Choose from 0-3: ";
-	cin  >> token;
-	cout << endl;
-
-	switch(token){
-		case 0 : filename1 = "new/small/QQbar_s5_yyxylv_eLeR.root";
-						 break;
-		case 1 : filename1 = "new/large/QQbar_l5_yyxylv_eLeR.root";
-						 break;
-		case 2 : filename1 = "new/small/QQbar_s5_yyxyev_eLeR.root";
-						 break;
-		case 3 : filename1 = "new/large/QQbar_l5_yyxyev_eLeR.root";
-						 break;
-	}
-
-	string filename = filename0 + filename1;
-	cout << "Processing : " << filename << " ..." << endl;
-
-	TFile * file = TFile::Open(filename.c_str());
 
 	int bin_e = 30;
 	int max_e = 1;
 
-	TCanvas * c1 = new TCanvas("c1", "Data-MC",0,0,500,500);
+	// set plot style
+	gStyle->SetOptFit(0);
+	gStyle->SetOptStat(0);  
+	gStyle->SetOptTitle(1);
+	gStyle->SetTitleBorderSize(0);
+	gStyle->SetTitleStyle(0);
+	gStyle->SetMarkerSize(0);
+	gStyle->SetTitleX(0.2); 
+	gStyle->SetTitleY(0.9); 
 
+	std::string filename = "../TTbarAnalysis_out.root";
+
+	TFile * file = TFile::Open(filename.c_str());
+
+	TCanvas * c1 = new TCanvas("c1", "Data-MC",0,0,cx,500);
 	TH1F * cosReco = new TH1F("cosReco", "E(Ntracks)", bin_e,-1.0,max_e);
 	cosReco->Sumw2();
-	TH1F * cosGen = new TH1F("cosGen", ";cos#theta_{b};Entries", bin_e,-1.0,max_e);
+	TH1F * cosGen = new TH1F("cosGen", ";cos#theta_{t};Entries / 0.07", bin_e,-1.0,max_e);
 	cosGen->Sumw2();
+
+	TH1F * cosGen_wsingleTop = new TH1F("cosGen_wsingleTop", ";cos#theta_{t};Entries / 0.07", bin_e,-1.0,max_e);
+	cosGen_wsingleTop->Sumw2();
+
+	TGaxis::SetMaxDigits(3);
 
 	TTree * normaltree = (TTree*) file->Get( "Stats" ) ;
 	TTree * GenTree = (TTree*) file->Get( "GenTree" ) ;
 
 	cosReco->SetLineWidth(3);
 	cosGen->SetLineWidth(3);
+	cosGen_wsingleTop->SetLineWidth(3);
+
 	cosGen->SetLineStyle(2);
+	cosGen_wsingleTop->SetLineStyle(2);
+
 	cosGen->SetLineColor(kGreen+1);
 	cosGen->SetFillColor(kGreen+1);
 	cosGen->SetFillStyle(3004);
 
-	int forward = GenTree->Draw("qMCBcostheta >> cosGen","qMCBcostheta > 0 && qMCBcostheta > -2 ");
-	int backward = GenTree->Draw("qMCBcostheta >> +cosGen","qMCBcostheta < 0 && qMCBcostheta > -2");
+	cosGen_wsingleTop->SetLineColor(kBlue+1);
+	cosGen_wsingleTop->SetFillColor(kBlue+1);
+	cosGen_wsingleTop->SetFillStyle(3004);
 
+	int forward = GenTree->Draw("qMCcostheta >> cosGen","qMCcostheta > 0 && qMCcostheta > -2 && singletopFlag == 0");
+	int backward = GenTree->Draw("qMCcostheta >> +cosGen","qMCcostheta < 0 && qMCcostheta > -2 && singletopFlag == 0");
+
+	int forward2 = GenTree->Draw("qMCcostheta >> cosGen_wsingleTop","qMCcostheta > 0 && qMCcostheta > -2");
+	int backward2 = GenTree->Draw("qMCcostheta >> +cosGen_wsingleTop","qMCcostheta < 0 && qMCcostheta > -2");
 
 	// Selection lists
 	TCut thru = "Thrust < 0.9";
@@ -75,25 +86,17 @@ void asymmetry_b()
 	TCut method6 = "methodTaken == 6";
 	TCut method7 = "methodTaken == 7";
 
-	// ntracks selections (correct)
-	TCut diag1 = " (Top1bntracks - Top1Genbntracks) == 0 " ;
-	TCut diag2 = " (Top2bntracks - Top2Genbntracks) == 0 " ;
-	TCut diag  = diag1 || diag2;
-
-	// ntracks selections (not correct)	
-	//TCut diag1 = " (Top1bntracks - Top1Genbntracks) != 0 " ;
-	//TCut diag2 = " (Top2bntracks - Top2Genbntracks) != 0 " ;
-	//TCut diag  = diag1 && diag2;
-	
 	// Total cut applied
 	TCut cuts = rcTW + hadM + pcut + gcut + methodAll;
-	//TCut cuts = rcTW + hadM + pcut + gcut + methodAll + diag;
+	//TCut cuts = rcTW + hadM + pcut + gcut + (method1|| method2|| method3|| method4);
 
-	TCut fcuts = "qBCostheta > 0" + cuts;
-	TCut bcuts = "qBCostheta < 0 && qBCostheta > -1.0 " + cuts;
+	TCut fcuts = "qCostheta > 0" + cuts;
+	TCut bcuts = "qCostheta < 0 && qCostheta > -1.0 " + cuts;
+	int recoforward = normaltree->Draw("qCostheta >> cosReco", fcuts);
+	int recobackward = normaltree->Draw("qCostheta >> +cosReco", bcuts);
 
-	int recoforward = normaltree->Draw("qBCostheta >> cosReco", fcuts);
-	int recobackward = normaltree->Draw("qBCostheta >> +cosReco", bcuts);
+	cout << recoforward <<endl;
+
 
 	cosGen->SetStats(0);
 	TF1 * fgen = new TF1("fgen","pol2",-1,1);
@@ -102,24 +105,36 @@ void asymmetry_b()
 	fgen->SetLineStyle(3);
 	freco->SetLineStyle(3);
 
-	cosGen->Scale(cosReco->GetEntries()/ cosGen->GetEntries());
+	//cosGen->Scale(cosReco->GetEntries()/ cosGen->GetEntries());
+	double intCosReco = cosReco->Integral(2,29);
+	double intCosGen  = cosGen->Integral(2,29);
+	double intCosGen_wsingleTop  = cosGen_wsingleTop->Integral(2,29);
+	//cosGen->Scale(intCosReco / intCosGen);
+	cosReco->Scale(1/intCosReco);
+	cosGen->Scale(1/intCosGen);
+	cosGen_wsingleTop->Scale(1/intCosGen_wsingleTop);
+	
 	cosGen->Fit("fgen","Q");
 	cosReco->Fit("freco", "QR");
-	cosGen->SetMinimum(0);
-	cosGen->Draw("he");
+	cosGen_wsingleTop->SetMinimum(0);
+	cosGen_wsingleTop->Draw("he");
+	cosGen->Draw("hsame");
 	fgen->Draw("same");
 	cosGen->SetMinimum(0);
 	cosReco->Draw("samee");
-	TLegend *legendMean2 = new TLegend(0.20,0.75,0.6,0.85,NULL,"brNDC");
-	legendMean2->SetFillColor(kWhite);
-	legendMean2->SetBorderSize(0);
-	legendMean2->AddEntry(cosGen,"Generated","f");
-	legendMean2->AddEntry(cosReco,"Reconstructed","f");
-	legendMean2->Draw();
 
-	TLatex latex;
-	latex.SetTextFont(72);
-	latex.DrawLatexNDC(0.21,0.7,"ILD #bf{Preliminary}");
+
+	TLegend *leg = new TLegend(0.20,0.70,0.70,0.85); //set here your x_0,y_0, x_1,y_1 options
+	leg->SetTextFont(42);
+	leg->AddEntry(cosGen_wsingleTop,"Parton level","l");
+	leg->AddEntry(cosGen,"Parton level (after single top removal)","l");
+	leg->AddEntry(cosReco,"Reconstructed","l");
+	leg->SetFillColor(0);
+	leg->SetLineColor(0);
+	leg->SetShadowColor(0);
+	leg->Draw();
+
+	c1->Update();
 
 	float afbgen = (float)(forward - backward) / (float) (forward + backward);
 	float afbreco = (float)(recoforward - recobackward) / (float) (recoforward + recobackward);
@@ -135,15 +150,19 @@ void asymmetry_b()
 	float afbrecof = (freco->Integral(0,1) - freco->Integral(-1,0)) / (freco->Integral(0,1) + freco->Integral(-1,0));
 
 	gPad->SetLeftMargin(0.14);
-	cosGen->GetYaxis()->SetTitleOffset(1.7);
+	cosGen->GetYaxis()->SetTitleOffset(1);
 
 	cout << "Afb gen functional: " << afbgenf << endl;
 	cout << "Afb reco functional: " << afbrecof << "(" << afbrecof / afbgenf *100 << "%)"   << endl;
 	float nominal = 30.8;
+
 	float efficiency = (float)(recoforward + recobackward)/(forward + backward) * 2 * 100;
 	cout << "Final efficiency: " << efficiency << "% (+" << efficiency / nominal *100 -100 << "%)\n" ;
 	cout << "--------------------------------------------------------------\n";
 	cout << "--------------------------------------------------------------\n";
 	//file->Close();
+	//
+
+	
 }
 

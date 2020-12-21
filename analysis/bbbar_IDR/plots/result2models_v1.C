@@ -1,6 +1,7 @@
 void result2models_v1()
 {
 //=========Macro generated from canvas: canvas0/canvas0
+
 //=========  (Thu Apr 25 14:34:21 2019) by ROOT version 6.11/01
    TCanvas *canvas0 = new TCanvas("canvas0", "canvas0",65,108,1000,800);
    gStyle->SetOptStat(0);
@@ -253,7 +254,7 @@ tex->SetNDC();
    pt->SetName("title");
    pt->SetBorderSize(0);
    pt->SetFillStyle(0);
-   TText *pt_LaTex = pt->AddText("e_{L}^{+}e_{R}^{-}#rightarrow b#bar{b} @ 500GeV, 46 fb^{-1}");
+   AText = pt->AddText("e_{L}^{+}e_{R}^{-}#rightarrow b#bar{b} @ 500GeV, 46 fb^{-1}");
    pt->Draw();
    canvas0->Modified();
    canvas0->cd();

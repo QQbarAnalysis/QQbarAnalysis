@@ -84,7 +84,7 @@ namespace QQbarProcessor
     float _Top1btag;
     float _Top1gamma;
     float _Top1bmomentum;
-    int _Top1bntracks;
+		int _Top1bntracks;
     int _Top1Genbntracks;
     float _Top1mass;
     float _Top1momentum;
@@ -170,6 +170,11 @@ namespace QQbarProcessor
     int _jet_vtx_ntrack[2][10];
     float _jet_vtx_charge[2][10];
 
+    // vertex position
+    float _jet_vtx_posX[2][10];
+    float _jet_vtx_posY[2][10];
+    float _jet_vtx_posZ[2][10];
+
     // jet track info
     float _jet_track_E[2][10][20];
     float _jet_track_px[2][10][20];
@@ -211,6 +216,7 @@ namespace QQbarProcessor
     float _MCPt;
     float _qMCBcostheta[2];
     float _MCNeutrinoEnergy;
+
     int _singletopFlag;
 
     float _MCTop1charge;
@@ -225,7 +231,6 @@ namespace QQbarProcessor
     float _MCWminusmass;
 
     // MC b quark info
-
     int _nNonBDaughter;
     int _NonBDaughterPDG[20];
 
@@ -300,12 +305,12 @@ namespace QQbarProcessor
 
       _nNonBDaughter = 0;
 
-      for (unsigned int i = 0; i < 7; i++) {
-	_methodCheck[i] = -1;
-	_methodTaken[i] = -1;
-	_methodSameCharge[i] = -1;
-	_methodZeroCharge[i] = -1;
-      }
+			for (unsigned int i = 0; i < 7; i++) {
+				_methodCheck[i] = -1;
+				_methodTaken[i] = -1;
+				_methodSameCharge[i] = -1;
+				_methodZeroCharge[i] = -1;
+			}
 
       for (unsigned int i = 0; i < 2; i++) {
         _jet_E[i]=0;
@@ -321,6 +326,11 @@ namespace QQbarProcessor
           _jet_vtx_isprimary[i][ivx]=-1;
           _jet_vtx_ntrack[i][ivx]=-1;
           _jet_vtx_charge[i][ivx]=-1000;
+
+          _jet_vtx_posX[i][ivx] = -1000;
+          _jet_vtx_posY[i][ivx] = -1000;
+          _jet_vtx_posZ[i][ivx] = -1000;
+
 
           for(int itr=0; itr<20; itr++) {
             _jet_track_E[i][ivx][itr]=0;
@@ -341,6 +351,9 @@ namespace QQbarProcessor
       for (unsigned int i = 0; i < 20; i++) {
         _NonBDaughterPDG[i]=0;
       }
+
+    } //end clear
+  };
 
 
 

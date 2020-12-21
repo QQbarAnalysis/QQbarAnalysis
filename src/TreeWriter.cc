@@ -314,7 +314,12 @@ namespace QQbarProcessor
     _hTree->Branch("jet_ntrack", data._jet_ntrack, "jet_ntrack[2]/I");
     _hTree->Branch("jet_vtx_ntrack", data._jet_vtx_ntrack, "jet_vtx_ntrack[2][10]/I");
     _hTree->Branch("jet_vtx_charge", data._jet_vtx_charge, "jet_vtx_charge[2][10]/F");
-
+    
+    //vertex position
+    _hTree->Branch("jet_vtx_posX", data._jet_vtx_posX, "jet_vtx_posX[2][10]/F");
+    _hTree->Branch("jet_vtx_posY", data._jet_vtx_posY, "jet_vtx_posY[2][10]/F");
+    _hTree->Branch("jet_vtx_posZ", data._jet_vtx_posZ, "jet_vtx_posZ[2][10]/F");
+    
     _hTree->Branch("jet_track_E", data._jet_track_E, "jet_track_E[2][10][20]/F");
     _hTree->Branch("jet_track_px", data._jet_track_px, "jet_track_px[2][10][20]/F");
     _hTree->Branch("jet_track_py", data._jet_track_py, "jet_track_py[2][10][20]/F");

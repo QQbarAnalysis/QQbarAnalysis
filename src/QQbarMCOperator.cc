@@ -150,7 +150,6 @@ namespace QQbarProcessor
     return stable_hadrons;
   }//GetBBbarHadrons()
 
-
   ///DO NOT USE THAT ON T-QUARKS!!!
   bool QQbarMCOperator::IsEvent() {
   
