@@ -356,10 +356,6 @@ namespace QQbarProcessor
   };
 
 
-
-    } //end clear
-  };
-
   struct StatsData_BBbar  {
   public:
 
