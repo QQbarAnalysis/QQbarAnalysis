@@ -35,7 +35,7 @@
 
 using namespace lcio ;
 using namespace marlin ;
-using namespace fastjet;
+//using namespace fastjet;
 
 namespace QQbarProcessor 
 {
