@@ -5,7 +5,6 @@
 #include <ctime>
 #include <cstdlib>
 #include "MathOperator.hh"
-#include "TopQuark.hh"
 #include <UTIL/PIDHandler.h>
 #include <EVENT/ReconstructedParticle.h>
 #include <EVENT/Vertex.h>
@@ -35,18 +34,13 @@ namespace QQbarProcessor
     //
     //	Methods
     //
-    float GetAsymmetryTVCM(TopQuark * top, TopQuark * top2); //TernaryVertexChargeMeasurement
-    int GetResultingB();
-    int CountKaons(TopQuark * top, TopQuark * top2);
-    std::vector< EVENT::ReconstructedParticle * > GetKaons(RecoJet * top);
-    float ComputeCharge(RecoJet * top);
-    EVENT::ReconstructedParticle * __getKaonsCheat( EVENT::ReconstructedParticle * &particle);
-    EVENT::ReconstructedParticle * __getHadronsCheat( EVENT::ReconstructedParticle * &particle, int pdg);
-    bool __magicBall(float threshold, float seed = 0.0);
     bool isKaon(EVENT::ReconstructedParticle *particle);
     bool isKaonCheat(EVENT::ReconstructedParticle *particle);
-    int getPDGtrack(EVENT::ReconstructedParticle *particle);
-    
+    EVENT::MCParticle* getMCParticle(EVENT::ReconstructedParticle *particle);
+    int isOverlay(EVENT::MCParticle * mctrack);
+    int getPDG(EVENT::MCParticle *mctrack);
+
+
   private:
     //
     //	Data
@@ -61,14 +55,7 @@ namespace QQbarProcessor
     //
     //	Private methods
     //
-    EVENT::Vertex * getTernaryVertex(TopQuark * top);
-    EVENT::ReconstructedParticle * getFlavourParticle(EVENT::Vertex * ternary);
-    EVENT::ReconstructedParticle * __getKaonCheat(EVENT::Vertex * ternary);
-    std::vector< EVENT::ReconstructedParticle * > __filterOutCheat(std::vector< EVENT::ReconstructedParticle * > particles, int type);
-    std::vector< EVENT::ReconstructedParticle * > __getKaonsCheat(const std::vector< EVENT::ReconstructedParticle * > & particles);
-    EVENT::ReconstructedParticle * getKaon(EVENT::Vertex * ternary);
-    std::vector< EVENT::ReconstructedParticle * > getKaons(const std::vector< EVENT::ReconstructedParticle * > & particles);
-    float checkAsymmetry(TopQuark * top, EVENT::Vertex * vertex1, EVENT::ReconstructedParticle * kaon1, float & top1costheta);
+
   };
 } /* QQbarProcessor */
 

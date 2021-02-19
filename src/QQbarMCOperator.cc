@@ -24,63 +24,35 @@ namespace QQbarProcessor
     int pdg = 0;
     if(number<3) return bbbar_ps;
     
-    MCParticle * quark1 = dynamic_cast<MCParticle*>(myCollection->getElementAt(2));
-    MCParticle * quark2 = dynamic_cast<MCParticle*>(myCollection->getElementAt(3));
-    pdg = quark1->getPDG();
-
-    // find the quarks and parton shower
-    MCParticle * b = NULL;
-    MCParticle * bbar = NULL;
-    vector< MCParticle * > ps;
-    bool bool_bbbar[2];
-    bool_bbbar[0]=false;
-    bool_bbbar[1]=false;
 
     for (int i = 0; i < number; i++) {
       MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
-      if (particle->getPDG() == 92 || particle->getPDG() == 91) {
+      if( (particle->getPDG() == 92 || particle->getPDG() == 91) && particle->isOverlay()==false) {
 	vector <MCParticle * > parents = particle->getParents();
-
 	for(int j=0; j<parents.size(); j++) {
 	  MCParticle * parent = parents.at(j);
-	  if(parent->getPDG()==pdg) {
-	    b=parent;
-	    bool_bbbar[0]=true;
-	  } else if(parent->getPDG()==-pdg) {
-	    bbar=parent;
-	    bool_bbbar[1]=true;
-	  } else ps.push_back(parent);
+	  bbbar_ps.push_back(parent);
 	}
       }
-      if(bool_bbbar[0]==true && bool_bbbar[1]==true) break;    
     }
-
-    bbbar_ps.push_back(b);
-    bbbar_ps.push_back(bbar);
-
-    //remove all repeated particles in the PS
-    vector< MCParticle * >::iterator end = ps.end();
-    for (vector<MCParticle *>::iterator it = ps.begin(); it != end; ++it) {
-      end = std::remove(it + 1, end, *it);
-    }
-    ps.erase(end, ps.end());
-    // save the PS particles
-    for(int k=0; k< ps.size(); k++) bbbar_ps.push_back(ps.at(k));
-  	  
     return bbbar_ps;
 
   }
 
   //Added by Seidai in 2020.Sep.16
-  vector<MCParticle*> QQbarMCOperator::GetBBbarHadrons() {
+  vector<vector<MCParticle*>>QQbarMCOperator::GetBBbarStables() {
     //std::cout << "##################################" << std::endl;
-    //std::cout << "##         Hadron level         ##" << std::endl;
+    //std::cout << "##         Stable level         ##" << std::endl;
     //std::cout << "##################################" << std::endl;
 
+
     int number = myCollection -> getNumberOfElements();
-    vector<MCParticle*> stable_hadrons;
-    if(number<3) return stable_hadrons; //return empty
-    int ihadron;// the border of hadronization
+    vector<vector<MCParticle*>> stables;
+    if(number<3) return stables; //return empty                                                      
+    vector<MCParticle*> stable_stables;
+    vector<MCParticle*> isr_stables;
+    vector<MCParticle*> overlay_stables;
+    int istable;// the border of stableization
 
     int isrphotons[2];
     isrphotons[0]=-1;
@@ -89,42 +61,38 @@ namespace QQbarProcessor
     vector<MCParticle*> pairISR;
     for(int i=2; i<number; i++) {
       MCParticle* particle = dynamic_cast<MCParticle*>(myCollection->getElementAt(i));
-      if (particle->getPDG() == 22 && pairISR.size()<2) {
+      if (particle->getPDG() == 22 && pairISR.size()<2 && particle->getGeneratorStatus()==1) {
 	pairISR.push_back(particle);
 	isrphotons[pairISR.size()-1]=i;
       }
 
-      if(particle->getPDG()==91 || particle->getPDG()==92 || particle->getPDG()==93) {
-        ihadron = i;
-        break;
-      } 
     }
-
-
-
-    for(int i=ihadron; i<number; i++) {
+    for(int i=isrphotons[pairISR.size()-1]+1; i<number; i++) {
       MCParticle* particle = dynamic_cast<MCParticle*>(myCollection->getElementAt(i));
       vector<MCParticle*> daughters = particle->getDaughters();
+     
+      if(daughters.size()==0 && particle->isOverlay()==true) {
+        overlay_stables.push_back(particle);
+      }
+      
+      if(daughters.size()==0 && particle->isOverlay()==false) {
 
-      int stable=0;
-      int ISRhadron=0;
-
-      if(daughters.size()==0) {
+	int ISRstable=0;
 
 	vector<MCParticle*> parents = particle->getParents();
 	for(int j=0; j<parents.size(); j++) {
 	  if(parents.at(j) == pairISR.at(0) || parents.at(j) == pairISR.at(1)) {
-	    ISRhadron=1;
+	    ISRstable=1;
 	  } else {
 	    vector<MCParticle*> parents2 = parents.at(j)->getParents();
 	    for(int j2=0; j2<parents2.size(); j2++) {
 	      if(parents2.at(j2) == pairISR.at(0) || parents2.at(j2) == pairISR.at(1)) { 
-		ISRhadron=1;
+		ISRstable=1;
 	      } else {
 		vector<MCParticle*> parents3 = parents2.at(j2)->getParents();
 		for(int j3=0; j3<parents3.size(); j3++) {
 		  if(parents3.at(j3) == pairISR.at(0) || parents3.at(j3) == pairISR.at(1)) { 
-		    ISRhadron=1;
+		    ISRstable=1;
 		  }
 		}
 	      }
@@ -132,23 +100,17 @@ namespace QQbarProcessor
 	  }
 	}
 	
-	if(ISRhadron==0) {
-	  stable_hadrons.push_back(particle);
-	  stable=1;
-	  //	  std::cout << "[" << i << "]  Particle: pdg" << particle->getPDG() <<" "<<particle->getEnergy() <<" is stable? "<< stable << std::endl;                
-	} //else {
-	  //std::cout << "[" << i << "]  is ISRHadron" << particle->getPDG() <<" "<<particle->getEnergy()  << std::endl; 
-	//}
-	stable=0;
+	if(ISRstable==0) stable_stables.push_back(particle);
+	if(ISRstable==1) isr_stables.push_back(particle);
       }
     }
 
-    //    std::cout << "### stable_hadrons ###" << std::endl;
-    //for(int i=0; i<stable_hadrons.size(); i++) {
-    //  std::cout << "[" << i << "]  Stable particle: " << stable_hadrons.at(i)->getPDG() << std::endl;
-    //}
-    return stable_hadrons;
-  }//GetBBbarHadrons()
+    stables.push_back(stable_stables);
+    stables.push_back(isr_stables);
+    stables.push_back(overlay_stables);
+    return stables;
+  }//GetBBbarStables()
+
 
   ///DO NOT USE THAT ON T-QUARKS!!!
   bool QQbarMCOperator::IsEvent() {
@@ -189,36 +151,50 @@ namespace QQbarProcessor
     MCParticle * b = NULL;
     MCParticle * bbar = NULL;
 
+    bool bool_bbbar[2]={false};
+
     bool recorded=false;
-    for (int i = 2; i < number; i++) {
-      MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
-      if(pdg<20) {
-	if (particle->getPDG() == pdg && !b) b = particle;
-	if (particle->getPDG() == -pdg  && !bbar) bbar =  particle;
-      } else {
-	if (particle->getPDG() == pdg && pair.size()<2) pair.push_back(particle);
+    int j=0;
+    for (int i = 0; i < number; i++) {
+      if(pdg==22) {
+	MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
+	if (particle->getPDG() == 22 && particle->getGeneratorStatus()==1) {
+	  pair.push_back(particle);
+	} 
+	if(pair.size()==2) break;
+	
+      } else {      
+	MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
+	if(fabs(particle->getPDG())<6) {
+	  if(particle->getPDG()>0) b=particle;
+	  else bbar=particle;
+	  bool_bbbar[j]=true;
+	  j++;
+	}
+	if(bool_bbbar[1]==true) break;
+
       }
     }
-
-    if(pdg<20) {
-      if (b) pair.push_back(b);
-      if (bbar) pair.push_back(bbar);
-    }
     
-    //    std::cout<<pair.size()<<"\n";
-    return pair;
+    if(pdg==22) return pair;
+    if(bool_bbbar[0]==true && bool_bbbar[1]==true) {
+      pair.push_back(b);
+      pair.push_back(bbar);
+      return pair;
+    } else return pair;
+
   }
   vector< MCParticle * > QQbarMCOperator::GetTopPairParticles(float & topBangle, float & topcosWb)
   {
     vector< MCParticle * > pair;
-
+    
     // particle declaration
     MCParticle * b = FindParticle(5);
     MCParticle * bbar = FindParticle(-5);
     MCParticle * wplus = FindParticle(24);
     MCParticle * wminus = FindParticle(-24);
-
-    // B Hadron
+    
+    // B Stable
     /*
       MCParticle * B0 = FindParticle(511);
       MCParticle * Bplus = FindParticle(521);
@@ -228,7 +204,7 @@ namespace QQbarProcessor
       MCParticle * BXiminusb = FindParticle(5132); 
       MCParticle * BXi0b = FindParticle(5232);
       MCParticle * BOmegaminusb = FindParticle(5332);
-
+      
       MCParticle * B0bar = FindParticle(-511);
       MCParticle * Bplusbar = FindParticle(-521);
       MCParticle * B0sbar = FindParticle(-531);
@@ -238,7 +214,7 @@ namespace QQbarProcessor
       MCParticle * BXi0bbar = FindParticle(-5232);
       MCParticle * BOmegaminusbbar = FindParticle(-5332);
     */
-
+    
     if (!b || !bbar ) 
       {
 	return pair;
@@ -260,9 +236,7 @@ namespace QQbarProcessor
 		  {
 		    continue;
 		  }
-
 		MCParticle * candidate = CombineParticles(final[i],final[j]);
-
 		if (std::abs(candidate->getCharge()) > 0.99 && std::abs(candidate->getCharge()) < 1.01 ) 
 		  {
 		    if (candidate->getCharge() > 0) 
@@ -278,15 +252,7 @@ namespace QQbarProcessor
 		  }
 	      }
 	  }
-	if(!wplus || !wminus){
-	  std::cout << "CRUNCH\n";
-	  return pair;
-	}
       }
-
-    std::cout << "b found: q " << b->getCharge() << " m " << b->getMass() << "\n";
-    std::cout << "bbar found: q " << bbar->getCharge() << " m " << bbar->getMass() << "\n";
-
     myBquarkPair.push_back(b);
     myBquarkPair.push_back(bbar);
     myWPair.push_back(wplus);
@@ -336,7 +302,7 @@ namespace QQbarProcessor
       }*/
     result.push_back(dynamic_cast<MCParticle*>( myCollection->getElementAt( 2)));
     result.push_back(dynamic_cast<MCParticle*>( myCollection->getElementAt( 3)));
-
+    
     MCParticle * higgs = FindParticle(25);
     if (higgs->getDaughters().size() == 2) 
       {
@@ -349,7 +315,7 @@ namespace QQbarProcessor
 	  {
 	    result.push_back(higgs->getDaughters()[0]->getDaughters()[0]);
 	    result.push_back(higgs->getDaughters()[0]->getDaughters()[1]);
-
+	    
 	  }
       }
     return result;
@@ -433,4 +399,3 @@ namespace QQbarProcessor
     return result;
   }
 }
-

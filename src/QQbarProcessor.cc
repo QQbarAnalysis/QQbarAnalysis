@@ -133,18 +133,10 @@ namespace QQbarProcessor
     // Initialize sum
     switch(_analysisType)
       {
-      case TTbarSemileptonic:
-	std::cout << "Initialize TTbarSemileptonicTree, _analysisType= " << _analysisType << "\n";
-	_ttbaranalysis.Init(_hfilename,0, _massCutparameter);
-       	break;
       case BBbar:
 	std::cout << "Initialize BBarTree, _analysisType= " << _analysisType << "\n";
 	_bbbaranalysis.Init(_hfilename);
 	break;
-      case TTbarHadronic:
-	std::cout << "Initialize TTbarHadronicTree, _analysisType= " << _analysisType << "\n";
-	_ttbaranalysis.Init(_hfilename,1, _massCutparameter);
-       	break;
       }
 
   }
@@ -155,30 +147,8 @@ namespace QQbarProcessor
 
   void QQbarProcessor::processEvent( LCEvent * evt )
   {
-
-	// turn on when running muon
-	#if 0 // include with yyxylv samples
-			int nisoe   = evt->getParameters().getIntVal("nIsoE");  // isolated electron
-			int nisomu  = evt->getParameters().getIntVal("nIsoMu"); // isolated muon
-			int nisotau = evt->getParameters().getIntVal("nIsoTau"); // isolated tau
-
-			if (!(nisomu==1&&nisoe==0&&nisotau==0)) throw marlin::SkipEventException(this);
-	#endif
-
     switch(_analysisType)
       {
-      case TTbarSemileptonic:
-       	_ttbaranalysis.AnalyseTTbarSemiLeptonic(evt,
-						_colName ,
-						_MCColName ,
-						_JetsColName ,
-						_JetsRelColName ,
-						_IsoLeptonColName,
-						_MCVtxColName ,
-						_colRelName
-						);
-       	break;
-
       case BBbar: 
 	{ 
 	  _bbbaranalysis.AnalyseBBbar(evt,
@@ -196,16 +166,6 @@ namespace QQbarProcessor
 				      );
 	}
 	break;
-
-      case TTbarHadronic:
-	_ttbaranalysis.AnalyseTTbarHadronic(evt,
-					    _colName ,
-					    _MCColName ,
-					    _JetsColName ,
-					    _JetsRelColName ,
-					    _MCVtxColName ,
-					    _colRelName
-							);
        	break;
       }
   }
@@ -221,17 +181,10 @@ namespace QQbarProcessor
     switch(_analysisType)
       {
 
-      case TTbarSemileptonic:
-	_ttbaranalysis.End();
-	break;
-
       case BBbar:
 	_bbbaranalysis.End();
 	break;
-	
-      case TTbarHadronic:
-	_ttbaranalysis.End();
-	break;
+
       }
   }
   

@@ -25,11 +25,7 @@ namespace QQbarProcessor
     //	Methods
     //
     
-    void InitializeSummaryTree(TTree * tree, SummaryData & data);
-    void InitializeStatsTree(TTree * tree, StatsData & data);
     void InitializeStatsBBbarTree(TTree * tree, StatsData_BBbar & data);
-    
-    void InitializeStatsHadronicTree(TTree * tree, StatsData & data);
   private:
     //
     //	Data

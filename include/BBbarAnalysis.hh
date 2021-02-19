@@ -35,7 +35,7 @@
 
 using namespace lcio ;
 using namespace marlin ;
-//using namespace fastjet;
+using namespace fastjet;
 
 namespace QQbarProcessor 
 {
@@ -54,7 +54,7 @@ namespace QQbarProcessor
     std::vector< MCParticle * > AnalyseGeneratorBBbar(QQbarMCOperator & opera);
     void AnalyseGeneratorISR(QQbarMCOperator & opera);
     void AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
-    void AnalyseGeneratorBBbar_Hadron(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
+    void AnalyseGeneratorBBbar_Stable(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
     void AnalyseBBbar(LCEvent * evt,
 		      bool _boolDBDanalysis,
 		      bool _kaoncheat,
@@ -75,7 +75,6 @@ namespace QQbarProcessor
 		    
   private:
 
-    void MatchB(std::vector<RecoJet*> * bjets, std::vector< MCParticle * > & mcbs, LCCollection * mcvtxcol);
 
     TFile * _hfile;
     TTree * _hTree;

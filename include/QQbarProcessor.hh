@@ -25,7 +25,6 @@
 #include <TTree.h>
 
 #include "BBbarAnalysis.hh"
-#include "TTbarAnalysis.hh"
 
 
 using namespace lcio ;
@@ -36,8 +35,6 @@ namespace QQbarProcessor
 {
   enum ANALYSIS_TYPE
     {
-      TTbarSemileptonic = 0,
-      TTbarHadronic = 1,
       BBbar = 2
     };
   class QQbarProcessor : public Processor 
@@ -72,7 +69,6 @@ namespace QQbarProcessor
     virtual void end() ;
 
     BBbarAnalysis _bbbaranalysis;
-    TTbarAnalysis _ttbaranalysis;
 
 	  
     /** Input collection name.
