@@ -583,7 +583,7 @@ namespace QQbarProcessor
 	      //cheat info                                          
               MCParticle * mctrack = vtxOperator.getMCParticle(found_track_particle);
 	      _stats._pfo_pdgcheat[pfo_recorded]=vtxOperator.getPDG(mctrack);
-	      _stats._pfo_vtx[pfo_recorded]=ivtx;
+	      _stats._pfo_vtx[pfo_recorded]=ivtx+1;
 	      _stats._pfo_istrack[pfo_recorded]=1;
 	      _stats._pfo_isisr[pfo_recorded]=0;
               for(int iisr=0; iisr<isr_stable.size();iisr++) {
