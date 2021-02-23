@@ -1,5 +1,5 @@
-#ifndef BBbarAnalysis_hh
-#define BBbarAnalysis_hh
+#ifndef QQbarAnalysis_hh
+#define QQbarAnalysis_hh
 
 #include <algorithm>
 #include <iostream>
@@ -40,31 +40,32 @@ using namespace fastjet;
 namespace QQbarProcessor 
 {
 
-  class BBbarAnalysis 
+  class QQbarAnalysis 
   {
 	  
   public:
 	  
-    BBbarAnalysis ();
-    virtual ~BBbarAnalysis () {};
+    QQbarAnalysis ();
+    virtual ~QQbarAnalysis () {};
 	  
     //METHODS
 	  
     void Init(std::string _hfilename) ;
-    std::vector< MCParticle * > AnalyseGeneratorBBbar(QQbarMCOperator & opera);
+    std::vector< MCParticle * > AnalyseGeneratorQQbar(QQbarMCOperator & opera);
     void AnalyseGeneratorISR(QQbarMCOperator & opera);
-    void AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
-    void AnalyseGeneratorBBbar_Stable(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
-    void AnalyseBBbar(LCEvent * evt,
+    void AnalyseGeneratorQQbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
+    void AnalyseGeneratorQQbar_Stable(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
+    void AnalyseQQbar(LCEvent * evt,
 		      bool _boolDBDanalysis,
-		      bool _kaoncheat,
-		      std::string _colRelName,
+		      bool _newPandoraPFO,
 		      std::string _colName ,
+                      std::string _newcolName ,
+		      std::string _colRelName,
 		      std::string _initialJetsColName,
 		      std::string _JetsColName ,
 		      std::string _JetsRelColName ,
 		      std::string _MCColName,
-		      std::string _KaonTaggerName,
+		      std::string _Old2NewPandoraPFOsLink,
 		      float _Rparam_jet_ps,
 		      float _pparam_jet_ps
 		      ) ;
@@ -78,7 +79,7 @@ namespace QQbarProcessor
 
     TFile * _hfile;
     TTree * _hTree;
-    StatsData_BBbar _stats;
+    StatsData_QQbar _stats;
 
   } ;
 		

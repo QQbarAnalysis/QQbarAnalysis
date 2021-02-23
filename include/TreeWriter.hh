@@ -25,7 +25,7 @@ namespace QQbarProcessor
     //	Methods
     //
     
-    void InitializeStatsBBbarTree(TTree * tree, StatsData_BBbar & data);
+    void InitializeStatsQQbarTree(TTree * tree, StatsData_QQbar & data);
   private:
     //
     //	Data

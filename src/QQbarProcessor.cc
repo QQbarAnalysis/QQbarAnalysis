@@ -32,68 +32,56 @@ namespace QQbarProcessor
 				"Output ROOT File Name",
 				_hfilename,
 				string("QQbarProcessor.root") );
-    registerProcessorParameter( "ElectronPolarisation",
-				"Helicity of e- beam",
-				_ePolarization,
-				0 );
-    registerProcessorParameter( "MassCut",
-				"Mass cut on qqbar",
-				_massCutparameter,
-				(float)200. );
     registerProcessorParameter( "AnalysisType",
-				"Analysis Type (0=ttbar semileptonic, 1=ttbar hadronic, 2=bbbar)",
+				"Analysis Type (0= default qqbar -started by A. Irles)",
 				_type,
 				_type );
     registerProcessorParameter( "DBDanalysis",
-				"It is a DBD analysis? Only for bbbar.",
+				"It is a DBD analysis?",
 				_boolDBDanalysis,
-  			true
-				);
-    registerProcessorParameter( "KaonCheat",
-				"Do we cheat in the kaon identification?",
-				_boolkaoncheat,
 				true
 				);
-    registerProcessorParameter( "KaonTaggerName",
-				"Kaon Tagger PIDHandler name",
-				_KaonTaggerName,
-				string("KaonTagger")
-				);
+    registerProcessorParameter( "newPandoraPFO",
+                                "Has a PandoraPFO collection been duplicarted? i.e. for dEdx reprocessinn?",
+				_newPandoraPFO,
+                                false
+                                );
     registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE , 
 			     "PFOCollection",
 			     "PFO collection name"  ,
 			     _colName ,
 			     string("PandoraPFOs")
 			     ) ;
+    registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE ,
+                             "newPFOCollection",
+                             "new PFO collection name, only used in the case of some highlevel preprocessing as dEdx Likelihood",
+                             _newcolName ,
+                             string("NewPandoraPFOs")
+                             ) ;
+    registerInputCollection( LCIO::LCRELATION,
+			    "Old2NewPandoraPFOsLink" ,
+			     "link between old and new Pandora PFO (only used if _newPandoraPFO==true" ,
+			     _Old2NewPandoraPFOsLink,
+			    std::string("Old2NewPandoraPFOsLink")
+			    );
     registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			     "JetCollectionName",
                              "Name of the Jet collection",
 			     _JetsColName,
 			     std::string("FinalJets")
                              );
+
     registerInputCollection( LCIO::LCRELATION,
 			     "JetRelCollectionName" , 
 			     "Name of the PrimaryVertex collection"  ,
 			     _JetsRelColName ,
 			     std::string("FinalJets_rel")
 			     );
-    registerInputCollection( LCIO::VERTEX,
-			     "GenVtxCollectionName" , 
-			     "Name of the PrimaryVertex collection"  ,
-			     _MCVtxColName ,
-			     std::string("MCVertex")
-			     );
     registerInputCollection( LCIO::MCPARTICLE,
 			     "MCCollectionName" , 
 			     "Name of the MC collection"  ,
 			     _MCColName ,
 			     std::string("MCParticles")
-			     );
-    registerInputCollection( LCIO::MCPARTICLE,
-			     "IsoLeptonCollectionName" , 
-			     "Name of the isolepton collection"  ,
-			     _IsoLeptonColName ,
-			     std::string("SelectedLepton")
 			     );
     registerInputCollection( LCIO::LCRELATION,
 			     "RecoMcTruthCollectionName" , 
@@ -103,11 +91,11 @@ namespace QQbarProcessor
 			     );
     registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			     "initialJetCollectionName" , 
-			     "Name of the initialJet collection, only used for DBD-bbbar analysis"  ,
+			     "Name of the initialJet collection, only used for DBD analysis"  ,
 			     _initialJetsColName ,
 			     std::string("InitialJets")
 			     );
-
+    
     registerProcessorParameter( "Rparam_jet_ps",
 				"R parameter of the ee_gentkt algorithm (for parton + shower analysis)",
 				_Rparam_jet_ps,
@@ -133,9 +121,9 @@ namespace QQbarProcessor
     // Initialize sum
     switch(_analysisType)
       {
-      case BBbar:
-	std::cout << "Initialize BBarTree, _analysisType= " << _analysisType << "\n";
-	_bbbaranalysis.Init(_hfilename);
+      case QQbar:
+	std::cout << "Initialize QQbarTree, _analysisType= " << _analysisType << "\n";
+	_qqbaranalysis.Init(_hfilename);
 	break;
       }
 
@@ -149,18 +137,19 @@ namespace QQbarProcessor
   {
     switch(_analysisType)
       {
-      case BBbar: 
+      case QQbar: 
 	{ 
-	  _bbbaranalysis.AnalyseBBbar(evt,
+	  _qqbaranalysis.AnalyseQQbar(evt,
 				      _boolDBDanalysis,
-				      _boolkaoncheat,
+				      _newPandoraPFO,
 				      _colName ,
+				      _newcolName ,
 				      _colRelName,
 				      _initialJetsColName,
 				      _JetsColName ,
 				      _JetsRelColName ,
 				      _MCColName,
-				      _KaonTaggerName,
+				      _Old2NewPandoraPFOsLink,
 				      _Rparam_jet_ps,
 				      _pparam_jet_ps
 				      );
@@ -181,8 +170,8 @@ namespace QQbarProcessor
     switch(_analysisType)
       {
 
-      case BBbar:
-	_bbbaranalysis.End();
+      case QQbar:
+	_qqbaranalysis.End();
 	break;
 
       }

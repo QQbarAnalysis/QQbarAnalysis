@@ -3,7 +3,7 @@
 namespace QQbarProcessor 
 {
 
-  struct StatsData_BBbar  {
+  struct StatsData_QQbar  {
   public:
 
     float _mc_quark_E[2];
@@ -260,7 +260,7 @@ namespace QQbarProcessor
       }
       
     }//end clear
-  };//end StatsData_BBbar	
+  };//end StatsData_QQbar	
   
 }
 #endif

@@ -1,4 +1,5 @@
-#include "BBbarAnalysis.hh"
+
+#include "QQbarAnalysis.hh"
 
 using namespace lcio ;
 using namespace marlin ;
@@ -6,6 +7,7 @@ using std::vector;
 using std::string;
 using std::abs;
 using EVENT::Track;
+using EVENT::ReconstructedParticle;
 using IMPL::ReconstructedParticleImpl;
 using EVENT::ParticleID;
 using IMPL::ParticleIDImpl;
@@ -13,20 +15,20 @@ using IMPL::ParticleIDImpl;
 
 namespace QQbarProcessor
 {
-  BBbarAnalysis:: BBbarAnalysis() {}
+  QQbarAnalysis:: QQbarAnalysis() {}
 
-  void BBbarAnalysis::Init(std::string _hfilename) 
+  void QQbarAnalysis::Init(std::string _hfilename) 
   { 
 
 
     TreeWriter writer;
     _hfile = new TFile( _hfilename.c_str(), "RECREATE", _hfilename.c_str() ) ;
     _hTree = new TTree( "Stats", "tree" );
-    writer.InitializeStatsBBbarTree(_hTree, _stats);
+    writer.InitializeStatsQQbarTree(_hTree, _stats);
     
   }
 
-  vector< MCParticle * > BBbarAnalysis::AnalyseGeneratorBBbar(QQbarMCOperator & opera) {
+  vector< MCParticle * > QQbarAnalysis::AnalyseGeneratorQQbar(QQbarMCOperator & opera) {
   
     vector <MCParticle *> genfinalstate;
     for (unsigned int i = 5; i > 0; i--) {
@@ -36,8 +38,6 @@ namespace QQbarProcessor
 
     if (genfinalstate.size() == 2) {
       
-      MCParticle * mcqqbar = opera.CombineParticles(genfinalstate[0],genfinalstate[1]);
-
       for (unsigned int i = 0; i < genfinalstate.size(); i++)  {
 	MCParticle * mcb = genfinalstate[i];
 	_stats._mc_quark_E[i]=mcb->getEnergy();
@@ -59,7 +59,7 @@ namespace QQbarProcessor
     return genfinalstate;
   }
 
-  void BBbarAnalysis::AnalyseGeneratorISR(QQbarMCOperator & opera) {
+  void QQbarAnalysis::AnalyseGeneratorISR(QQbarMCOperator & opera) {
   
     streamlog_out(DEBUG) << "Extract ISR \n";                                                                                                  
 
@@ -68,8 +68,6 @@ namespace QQbarProcessor
     
     if (genfinalstate.size() == 2) {
       
-      MCParticle * mcqqbar = opera.CombineParticles(genfinalstate[0],genfinalstate[1]);
-
       for (unsigned int i = 0; i < genfinalstate.size(); i++)  {
 	MCParticle * mcb = genfinalstate[i];
 	_stats._mc_ISR_E[i]=mcb->getEnergy();
@@ -92,13 +90,13 @@ namespace QQbarProcessor
   }
 
   
-  void BBbarAnalysis::AnalyseGeneratorBBbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps)
+  void QQbarAnalysis::AnalyseGeneratorQQbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps)
   {
     
     vector<PseudoJet> particles;
     JetDefinition jet_def(ee_genkt_algorithm,_Rparam_jet_ps, _pparam_jet_ps);
     
-    vector <MCParticle *> bbbar_ps = opera.GetBBbarQuarksPS();
+    vector <MCParticle *> bbbar_ps = opera.GetQQbarQuarksPS();
     streamlog_out(DEBUG) << "Hard Process + PS Level \n";
 
   
@@ -161,12 +159,12 @@ namespace QQbarProcessor
 
   //Added by Seidai in 2020.Sep.17
   //MC stable particle information provider
-  void BBbarAnalysis::AnalyseGeneratorBBbar_Stable(QQbarMCOperator& opera, float _Rparam_jet_ps, float _pparam_jet_ps) {
+  void QQbarAnalysis::AnalyseGeneratorQQbar_Stable(QQbarMCOperator& opera, float _Rparam_jet_ps, float _pparam_jet_ps) {
     vector<PseudoJet> particles;
     JetDefinition jet_def(ee_genkt_algorithm, _Rparam_jet_ps, _pparam_jet_ps);
     
     //Obtain particles which are appeared after intermediate particle
-    vector<vector<MCParticle*> > all_stable = opera.GetBBbarStables();
+    vector<vector<MCParticle*> > all_stable = opera.GetQQbarStables();
     vector<MCParticle*> qqbar_stable = all_stable.at(0);
     vector<MCParticle*> isr_stable = all_stable.at(1);
     vector<MCParticle*> overlay_stable = all_stable.at(2);
@@ -259,20 +257,21 @@ namespace QQbarProcessor
       }
       
     }
-  }//AnalyseGeneratorBBbar_Stable()
+  }//AnalyseGeneratorQQbar_Stable()
 
 
   
-  void BBbarAnalysis::AnalyseBBbar(LCEvent * evt,
+  void QQbarAnalysis::AnalyseQQbar(LCEvent * evt,
 				   bool _boolDBDanalysis,
-				   bool _boolkaoncheat,
+				   bool _newPandoraPFO,
 				   std::string _colName ,
+				   std::string _newcolName ,
 				   std::string _colRelName,
 				   std::string _initialJetsColName,
 				   std::string _JetsColName ,
 				   std::string _JetsRelColName ,
 				   std::string _MCColName,
-				   std::string _KaonTaggerName,
+				   std::string _Old2NewPandoraPFOsLink,
 				   float _Rparam_jet_ps, 
 				   float _pparam_jet_ps
 				   )
@@ -299,7 +298,7 @@ namespace QQbarProcessor
 
         //LCCollection * mcvtxcol = evt->getCollection(_MCVtxColName); 
         LCCollection * pfocol = evt->getCollection(_colName);  
-        VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName)); 
+	//        VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName)); 
 	vector< RecoJet * > * jets = QQbarTools::getJets(jetcol, jetrelcol);
 
 	ClearVariables();
@@ -313,12 +312,12 @@ namespace QQbarProcessor
         }  
 
 	//MC bbbar Analysis
-	QQbarMCOperator opera(mccol);    
+	QQbarMCOperator operaMC(mccol,evt->getCollection(_colRelName));    
 	//if(opera.IsEvent()==true) {
-	vector < MCParticle * > mcbs = AnalyseGeneratorBBbar(opera);//Hard Process
-	AnalyseGeneratorISR(opera); 
-	AnalyseGeneratorBBbar_PS(opera,_Rparam_jet_ps,_pparam_jet_ps);
-	AnalyseGeneratorBBbar_Stable(opera,_Rparam_jet_ps,_pparam_jet_ps);
+	vector < MCParticle * > mcbs = AnalyseGeneratorQQbar(operaMC);//Hard Process
+	AnalyseGeneratorISR(operaMC); 
+	AnalyseGeneratorQQbar_PS(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
+	AnalyseGeneratorQQbar_Stable(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
 
 	// get jet reconstruction variables (merging distances)
 	if(_boolDBDanalysis==true) {
@@ -339,7 +338,7 @@ namespace QQbarProcessor
 	    vector<float> params = pid.getParameters();
 	    _stats._d23 = params[pidh.getParameterIndex(alid,"y23")];
 	    _stats._d12 = params[pidh.getParameterIndex(alid,"y12")];
-	    streamlog_out(DEBUG) << "IDR: d23 (reco)= "<<_stats._d23<<"\n";
+	    streamlog_out(DEBUG) << "not DBD d23 (reco)= "<<_stats._d23<<"\n";
 
 	  } catch(UTIL::UnknownAlgorithm &e){ 
 	    streamlog_out(DEBUG) << "No algorithm yth!\n"; 
@@ -382,7 +381,7 @@ namespace QQbarProcessor
 
 
 	//Obtain particles which are appeared after intermediate particle                                                                                                                                      
-	vector<vector<MCParticle*> > all_stable = opera.GetBBbarStables();
+	vector<vector<MCParticle*> > all_stable = operaMC.GetQQbarStables();
 	vector<MCParticle*> isr_stable = all_stable.at(1);
 
 	//get the pfO object identified as photon with the maximum energy
@@ -407,39 +406,65 @@ namespace QQbarProcessor
           _stats._jet_ctag[ijet]=jets->at(ijet)->GetCTag();
 
 	  //	  ReconstructedParticle * jet_reco = dynamic_cast< ReconstructedParticle * >(jetcol->getElementAt(ijet));
-	  vector<ReconstructedParticle*> components = jets->at(ijet)->getParticles();
-	  if(components.size()>150) {
-	    std::cout<<"ERROR: nPFOs> 150: "<<components.size()<<std::endl;
+  
+	  std::string pfocollection=_colName;
+	  //	  if(_newPandoraPFO==true) pfocollection=_newcolName;
+
+	  PIDHandler pidh_1(evt->getCollection(pfocollection));
+	  int pid_1 = pidh_1.getAlgorithmID("LikelihoodPID");
+
+	  PIDHandler pidh_2(evt->getCollection(pfocollection));
+          int pid_2 = pidh_2.getAlgorithmID("dEdxPID");
+
+
+	  vector<ReconstructedParticle*> components_originalPFO = jets->at(ijet)->getParticles();
+	  if(components_originalPFO.size()>150) {
+	    std::cout<<"ERROR: nPFOs> 150: "<<components_originalPFO.size()<<std::endl;
 	  }
-	  for(int i=0; i<components.size(); i++) { 
+	  for(int i=0; i<components_originalPFO.size(); i++) { 
 
+	    ReconstructedParticle * component = components_originalPFO.at(i);
+
+	    /*if(_newPandoraPFO==true) {
+              streamlog_out(DEBUG)<<"newpandora=true\n";
+	      vector< LCObject * > obj = navigator.getRelatedToObjects(components_originalPFO.at(i));
+	      streamlog_out(DEBUG)<<"  oldPandoraPFOID:"<<components_originalPFO.at(i)->getEnergy();
+              streamlog_out(DEBUG)<<" size:"<<obj.size()<<" ";
+	      streamlog_out(DEBUG)<<obj.at(0)->id()<<"\n";
+	      component = dynamic_cast< ReconstructedParticle * >(obj[0]);
+	      streamlog_out(DEBUG)<<" newID:" << component->getEnergy()<<"\n";
+
+	      }*/
+	      
             streamlog_out(DEBUG)<<"pfo number: "<<i<<"\n";
-	    streamlog_out(DEBUG)<<" _stats._pfo_E="<<components.at(i)->getEnergy();
-	    streamlog_out(DEBUG)<<" _stats._pfo_px="<<components.at(i)->getMomentum()[0];
-	    streamlog_out(DEBUG)<<" _stats._pfo_py="<<components.at(i)->getMomentum()[1];
-	    streamlog_out(DEBUG)<<" _stats._pfo_pz="<<components.at(i)->getMomentum()[2];
-	    streamlog_out(DEBUG)<<" _stats._pfo_m="<<components.at(i)->getMass();
-	    streamlog_out(DEBUG)<<" _stats._pfo_type="<<components.at(i)->getType();
-	    streamlog_out(DEBUG)<<" _stats._pfo_charge="<<components.at(i)->getCharge()<<"\n";
+	    streamlog_out(DEBUG)<<" _stats._pfo_E="<<component->getEnergy();
+	    streamlog_out(DEBUG)<<" _stats._pfo_px="<<component->getMomentum()[0];
+	    streamlog_out(DEBUG)<<" _stats._pfo_py="<<component->getMomentum()[1];
+	    streamlog_out(DEBUG)<<" _stats._pfo_pz="<<component->getMomentum()[2];
+	    streamlog_out(DEBUG)<<" _stats._pfo_m="<<component->getMass();
+	    streamlog_out(DEBUG)<<" _stats._pfo_type="<<component->getType();
+	    streamlog_out(DEBUG)<<" _stats._pfo_charge="<<component->getCharge()<<"\n";
 
-            if(components.at(i)->getStartVertex()!=NULL) {
+            if(component->getStartVertex()!=NULL) {
 	      //we collect the info of the tracks associated to the primary vtx
-	      if(components.at(i)->getStartVertex()->isPrimary()) {
+	      if(component->getStartVertex()->isPrimary()) {
 		streamlog_out(DEBUG)<<" IS PRIMARY TRACK: ssave info " <<std::endl;
 
 		_stats._pfo_jet_match[pfo_recorded]=ijet;
 
-		//high level info 
-		MCParticle * mctrack = vtxOperator.getMCParticle(components.at(i));
-		_stats._pfo_E[pfo_recorded]=components.at(i)->getEnergy();
-		_stats._pfo_px[pfo_recorded]=components.at(i)->getMomentum()[0];
-		_stats._pfo_py[pfo_recorded]=components.at(i)->getMomentum()[1];
-		_stats._pfo_pz[pfo_recorded]=components.at(i)->getMomentum()[2];
-		_stats._pfo_m[pfo_recorded]=components.at(i)->getMass();
-		_stats._pfo_type[pfo_recorded]=components.at(i)->getType();
-		_stats._pfo_charge[pfo_recorded]=components.at(i)->getCharge();
+		MCParticle * mctrack=operaMC.getMCParticle(component);
+
+		_stats._pfo_E[pfo_recorded]=component->getEnergy();
+		_stats._pfo_px[pfo_recorded]=component->getMomentum()[0];
+		_stats._pfo_py[pfo_recorded]=component->getMomentum()[1];
+		_stats._pfo_pz[pfo_recorded]=component->getMomentum()[2];
+		_stats._pfo_m[pfo_recorded]=component->getMass();
+		_stats._pfo_type[pfo_recorded]=component->getType();
+		_stats._pfo_charge[pfo_recorded]=component->getCharge();
 		//cheat info                                                                                                                                                                                   
-		_stats._pfo_pdgcheat[pfo_recorded]=vtxOperator.getPDG(mctrack);
+		_stats._pfo_pdgcheat[pfo_recorded]=operaMC.getPDG(mctrack);
+                streamlog_out(DEBUG)<<" PDG CHEAT " <<_stats._pfo_pdgcheat[pfo_recorded]<<std::endl;
+
 		_stats._pfo_vtx[pfo_recorded]=0;
 		_stats._pfo_istrack[pfo_recorded]=1;
 		_stats._pfo_isisr[pfo_recorded]=0;
@@ -450,10 +475,10 @@ namespace QQbarProcessor
 		    continue;
 		  }
 		}
-		Track * trk =components.at(i)->getTracks()[0];
+		Track * trk =component->getTracks()[0];
 		_stats._pfo_chi2[pfo_recorded]=trk->getChi2();
                 _stats._pfo_ndf[pfo_recorded]=float(trk->getNdf());
-                _stats._pfo_isoverlay[pfo_recorded]=vtxOperator.isOverlay(mctrack);
+                _stats._pfo_isoverlay[pfo_recorded]=operaMC.isOverlay(mctrack);
 		_stats._pfo_tpc_hits[pfo_recorded]=trk->getSubdetectorHitNumbers()[6];
 		_stats._pfo_dedx[pfo_recorded]=trk->getdEdx()*1e6;
 		_stats._pfo_dedxerror[pfo_recorded]=trk->getdEdxError()*1e6;
@@ -471,17 +496,29 @@ namespace QQbarProcessor
 		_stats._pfo_phierror[pfo_recorded]=cov[2];
 		_stats._pfo_omegaerror[pfo_recorded]=cov[5];
 		_stats._pfo_tanlambdaerror[pfo_recorded]=cov[14];
-		
-		PIDHandler pidh_1(pfocol); 
-		int pid_1 = pidh_1.getAlgorithmID("LikelihoodPID");
-		_stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(components.at(i), pid_1).getPDG();
-		streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(components.at(i), pid_1).getPDG()<<std::endl;
-		_stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(components.at(i), pid_1).getLikelihood();
 
-                PIDHandler pidh_2(pfocol);
-                int pid_2 = pidh_2.getAlgorithmID("dEdxPID");
-                _stats._pfo_piddedx[pfo_recorded] = pidh_2.getParticleID(components.at(i), pid_2).getPDG();
-                _stats._pfo_piddedx_likelihood[pfo_recorded]=pidh_2.getParticleID(components.at(i), pid_2).getLikelihood();
+		if(_newPandoraPFO==true) {
+		  LCRelationNavigator navigator(evt->getCollection(_Old2NewPandoraPFOsLink));
+		  vector< LCObject * > obj = navigator.getRelatedToObjects(component);
+		  streamlog_out(DEBUG)<<" objSize:"<<obj.size()<<"\n";
+		  ReconstructedParticle * component_pid = dynamic_cast< ReconstructedParticle* >(obj[0]);
+		  _stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(component_pid, pid_1).getPDG();
+		  streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(component_pid, pid_1).getPDG()<<std::endl;
+		  _stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(component_pid, pid_1).getLikelihood();
+
+		  _stats._pfo_piddedx[pfo_recorded] = pidh_2.getParticleID(component_pid, pid_2).getPDG();
+		  _stats._pfo_piddedx_likelihood[pfo_recorded]=pidh_2.getParticleID(component_pid, pid_2).getLikelihood();
+		  streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pidh_2.getParticleID(component_pid, pid_2).getPDG()<<std::endl;
+		} else {
+		  _stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(component, pid_1).getPDG();
+                  streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(component, pid_1).getPDG()<<std::endl;
+                  _stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(component, pid_1).getLikelihood();
+
+                  _stats._pfo_piddedx[pfo_recorded] = pidh_2.getParticleID(component, pid_2).getPDG();
+                  _stats._pfo_piddedx_likelihood[pfo_recorded]=pidh_2.getParticleID(component, pid_2).getLikelihood();
+                  streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pidh_2.getParticleID(component, pid_2).getPDG()<<std::endl;
+		}
+
 
 		pfo_recorded++;
 		if(ijet==0) _stats._pfo_n_j1++;
@@ -498,19 +535,33 @@ namespace QQbarProcessor
 
 	      _stats._pfo_jet_match[pfo_recorded]=ijet;
 
-	      _stats._pfo_E[pfo_recorded]=components.at(i)->getEnergy();
-	      _stats._pfo_px[pfo_recorded]=components.at(i)->getMomentum()[0];
-	      _stats._pfo_py[pfo_recorded]=components.at(i)->getMomentum()[1];
-	      _stats._pfo_pz[pfo_recorded]=components.at(i)->getMomentum()[2];
-	      _stats._pfo_m[pfo_recorded]=components.at(i)->getMass();
-	      _stats._pfo_type[pfo_recorded]=components.at(i)->getType();
-	      _stats._pfo_charge[pfo_recorded]=components.at(i)->getCharge();
+	      _stats._pfo_E[pfo_recorded]=component->getEnergy();
+	      _stats._pfo_px[pfo_recorded]=component->getMomentum()[0];
+	      _stats._pfo_py[pfo_recorded]=component->getMomentum()[1];
+	      _stats._pfo_pz[pfo_recorded]=component->getMomentum()[2];
+	      _stats._pfo_m[pfo_recorded]=component->getMass();
+	      _stats._pfo_type[pfo_recorded]=component->getType();
+	      _stats._pfo_charge[pfo_recorded]=component->getCharge();
 	      //cheat info      
-	      MCParticle * mcpfo = vtxOperator.getMCParticle(components.at(i));
-	      _stats._pfo_pdgcheat[pfo_recorded]=vtxOperator.getPDG(mcpfo);
+	      MCParticle * mcpfo=operaMC.getMCParticle(component);
+	      /*
+	      MCParticle * mcpfo;
+	      if(_newPandoraPFO==true) {
+		LCRelationNavigator navigator(evt->getCollection(_Old2NewPandoraPFOsLink));
+		vector< LCObject * > obj = navigator.getRelatedToObjects(component);
+		//		mcpfo= operaMC.getMCParticle(dynamic_cast< ReconstructedParticle* >(obj[0]));
+		ReconstructedParticle * jetpart = dynamic_cast< ReconstructedParticle * >(obj[0]);
+		mcpfo= operaMC.getMCParticle(jetpart);
+
+	      } else {
+		mcpfo= operaMC.getMCParticle(component);
+		}*/
+
+	      _stats._pfo_pdgcheat[pfo_recorded]=operaMC.getPDG(mcpfo);
+	      streamlog_out(DEBUG)<<" PDG CHEAT " <<_stats._pfo_pdgcheat[pfo_recorded]<<std::endl;
 	      _stats._pfo_istrack[pfo_recorded]=0;
 	      _stats._pfo_vtx[pfo_recorded]=-1;
-              _stats._pfo_isoverlay[pfo_recorded]=vtxOperator.isOverlay(mcpfo);
+              _stats._pfo_isoverlay[pfo_recorded]=operaMC.isOverlay(mcpfo);
 	      _stats._pfo_isisr[pfo_recorded]=0;
 	      for(int iisr=0; iisr<isr_stable.size();iisr++) {
 		if(mcpfo==isr_stable.at(iisr)) {
@@ -520,11 +571,21 @@ namespace QQbarProcessor
 		}
 	      }
 
-	      PIDHandler pidh_1(pfocol);
-	      int pid_1 = pidh_1.getAlgorithmID("LikelihoodPID");
-	      _stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(components.at(i), pid_1).getPDG();
-	      streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(components.at(i), pid_1).getPDG()<<std::endl;
-	      _stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(components.at(i), pid_1).getLikelihood();
+	      if(_newPandoraPFO==true) {
+		  LCRelationNavigator navigator(evt->getCollection(_Old2NewPandoraPFOsLink));
+		  vector< LCObject * > obj = navigator.getRelatedToObjects(component);
+		  streamlog_out(DEBUG)<<" objSize:"<<obj.size()<<"\n";
+		  ReconstructedParticle * component_pid = dynamic_cast< ReconstructedParticle* >(obj[0]);
+		  _stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(component_pid, pid_1).getPDG();
+		  streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(component_pid, pid_1).getPDG()<<std::endl;
+		  _stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(component_pid, pid_1).getLikelihood();
+
+		} else {
+		  _stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(component, pid_1).getPDG();
+                  streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(component, pid_1).getPDG()<<std::endl;
+                  _stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(component, pid_1).getLikelihood();
+
+	      }
 
 	      _stats._pfo_piddedx[pfo_recorded] = 0;
 	      _stats._pfo_piddedx_likelihood[pfo_recorded]=0;
@@ -551,7 +612,7 @@ namespace QQbarProcessor
 	    _stats._pfo_n=pfo_recorded;
 	    continue;
 	  }
-
+	  
 	  for( int ivtx=0; ivtx<vertices->size(); ivtx++) {
 
 
@@ -581,8 +642,10 @@ namespace QQbarProcessor
 	      _stats._pfo_type[pfo_recorded]=found_track_particle->getType();
 	      _stats._pfo_charge[pfo_recorded]=found_track_particle->getCharge();
 	      //cheat info                                          
-              MCParticle * mctrack = vtxOperator.getMCParticle(found_track_particle);
-	      _stats._pfo_pdgcheat[pfo_recorded]=vtxOperator.getPDG(mctrack);
+              MCParticle * mctrack= operaMC.getMCParticle(found_track_particle);
+
+	      _stats._pfo_pdgcheat[pfo_recorded]=operaMC.getPDG(mctrack);
+	      streamlog_out(DEBUG)<<" PDG CHEAT " <<_stats._pfo_pdgcheat[pfo_recorded]<<std::endl;
 	      _stats._pfo_vtx[pfo_recorded]=ivtx+1;
 	      _stats._pfo_istrack[pfo_recorded]=1;
 	      _stats._pfo_isisr[pfo_recorded]=0;
@@ -594,7 +657,7 @@ namespace QQbarProcessor
                 }
               }
 	      Track * trk = found_track_particle->getTracks()[0];
-	      _stats._pfo_isoverlay[pfo_recorded]=vtxOperator.isOverlay(mctrack);
+	      _stats._pfo_isoverlay[pfo_recorded]=operaMC.isOverlay(mctrack);
 	      _stats._pfo_tpc_hits[pfo_recorded]=trk->getSubdetectorHitNumbers()[6];
 	      _stats._pfo_dedx[pfo_recorded]=trk->getdEdx()*1e6;
 	      _stats._pfo_dedxerror[pfo_recorded]=trk->getdEdxError()*1e6;
@@ -614,17 +677,30 @@ namespace QQbarProcessor
 	      _stats._pfo_phierror[pfo_recorded]=cov[2];
 	      _stats._pfo_omegaerror[pfo_recorded]=cov[5];
 	      _stats._pfo_tanlambdaerror[pfo_recorded]=cov[14];
+	      
+	      if(_newPandoraPFO==true) {
+		LCRelationNavigator navigator(evt->getCollection(_Old2NewPandoraPFOsLink));
+		vector< LCObject * > obj = navigator.getRelatedToObjects(found_track_particle);
+		streamlog_out(DEBUG)<<" objSize:"<<obj.size()<<"\n";
+		ReconstructedParticle * component_pid = dynamic_cast< ReconstructedParticle* >(obj[0]);
+		_stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(component_pid, pid_1).getPDG();
+		streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(component_pid, pid_1).getPDG()<<std::endl;
+		_stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(component_pid, pid_1).getLikelihood();
+		
+		_stats._pfo_piddedx[pfo_recorded] = pidh_2.getParticleID(component_pid, pid_2).getPDG();
+		_stats._pfo_piddedx_likelihood[pfo_recorded]=pidh_2.getParticleID(component_pid, pid_2).getLikelihood();
+		streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pidh_2.getParticleID(component_pid, pid_2).getPDG()<<std::endl;
+		
+	      } else {
+		_stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(found_track_particle, pid_1).getPDG();
+		streamlog_out(DEBUG)<<" PDG with default LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(found_track_particle, pid_1).getPDG()<<std::endl;
+		_stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(found_track_particle, pid_1).getLikelihood();
+		
+		_stats._pfo_piddedx[pfo_recorded] = pidh_2.getParticleID(found_track_particle, pid_2).getPDG();
+		_stats._pfo_piddedx_likelihood[pfo_recorded]=pidh_2.getParticleID(found_track_particle, pid_2).getLikelihood();
+		streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pidh_2.getParticleID(found_track_particle, pid_2).getPDG()<<std::endl;
+	      }
 
-	      PIDHandler pidh_1(pfocol);
-	      int pid_1 = pidh_1.getAlgorithmID("LikelihoodPID");
-	      _stats._pfo_pid[pfo_recorded] = pidh_1.getParticleID(found_track_particle, pid_1).getPDG();
-	      streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pidh_1.getParticleID(found_track_particle, pid_1).getPDG()<<std::endl;
-	      _stats._pfo_pid_likelihood[pfo_recorded]=pidh_1.getParticleID(found_track_particle, pid_1).getLikelihood();
-
-	      PIDHandler pidh_2(pfocol);
-	      int pid_2 = pidh_2.getAlgorithmID("dEdxPID");
-	      _stats._pfo_piddedx[pfo_recorded] = pidh_2.getParticleID(found_track_particle, pid_2).getPDG();
-	      _stats._pfo_piddedx_likelihood[pfo_recorded]=pidh_2.getParticleID(found_track_particle, pid_2).getLikelihood();
 
 	      streamlog_out(DEBUG)<<"      itr= "<<itr<<std::endl;
 	      pfo_recorded++;
@@ -637,6 +713,7 @@ namespace QQbarProcessor
 	      }
 	    }//itr
 	  }//vitx
+	  
 	  _stats._pfo_n=pfo_recorded;
 	  if(pfo_recorded==0) 
 	    streamlog_out(DEBUG)<<"ERROR - pfo_recorded =0 "<<std::endl;
@@ -655,12 +732,12 @@ namespace QQbarProcessor
   }
 
 
-  void BBbarAnalysis::ClearVariables()
+  void QQbarAnalysis::ClearVariables()
   {
     _stats.Clear();
   }
 
-  void BBbarAnalysis::End()
+  void QQbarAnalysis::End()
   {   
     _hfile->Write();
     _hfile->Close();

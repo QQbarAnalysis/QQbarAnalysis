@@ -3,18 +3,21 @@ using std::vector;
 using std::string;
 using EVENT::LCCollection;
 using EVENT::MCParticle;
+using EVENT::ReconstructedParticle;
 using IMPL::MCParticleImpl;
+using UTIL::LCRelationNavigator;
+using EVENT::LCObject;
 
 
 namespace QQbarProcessor
 {
-  QQbarMCOperator:: QQbarMCOperator (LCCollection * col)
+  QQbarMCOperator:: QQbarMCOperator (LCCollection * col, LCCollection * rel)
   {
     myCollection = col;
-    myNeutrino = NULL;
+    myRelCollection = rel;
   }
 
-  vector< MCParticle * > QQbarMCOperator::GetBBbarQuarksPS()
+  vector< MCParticle * > QQbarMCOperator::GetQQbarQuarksPS()
   {
 
     int number = myCollection->getNumberOfElements();
@@ -40,7 +43,7 @@ namespace QQbarProcessor
   }
 
   //Added by Seidai in 2020.Sep.16
-  vector<vector<MCParticle*>>QQbarMCOperator::GetBBbarStables() {
+  vector<vector<MCParticle*>>QQbarMCOperator::GetQQbarStables() {
     //std::cout << "##################################" << std::endl;
     //std::cout << "##         Stable level         ##" << std::endl;
     //std::cout << "##################################" << std::endl;
@@ -109,7 +112,7 @@ namespace QQbarProcessor
     stables.push_back(isr_stables);
     stables.push_back(overlay_stables);
     return stables;
-  }//GetBBbarStables()
+  }//GetQQbarStables()
 
 
   ///DO NOT USE THAT ON T-QUARKS!!!
@@ -184,218 +187,63 @@ namespace QQbarProcessor
     } else return pair;
 
   }
-  vector< MCParticle * > QQbarMCOperator::GetTopPairParticles(float & topBangle, float & topcosWb)
-  {
-    vector< MCParticle * > pair;
+
+  // *****************************************************************************************
+  // PFO to MC relations
+  MCParticle * QQbarMCOperator::getMCParticle(EVENT::ReconstructedParticle *particle) {
     
-    // particle declaration
-    MCParticle * b = FindParticle(5);
-    MCParticle * bbar = FindParticle(-5);
-    MCParticle * wplus = FindParticle(24);
-    MCParticle * wminus = FindParticle(-24);
+    LCRelationNavigator navigator(myRelCollection);
+    streamlog_out(DEBUG) <<"getPDG: using Reconstructed collection \n";
+
+    vector< LCObject * > obj = navigator.getRelatedToObjects(particle);
+    vector< float > weights = navigator.getRelatedToWeights(particle);
+    MCParticle * winner = NULL;
+    MCParticle * winner2 = NULL;
+
+    float maxweight = 0.50;
+    for (unsigned int i = 0; i < obj.size(); i++) {
+      if(particle->getTracks().size()!=0) {
+        weights[i] = fmod(weights[i],10000)/1000.;
+        streamlog_out(DEBUG) <<"getPDG : PFO is a TRACK \n";
+      } else {
+        streamlog_out(DEBUG) <<"getPDG : PFO is a not a TRACK \n";
+      }
+      //considerations on the track weigth from Mikael:      
+      //The track-part of the weight of a PFO should just be a copy of the weight in the 
+      //corresponding track-object (in permil) so (pfowgt%10000)/1000.0 should           
+      //be the same as the track weight. Be aware of the navigators in two               
+      //direction (RecoMCTruthLink and MCTruthRecoLink): They link the same              
+      //objects, but the weights are different: One tells you which fraction of          
+      //the PFO observation comes from which MCParticle, the other tells you             
+      //which fraction of all signal produced of the MCParticle goes into the            
+      //PFO in question....                                                              
+
+      winner2 = dynamic_cast< MCParticle * >(obj[i]);
+
+      streamlog_out(DEBUG) <<"getMCParticle "<<i<< " max weight "<<maxweight<<" weight "<<weights[i]<<" MCPDG "<<winner2->getPDG()<<" mom "<<MathOperator::getModule(winner2->getMomentum())<<" px: "<<winner2->getMomentum()[0]<< " py: "<<winner2->getMomentum()[1]<< " En\
+d point (in m), x, y, z "<<winner2->getEndpoint()[0]<<" "<<winner2->getEndpoint()[1]<<" "<<winner2->getEndpoint()[2]<<"\n";
+      if (weights[i] > maxweight) {
+        winner = dynamic_cast< MCParticle * >(obj[i]);
+        maxweight = weights[i];
+      }
+    }
+    if(!winner) return NULL;
+    streamlog_out(DEBUG) <<"end getPDG " <<maxweight<<" "<<winner->getPDG()<< "\n";
+    return winner;
+  }
+
+  
+  int QQbarMCOperator::isOverlay(MCParticle * winner) {
+
+    if(winner==NULL) return 0;
+    return winner->isOverlay();
+  }
+
+  
+  int QQbarMCOperator::getPDG(MCParticle * winner) {                     
     
-    // B Stable
-    /*
-      MCParticle * B0 = FindParticle(511);
-      MCParticle * Bplus = FindParticle(521);
-      MCParticle * B0s = FindParticle(531);
-      MCParticle * B0c = FindParticle(541);
-      MCParticle * BLambda0b = FindParticle(5122);
-      MCParticle * BXiminusb = FindParticle(5132); 
-      MCParticle * BXi0b = FindParticle(5232);
-      MCParticle * BOmegaminusb = FindParticle(5332);
-      
-      MCParticle * B0bar = FindParticle(-511);
-      MCParticle * Bplusbar = FindParticle(-521);
-      MCParticle * B0sbar = FindParticle(-531);
-      MCParticle * B0cbar = FindParticle(-541);
-      MCParticle * BLambda0bbar = FindParticle(-5122);
-      MCParticle * BXiminusbbar = FindParticle(-5132); 
-      MCParticle * BXi0bbar = FindParticle(-5232);
-      MCParticle * BOmegaminusbbar = FindParticle(-5332);
-    */
-    
-    if (!b || !bbar ) 
-      {
-	return pair;
-      }
-    if (!wplus || !wminus) 
-      {
-	vector< MCParticle * > final = GetFinalState();
-	std::cout << "Nfinal - bbbar: " << final.size() << "\n";
-	if (final.size() < 4) 
-	  {
-	    std::cout << "CRUNCH\n";
-	    return pair; // CRUNCH
-	  }
-	for (int i = 0; i < final.size(); i++) 
-	  {
-	    for (int j = 0; j < i; j++) 
-	      {
-		if (i == j) 
-		  {
-		    continue;
-		  }
-		MCParticle * candidate = CombineParticles(final[i],final[j]);
-		if (std::abs(candidate->getCharge()) > 0.99 && std::abs(candidate->getCharge()) < 1.01 ) 
-		  {
-		    if (candidate->getCharge() > 0) 
-		      {
-			wplus = candidate;
-			std::cout << "W+ found: q " << candidate->getCharge() << " m " << candidate->getMass() << "\n";
-		      }
-		    else 
-		      {
-			wminus = candidate;
-			std::cout << "W- found: q " << candidate->getCharge() << " m " << candidate->getMass() << "\n";
-		      }
-		  }
-	      }
-	  }
-      }
-    myBquarkPair.push_back(b);
-    myBquarkPair.push_back(bbar);
-    myWPair.push_back(wplus);
-    myWPair.push_back(wminus);
-    MCParticle * top = CombineParticles(b, wplus);
-    topBangle = MathOperator::getAngle(top->getMomentum(), b->getMomentum());
-    MCParticle * topbar = CombineParticles(bbar, wminus);
-    topcosWb = std::cos( MathOperator::getAngle(wplus->getMomentum(), b->getMomentum()));
-    pair.push_back(top);
-    pair.push_back(topbar);
-    return pair;
+    if(winner==NULL) return 0;
+    return abs(winner->getPDG());
   }
-  vector< MCParticle * > QQbarMCOperator::GetWPair()
-  {
-    return myWPair;
-  }
-  vector< MCParticle * > QQbarMCOperator::GetBquarkPair()
-  {
-    return myBquarkPair;
-  }
-  MCParticle * QQbarMCOperator::CombineParticles(EVENT::MCParticle * b, EVENT::MCParticle * w)
-  {
-    MCParticleImpl * result = new MCParticleImpl();
-    double energy = b->getEnergy() + w->getEnergy();
-    double momentum[3];
-    for (int i = 0; i < 3; i++) 
-      {
-	momentum[i] = b->getMomentum()[i] + w->getMomentum()[i];
-      }
-    double charge = b->getCharge() + w->getCharge();
-    double mass = std::sqrt(energy * energy - momentum[0] * momentum[0] - momentum[1]*momentum[1] - momentum[2] * momentum[2] );
-    int pdg = charge / std::abs(charge) * 6;
-    //result->setEnergy(energy);
-    result->setMass(mass);
-    result->setMomentum(momentum);
-    result->setCharge(charge);
-    result->setPDG(pdg);
-    return result;
-  }
-  vector <MCParticle *> QQbarMCOperator::GetFinalStateBkg()
-  {
-    vector <MCParticle *> result;
-    /*for (unsigned int i = 0; i < 4; i++) 
-      {
-      MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i+2) );
-      result.push_back(particle);
-      }*/
-    result.push_back(dynamic_cast<MCParticle*>( myCollection->getElementAt( 2)));
-    result.push_back(dynamic_cast<MCParticle*>( myCollection->getElementAt( 3)));
-    
-    MCParticle * higgs = FindParticle(25);
-    if (higgs->getDaughters().size() == 2) 
-      {
-	result.push_back(higgs->getDaughters()[0]);
-	result.push_back(higgs->getDaughters()[1]);
-      }
-    if (higgs->getDaughters().size() == 1) 
-      {
-	if (higgs->getDaughters()[0]->getDaughters().size() == 2) 
-	  {
-	    result.push_back(higgs->getDaughters()[0]->getDaughters()[0]);
-	    result.push_back(higgs->getDaughters()[0]->getDaughters()[1]);
-	    
-	  }
-      }
-    return result;
-  }
-  vector <MCParticle *> QQbarMCOperator::GetFinalState()
-  {
-    vector <MCParticle *> result;
-    MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(2) );
-    if (abs(particle->getPDG()) == 11) 
-      {
-	const vector< MCParticle * > daughters = particle->getDaughters();
-	for (unsigned int i = 0; i < daughters.size(); i++) 
-	  {
-	    if (abs(daughters[i]->getPDG()) != 5) 
-	      {
-		result.push_back(daughters[i]);
-	      }
-	    if (abs(daughters[i]->getPDG()) == 12 ||
-		abs(daughters[i]->getPDG()) == 14 ||	
-		abs(daughters[i]->getPDG()) == 16) 
-	      {
-		myNeutrino = daughters[i];
-	      }
-	  }
-      }
-    else 
-      {
-	std::cout << "ERROR: Particle has " << particle->getPDG() << ", e- not found!\n";
-      }
-    return result;
-  }
-  MCParticle * QQbarMCOperator::FindParticle(int pdg)
-  {
-    int number = myCollection->getNumberOfElements();
-    MCParticle * result = NULL;
-    for (int i = 0; i < number; i++) 
-      {
-	MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
-	if (particle->getPDG() == pdg) 
-	  {
-	    result = particle;
-	    break;
-	  }
-      }
-    if (!result) 
-      {
-	std::cout << "Particle " << pdg << " not found!\n";
-      }
-    return result;
-  }
-  MCParticle * QQbarMCOperator::GetNeutrino()
-  {
-    return myNeutrino;
-  }
-  MCParticle * QQbarMCOperator::GetTauLepton()
-  {
-    MCParticle * tau = FindParticle(15);
-    MCParticle * taubar = FindParticle(-15);
-    MCParticle * particle = (tau)? tau : taubar;
-    if (!particle) 
-      {
-	return NULL;
-      }
-    MCParticle * result = NULL;
-    if (particle->getDaughters().size() == 1 && abs(particle->getDaughters()[0]->getPDG()) == 15) 
-      {
-	particle = particle->getDaughters()[0];
-      }
-    if (particle->getDaughters().size() == 3) 
-      {
-	for (unsigned int i = 0; i < particle->getDaughters().size(); i++) 
-	  {
-	    if (abs(particle->getDaughters()[i]->getPDG()) == 13) 
-	      {
-		std::cout << "Particle tau found!\n";
-		result = particle->getDaughters()[i];
-		break;
-	      }
-	  }
-      }
-    return result;
-  }
+
 }

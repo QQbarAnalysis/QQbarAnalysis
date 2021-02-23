@@ -5,7 +5,7 @@ using std::vector;
 namespace QQbarProcessor 
 {
   TreeWriter:: TreeWriter() {}
-  void TreeWriter::InitializeStatsBBbarTree(TTree * _hTree, StatsData_BBbar & data)
+  void TreeWriter::InitializeStatsQQbarTree(TTree * _hTree, StatsData_QQbar & data)
   {
 
     //new variables

@@ -20,7 +20,7 @@
 #include <TTree.h>
 
 #include "MathOperator.hh"
-#include "VertexChargeOperator.hh"
+//#include "VertexChargeOperator.hh"
 #include "RecoJet.hh"
 #include "TreeWriter.hh"
 #include "TreeStructures.hh"

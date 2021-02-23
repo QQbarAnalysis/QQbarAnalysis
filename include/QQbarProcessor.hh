@@ -24,7 +24,7 @@
 #include <TFile.h>
 #include <TTree.h>
 
-#include "BBbarAnalysis.hh"
+#include "QQbarAnalysis.hh"
 
 
 using namespace lcio ;
@@ -35,7 +35,7 @@ namespace QQbarProcessor
 {
   enum ANALYSIS_TYPE
     {
-      BBbar = 2
+      QQbar = 0
     };
   class QQbarProcessor : public Processor 
   {
@@ -68,7 +68,7 @@ namespace QQbarProcessor
      */
     virtual void end() ;
 
-    BBbarAnalysis _bbbaranalysis;
+    QQbarAnalysis _qqbaranalysis;
 
 	  
     /** Input collection name.
@@ -77,19 +77,15 @@ namespace QQbarProcessor
     std::string _hfilename;
     ANALYSIS_TYPE _analysisType ;
     std::string _colName ;
+    std::string _newcolName ; //only used if we reprocess dEdx
     std::string _MCColName ;
     std::string _JetsColName ;
     std::string _JetsRelColName ;
-    std::string _JetsVtxColName ;
-    std::string _IsoLeptonColName;
-    std::string _MCVtxColName ;
     std::string _colRelName;
     std::string _initialJetsColName;
-    int _ePolarization;
-    float _massCutparameter;
-    bool _boolkaoncheat;
     bool _boolDBDanalysis;
-    std::string _KaonTaggerName;
+    bool _newPandoraPFO;
+    std::string _Old2NewPandoraPFOsLink;
 
     float _Rparam_jet_ps;
     float _pparam_jet_ps;
