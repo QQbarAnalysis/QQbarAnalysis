@@ -22,7 +22,7 @@ void QQBARLabel(Double_t x,Double_t y,TString text,Color_t color)
     p.SetTextSize(0.05);
     p.SetTextFont(42);
     p.SetTextColor(color);
-    p.DrawLatex(x+0.125,y,text);
+    p.DrawLatex(x+0.1,y,text);
   }
 }
 

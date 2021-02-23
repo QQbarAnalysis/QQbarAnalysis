@@ -73,15 +73,15 @@ public :
    Float_t         mc_quark_ps_jet_py[2];
    Float_t         mc_quark_ps_jet_pz[2];
    Int_t           mc_stable_n;
-   Float_t         mc_stable_E[704];   //[mc_stable_n]
-   Float_t         mc_stable_px[704];   //[mc_stable_n]
-   Float_t         mc_stable_py[704];   //[mc_stable_n]
-   Float_t         mc_stable_pz[704];   //[mc_stable_n]
-   Float_t         mc_stable_m[704];   //[mc_stable_n]
-   Int_t           mc_stable_pdg[704];   //[mc_stable_n]
-   Float_t         mc_stable_charge[704];   //[mc_stable_n]
-   Int_t           mc_stable_isoverlay[704];   //[mc_stable_n]
-   Int_t           mc_stable_isisr[704];   //[mc_stable_n]
+   Float_t         mc_stable_E[999];   //[mc_stable_n]
+   Float_t         mc_stable_px[999];   //[mc_stable_n]
+   Float_t         mc_stable_py[999];   //[mc_stable_n]
+   Float_t         mc_stable_pz[999];   //[mc_stable_n]
+   Float_t         mc_stable_m[999];   //[mc_stable_n]
+   Int_t           mc_stable_pdg[999];   //[mc_stable_n]
+   Float_t         mc_stable_charge[999];   //[mc_stable_n]
+   Int_t           mc_stable_isoverlay[999];   //[mc_stable_n]
+   Int_t           mc_stable_isisr[999];   //[mc_stable_n]
    Float_t         mc_stable_y12;
    Float_t         mc_stable_y23;
    Float_t         mc_stable_d12;
@@ -116,38 +116,38 @@ public :
    Int_t           jet_nvtx_j1;
    Int_t           jet_pfo_n_j2;
    Int_t           jet_nvtx_j2;
-   Int_t           jet_pfo_match[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_pdgcheat[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_E[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_px[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_py[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_pz[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_m[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_type[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_isoverlay[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_isisr[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_istrack[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_vtx[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_charge[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_tpc_hits[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_dedx[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_dedxerror[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_d0[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_d0error[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_z0[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_z0error[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_phi[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_phierror[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_omega[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_omegaerror[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_tanlambda[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_tanlambdaerror[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_chi2[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_ndf[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_pid[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_pid_likelihood[140];   //[jet_pfo_n]
-   Int_t           jet_pfo_piddedx[140];   //[jet_pfo_n]
-   Float_t         jet_pfo_piddedx_likelihood[140];   //[jet_pfo_n]
+   Int_t           jet_pfo_match[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_pdgcheat[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_E[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_px[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_py[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_pz[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_m[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_type[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_isoverlay[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_isisr[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_istrack[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_vtx[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_charge[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_tpc_hits[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_dedx[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_dedxerror[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_d0[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_d0error[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_z0[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_z0error[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_phi[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_phierror[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_omega[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_omegaerror[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_tanlambda[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_tanlambdaerror[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_chi2[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_ndf[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_pid[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_pid_likelihood[999];   //[jet_pfo_n]
+   Int_t           jet_pfo_piddedx[999];   //[jet_pfo_n]
+   Float_t         jet_pfo_piddedx_likelihood[999];   //[jet_pfo_n]
 
    // List of branches
    TBranch        *b_mc_quark_E;   //!
@@ -271,11 +271,14 @@ public :
   virtual void InitHistosPFO(std::vector<TString>);
   virtual void InitHistosJet(std::vector<TString>);
   virtual void InitHistosTrack(std::vector<TString>);
-  
+  virtual void InitHistosTrackID(std::vector<TString>);
+
   virtual void WriteHistosMC();
   virtual void WriteHistosPFO();
   virtual void WriteHistosJet();
   virtual void WriteHistosTrack();
+  virtual void WriteHistosTrackID();
+
   //analysis
   virtual void     DQChecks(int , float , TString );
   
@@ -422,6 +425,14 @@ private:
   TH1F* h_sectrack_z0error[10];
   TH1F* h_sectrack_d0error[10];
 
+  TH1F* h_primtrack_mom_K[10];
+  TH1F* h_primtrack_mom_Pi[10];
+  TH1F* h_primtrack_mom_p[10];
+
+  TH1F* h_sectrack_mom_K[10];
+  TH1F* h_sectrack_mom_Pi[10];
+  TH1F* h_sectrack_mom_p[10];
+
   TH1F* h_PFO_phi[10]; 
   TH1F* h_PFO_theta[10];
   TH1F* h_PFO_mom[10];
@@ -440,6 +451,8 @@ private:
   TH1F* h_Jet_phi[10]; 
   TH1F* h_Jet_theta[10];
   TH1F* h_Jet_mom[10];
+  TH1F* h_Jet_btag[10];
+  TH1F* h_Jet_ctag[10];
 
   
 };

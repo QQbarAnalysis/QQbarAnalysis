@@ -21,6 +21,7 @@ void observable::InitDQ() {
 
   InitHistosMC(name);
   InitHistosTrack(name);
+  InitHistosTrackID(name);
   InitHistosPFO(name);
   InitHistosJet(name);
 }
@@ -284,8 +285,6 @@ void observable::WriteHistosPFO() {
   
 }
 
-// ** tracks
-
 void observable::InitHistosTrack(std::vector<TString> name) {
 
   for(unsigned int i=0; i<name.size(); i++) {
@@ -410,6 +409,71 @@ void observable::WriteHistosTrack() {
   }
 }
 
+// ** tracks/ per particle type
+
+void observable::InitHistosTrackID(std::vector<TString> name) {
+
+  for(unsigned int i=0; i<name.size(); i++) {
+ 
+    h_sectrack_mom_K[i] = new TH1F("sectrack_mom_K_"+name.at(i),"sectrack_mom_K_"+name.at(i),100,0,100);
+    h_sectrack_mom_Pi[i] = new TH1F("sectrack_mom_Pi_"+name.at(i),"sectrack_mom_Pi_"+name.at(i),100,0,100);
+    h_sectrack_mom_p[i] = new TH1F("sectrack_mom_p_"+name.at(i),"sectrack_mom_p_"+name.at(i),100,0,100);
+  
+    h_primtrack_mom_K[i] = new TH1F("primtrack_mom_K_"+name.at(i),"primtrack_mom_K_"+name.at(i),100,0,100);
+    h_primtrack_mom_Pi[i] = new TH1F("primtrack_mom_Pi_"+name.at(i),"primtrack_mom_Pi_"+name.at(i),100,0,100);
+    h_primtrack_mom_p[i] = new TH1F("primtrack_mom_p_"+name.at(i),"primtrack_mom_p_"+name.at(i),100,0,100);
+    
+  }
+}
+
+void observable::WriteHistosTrackID() {
+
+  for(int i=0; i<6; i++) {
+    
+    h_sectrack_mom_K[6]->Add(h_sectrack_mom_K[i]); 
+    h_sectrack_mom_Pi[6]->Add(h_sectrack_mom_Pi[i]);
+    h_sectrack_mom_p[6]->Add(h_sectrack_mom_p[i]);
+
+    h_primtrack_mom_K[6]->Add(h_primtrack_mom_K[i]); 
+    h_primtrack_mom_Pi[6]->Add(h_primtrack_mom_Pi[i]);
+    h_primtrack_mom_p[6]->Add(h_primtrack_mom_p[i]);
+
+  }
+
+  for(int i=0; i<3; i++) {
+    h_sectrack_mom_K[7]->Add(h_sectrack_mom_K[i]); 
+    h_sectrack_mom_Pi[7]->Add(h_sectrack_mom_Pi[i]);
+    h_sectrack_mom_p[7]->Add(h_sectrack_mom_p[i]);
+     
+    h_primtrack_mom_K[7]->Add(h_primtrack_mom_K[i]); 
+    h_primtrack_mom_Pi[7]->Add(h_primtrack_mom_Pi[i]);
+    h_primtrack_mom_p[7]->Add(h_primtrack_mom_p[i]);
+
+  }
+
+  for(int i=3; i<6; i++) {
+ 
+    h_sectrack_mom_K[8]->Add(h_sectrack_mom_K[i]); 
+    h_sectrack_mom_Pi[8]->Add(h_sectrack_mom_Pi[i]);
+    h_sectrack_mom_p[8]->Add(h_sectrack_mom_p[i]);
+      
+    h_primtrack_mom_K[8]->Add(h_primtrack_mom_K[i]); 
+    h_primtrack_mom_Pi[8]->Add(h_primtrack_mom_Pi[i]);
+    h_primtrack_mom_p[8]->Add(h_primtrack_mom_p[i]);
+  }
+  
+  for(int i=0; i<9; i++) {
+    h_sectrack_mom_K[i]->Write(); 
+    h_sectrack_mom_Pi[i]->Write();
+    h_sectrack_mom_p[i]->Write();
+
+    h_primtrack_mom_K[i]->Write(); 
+    h_primtrack_mom_Pi[i]->Write();
+    h_primtrack_mom_p[i]->Write();
+ 
+  }
+}
+
 // ** Jets
 void observable::InitHistosJet(std::vector<TString> name) {
 
@@ -417,6 +481,8 @@ void observable::InitHistosJet(std::vector<TString> name) {
     h_Jet_phi[i] = new TH1F("Jet_phi_"+name.at(i),"Jet_phi_"+name.at(i),100,0,2.*TMath::Pi());
     h_Jet_theta[i] = new TH1F("Jet_theta_"+name.at(i),"Jet_theta_"+name.at(i),100,0,TMath::Pi());
     h_Jet_mom[i] = new TH1F("Jet_mom_"+name.at(i),"Jet_mom_"+name.at(i),251,-0.5,250.5);
+    h_Jet_btag[i] = new TH1F("Jet_btag_"+name.at(i),"Jet_btag_"+name.at(i),1000,0,1);
+    h_Jet_ctag[i] = new TH1F("Jet_ctag_"+name.at(i),"Jet_ctag_"+name.at(i),1000,0,1);
   }
   
 }
@@ -427,24 +493,33 @@ void observable::WriteHistosJet() {
     h_Jet_phi[6]->Add(h_Jet_phi[i]); 
     h_Jet_theta[6]->Add(h_Jet_theta[i]);
     h_Jet_mom[6]->Add(h_Jet_mom[i]);
+    h_Jet_btag[6]->Add(h_Jet_btag[i]);
+    h_Jet_ctag[6]->Add(h_Jet_ctag[i]);
+
   }
 
   for(int i=0; i<3; i++) {
     h_Jet_phi[7]->Add(h_Jet_phi[i]); 
     h_Jet_theta[7]->Add(h_Jet_theta[i]);
     h_Jet_mom[7]->Add(h_Jet_mom[i]);
+    h_Jet_btag[7]->Add(h_Jet_btag[i]);
+    h_Jet_ctag[7]->Add(h_Jet_ctag[i]);
   }
 
   for(int i=3; i<6; i++) {
     h_Jet_phi[8]->Add(h_Jet_phi[i]); 
     h_Jet_theta[8]->Add(h_Jet_theta[i]);
     h_Jet_mom[8]->Add(h_Jet_mom[i]);
+    h_Jet_btag[8]->Add(h_Jet_btag[i]);
+    h_Jet_ctag[8]->Add(h_Jet_ctag[i]);
   }
 
   for(int i=0; i<9; i++) {
     h_Jet_phi[i]->Write(); 
     h_Jet_theta[i]->Write();
     h_Jet_mom[i]->Write();
+    h_Jet_btag[i]->Write();
+    h_Jet_ctag[i]->Write();
   }
 }
 
@@ -479,10 +554,12 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
     //cout<<"hola 1"<<endl;
     float gamma_e=mc_ISR_E[0]+mc_ISR_E[1];
 
+    bool squark=false;
     int ihisto=-1;
     if(fabs(mc_quark_pdg[0])<4) ihisto=0;
     if(fabs(mc_quark_pdg[0])==4) ihisto=1;
     if(fabs(mc_quark_pdg[0])==5) ihisto=2;
+    if(fabs(mc_quark_pdg[0])==3) squark=true;
     if(gamma_e>Kvcut) ihisto+=3;
     if(ihisto<0) {
       cout<<jentry << "NO QQBAR "<<jet_E[0]<<endl;
@@ -563,6 +640,8 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
       h_Jet_phi[ihisto]->Fill(anglesmomjet.at(0));
       h_Jet_theta[ihisto]->Fill(anglesmomjet.at(1));
       h_Jet_mom[ihisto]->Fill(anglesmomjet.at(2));
+      h_Jet_btag[ihisto]->Fill(jet_btag[j]);
+      h_Jet_ctag[ihisto]->Fill(jet_ctag[j]);
 
     }
     
@@ -613,6 +692,18 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
       }
     
       if(jet_pfo_istrack[i]==1 && jet_pfo_vtx[i]>0) {
+
+	if( (ihisto==0 || ihisto==3) && squark==true) {
+	  if(fabs(jet_pfo_pdgcheat[i])==321) h_sectrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==211) h_sectrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_sectrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	}
+	if( ihisto!=0 && ihisto!=3) {
+	  if(fabs(jet_pfo_pdgcheat[i])==321) h_sectrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==211) h_sectrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_sectrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	}
+
 	h_sectrack_phi[ihisto]->Fill(anglesmom.at(0));
 	h_sectrack_theta[ihisto]->Fill(anglesmom.at(1));
 	h_sectrack_mom[ihisto]->Fill(anglesmom.at(2));
@@ -625,6 +716,18 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
       }
 
       if(jet_pfo_istrack[i]==1 && jet_pfo_vtx[i]==0) {
+
+	if( (ihisto==0 || ihisto==3) && squark==true) {
+	  if(fabs(jet_pfo_pdgcheat[i])==321) h_primtrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==211) h_primtrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_primtrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	}
+	if( ihisto!=0 && ihisto!=3) {
+	  if(fabs(jet_pfo_pdgcheat[i])==321) h_primtrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==211) h_primtrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_primtrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	}
+
 	h_primtrack_phi[ihisto]->Fill(anglesmom.at(0));
 	h_primtrack_theta[ihisto]->Fill(anglesmom.at(1));
 	h_primtrack_mom[ihisto]->Fill(anglesmom.at(2));
@@ -641,14 +744,14 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
 
             
     h_PFO_njet[ihisto]->Fill(nPFO1);
-    h_PFOoverlay_njet[ihisto]->Fill(nPFOoverlay1);
-    h_PFOisr_njet[ihisto]->Fill(nPFOisr1);
+    h_PFOoverlay_njet[ihisto]->Fill(nPFO1+nPFOisr1+nPFOoverlay1);
+    h_PFOisr_njet[ihisto]->Fill(nPFO1+nPFOisr1);
     for(int i=0; i<5; i++) h_vtx_ntrack[ihisto]->Fill(ntracksec1[i]);
     h_nprimtrack[ihisto]->Fill(ntrackprim1);
 
     h_PFO_njet[ihisto]->Fill(nPFO2);
-    h_PFOoverlay_njet[ihisto]->Fill(nPFOoverlay2);
-    h_PFOisr_njet[ihisto]->Fill(nPFOisr2);
+    h_PFOoverlay_njet[ihisto]->Fill(nPFO2+nPFOisr2+nPFOoverlay2);
+    h_PFOisr_njet[ihisto]->Fill(nPFO2+nPFOisr2);
     for(int i=0; i<5; i++) h_vtx_ntrack[ihisto]->Fill(ntracksec2[i]);
     h_nprimtrack[ihisto]->Fill(ntrackprim2);
       
@@ -663,9 +766,11 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
   WriteHistosPFO();
   WriteHistosTrack();
   WriteHistosJet();
-
+  WriteHistosTrackID();
   
 }
+
+ 
 
 
 bool observable::PreSelection(int type=0,float Kvcut=25) {
