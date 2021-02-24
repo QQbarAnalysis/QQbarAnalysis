@@ -73,57 +73,57 @@ void observable::dEdx(int n_entries=-1, TString process="",bool secondary=false,
 	double nt=0;
 	if(jet_btag[ijet]>0.8) {
 	  int nkaonvtx=0;
-	  for(int ipfo=0; ipfo<jet_pfo_n; ipfo++) {
+	  for(int ipfo=0; ipfo<pfo_n; ipfo++) {
 
-	    float momentum = sqrt (pow(jet_pfo_px[ipfo],2) +pow(jet_pfo_py[ipfo],2) +pow(jet_pfo_pz[ipfo],2) );
+	    float momentum = sqrt (pow(pfo_px[ipfo],2) +pow(pfo_py[ipfo],2) +pow(pfo_pz[ipfo],2) );
 	    
-	    if(secondary==true &&  jet_pfo_vtx[ipfo]<1) continue;
-	    // if(secondary==false &&  jet_pfo_vtx[ipfo]>0) continue;
-	    if(ignoreoverlay==false && jet_pfo_isoverlay[ipfo]==1) continue;
+	    if(secondary==true &&  pfo_vtx[ipfo]<1) continue;
+	    // if(secondary==false &&  pfo_vtx[ipfo]>0) continue;
+	    if(ignoreoverlay==false && pfo_isoverlay[ipfo]==1) continue;
 
 	    float costheta;
 	    std::vector<float> p_track;
-	    p_track.push_back(jet_pfo_px[ipfo]);
-	    p_track.push_back(jet_pfo_py[ipfo]);
-	    p_track.push_back(jet_pfo_pz[ipfo]);
+	    p_track.push_back(pfo_px[ipfo]);
+	    p_track.push_back(pfo_py[ipfo]);
+	    p_track.push_back(pfo_pz[ipfo]);
 	    costheta=GetCostheta(p_track);
-	    float dedx=jet_pfo_dedx[ipfo];
+	    float dedx=pfo_dedx[ipfo];
 	    if(angular_correction==true) {
 	      dedx=dedx*pow(TMath::ACos(fabs(costheta)),0.05);
 	    }
-	    if( jet_pfo_istrack[ipfo]==1) {
+	    if( pfo_istrack[ipfo]==1) {
 	      
-	      if( fabs(jet_pfo_pdgcheat[ipfo])==321 ){
+	      if( fabs(pfo_pdgcheat[ipfo])==321 ){
 		nkaonjet++;
 		nkaonvtx++;
 		p_kaon->Fill(momentum);
 	      }
-	      if( fabs(jet_pfo_pdgcheat[ipfo])==211 ) p_pion->Fill(momentum);
-	      if( fabs(jet_pfo_pdgcheat[ipfo])==2212 ) p_proton->Fill(momentum);
-	      if( fabs(jet_pfo_pdgcheat[ipfo])==11 ) p_electron->Fill(momentum);
-	      if( fabs(jet_pfo_pdgcheat[ipfo])==13 ) p_muon->Fill(momentum);
+	      if( fabs(pfo_pdgcheat[ipfo])==211 ) p_pion->Fill(momentum);
+	      if( fabs(pfo_pdgcheat[ipfo])==2212 ) p_proton->Fill(momentum);
+	      if( fabs(pfo_pdgcheat[ipfo])==11 ) p_electron->Fill(momentum);
+	      if( fabs(pfo_pdgcheat[ipfo])==13 ) p_muon->Fill(momentum);
 	    }
 	    	    
 	    //for(int ijet=0; ijet<2; ijet++) {
 	    if(dedx>0) {
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==211) pion_dEdx_truth->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==321) kaon_dEdx_truth->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==2212) proton_dEdx_truth->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==11) electron_dEdx_truth->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==13) muon_dEdx_truth->Fill(momentum,dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==211) pion_dEdx_truth->Fill(momentum,dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==321) kaon_dEdx_truth->Fill(momentum,dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==2212) proton_dEdx_truth->Fill(momentum,dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==11) electron_dEdx_truth->Fill(momentum,dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==13) muon_dEdx_truth->Fill(momentum,dedx);
 
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==211) pion_dEdx_cos->Fill(fabs(costheta),dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==321) kaon_dEdx_cos->Fill(fabs(costheta),dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==2212) proton_dEdx_cos->Fill(fabs(costheta),dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==11) electron_dEdx_cos->Fill(fabs(costheta),dedx);
-	      if(fabs(jet_pfo_pdgcheat[ipfo])==13) muon_dEdx_cos->Fill(fabs(costheta),dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==211) pion_dEdx_cos->Fill(fabs(costheta),dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==321) kaon_dEdx_cos->Fill(fabs(costheta),dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==2212) proton_dEdx_cos->Fill(fabs(costheta),dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==11) electron_dEdx_cos->Fill(fabs(costheta),dedx);
+	      if(fabs(pfo_pdgcheat[ipfo])==13) muon_dEdx_cos->Fill(fabs(costheta),dedx);
 
 
-	      if(fabs(jet_pfo_piddedx[ipfo])==211) pion_dEdx_pid->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_piddedx[ipfo])==321) kaon_dEdx_pid->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_piddedx[ipfo])==2212) proton_dEdx_pid->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_piddedx[ipfo])==11) electron_dEdx_pid->Fill(momentum,dedx);
-	      if(fabs(jet_pfo_piddedx[ipfo])==13) muon_dEdx_pid->Fill(momentum,dedx);
+	      if(fabs(pfo_piddedx[ipfo])==211) pion_dEdx_pid->Fill(momentum,dedx);
+	      if(fabs(pfo_piddedx[ipfo])==321) kaon_dEdx_pid->Fill(momentum,dedx);
+	      if(fabs(pfo_piddedx[ipfo])==2212) proton_dEdx_pid->Fill(momentum,dedx);
+	      if(fabs(pfo_piddedx[ipfo])==11) electron_dEdx_pid->Fill(momentum,dedx);
+	      if(fabs(pfo_piddedx[ipfo])==13) muon_dEdx_pid->Fill(momentum,dedx);
 	    }
 	  }
 	  n_kaon_vtx->Fill(nkaonvtx);

@@ -110,44 +110,44 @@ public :
    Float_t         principle_thrust_axis[3];
    Float_t         sphericity;
    Float_t         sphericity_tensor[3];
-   Int_t           jet_pfo_n;
+   Int_t           pfo_n;
    Int_t           jet_nvtx;
-   Int_t           jet_pfo_n_j1;
+   Int_t           pfo_n_j1;
    Int_t           jet_nvtx_j1;
-   Int_t           jet_pfo_n_j2;
+   Int_t           pfo_n_j2;
    Int_t           jet_nvtx_j2;
-   Int_t           jet_pfo_match[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_pdgcheat[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_E[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_px[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_py[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_pz[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_m[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_type[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_isoverlay[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_isisr[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_istrack[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_vtx[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_charge[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_tpc_hits[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_dedx[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_dedxerror[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_d0[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_d0error[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_z0[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_z0error[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_phi[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_phierror[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_omega[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_omegaerror[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_tanlambda[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_tanlambdaerror[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_chi2[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_ndf[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_pid[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_pid_likelihood[999];   //[jet_pfo_n]
-   Int_t           jet_pfo_piddedx[999];   //[jet_pfo_n]
-   Float_t         jet_pfo_piddedx_likelihood[999];   //[jet_pfo_n]
+   Int_t           pfo_match[999];   //[pfo_n]
+   Int_t           pfo_pdgcheat[999];   //[pfo_n]
+   Float_t         pfo_E[999];   //[pfo_n]
+   Float_t         pfo_px[999];   //[pfo_n]
+   Float_t         pfo_py[999];   //[pfo_n]
+   Float_t         pfo_pz[999];   //[pfo_n]
+   Float_t         pfo_m[999];   //[pfo_n]
+   Int_t           pfo_type[999];   //[pfo_n]
+   Int_t           pfo_isoverlay[999];   //[pfo_n]
+   Int_t           pfo_isisr[999];   //[pfo_n]
+   Int_t           pfo_istrack[999];   //[pfo_n]
+   Int_t           pfo_vtx[999];   //[pfo_n]
+   Int_t           pfo_charge[999];   //[pfo_n]
+   Int_t           pfo_tpc_hits[999];   //[pfo_n]
+   Float_t         pfo_dedx[999];   //[pfo_n]
+   Float_t         pfo_dedxerror[999];   //[pfo_n]
+   Float_t         pfo_d0[999];   //[pfo_n]
+   Float_t         pfo_d0error[999];   //[pfo_n]
+   Float_t         pfo_z0[999];   //[pfo_n]
+   Float_t         pfo_z0error[999];   //[pfo_n]
+   Float_t         pfo_phi[999];   //[pfo_n]
+   Float_t         pfo_phierror[999];   //[pfo_n]
+   Float_t         pfo_omega[999];   //[pfo_n]
+   Float_t         pfo_omegaerror[999];   //[pfo_n]
+   Float_t         pfo_tanlambda[999];   //[pfo_n]
+   Float_t         pfo_tanlambdaerror[999];   //[pfo_n]
+   Float_t         pfo_chi2[999];   //[pfo_n]
+   Float_t         pfo_ndf[999];   //[pfo_n]
+   Int_t           pfo_pid[999];   //[pfo_n]
+   Float_t         pfo_pid_likelihood[999];   //[pfo_n]
+   Int_t           pfo_piddedx[999];   //[pfo_n]
+   Float_t         pfo_piddedx_likelihood[999];   //[pfo_n]
 
    // List of branches
    TBranch        *b_mc_quark_E;   //!
@@ -218,32 +218,32 @@ public :
    TBranch        *b_principle_thrust_axis;   //!
    TBranch        *b_sphericity;   //!
    TBranch        *b_sphericity_tensor;   //!
-   TBranch        *b_jet_pfo_n;   //!
+   TBranch        *b_pfo_n;   //!
    TBranch        *b_jet_nvtx;   //!
-   TBranch        *b_jet_pfo_n_j1;   //!
+   TBranch        *b_pfo_n_j1;   //!
    TBranch        *b_jet_nvtx_j1;   //!
-   TBranch        *b_jet_pfo_n_j2;   //!
+   TBranch        *b_pfo_n_j2;   //!
    TBranch        *b_jet_nvtx_j2;   //!
-   TBranch        *b_jet_pfo_match;   //!
-   TBranch        *b_jet_pfo_pdgcheat;   //!
-   TBranch        *b_jet_pfo_E;   //!
-   TBranch        *b_jet_pfo_px;   //!
-   TBranch        *b_jet_pfo_py;   //!
-   TBranch        *b_jet_pfo_pz;   //!
-   TBranch        *b_jet_pfo_m;   //!
-   TBranch        *b_jet_pfo_type;   //!
-   TBranch        *b_jet_pfo_isoverlay;   //!
-   TBranch        *b_jet_pfo_isisr;   //!
-   TBranch        *b_jet_pfo_istrack;   //!
-   TBranch        *b_jet_pfo_vtx;   //!
-   TBranch        *b_jet_pfo_charge;   //!
-   TBranch        *b_jet_pfo_tpc_hits;   //!
-   TBranch        *b_jet_pfo_dedx;   //!
-   TBranch        *b_jet_pfo_dedxerror;   //!
-   TBranch        *b_jet_pfo_d0;   //!
-   TBranch        *b_jet_pfo_d0error;   //!
-   TBranch        *b_jet_pfo_z0;   //!
-   TBranch        *b_jet_pfo_z0error;   //!
+   TBranch        *b_pfo_match;   //!
+   TBranch        *b_pfo_pdgcheat;   //!
+   TBranch        *b_pfo_E;   //!
+   TBranch        *b_pfo_px;   //!
+   TBranch        *b_pfo_py;   //!
+   TBranch        *b_pfo_pz;   //!
+   TBranch        *b_pfo_m;   //!
+   TBranch        *b_pfo_type;   //!
+   TBranch        *b_pfo_isoverlay;   //!
+   TBranch        *b_pfo_isisr;   //!
+   TBranch        *b_pfo_istrack;   //!
+   TBranch        *b_pfo_vtx;   //!
+   TBranch        *b_pfo_charge;   //!
+   TBranch        *b_pfo_tpc_hits;   //!
+   TBranch        *b_pfo_dedx;   //!
+   TBranch        *b_pfo_dedxerror;   //!
+   TBranch        *b_pfo_d0;   //!
+   TBranch        *b_pfo_d0error;   //!
+   TBranch        *b_pfo_z0;   //!
+   TBranch        *b_pfo_z0error;   //!
    TBranch        *b_jet_pfo_phi;   //!
    TBranch        *b_jet_pfo_phierror;   //!
    TBranch        *b_jet_pfo_omega;   //!
