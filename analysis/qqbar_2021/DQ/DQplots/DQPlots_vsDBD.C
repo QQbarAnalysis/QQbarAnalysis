@@ -25,7 +25,7 @@ void DQPlots_vsDBD() {
   names[3]="_uds_rad";
   names[4]="_c_rad";
   names[5]="_b_rad";
-  names[6]="_all";
+  names[6]="_rad";
 
   
   TString file[3];
@@ -38,7 +38,7 @@ void DQPlots_vsDBD() {
   //  file[2]="DQ_250GeV_250GeV_DBD_eL.root";
   int nfiles=2;
 
-
+  /*
   //NMC
   std::vector<TH1F *> histos_NMC;
   std::vector<TH1F *> histos_NMC_all;
@@ -52,7 +52,7 @@ void DQPlots_vsDBD() {
   } 
   Compare_2Histos("NMC", histos_NMC, histos_NMC_all,nfiles);
   
-
+  
   //Nreco
   std::vector<TH1F *> histos_Nreco;
   std::vector<TH1F *> histos_Nreco_all;
@@ -70,6 +70,8 @@ void DQPlots_vsDBD() {
     histos_Nreco_all.push_back(getHisto("reco",file[i],"PFO_njet"+names[6]));
   } 
   Compare_3Histos("Nreco", histos_Nreco, histos_Nreco_all,nfiles);
+  
+  */
   //quark
   std::vector<TH1F *> histos_quark;
   std::vector<TH1F *> histos_quark_all;
@@ -84,7 +86,7 @@ void DQPlots_vsDBD() {
     histos_quark_all.push_back(getHisto("MC",file[i],"quark_mom"+names[6]));
   } 
   Compare_3Histos("quark", histos_quark, histos_quark_all,nfiles);
-
+  
  //quark_afterps
   std::vector<TH1F *> histos_quark_afterps;
   std::vector<TH1F *> histos_quark_afterps_all;
@@ -99,8 +101,8 @@ void DQPlots_vsDBD() {
     histos_quark_afterps_all.push_back(getHisto("MC",file[i],"quark_afterps_mom"+names[6]));
   }
   Compare_3Histos("quark_afterps", histos_quark_afterps, histos_quark_afterps_all,nfiles);
-
-
+  
+  /*
   //QCDFSR
   std::vector<TH1F *> histos_QCDFSR;
   std::vector<TH1F *> histos_QCDFSR_all;
@@ -148,7 +150,7 @@ void DQPlots_vsDBD() {
   }
   Compare_3Histos("particle", histos_particle, histos_particle_all,nfiles);
 
-
+  */
   //PFO
   std::vector<TH1F *> histos_PFO;
   std::vector<TH1F *> histos_PFO_all;
@@ -164,7 +166,7 @@ void DQPlots_vsDBD() {
   }
   Compare_3Histos("PFO", histos_PFO, histos_PFO_all,nfiles);
   Compare_3HistosEventNorm("PFO",histos_PFO_all, histos_quark_all,nfiles);
-
+  
   
   //track
   std::vector<TH1F *> histos_track;

@@ -664,79 +664,79 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
     h_nvtx[ihisto]->Fill(jet_nvtx_j1);
     h_nvtx[ihisto]->Fill(jet_nvtx_j2);
     
-    for(int i=0; i<jet_pfo_n; i++) {
-      std::vector< float > anglesmom = CalculateAnglesMom(jet_pfo_px[i],jet_pfo_py[i],jet_pfo_pz[i]);
+    for(int i=0; i<pfo_n; i++) {
+      std::vector< float > anglesmom = CalculateAnglesMom(pfo_px[i],pfo_py[i],pfo_pz[i]);
       
-      if(jet_pfo_isoverlay[i]==0 && jet_pfo_isisr[i]==0){
+      if(pfo_isoverlay[i]==0 && pfo_isisr[i]==0){
 	h_PFO_phi[ihisto]->Fill(anglesmom.at(0));
 	h_PFO_theta[ihisto]->Fill(anglesmom.at(1));
 	h_PFO_mom[ihisto]->Fill(anglesmom.at(2));
-	if(jet_pfo_match[i]==0) nPFO1++;
-	if(jet_pfo_match[i]==1) nPFO2++;
+	if(pfo_match[i]==0) nPFO1++;
+	if(pfo_match[i]==1) nPFO2++;
       }
       
-      if(jet_pfo_isoverlay[i]==1) {
+      if(pfo_isoverlay[i]==1) {
 	h_PFOoverlay_phi[ihisto]->Fill(anglesmom.at(0));
 	h_PFOoverlay_theta[ihisto]->Fill(anglesmom.at(1));
 	h_PFOoverlay_mom[ihisto]->Fill(anglesmom.at(2));
-	 if(jet_pfo_match[i]==0) nPFOoverlay1++;
-	 if(jet_pfo_match[i]==1) nPFOoverlay2++;
+	 if(pfo_match[i]==0) nPFOoverlay1++;
+	 if(pfo_match[i]==1) nPFOoverlay2++;
       }
 
-      if(jet_pfo_isisr[i]==1) {
+      if(pfo_isisr[i]==1) {
 	h_PFOisr_phi[ihisto]->Fill(anglesmom.at(0));
 	h_PFOisr_theta[ihisto]->Fill(anglesmom.at(1));
 	h_PFOisr_mom[ihisto]->Fill(anglesmom.at(2));
-	if(jet_pfo_match[i]==0) nPFOisr1++;
-	if(jet_pfo_match[i]==1) nPFOisr2++;
+	if(pfo_match[i]==0) nPFOisr1++;
+	if(pfo_match[i]==1) nPFOisr2++;
       }
     
-      if(jet_pfo_istrack[i]==1 && jet_pfo_vtx[i]>0) {
+      if(pfo_istrack[i]==1 && pfo_vtx[i]>0) {
 
 	if( (ihisto==0 || ihisto==3) && squark==true) {
-	  if(fabs(jet_pfo_pdgcheat[i])==321) h_sectrack_mom_K[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==211) h_sectrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_sectrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==321) h_sectrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==211) h_sectrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==2212) h_sectrack_mom_p[ihisto]->Fill(anglesmom.at(2));
 	}
 	if( ihisto!=0 && ihisto!=3) {
-	  if(fabs(jet_pfo_pdgcheat[i])==321) h_sectrack_mom_K[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==211) h_sectrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_sectrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==321) h_sectrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==211) h_sectrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==2212) h_sectrack_mom_p[ihisto]->Fill(anglesmom.at(2));
 	}
 
 	h_sectrack_phi[ihisto]->Fill(anglesmom.at(0));
 	h_sectrack_theta[ihisto]->Fill(anglesmom.at(1));
 	h_sectrack_mom[ihisto]->Fill(anglesmom.at(2));
-	h_sectrack_d0[ihisto]->Fill(jet_pfo_d0[i]);
-	h_sectrack_z0[ihisto]->Fill(jet_pfo_z0[i]);
-	h_sectrack_d0error[ihisto]->Fill(jet_pfo_d0error[i]);
-	h_sectrack_z0error[ihisto]->Fill(jet_pfo_z0error[i]);
-	if(jet_pfo_match[i]==0) ntracksec1[jet_pfo_vtx[i]]++;
-	if(jet_pfo_match[i]==1) ntracksec2[jet_pfo_vtx[i]]++;
+	h_sectrack_d0[ihisto]->Fill(pfo_d0[i]);
+	h_sectrack_z0[ihisto]->Fill(pfo_z0[i]);
+	h_sectrack_d0error[ihisto]->Fill(pfo_d0error[i]);
+	h_sectrack_z0error[ihisto]->Fill(pfo_z0error[i]);
+	if(pfo_match[i]==0) ntracksec1[pfo_vtx[i]]++;
+	if(pfo_match[i]==1) ntracksec2[pfo_vtx[i]]++;
       }
 
-      if(jet_pfo_istrack[i]==1 && jet_pfo_vtx[i]==0) {
+      if(pfo_istrack[i]==1 && pfo_vtx[i]==0) {
 
 	if( (ihisto==0 || ihisto==3) && squark==true) {
-	  if(fabs(jet_pfo_pdgcheat[i])==321) h_primtrack_mom_K[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==211) h_primtrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_primtrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==321) h_primtrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==211) h_primtrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==2212) h_primtrack_mom_p[ihisto]->Fill(anglesmom.at(2));
 	}
 	if( ihisto!=0 && ihisto!=3) {
-	  if(fabs(jet_pfo_pdgcheat[i])==321) h_primtrack_mom_K[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==211) h_primtrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
-	  if(fabs(jet_pfo_pdgcheat[i])==2212) h_primtrack_mom_p[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==321) h_primtrack_mom_K[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==211) h_primtrack_mom_Pi[ihisto]->Fill(anglesmom.at(2));
+	  if(fabs(pfo_pdgcheat[i])==2212) h_primtrack_mom_p[ihisto]->Fill(anglesmom.at(2));
 	}
 
 	h_primtrack_phi[ihisto]->Fill(anglesmom.at(0));
 	h_primtrack_theta[ihisto]->Fill(anglesmom.at(1));
 	h_primtrack_mom[ihisto]->Fill(anglesmom.at(2));
-	h_primtrack_d0[ihisto]->Fill(jet_pfo_d0[i]);
-	h_primtrack_z0[ihisto]->Fill(jet_pfo_z0[i]);
-	h_primtrack_d0error[ihisto]->Fill(jet_pfo_d0error[i]);
-	h_primtrack_z0error[ihisto]->Fill(jet_pfo_z0error[i]);
-	if(jet_pfo_match[i]==0) ntrackprim1++;
-	if(jet_pfo_match[i]==1) ntrackprim2++;
+	h_primtrack_d0[ihisto]->Fill(pfo_d0[i]);
+	h_primtrack_z0[ihisto]->Fill(pfo_z0[i]);
+	h_primtrack_d0error[ihisto]->Fill(pfo_d0error[i]);
+	h_primtrack_z0error[ihisto]->Fill(pfo_z0error[i]);
+	if(pfo_match[i]==0) ntrackprim1++;
+	if(pfo_match[i]==1) ntrackprim2++;
       }
 
       
