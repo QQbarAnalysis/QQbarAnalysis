@@ -133,21 +133,25 @@ void Compare_3Histos(TString name, std::vector<TH1F *> histos1, std::vector<TH1F
   }
 
 
-  TCanvas * canvas2 = new TCanvas(name+"_all",name+"_all",1200,600);
+  TCanvas * canvas2 = new TCanvas(name+"_all",name+"_all",1800,600);
   canvas2->Divide(3,1);
-  for(int i=0; i<nfiles; i++) {
-    for(int kl=0; kl<3; kl++) {
+  for(int kl=0; kl<3; kl++) {
+    for(int i=0; i<nfiles; i++) {
       canvas2->cd(kl+1);
       gPad->SetLogy();
       histos2.at(kl+i*3)->SetLineColor(i+1);
+      if(i==0) {
+	if(kl==0) histos2.at(kl+i*3)->GetXaxis()->SetTitle("Phi [rad]");
+	if(kl==1) histos2.at(kl+i*3)->GetXaxis()->SetTitle("#theta [rad]");
+	if(kl==2) histos2.at(kl+i*3)->GetXaxis()->SetTitle("momentum [GeV]");
+      }
       if(i==2) histos2.at(kl+i*3)->SetLineColor(4);
       histos2.at(kl+i*3)->SetLineWidth(2);
       histos2.at(kl+i*3)-> GetYaxis()->SetRangeUser(100,histos2.at(kl+i*3)->GetMaximum()*1.2);
       if(normalized==true) histos2.at(kl+i*3)-> DrawNormalized("same");
       else histos2.at(kl+i*3)-> Draw("same");
-      Labels(6);
-      
     }
+    Labels(6);
   }
  
 

@@ -54,7 +54,7 @@ void DQPlots_trackmom() {
   histos_udssec.push_back(getHisto("reco",file,"sectrack_mom_K_uds"));
   histos_udssec.push_back(getHisto("reco",file,"sectrack_mom_p_uds"));
 
-  Compare_3Histos("uds-secondary tracks",histos_udssec,false,leg,"momentum [GeV]","entries");
+  Compare_3Histos("s-secondary tracks",histos_udssec,false,leg,"momentum [GeV]","entries");
 
   //uds-primar
   std::vector<TH1F *> histos_udsprim;
@@ -62,7 +62,7 @@ void DQPlots_trackmom() {
   histos_udsprim.push_back(getHisto("reco",file,"primtrack_mom_K_uds"));
   histos_udsprim.push_back(getHisto("reco",file,"primtrack_mom_p_uds"));
 
-  Compare_3Histos("uds-primary tracks",histos_udsprim,false,leg,"momentum [GeV]","entries");
+  Compare_3Histos("s-primary tracks",histos_udsprim,false,leg,"momentum [GeV]","entries");
   
   
 }
