@@ -92,46 +92,46 @@ namespace QQbarProcessor
     _hTree->Branch("sphericity_tensor", data._sphericity_tensor, "sphericity_tensor[3]/F");
 
   // pfo inside the jets
-    _hTree->Branch("jet_pfo_n", &data._pfo_n, "jet_pfo_n/I");
+    _hTree->Branch("pfo_n", &data._pfo_n, "pfo_n/I");
     _hTree->Branch("jet_nvtx", &data._nvtx, "jet_nvtx/I");
-    _hTree->Branch("jet_pfo_n_j1", &data._pfo_n_j1, "jet_pfo_n_j1/I");
+    _hTree->Branch("pfo_n_j1", &data._pfo_n_j1, "pfo_n_j1/I");
     _hTree->Branch("jet_nvtx_j1", &data._nvtx_j1, "jet_nvtx_j1/I");
-    _hTree->Branch("jet_pfo_n_j2", &data._pfo_n_j2, "jet_pfo_n_j2/I");
+    _hTree->Branch("pfo_n_j2", &data._pfo_n_j2, "pfo_n_j2/I");
     _hTree->Branch("jet_nvtx_j2", &data._nvtx_j2, "jet_nvtx_j2/I");
 
-    _hTree->Branch("jet_pfo_match", data._pfo_jet_match, "jet_pfo_match[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_pdgcheat", data._pfo_pdgcheat, "jet_pfo_pdgcheat[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_E", data._pfo_E, "jet_pfo_E[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_px", data._pfo_px, "jet_pfo_px[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_py", data._pfo_py, "jet_pfo_py[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_pz", data._pfo_pz, "jet_pfo_pz[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_m", data._pfo_m, "jet_pfo_m[jet_pfo_n]/F"); 
-    _hTree->Branch("jet_pfo_type", data._pfo_type, "jet_pfo_type[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_isoverlay", data._pfo_isoverlay, "jet_pfo_isoverlay[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_isisr", data._pfo_isisr, "jet_pfo_isisr[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_istrack", data._pfo_istrack, "jet_pfo_istrack[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_vtx", data._pfo_vtx, "jet_pfo_vtx[jet_pfo_n]/I");     
-    _hTree->Branch("jet_pfo_charge", data._pfo_charge, "jet_pfo_charge[jet_pfo_n]/I");
+    _hTree->Branch("pfo_match", data._pfo_jet_match, "pfo_match[pfo_n]/I");
+    _hTree->Branch("pfo_pdgcheat", data._pfo_pdgcheat, "pfo_pdgcheat[pfo_n]/I");
+    _hTree->Branch("pfo_E", data._pfo_E, "pfo_E[pfo_n]/F");
+    _hTree->Branch("pfo_px", data._pfo_px, "pfo_px[pfo_n]/F");
+    _hTree->Branch("pfo_py", data._pfo_py, "pfo_py[pfo_n]/F");
+    _hTree->Branch("pfo_pz", data._pfo_pz, "pfo_pz[pfo_n]/F");
+    _hTree->Branch("pfo_m", data._pfo_m, "pfo_m[pfo_n]/F"); 
+    _hTree->Branch("pfo_type", data._pfo_type, "pfo_type[pfo_n]/I");
+    _hTree->Branch("pfo_isoverlay", data._pfo_isoverlay, "pfo_isoverlay[pfo_n]/I");
+    _hTree->Branch("pfo_isisr", data._pfo_isisr, "pfo_isisr[pfo_n]/I");
+    _hTree->Branch("pfo_istrack", data._pfo_istrack, "pfo_istrack[pfo_n]/I");
+    _hTree->Branch("pfo_vtx", data._pfo_vtx, "pfo_vtx[pfo_n]/I");     
+    _hTree->Branch("pfo_charge", data._pfo_charge, "pfo_charge[pfo_n]/I");
 
-    _hTree->Branch("jet_pfo_tpc_hits", data._pfo_tpc_hits, "jet_pfo_tpc_hits[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_dedx", data._pfo_dedx, "jet_pfo_dedx[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_dedxerror", data._pfo_dedxerror, "jet_pfo_dedxerror[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_d0", data._pfo_d0, "jet_pfo_d0[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_d0error", data._pfo_d0error, "jet_pfo_d0error[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_z0", data._pfo_z0, "jet_pfo_z0[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_z0error", data._pfo_z0error, "jet_pfo_z0error[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_phi", data._pfo_phi, "jet_pfo_phi[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_phierror", data._pfo_phierror, "jet_pfo_phierror[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_omega", data._pfo_omega, "jet_pfo_omega[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_omegaerror", data._pfo_omegaerror, "jet_pfo_omegaerror[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_tanlambda", data._pfo_tanlambda, "jet_pfo_tanlambda[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_tanlambdaerror", data._pfo_tanlambdaerror, "jet_pfo_tanlambdaerror[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_chi2", data._pfo_chi2, "jet_pfo_chi2[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_ndf", data._pfo_ndf, "jet_pfo_ndf[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_pid", data._pfo_pid, "jet_pfo_pid[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_pid_likelihood", data._pfo_pid_likelihood, "jet_pfo_pid_likelihood[jet_pfo_n]/F");
-    _hTree->Branch("jet_pfo_piddedx", data._pfo_piddedx, "jet_pfo_piddedx[jet_pfo_n]/I");
-    _hTree->Branch("jet_pfo_piddedx_likelihood", data._pfo_piddedx_likelihood, "jet_pfo_piddedx_likelihood[jet_pfo_n]/F");
+    _hTree->Branch("pfo_tpc_hits", data._pfo_tpc_hits, "pfo_tpc_hits[pfo_n]/I");
+    _hTree->Branch("pfo_dedx", data._pfo_dedx, "pfo_dedx[pfo_n]/F");
+    _hTree->Branch("pfo_dedxerror", data._pfo_dedxerror, "pfo_dedxerror[pfo_n]/F");
+    _hTree->Branch("pfo_d0", data._pfo_d0, "pfo_d0[pfo_n]/F");
+    _hTree->Branch("pfo_d0error", data._pfo_d0error, "pfo_d0error[pfo_n]/F");
+    _hTree->Branch("pfo_z0", data._pfo_z0, "pfo_z0[pfo_n]/F");
+    _hTree->Branch("pfo_z0error", data._pfo_z0error, "pfo_z0error[pfo_n]/F");
+    _hTree->Branch("pfo_phi", data._pfo_phi, "pfo_phi[pfo_n]/F");
+    _hTree->Branch("pfo_phierror", data._pfo_phierror, "pfo_phierror[pfo_n]/F");
+    _hTree->Branch("pfo_omega", data._pfo_omega, "pfo_omega[pfo_n]/F");
+    _hTree->Branch("pfo_omegaerror", data._pfo_omegaerror, "pfo_omegaerror[pfo_n]/F");
+    _hTree->Branch("pfo_tanlambda", data._pfo_tanlambda, "pfo_tanlambda[pfo_n]/F");
+    _hTree->Branch("pfo_tanlambdaerror", data._pfo_tanlambdaerror, "pfo_tanlambdaerror[pfo_n]/F");
+    _hTree->Branch("pfo_chi2", data._pfo_chi2, "pfo_chi2[pfo_n]/F");
+    _hTree->Branch("pfo_ndf", data._pfo_ndf, "pfo_ndf[pfo_n]/F");
+    _hTree->Branch("pfo_pid", data._pfo_pid, "pfo_pid[pfo_n]/I");
+    _hTree->Branch("pfo_pid_likelihood", data._pfo_pid_likelihood, "pfo_pid_likelihood[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx", data._pfo_piddedx, "pfo_piddedx[pfo_n]/I");
+    _hTree->Branch("pfo_piddedx_likelihood", data._pfo_piddedx_likelihood, "pfo_piddedx_likelihood[pfo_n]/F");
 
 
 
