@@ -27,9 +27,9 @@
 
 void Labels(){
 
-  QQBARLabel(0.86,0.952,"");
+  QQBARLabel(0.1,0.952,"Work In Progress");
   //  QQBARLabel2(0.3,0.97, "e^{-}e^{+} #rightarrow q#bar{q}, q=udscb, 250 GeV, 250fb^{-1}",kGray+2);
-  QQBARLabel2(0.2,0.965, "e^{-}e^{+} #rightarrow b#bar{b} (K_{#gamma}<35 GeV)",kGray+2);
+  QQBARLabel2(0.6,0.965, "e^{-}e^{+} #rightarrow b#bar{b} (K_{#gamma}<35 GeV)",kGray+2);
 
   /* if(i==0) QQBARLabel2(0.04,0.07, "[No Cuts]",kOrange+3);
   if(i==1) QQBARLabel2(0.04,0.07, "Photon veto",kOrange+3);
@@ -70,7 +70,7 @@ void dEdxplots() {
   gStyle->SetPadLeftMargin(0.2);
 
  
-  TString filename = "../output_250_all_250GeV_mc2020-15162_eL_lcfi_VVB1.17_2021.root";//output_250_all_250GeV_mc2020-15162_eL_lcfi_VVB1.17_norestorer.root";//"../output_250_all_250GeV_DBD_eL_norestorer.root";
+  TString filename = "../output_250_secondaries_250GeV_mc2020-15162_eL_lcfi_VVB1.17_2021.root";//output_250_all_250GeV_mc2020-15162_eL_lcfi_VVB1.17_norestorer.root";//"../output_250_all_250GeV_DBD_eL_norestorer.root";
 //output_250_all_250GeV_mc2020-15162_eL_lcfi_VVB1.17_norestorer.root";
 //output_250_all_250GeV_DBD_eL_norestorer.root";
   //output_250_all_250GeV_mc2020-15162_eL_lcfi_VVB1.17_norestorer.root";//output_250_all_250GeV_mc2020-15161_eL_lcfi_VVB1.17_norestorer.root";//output_250_all_250GeV_DBD_eL_norestorer.root";
@@ -111,8 +111,8 @@ void dEdxplots() {
 
     x[i]=xpi[i];
     ex[i]=expi[i]/2.;
-    y1[i]=2*fabs(ypi[i]-yk[i])/sqrt(pow(sypi[i],2)+pow(syk[i],2));
-    y2[i]=2*fabs(ypr[i]-yk[i])/sqrt(pow(sypr[i],2)+pow(syk[i],2));
+    y1[i]=fabs(ypi[i]-yk[i])*sqrt(2)/sqrt(pow(sypi[i],2)+pow(syk[i],2));
+    y2[i]=fabs(ypr[i]-yk[i])*sqrt(2)/sqrt(pow(sypr[i],2)+pow(syk[i],2));
     ey1[i]=sqrt(pow(eyk[i],2))/sqrt(pow(sypi[i],2)+pow(syk[i],2));
     ey2[i]=sqrt(pow(eyk[i],2))/sqrt(pow(sypi[i],2)+pow(syk[i],2));
     n++;
@@ -173,7 +173,7 @@ void dEdxplots() {
   electron_dEdx_truth->SetFillColor(1);
   electron_dEdx_truth->SetFillStyle(1001);
   electron_dEdx_truth->SetContour(5);
-  electron_dEdx_truth->Draw("psame");
+  //electron_dEdx_truth->Draw("psame");
 
   muon_dEdx_truth->SetMarkerColor(kGray);
   muon_dEdx_truth->SetMarkerStyle(1);
@@ -184,9 +184,9 @@ void dEdxplots() {
   //muon_dEdx_truth->Draw("psame");
   
   f1->SetLineColor(kOrange);
-  f1->Draw("lsame");
+  //f1->Draw("lsame");
   f2->SetLineColor(kOrange);
-  f2->Draw("lsame");
+  // f2->Draw("lsame");
 
   Labels();
   
@@ -196,7 +196,7 @@ void dEdxplots() {
   leg0->AddEntry(pion_dEdx_truth,"Charged Pions","f");
   leg0->AddEntry(proton_dEdx_truth,"Protons","f");
   //leg0->AddEntry(muon_dEdx_truth,"Muons","f");
-  leg0->AddEntry(electron_dEdx_truth,"Electrons","f");
+  // leg0->AddEntry(electron_dEdx_truth,"Electrons","f");
   leg0->SetFillColor(0);
   leg0->SetLineColor(0);
   leg0->SetShadowColor(0);
@@ -206,7 +206,7 @@ void dEdxplots() {
   leg1->SetTextSize(0.03);
   leg1->SetTextFont(42);
   leg1->AddEntry(kaon_dEdx_truth,"Charged Kaons","f");
-  leg1->AddEntry(f1,"Kaon Selection","l");
+  //leg1->AddEntry(f1,"Kaon Selection","l");
   leg1->SetFillColor(0);
   leg1->SetLineColor(0);
   leg1->SetShadowColor(0);
