@@ -422,6 +422,7 @@ void observable::dEdx(int n_entries=-1, TString process="",bool secondary=false,
   kaon_dEdx_cos->Write();
   proton_dEdx_cos->Write();
   electron_dEdx_cos->Write();
+  muon_dEdx_cos->Write();
   
   pion_dEdx_pid->SetName("pid_pion");
   kaon_dEdx_pid->SetName("pid_kaon");
