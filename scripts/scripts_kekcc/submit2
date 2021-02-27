@@ -1,0 +1,39 @@
+#!/bin/sh
+
+data_input=$1
+id=$2
+nfirst=$3
+nlast=$4
+nrun=$5
+inputxml=$6
+model=$7
+chiral=$8
+
+flist=list/${id}_${model}.list
+if [ ! -f ${flist} ] ; then
+    `find ${data_input} -name *${id}*.slcio | sort > ${flist}`
+fi
+
+nf=`more ${flist} | wc -l`
+echo "number of files for process ${id}: " ${nf}
+
+if [ ${nlast} -le 0 ] || [ ${nlast} -ge ${nf} ] ; then
+    nlast=${nf}
+fi
+
+njobs=$[($nlast-$nfirst)/$nrun+1]
+seqlist=`seq 1 $njobs`
+for seq in $seqlist; do
+    nrun0=$[$nfirst+$nrun*($seq-1)]
+    nrun1tmp=$[$nrun0+$nrun-1]
+    if [ $nrun1tmp -le $nlast ] ; then
+	nrun1=$nrun1tmp
+    else
+	nrun1=$nlast
+    fi
+    echo ${id} $nrun0 $nrun1 $nrun $njobs
+    log=./sublog/${id}"_"`printf %03d $seq`.log
+    bsub -q s -J "ana"`printf %03d $seq` -o $log "./runMarlin2 ${flist} $nrun0 $nrun1 $inputxml $model $chiral $id"
+#    ./runMarlin2 ${flist} $nrun0 $nrun1 $inputxml
+#    sleep 5
+done
