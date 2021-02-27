@@ -126,8 +126,8 @@ void observable::dEdx(int n_entries=-1, TString process="",bool secondary=false,
 	      }
 	    }
 	  }
+	  n_kaon_vtx->Fill(nkaonvtx);
 	}//btag
-	n_kaon_vtx->Fill(nkaonvtx);
       }//ijet
     }//bb
   }//for
