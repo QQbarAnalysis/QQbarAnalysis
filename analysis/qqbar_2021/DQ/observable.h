@@ -244,18 +244,18 @@ public :
    TBranch        *b_pfo_d0error;   //!
    TBranch        *b_pfo_z0;   //!
    TBranch        *b_pfo_z0error;   //!
-   TBranch        *b_jet_pfo_phi;   //!
-   TBranch        *b_jet_pfo_phierror;   //!
-   TBranch        *b_jet_pfo_omega;   //!
-   TBranch        *b_jet_pfo_omegaerror;   //!
-   TBranch        *b_jet_pfo_tanlambda;   //!
-   TBranch        *b_jet_pfo_tanlambdaerror;   //!
-   TBranch        *b_jet_pfo_chi2;   //!
-   TBranch        *b_jet_pfo_ndf;   //!
-   TBranch        *b_jet_pfo_pid;   //!
-   TBranch        *b_jet_pfo_pid_likelihood;   //!
-   TBranch        *b_jet_pfo_piddedx;   //!
-   TBranch        *b_jet_pfo_piddedx_likelihood;   //!
+   TBranch        *b_pfo_phi;   //!
+   TBranch        *b_pfo_phierror;   //!
+   TBranch        *b_pfo_omega;   //!
+   TBranch        *b_pfo_omegaerror;   //!
+   TBranch        *b_pfo_tanlambda;   //!
+   TBranch        *b_pfo_tanlambdaerror;   //!
+   TBranch        *b_pfo_chi2;   //!
+   TBranch        *b_pfo_ndf;   //!
+   TBranch        *b_pfo_pid;   //!
+   TBranch        *b_pfo_pid_likelihood;   //!
+   TBranch        *b_pfo_piddedx;   //!
+   TBranch        *b_pfo_piddedx_likelihood;   //!
     
   observable(TString tree_s);
   observable(TList *f=0);
@@ -597,44 +597,44 @@ void observable::Init(TTree *tree)
    fChain->SetBranchAddress("principle_thrust_axis", principle_thrust_axis, &b_principle_thrust_axis);
    fChain->SetBranchAddress("sphericity", &sphericity, &b_sphericity);
    fChain->SetBranchAddress("sphericity_tensor", sphericity_tensor, &b_sphericity_tensor);
-   fChain->SetBranchAddress("jet_pfo_n", &jet_pfo_n, &b_jet_pfo_n);
+   fChain->SetBranchAddress("pfo_n", &pfo_n, &b_pfo_n);
    fChain->SetBranchAddress("jet_nvtx", &jet_nvtx, &b_jet_nvtx);
-   fChain->SetBranchAddress("jet_pfo_n_j1", &jet_pfo_n_j1, &b_jet_pfo_n_j1);
+   fChain->SetBranchAddress("pfo_n_j1", &pfo_n_j1, &b_pfo_n_j1);
    fChain->SetBranchAddress("jet_nvtx_j1", &jet_nvtx_j1, &b_jet_nvtx_j1);
-   fChain->SetBranchAddress("jet_pfo_n_j2", &jet_pfo_n_j2, &b_jet_pfo_n_j2);
+   fChain->SetBranchAddress("pfo_n_j2", &pfo_n_j2, &b_pfo_n_j2);
    fChain->SetBranchAddress("jet_nvtx_j2", &jet_nvtx_j2, &b_jet_nvtx_j2);
-   fChain->SetBranchAddress("jet_pfo_match", jet_pfo_match, &b_jet_pfo_match);
-   fChain->SetBranchAddress("jet_pfo_pdgcheat", jet_pfo_pdgcheat, &b_jet_pfo_pdgcheat);
-   fChain->SetBranchAddress("jet_pfo_E", jet_pfo_E, &b_jet_pfo_E);
-   fChain->SetBranchAddress("jet_pfo_px", jet_pfo_px, &b_jet_pfo_px);
-   fChain->SetBranchAddress("jet_pfo_py", jet_pfo_py, &b_jet_pfo_py);
-   fChain->SetBranchAddress("jet_pfo_pz", jet_pfo_pz, &b_jet_pfo_pz);
-   fChain->SetBranchAddress("jet_pfo_m", jet_pfo_m, &b_jet_pfo_m);
-   fChain->SetBranchAddress("jet_pfo_type", jet_pfo_type, &b_jet_pfo_type);
-   fChain->SetBranchAddress("jet_pfo_isoverlay", jet_pfo_isoverlay, &b_jet_pfo_isoverlay);
-   fChain->SetBranchAddress("jet_pfo_isisr", jet_pfo_isisr, &b_jet_pfo_isisr);
-   fChain->SetBranchAddress("jet_pfo_istrack", jet_pfo_istrack, &b_jet_pfo_istrack);
-   fChain->SetBranchAddress("jet_pfo_vtx", jet_pfo_vtx, &b_jet_pfo_vtx);
-   fChain->SetBranchAddress("jet_pfo_charge", jet_pfo_charge, &b_jet_pfo_charge);
-   fChain->SetBranchAddress("jet_pfo_tpc_hits", jet_pfo_tpc_hits, &b_jet_pfo_tpc_hits);
-   fChain->SetBranchAddress("jet_pfo_dedx", jet_pfo_dedx, &b_jet_pfo_dedx);
-   fChain->SetBranchAddress("jet_pfo_dedxerror", jet_pfo_dedxerror, &b_jet_pfo_dedxerror);
-   fChain->SetBranchAddress("jet_pfo_d0", jet_pfo_d0, &b_jet_pfo_d0);
-   fChain->SetBranchAddress("jet_pfo_d0error", jet_pfo_d0error, &b_jet_pfo_d0error);
-   fChain->SetBranchAddress("jet_pfo_z0", jet_pfo_z0, &b_jet_pfo_z0);
-   fChain->SetBranchAddress("jet_pfo_z0error", jet_pfo_z0error, &b_jet_pfo_z0error);
-   fChain->SetBranchAddress("jet_pfo_phi", jet_pfo_phi, &b_jet_pfo_phi);
-   fChain->SetBranchAddress("jet_pfo_phierror", jet_pfo_phierror, &b_jet_pfo_phierror);
-   fChain->SetBranchAddress("jet_pfo_omega", jet_pfo_omega, &b_jet_pfo_omega);
-   fChain->SetBranchAddress("jet_pfo_omegaerror", jet_pfo_omegaerror, &b_jet_pfo_omegaerror);
-   fChain->SetBranchAddress("jet_pfo_tanlambda", jet_pfo_tanlambda, &b_jet_pfo_tanlambda);
-   fChain->SetBranchAddress("jet_pfo_tanlambdaerror", jet_pfo_tanlambdaerror, &b_jet_pfo_tanlambdaerror);
-   fChain->SetBranchAddress("jet_pfo_chi2", jet_pfo_chi2, &b_jet_pfo_chi2);
-   fChain->SetBranchAddress("jet_pfo_ndf", jet_pfo_ndf, &b_jet_pfo_ndf);
-   fChain->SetBranchAddress("jet_pfo_pid", jet_pfo_pid, &b_jet_pfo_pid);
-   fChain->SetBranchAddress("jet_pfo_pid_likelihood", jet_pfo_pid_likelihood, &b_jet_pfo_pid_likelihood);
-   fChain->SetBranchAddress("jet_pfo_piddedx", jet_pfo_piddedx, &b_jet_pfo_piddedx);
-   fChain->SetBranchAddress("jet_pfo_piddedx_likelihood", jet_pfo_piddedx_likelihood, &b_jet_pfo_piddedx_likelihood);
+   fChain->SetBranchAddress("pfo_match", pfo_match, &b_pfo_match);
+   fChain->SetBranchAddress("pfo_pdgcheat", pfo_pdgcheat, &b_pfo_pdgcheat);
+   fChain->SetBranchAddress("pfo_E", pfo_E, &b_pfo_E);
+   fChain->SetBranchAddress("pfo_px", pfo_px, &b_pfo_px);
+   fChain->SetBranchAddress("pfo_py", pfo_py, &b_pfo_py);
+   fChain->SetBranchAddress("pfo_pz", pfo_pz, &b_pfo_pz);
+   fChain->SetBranchAddress("pfo_m", pfo_m, &b_pfo_m);
+   fChain->SetBranchAddress("pfo_type", pfo_type, &b_pfo_type);
+   fChain->SetBranchAddress("pfo_isoverlay", pfo_isoverlay, &b_pfo_isoverlay);
+   fChain->SetBranchAddress("pfo_isisr", pfo_isisr, &b_pfo_isisr);
+   fChain->SetBranchAddress("pfo_istrack", pfo_istrack, &b_pfo_istrack);
+   fChain->SetBranchAddress("pfo_vtx", pfo_vtx, &b_pfo_vtx);
+   fChain->SetBranchAddress("pfo_charge", pfo_charge, &b_pfo_charge);
+   fChain->SetBranchAddress("pfo_tpc_hits", pfo_tpc_hits, &b_pfo_tpc_hits);
+   fChain->SetBranchAddress("pfo_dedx", pfo_dedx, &b_pfo_dedx);
+   fChain->SetBranchAddress("pfo_dedxerror", pfo_dedxerror, &b_pfo_dedxerror);
+   fChain->SetBranchAddress("pfo_d0", pfo_d0, &b_pfo_d0);
+   fChain->SetBranchAddress("pfo_d0error", pfo_d0error, &b_pfo_d0error);
+   fChain->SetBranchAddress("pfo_z0", pfo_z0, &b_pfo_z0);
+   fChain->SetBranchAddress("pfo_z0error", pfo_z0error, &b_pfo_z0error);
+   fChain->SetBranchAddress("pfo_phi", pfo_phi, &b_pfo_phi);
+   fChain->SetBranchAddress("pfo_phierror", pfo_phierror, &b_pfo_phierror);
+   fChain->SetBranchAddress("pfo_omega", pfo_omega, &b_pfo_omega);
+   fChain->SetBranchAddress("pfo_omegaerror", pfo_omegaerror, &b_pfo_omegaerror);
+   fChain->SetBranchAddress("pfo_tanlambda", pfo_tanlambda, &b_pfo_tanlambda);
+   fChain->SetBranchAddress("pfo_tanlambdaerror", pfo_tanlambdaerror, &b_pfo_tanlambdaerror);
+   fChain->SetBranchAddress("pfo_chi2", pfo_chi2, &b_pfo_chi2);
+   fChain->SetBranchAddress("pfo_ndf", pfo_ndf, &b_pfo_ndf);
+   fChain->SetBranchAddress("pfo_pid", pfo_pid, &b_pfo_pid);
+   fChain->SetBranchAddress("pfo_pid_likelihood", pfo_pid_likelihood, &b_pfo_pid_likelihood);
+   fChain->SetBranchAddress("pfo_piddedx", pfo_piddedx, &b_pfo_piddedx);
+   fChain->SetBranchAddress("pfo_piddedx_likelihood", pfo_piddedx_likelihood, &b_pfo_piddedx_likelihood);
 
   Notify();
    

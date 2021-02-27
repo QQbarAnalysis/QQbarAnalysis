@@ -1,0 +1,45 @@
+#!/bin/bash -x
+
+#run_preset
+
+flist=$1
+start=$2
+end=$3
+inputxml=$4
+model=$5
+chiral=$6
+id=$7
+
+#outputDir=/hsm/ilc/users/yokugawa/preset_N_run/${model}/semiLep/${chiral}/${isolep}
+# outputDir=/group/ilc/users/yokugawa/QQbar250/${model}/${chiral}/${id}/000
+outputDir=/group/ilc/users/yokugawa/QQbar250/${model}/${chiral}/${id}/proc_2021
+
+logDir=./log
+
+tmpxmlDir=./tmpxml
+xmlDir=./myxml
+
+for count in $(seq $start $end)
+  do
+  input=`head -${count} ${flist} | tail -1`
+  echo ${input}
+  filename=`basename ${input}`
+  filename="${filename%.*}"
+  echo ${filename}
+  tmpxml=${tmpxmlDir}/${filename}.xml
+  lastxml=${xmlDir}/${filename}.xml
+  
+  log=${logDir}/${filename}.log
+  
+  rootout1=${outputDir}/vertex_restorer_out/${filename}_VR.root
+  rootout2=${outputDir}/QQbarProcessor_out/${filename}.root
+  slcioout=/hsm/ilc/users/yokugawa/QQbar250/${model}/${chiral}/${id}/000/${filename}.slcio
+
+	sed -e "/<!-- INPUT.slcio -->/i $input" $inputxml | sed -e "/<!-- OUTPUT1.root -->/i $rootout1" | sed -e "/<!-- OUTPUT2.root -->/i $rootout2" | sed -e "/<!-- OUTPUT.slcio -->/i $slcioout" > $lastxml
+
+  ${MARLIN}/bin/Marlin $lastxml > $log 2>&1
+  
+  echo "$count event finished"
+  
+done
+
