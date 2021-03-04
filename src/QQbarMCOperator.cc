@@ -71,11 +71,24 @@ namespace QQbarProcessor
 
     }
     for(int i=isrphotons[pairISR.size()-1]+1; i<number; i++) {
+
+
       MCParticle* particle = dynamic_cast<MCParticle*>(myCollection->getElementAt(i));
       vector<MCParticle*> daughters = particle->getDaughters();
      
+      streamlog_out(DEBUG)<<"\n MCCollection, particle:"<<i;
+      streamlog_out(DEBUG)<<" pdg="<<particle->getPDG();
+      streamlog_out(DEBUG)<<" satus="<<particle->getGeneratorStatus();
+      streamlog_out(DEBUG)<<" Ndaughters="<<daughters.size();
+      streamlog_out(DEBUG)<<" E="<<particle->getEnergy();
+      streamlog_out(DEBUG)<<" px="<<particle->getMomentum()[0];
+      streamlog_out(DEBUG)<<" py="<<particle->getMomentum()[1];
+      streamlog_out(DEBUG)<<" pz="<<particle->getMomentum()[2];
+      streamlog_out(DEBUG)<<" m="<<particle->getMass();
+      streamlog_out(DEBUG)<<" charge="<<particle->getCharge();
       if(daughters.size()==0 && particle->isOverlay()==true) {
         overlay_stables.push_back(particle);
+	streamlog_out(DEBUG)<<" ----> IS OVERLAY";
       }
       
       if(daughters.size()==0 && particle->isOverlay()==false) {
@@ -103,8 +116,15 @@ namespace QQbarProcessor
 	  }
 	}
 	
-	if(ISRstable==0) stable_stables.push_back(particle);
-	if(ISRstable==1) isr_stables.push_back(particle);
+	if(ISRstable==0) {
+	  stable_stables.push_back(particle);
+	  streamlog_out(DEBUG)<<" ----> IS STABLE";
+	}
+
+	if(ISRstable==1) {
+	  isr_stables.push_back(particle);
+	  streamlog_out(DEBUG)<<" ----> IS ISR";
+	}
       }
     }
 

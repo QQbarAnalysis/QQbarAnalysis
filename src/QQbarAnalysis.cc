@@ -175,16 +175,16 @@ namespace QQbarProcessor
     for(int i=0; i<nstables; i++) {
       if(qqbar_stable.at(i)!=NULL) {
         //They are filled at line:587
+	_stats._mc_stable_E[_stats._mc_stable_n]=qqbar_stable.at(i)->getEnergy();
+	_stats._mc_stable_px[_stats._mc_stable_n]=qqbar_stable.at(i)->getMomentum()[0];
+	_stats._mc_stable_py[_stats._mc_stable_n]=qqbar_stable.at(i)->getMomentum()[1];
+	_stats._mc_stable_pz[_stats._mc_stable_n]=qqbar_stable.at(i)->getMomentum()[2];
+	_stats._mc_stable_pdg[_stats._mc_stable_n]=qqbar_stable.at(i)->getPDG();
+	_stats._mc_stable_charge[_stats._mc_stable_n]=qqbar_stable.at(i)->getCharge();
+	_stats._mc_stable_m[_stats._mc_stable_n]=qqbar_stable.at(i)->getMass();
+        _stats._mc_stable_isisr[_stats._mc_stable_n]=0;
+        _stats._mc_stable_isoverlay[_stats._mc_stable_n]=0;	
 	_stats._mc_stable_n++;
-	_stats._mc_stable_E[i]=qqbar_stable.at(i)->getEnergy();
-	_stats._mc_stable_px[i]=qqbar_stable.at(i)->getMomentum()[0];
-	_stats._mc_stable_py[i]=qqbar_stable.at(i)->getMomentum()[1];
-	_stats._mc_stable_pz[i]=qqbar_stable.at(i)->getMomentum()[2];
-	_stats._mc_stable_pdg[i]=qqbar_stable.at(i)->getPDG();
-	_stats._mc_stable_charge[i]=qqbar_stable.at(i)->getCharge();
-	_stats._mc_stable_m[i]=qqbar_stable.at(i)->getMass();
-        _stats._mc_stable_isisr[i]=0;
-        _stats._mc_stable_isoverlay[i]=0;	
         //Consists particle object which has 4-momentum
 	particles.push_back(PseudoJet(qqbar_stable.at(i)->getMomentum()[0], qqbar_stable.at(i)->getMomentum()[1], qqbar_stable.at(i)->getMomentum()[2], qqbar_stable.at(i)->getEnergy()));
 	
@@ -198,32 +198,32 @@ namespace QQbarProcessor
     for(int i=0; i<nisr; i++) {
       if(isr_stable.at(i)!=NULL) {
         //They are filled at line:587                                                                                                                                                                 
+        _stats._mc_stable_E[_stats._mc_stable_n]=isr_stable.at(i)->getEnergy();
+        _stats._mc_stable_px[_stats._mc_stable_n]=isr_stable.at(i)->getMomentum()[0];
+        _stats._mc_stable_py[_stats._mc_stable_n]=isr_stable.at(i)->getMomentum()[1];
+        _stats._mc_stable_pz[_stats._mc_stable_n]=isr_stable.at(i)->getMomentum()[2];
+        _stats._mc_stable_pdg[_stats._mc_stable_n]=isr_stable.at(i)->getPDG();
+        _stats._mc_stable_charge[_stats._mc_stable_n]=isr_stable.at(i)->getCharge();
+        _stats._mc_stable_m[_stats._mc_stable_n]=isr_stable.at(i)->getMass();
+        _stats._mc_stable_isisr[_stats._mc_stable_n]=1;
+        _stats._mc_stable_isoverlay[_stats._mc_stable_n]=0;
         _stats._mc_stable_n++;
-        _stats._mc_stable_E[i]=isr_stable.at(i)->getEnergy();
-        _stats._mc_stable_px[i]=isr_stable.at(i)->getMomentum()[0];
-        _stats._mc_stable_py[i]=isr_stable.at(i)->getMomentum()[1];
-        _stats._mc_stable_pz[i]=isr_stable.at(i)->getMomentum()[2];
-        _stats._mc_stable_pdg[i]=isr_stable.at(i)->getPDG();
-        _stats._mc_stable_charge[i]=isr_stable.at(i)->getCharge();
-        _stats._mc_stable_m[i]=isr_stable.at(i)->getMass();
-        _stats._mc_stable_isisr[i]=1;
-        _stats._mc_stable_isoverlay[i]=0;
 	QQbarTools::PrintParticle(isr_stable.at(i));
       } 
     }
     int noverlay=overlay_stable.size();
     for(int i=0; i<noverlay; i++) {
       if(overlay_stable.at(i)!=NULL) {
+        _stats._mc_stable_E[_stats._mc_stable_n]=overlay_stable.at(i)->getEnergy();
+        _stats._mc_stable_px[_stats._mc_stable_n]=overlay_stable.at(i)->getMomentum()[0];
+        _stats._mc_stable_py[_stats._mc_stable_n]=overlay_stable.at(i)->getMomentum()[1];
+        _stats._mc_stable_pz[_stats._mc_stable_n]=overlay_stable.at(i)->getMomentum()[2];
+        _stats._mc_stable_pdg[_stats._mc_stable_n]=overlay_stable.at(i)->getPDG();
+        _stats._mc_stable_charge[_stats._mc_stable_n]=overlay_stable.at(i)->getCharge();
+        _stats._mc_stable_m[_stats._mc_stable_n]=overlay_stable.at(i)->getMass();
+        _stats._mc_stable_isisr[_stats._mc_stable_n]=0;
+        _stats._mc_stable_isoverlay[_stats._mc_stable_n]=1;
         _stats._mc_stable_n++;
-        _stats._mc_stable_E[i]=overlay_stable.at(i)->getEnergy();
-        _stats._mc_stable_px[i]=overlay_stable.at(i)->getMomentum()[0];
-        _stats._mc_stable_py[i]=overlay_stable.at(i)->getMomentum()[1];
-        _stats._mc_stable_pz[i]=overlay_stable.at(i)->getMomentum()[2];
-        _stats._mc_stable_pdg[i]=overlay_stable.at(i)->getPDG();
-        _stats._mc_stable_charge[i]=overlay_stable.at(i)->getCharge();
-        _stats._mc_stable_m[i]=overlay_stable.at(i)->getMass();
-        _stats._mc_stable_isisr[i]=0;
-        _stats._mc_stable_isoverlay[i]=1;
 	QQbarTools::PrintParticle(overlay_stable.at(i)); 
       }
     }
