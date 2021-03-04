@@ -91,6 +91,7 @@ namespace QQbarProcessor
     float _pfo_m[1000];
     int _pfo_type[1000]; 
     int _pfo_charge[1000];
+    int _pfo_ntracks[1000];
     int _pfo_pdgcheat[1000];
     int _pfo_isoverlay[1000];
     int _pfo_isisr[1000];
@@ -230,11 +231,12 @@ namespace QQbarProcessor
 	_pfo_m[ipfo]=0;
 	_pfo_type[ipfo]=0;
 	_pfo_charge[ipfo]=-1000;
+        _pfo_charge[ipfo]=0;
 	_pfo_pdgcheat[ipfo]=-1000;
 	_pfo_isisr[ipfo]=-1;
 	_pfo_isoverlay[ipfo]=-1;
 	_pfo_istrack[ipfo]=-1;
-	_pfo_vtx[ipfo]=-2;
+	_pfo_vtx[ipfo]=-1;
 	  
 	_pfo_tpc_hits[ipfo]=0;
 	_pfo_dedx[ipfo]=0;

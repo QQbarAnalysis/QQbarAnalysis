@@ -444,10 +444,11 @@ namespace QQbarProcessor
 	    streamlog_out(DEBUG)<<" _stats._pfo_type="<<component->getType();
 	    streamlog_out(DEBUG)<<" _stats._pfo_charge="<<component->getCharge()<<"\n";
 
-            if(component->getStartVertex()!=NULL) {
+            if(component->getTracks().size()>0) {
 	      //we collect the info of the tracks associated to the primary vtx
-	      if(component->getStartVertex()->isPrimary()) {
+	      if( (component->getStartVertex()!=NULL && component->getStartVertex()->isPrimary()) || component->getStartVertex()==NULL) {
 		streamlog_out(DEBUG)<<" IS PRIMARY TRACK: ssave info " <<std::endl;
+		if(component->getTracks().size()>1) streamlog_out(DEBUG)<<" NTRACKSLARGERTHAN 1 " <<component->getTracks().size()<<std::endl;
 
 		_stats._pfo_jet_match[pfo_recorded]=ijet;
 
@@ -460,17 +461,25 @@ namespace QQbarProcessor
 		_stats._pfo_m[pfo_recorded]=component->getMass();
 		_stats._pfo_type[pfo_recorded]=component->getType();
 		_stats._pfo_charge[pfo_recorded]=component->getCharge();
+		_stats._pfo_ntracks[pfo_recorded]=component->getTracks().size();
 		//cheat info                                                                                                                                                                                   
 		_stats._pfo_pdgcheat[pfo_recorded]=operaMC.getPDG(mctrack);
                 streamlog_out(DEBUG)<<" PDG CHEAT " <<_stats._pfo_pdgcheat[pfo_recorded]<<std::endl;
 
-		_stats._pfo_vtx[pfo_recorded]=0;
+		if(component->getStartVertex()!=NULL && component->getStartVertex()->isPrimary()) {
+		  _stats._pfo_vtx[pfo_recorded]=0;
+		}
+		
+		if(component->getStartVertex()==NULL) {
+                  _stats._pfo_vtx[pfo_recorded]=-1;
+		}
+
 		_stats._pfo_istrack[pfo_recorded]=1;
 		_stats._pfo_isisr[pfo_recorded]=0;
 		for(int iisr=0; iisr<isr_stable.size();iisr++) {
 		  if(mctrack==isr_stable.at(iisr)) {
 		    _stats._pfo_isisr[pfo_recorded]=1;
-		    streamlog_out(DEBUG)<<" Primary track is associated to ISR "<<std::endl;
+		    streamlog_out(DEBUG)<<" Track is associated to ISR "<<std::endl;
 		    continue;
 		  }
 		}
@@ -526,12 +535,14 @@ namespace QQbarProcessor
 		  streamlog_out(DEBUG)<<"ERROR - pfo_recorded > 150 "<<std::endl;
 		  break;
 		}
-	      } else {
+	      }
+
+              if(component->getStartVertex()!=NULL && component->getStartVertex()->isPrimary()==false) {
                 streamlog_out(DEBUG)<<" IS A SECONDARY TRACK: ignore info because we prefer the LCFIPlus + VertexRecovery Information " <<std::endl;
 	      }
 	    } else {
-	      streamlog_out(DEBUG)<<" THIS PFO is not a track associated to any vtx" <<std::endl;
-
+	      streamlog_out(DEBUG)<<" THIS PFO has not any associated track" <<std::endl;
+	      
 	      _stats._pfo_jet_match[pfo_recorded]=ijet;
 
 	      _stats._pfo_E[pfo_recorded]=component->getEnergy();
@@ -541,6 +552,7 @@ namespace QQbarProcessor
 	      _stats._pfo_m[pfo_recorded]=component->getMass();
 	      _stats._pfo_type[pfo_recorded]=component->getType();
 	      _stats._pfo_charge[pfo_recorded]=component->getCharge();
+	      _stats._pfo_ntracks[pfo_recorded]=component->getTracks().size();
 	      //cheat info      
 	      MCParticle * mcpfo=operaMC.getMCParticle(component);
 	      /*
@@ -640,6 +652,7 @@ namespace QQbarProcessor
 	      _stats._pfo_m[pfo_recorded]=found_track_particle->getMass();
 	      _stats._pfo_type[pfo_recorded]=found_track_particle->getType();
 	      _stats._pfo_charge[pfo_recorded]=found_track_particle->getCharge();
+	      _stats._pfo_ntracks[pfo_recorded]=1;
 	      //cheat info                                          
               MCParticle * mctrack= operaMC.getMCParticle(found_track_particle);
 

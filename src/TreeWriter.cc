@@ -112,6 +112,7 @@ namespace QQbarProcessor
     _hTree->Branch("pfo_istrack", data._pfo_istrack, "pfo_istrack[pfo_n]/I");
     _hTree->Branch("pfo_vtx", data._pfo_vtx, "pfo_vtx[pfo_n]/I");     
     _hTree->Branch("pfo_charge", data._pfo_charge, "pfo_charge[pfo_n]/I");
+    _hTree->Branch("pfo_ntracks", data._pfo_ntracks, "pfo_ntracks[pfo_n]/I");
 
     _hTree->Branch("pfo_tpc_hits", data._pfo_tpc_hits, "pfo_tpc_hits[pfo_n]/I");
     _hTree->Branch("pfo_dedx", data._pfo_dedx, "pfo_dedx[pfo_n]/F");
