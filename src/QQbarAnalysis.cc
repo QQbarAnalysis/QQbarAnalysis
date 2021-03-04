@@ -249,7 +249,6 @@ namespace QQbarProcessor
       _stats._mc_stable_d12 = dmerge_12;
       _stats._mc_stable_d23 = dmerge_23;
       for(int i=0; i<jets.size(); i++) {
-	_stats._mc_stable_n++;
 	_stats._mc_stable_jet_E[i]=jets[i].E();
 	_stats._mc_stable_jet_px[i]=jets[i].px();
 	_stats._mc_stable_jet_py[i]=jets[i].py();
