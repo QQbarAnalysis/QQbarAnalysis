@@ -109,7 +109,6 @@ namespace QQbarProcessor
     _hTree->Branch("pfo_type", data._pfo_type, "pfo_type[pfo_n]/I");
     _hTree->Branch("pfo_isoverlay", data._pfo_isoverlay, "pfo_isoverlay[pfo_n]/I");
     _hTree->Branch("pfo_isisr", data._pfo_isisr, "pfo_isisr[pfo_n]/I");
-    _hTree->Branch("pfo_istrack", data._pfo_istrack, "pfo_istrack[pfo_n]/I");
     _hTree->Branch("pfo_vtx", data._pfo_vtx, "pfo_vtx[pfo_n]/I");     
     _hTree->Branch("pfo_charge", data._pfo_charge, "pfo_charge[pfo_n]/I");
     _hTree->Branch("pfo_ntracks", data._pfo_ntracks, "pfo_ntracks[pfo_n]/I");
@@ -131,8 +130,21 @@ namespace QQbarProcessor
     _hTree->Branch("pfo_ndf", data._pfo_ndf, "pfo_ndf[pfo_n]/F");
     _hTree->Branch("pfo_pid", data._pfo_pid, "pfo_pid[pfo_n]/I");
     _hTree->Branch("pfo_pid_likelihood", data._pfo_pid_likelihood, "pfo_pid_likelihood[pfo_n]/F");
+    _hTree->Branch("pfo_pid_eprob", data._pfo_pid_eprob, "pfo_pid_eprob[pfo_n]/F");
+    _hTree->Branch("pfo_pid_muprob", data._pfo_pid_muprob, "pfo_pid_muprob[pfo_n]/F");
+    _hTree->Branch("pfo_pid_piprob", data._pfo_pid_piprob, "pfo_pid_piprob[pfo_n]/F");
+    _hTree->Branch("pfo_pid_kprob", data._pfo_pid_kprob, "pfo_pid_kprob[pfo_n]/F");
+    _hTree->Branch("pfo_pid_pprob", data._pfo_pid_pprob, "pfo_pid_pprob[pfo_n]/F");
+    _hTree->Branch("pfo_pid_hprob", data._pfo_pid_hprob, "pfo_pid_hprob[pfo_n]/F");
     _hTree->Branch("pfo_piddedx", data._pfo_piddedx, "pfo_piddedx[pfo_n]/I");
     _hTree->Branch("pfo_piddedx_likelihood", data._pfo_piddedx_likelihood, "pfo_piddedx_likelihood[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_eprob", data._pfo_piddedx_eprob, "pfo_piddedx_eprob[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_muprob", data._pfo_piddedx_muprob, "pfo_piddedx_muprob[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_piprob", data._pfo_piddedx_piprob, "pfo_piddedx_piprob[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_kprob", data._pfo_piddedx_kprob, "pfo_piddedx_kprob[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_pprob", data._pfo_piddedx_pprob, "pfo_piddedx_pprob[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_hprob", data._pfo_piddedx_hprob, "pfo_piddedx_hprob[pfo_n]/F");
+
 
 
 

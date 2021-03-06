@@ -95,7 +95,6 @@ namespace QQbarProcessor
     int _pfo_pdgcheat[1000];
     int _pfo_isoverlay[1000];
     int _pfo_isisr[1000];
-    int _pfo_istrack[1000];
     int _pfo_vtx[1000];
 
     int _pfo_tpc_hits[1000];
@@ -115,8 +114,20 @@ namespace QQbarProcessor
     float _pfo_ndf[1000];
     int _pfo_pid[1000];
     float _pfo_pid_likelihood[1000];
+    float _pfo_pid_eprob[1000];
+    float _pfo_pid_muprob[1000];
+    float _pfo_pid_piprob[1000];
+    float _pfo_pid_kprob[1000];
+    float _pfo_pid_pprob[1000];
+    float _pfo_pid_hprob[1000];
     int _pfo_piddedx[1000];
     float _pfo_piddedx_likelihood[1000];
+    float _pfo_piddedx_eprob[1000];
+    float _pfo_piddedx_muprob[1000];
+    float _pfo_piddedx_piprob[1000];
+    float _pfo_piddedx_kprob[1000];
+    float _pfo_piddedx_pprob[1000];
+    float _pfo_piddedx_hprob[1000];
 
     int _pfo_n;
     int _nvtx;
@@ -235,7 +246,6 @@ namespace QQbarProcessor
 	_pfo_pdgcheat[ipfo]=-1000;
 	_pfo_isisr[ipfo]=-1;
 	_pfo_isoverlay[ipfo]=-1;
-	_pfo_istrack[ipfo]=-1;
 	_pfo_vtx[ipfo]=-1;
 	  
 	_pfo_tpc_hits[ipfo]=0;
@@ -256,8 +266,21 @@ namespace QQbarProcessor
 	
 	_pfo_pid[ipfo]=0;
 	_pfo_pid_likelihood[ipfo]=0;
+	_pfo_pid_eprob[ipfo]=0;
+	_pfo_pid_muprob[ipfo]=0;
+	_pfo_pid_piprob[ipfo]=0;
+	_pfo_pid_kprob[ipfo]=0;
+	_pfo_pid_pprob[ipfo]=0;
+	_pfo_pid_hprob[ipfo]=0;
+
 	_pfo_piddedx[ipfo]=0;
 	_pfo_piddedx_likelihood[ipfo]=0;
+        _pfo_piddedx_eprob[ipfo]=0;
+        _pfo_piddedx_muprob[ipfo]=0;
+        _pfo_piddedx_piprob[ipfo]=0;
+        _pfo_piddedx_kprob[ipfo]=0;
+        _pfo_piddedx_pprob[ipfo]=0;
+        _pfo_piddedx_hprob[ipfo]=0;
 	
       }
       

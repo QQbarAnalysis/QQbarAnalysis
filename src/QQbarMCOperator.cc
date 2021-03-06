@@ -263,7 +263,7 @@ d point (in m), x, y, z "<<winner2->getEndpoint()[0]<<" "<<winner2->getEndpoint(
   int QQbarMCOperator::getPDG(MCParticle * winner) {                     
     
     if(winner==NULL) return 0;
-    return abs(winner->getPDG());
+    return winner->getPDG();
   }
 
 }
