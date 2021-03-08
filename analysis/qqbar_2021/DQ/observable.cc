@@ -691,7 +691,7 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
 	if(pfo_match[i]==1) nPFOisr2++;
       }
     
-      if(pfo_istrack[i]==1 && pfo_vtx[i]>0) {
+      if(pfo_ntracks[i]==1 && fabs(pfo_charge[i])!=0 && pfo_vtx[i]>0) {
 
 	if( (ihisto==0 || ihisto==3) && squark==true) {
 	  if(fabs(pfo_pdgcheat[i])==321) h_sectrack_mom_K[ihisto]->Fill(anglesmom.at(2));
@@ -715,7 +715,7 @@ void observable::DQChecks(int n_entries=-1, float Kvcut=35, TString output="test
 	if(pfo_match[i]==1) ntracksec2[pfo_vtx[i]]++;
       }
 
-      if(pfo_istrack[i]==1 && pfo_vtx[i]==0) {
+      if(pfo_ntracks[i]==1 && fabs(pfo_charge[i])!=0 && pfo_vtx[i]==0) {
 
 	if( (ihisto==0 || ihisto==3) && squark==true) {
 	  if(fabs(pfo_pdgcheat[i])==321) h_primtrack_mom_K[ihisto]->Fill(anglesmom.at(2));
