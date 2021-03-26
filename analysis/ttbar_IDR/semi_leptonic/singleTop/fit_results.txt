@@ -1,0 +1,96 @@
+# Fit Results
+
+## SingleTop && Cos0.9 && Method1
+
+Total Events:	1.51585e+06
+Selected:		721
+
+(Crystalball)
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.96431e-02   2.25619e-03   4.38783e-06   4.65093e-02
+   2  Mean         7.16641e+01   1.76326e+00   3.41135e-03  -4.33516e-05
+   3  Sigma        2.69260e+01   1.62229e+00   3.12166e-03   5.32397e-05
+   4  Alpha        1.54754e+00   7.34870e-01   1.21114e-03  -2.24270e-03
+   5  N           -1.12659e+05   4.24264e-01   1.01590e-04   0.00000e+00
+
+## SingleTop && Cos0.9
+
+Total Events:	1.51585e+06
+Selected:		12185
+
+(Crystalball)
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.06353e-02   5.50782e-04   0.00000e+00   1.95331e+00
+   2  Mean         6.72380e+01   5.53692e-01  -0.00000e+00   7.74662e-04
+   3  Sigma        2.87102e+01   5.70428e-01   0.00000e+00   1.02106e-04
+   4  Alpha        1.51941e+00   3.31116e-03   0.00000e+00  -1.24773e+00
+   5  N            1.53473e+00   4.24264e-01  -0.00000e+00   0.00000e+00
+
+## SingleTop
+
+Total Events:	1.51585e+06
+Selected:		183956
+
+(Double Gaus)
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Const1       3.30635e-02   6.16687e-04   5.44940e-07  -2.38344e-02
+   2  Mean1        1.04080e+02   1.98225e+00   8.58618e-04  -2.26895e-04
+   3  Sigma1       3.24949e+01   2.19290e+00   6.72112e-04   5.69227e-05
+   4  Const2       1.89943e-02   2.70058e-03   5.44052e-07   3.07708e-01
+   5  Mean2        5.77290e+01   8.85771e-01   7.66720e-04   5.38289e-04
+   6  Sigma2       1.97371e+01   8.33313e-01   6.64566e-04  -7.40719e-04
+
+## Cos0.9
+
+Total Events:	1.51585e+06
+Selected:		45868
+
+(LogNormal)
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           4.13200e+00   6.76613e-02   9.05228e-05   1.69166e-03
+   2  p1           8.08274e+01   8.50019e-01   1.12785e-03  -1.26159e-04
+   3  p2           1.65201e+00   1.15857e-02   1.83229e-05  -2.59034e-03
+
+Max = 62.823 GeV
+
+## Method1
+
+Total Events:	1.51585e+06
+Selected:		107715
+
+(Triple Gaus)
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Const1       1.01315e-02   2.57171e-03   6.28450e-07   2.48127e+00
+   2  Mean1        5.08603e+01   1.94586e+00   1.11078e-03  -6.86145e-05
+   3  Sigma1       1.37695e+01   1.40127e+00   9.09994e-04   3.63825e-04
+   4  Const2       2.56534e-02   5.36272e-03   6.46567e-07   1.90461e+00
+   5  Mean2        8.14914e+01   5.19481e+00   7.41591e-04   3.38296e-04
+   6  Sigma2       2.27535e+01   1.87701e+00   5.52558e-04   4.40930e-03
+   7  Const3       3.08501e-02   2.37975e-03   5.87344e-07   1.84486e+00
+   8  Mean3        1.31256e+02   5.68089e+00   9.19825e-04  -2.63726e-03
+   9  Sigma3       2.99661e+01   4.16266e+00   8.39725e-04   2.98481e-04
+
+Max = 96.5769 GeV
+
+## All
+
+Total Events:	1.51585e+06
+
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           2.32525e-03   2.55238e-04   1.40325e-07  -5.48157e+01
+   2  p1           4.63080e+01   4.37737e-01   6.00557e-04   2.59228e-03
+   3  p2           1.31458e+01   6.46767e-01   5.75690e-04  -5.14140e-03
+   4  p3           5.20107e-03   3.89298e-04   5.45581e-07  -2.88432e+01
+   5  p4           7.28125e+01   1.64340e+00   2.15694e-03   8.54590e-03
+   6  p5           2.36618e+01   6.96797e-01   9.37901e-04  -9.34838e-03
+   7  p6           7.52981e-03   1.56847e-04  -2.59808e-07   1.85818e+01
+   8  p7           1.24267e+02   1.85224e+00   2.82930e-03   4.51662e-03
+   9  p8           3.51850e+01   1.28613e+00  -1.85043e-03  -3.88984e-03
+
+Max = 91.6638 GeV

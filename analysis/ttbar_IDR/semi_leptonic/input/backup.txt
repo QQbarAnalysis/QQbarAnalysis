@@ -1,0 +1,6 @@
+yyxylv/small,/home/ilc/yokugawa/run/root_merge/new/small/QQbar_s5_yyxylv_eLeR.root
+yyxylv/large,/home/ilc/yokugawa/run/root_merge/new/large/QQbar_l5_yyxylv_eLeR.root
+yyxyev/small,/home/ilc/yokugawa/run/root_merge/new/small/QQbar_s5_yyxyev_eLeR.root
+yyxyev/large,/home/ilc/yokugawa/run/root_merge/new/large/QQbar_l5_yyxyev_eLeR.root
+yyxylv/large/muonONLY,/home/ilc/yokugawa/test2/root_merge/muonONLY.root
+yyxylv/large/tauONLY,/home/ilc/yokugawa/test2/root_merge/tauONLY.root
