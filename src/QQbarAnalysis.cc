@@ -261,7 +261,7 @@ namespace QQbarProcessor
 
 
   
-  bool QQbarAnalysis::WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, int pfo_recorded, int ijet, int ivtx, bool _newPandoraPFO, std::string _colName, std::string _Old2NewPandoraPFOsLink){
+  bool QQbarAnalysis::WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, int pfo_recorded, int ijet, int ivtx, std::string _colName, std::string _versionPID){
     
     streamlog_out(DEBUG)<<" _stats._pfo_E="<<component->getEnergy();
     streamlog_out(DEBUG)<<" _stats._pfo_px="<<component->getMomentum()[0];
@@ -332,9 +332,8 @@ namespace QQbarProcessor
     _stats._pfo_omegaerror[pfo_recorded]=cov[5];
     _stats._pfo_tanlambdaerror[pfo_recorded]=cov[14];
     
-    std::string pfocollection=_colName;
-    PIDHandler pidh_1(evt->getCollection(pfocollection));
-    int pid_1 = pidh_1.getAlgorithmID("LikelihoodPID");
+    PIDHandler pidh_1(evt->getCollection(_colName));
+    int pid_1 = pidh_1.getAlgorithmID("LikelihoodPID"+_versionPID);
     int index_likelihood[6];
     index_likelihood[0]=pidh_1.getParameterIndex(pid_1, "electronProbability");
     index_likelihood[1]=pidh_1.getParameterIndex(pid_1, "muonProbability");
@@ -344,8 +343,8 @@ namespace QQbarProcessor
     index_likelihood[5]=pidh_1.getParameterIndex(pid_1, "hadronProbability");
 
 
-    PIDHandler pidh_2(evt->getCollection(pfocollection));
-    int pid_2 = pidh_2.getAlgorithmID("dEdxPID");
+    PIDHandler pidh_2(evt->getCollection(_colName));
+    int pid_2 = pidh_2.getAlgorithmID("dEdxPID"+_versionPID);
     int index_dedx[6];
     index_dedx[0]=pidh_2.getParameterIndex(pid_2, "electronProbability"); 
     index_dedx[1]=pidh_2.getParameterIndex(pid_2, "muonProbability");
@@ -355,74 +354,37 @@ namespace QQbarProcessor
     index_dedx[5]=pidh_2.getParameterIndex(pid_2, "hadronProbability");
 
 
-    if(_newPandoraPFO==true) {
-      LCRelationNavigator navigator(evt->getCollection(_Old2NewPandoraPFOsLink));
-      vector< LCObject * > obj = navigator.getRelatedToObjects(component);
-      streamlog_out(DEBUG)<<" objSize:"<<obj.size()<<"\n";
-      ReconstructedParticle * component_pid = dynamic_cast< ReconstructedParticle* >(obj[0]);
-
-      const ParticleID& pid_likelihood = pidh_1.getParticleID(component_pid,pid_1);
-      vector<float> params_1 = pid_likelihood.getParameters();
-      streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pid_likelihood.getPDG()<<std::endl;
-      _stats._pfo_pid[pfo_recorded] = pid_likelihood.getPDG();
-      _stats._pfo_pid_likelihood[pfo_recorded]=pid_likelihood.getLikelihood();
-      if(params_1.size()>0) {
-	_stats._pfo_pid_eprob[pfo_recorded]=params_1.at(index_likelihood[0]);
-	_stats._pfo_pid_muprob[pfo_recorded]=params_1.at(index_likelihood[1]);
-	_stats._pfo_pid_piprob[pfo_recorded]=params_1.at(index_likelihood[2]);
-	_stats._pfo_pid_kprob[pfo_recorded]=params_1.at(index_likelihood[3]);
-	_stats._pfo_pid_pprob[pfo_recorded]=params_1.at(index_likelihood[4]);
-	_stats._pfo_pid_hprob[pfo_recorded]=params_1.at(index_likelihood[5]);
-	streamlog_out(DEBUG)<<" eprob: "<<params_1.at(index_likelihood[0])<<" muprob: "<<params_1.at(index_likelihood[1])<<" piprob: "<<params_1.at(index_likelihood[2])<<" kprob: "<<params_1.at(index_likelihood[3])<<" pprob: "<<params_1.at(index_likelihood[4])<<" hprob: "<<params_1.at(index_likelihood[5])<<std::endl;
-      }
-      const ParticleID& pid_dedx = pidh_2.getParticleID(component_pid,pid_2);
-      vector<float> params_2 = pid_dedx.getParameters();
-      streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pid_dedx.getPDG()<<std::endl;
-      _stats._pfo_piddedx[pfo_recorded] = pid_dedx.getPDG();
-      _stats._pfo_piddedx_likelihood[pfo_recorded]=pid_dedx.getLikelihood();
-      if(params_2.size()>0) {
-	_stats._pfo_piddedx_eprob[pfo_recorded]=params_2.at(index_dedx[0]);
-	_stats._pfo_piddedx_muprob[pfo_recorded]=params_2.at(index_dedx[1]);
-	_stats._pfo_piddedx_piprob[pfo_recorded]=params_2.at(index_dedx[2]);
-	_stats._pfo_piddedx_kprob[pfo_recorded]=params_2.at(index_dedx[3]);
-	_stats._pfo_piddedx_pprob[pfo_recorded]=params_2.at(index_dedx[4]);
-	_stats._pfo_piddedx_hprob[pfo_recorded]=params_2.at(index_dedx[5]);
-	streamlog_out(DEBUG)<<" eprob: "<<params_2.at(index_dedx[0])<<" muprob: "<<params_2.at(index_dedx[1])<<" piprob: "<<params_2.at(index_dedx[2])<<" kprob: "<<params_2.at(index_dedx[3])<<" pprob: "<<params_2.at(index_dedx[4])<<" hprob: "<<params_2.at(index_dedx[5])<<std::endl;
-      }
-    } else {
-
-      const ParticleID& pid_likelihood = pidh_1.getParticleID(component,pid_1);
-      vector<float> params_1 = pid_likelihood.getParameters();
-      streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pid_likelihood.getPDG()<<std::endl;
-      _stats._pfo_pid[pfo_recorded] = pid_likelihood.getPDG();
-      _stats._pfo_pid_likelihood[pfo_recorded]=pid_likelihood.getLikelihood();
-      if(params_1.size()>0) {
-	_stats._pfo_pid_eprob[pfo_recorded]=params_1.at(index_likelihood[0]);
-	_stats._pfo_pid_muprob[pfo_recorded]=params_1.at(index_likelihood[1]);
-	_stats._pfo_pid_piprob[pfo_recorded]=params_1.at(index_likelihood[2]);
-	_stats._pfo_pid_kprob[pfo_recorded]=params_1.at(index_likelihood[3]);
-	_stats._pfo_pid_pprob[pfo_recorded]=params_1.at(index_likelihood[4]);
-	_stats._pfo_pid_hprob[pfo_recorded]=params_1.at(index_likelihood[5]);
-	streamlog_out(DEBUG)<<" eprob: "<<params_1.at(index_likelihood[0])<<" muprob: "<<params_1.at(index_likelihood[1])<<" piprob: "<<params_1.at(index_likelihood[2])<<" kprob: "<<params_1.at(index_likelihood[3])<<" pprob: "<<params_1.at(index_likelihood[4])<<" hprob: "<<params_1.at(index_likelihood[5])<<std::endl;
-      }
-
-      const ParticleID& pid_dedx = pidh_2.getParticleID(component,pid_2);
-      vector<float> params_2 = pid_dedx.getParameters();
-      streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pid_dedx.getPDG()<<std::endl;
-      _stats._pfo_piddedx[pfo_recorded] = pid_dedx.getPDG();
-      _stats._pfo_piddedx_likelihood[pfo_recorded]=pid_dedx.getLikelihood();
-      if(params_2.size()>0) {
-        _stats._pfo_piddedx_eprob[pfo_recorded]=params_2.at(index_dedx[0]);
-        _stats._pfo_piddedx_muprob[pfo_recorded]=params_2.at(index_dedx[1]);
-        _stats._pfo_piddedx_piprob[pfo_recorded]=params_2.at(index_dedx[2]);
-        _stats._pfo_piddedx_kprob[pfo_recorded]=params_2.at(index_dedx[3]);
-        _stats._pfo_piddedx_pprob[pfo_recorded]=params_2.at(index_dedx[4]);
-        _stats._pfo_piddedx_hprob[pfo_recorded]=params_2.at(index_dedx[5]);
-        streamlog_out(DEBUG)<<" eprob: "<<params_2.at(index_dedx[0])<<" muprob: "<<params_2.at(index_dedx[1])<<" piprob: "<<params_2.at(index_dedx[2])<<" kprob: "<<params_2.at(index_dedx[3])<<" pprob: "<<params_2.at(index_dedx[4])<<" hprob: "<<params_2.at(index_dedx[5])<<std::endl;
-      }
-
-
+    
+    const ParticleID& pid_likelihood = pidh_1.getParticleID(component,pid_1);
+    vector<float> params_1 = pid_likelihood.getParameters();
+    streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pid_likelihood.getPDG()<<std::endl;
+    _stats._pfo_pid[pfo_recorded] = pid_likelihood.getPDG();
+    _stats._pfo_pid_likelihood[pfo_recorded]=pid_likelihood.getLikelihood();
+    if(params_1.size()>0) {
+      _stats._pfo_pid_eprob[pfo_recorded]=params_1.at(index_likelihood[0]);
+      _stats._pfo_pid_muprob[pfo_recorded]=params_1.at(index_likelihood[1]);
+      _stats._pfo_pid_piprob[pfo_recorded]=params_1.at(index_likelihood[2]);
+      _stats._pfo_pid_kprob[pfo_recorded]=params_1.at(index_likelihood[3]);
+      _stats._pfo_pid_pprob[pfo_recorded]=params_1.at(index_likelihood[4]);
+      _stats._pfo_pid_hprob[pfo_recorded]=params_1.at(index_likelihood[5]);
+      streamlog_out(DEBUG)<<" eprob: "<<params_1.at(index_likelihood[0])<<" muprob: "<<params_1.at(index_likelihood[1])<<" piprob: "<<params_1.at(index_likelihood[2])<<" kprob: "<<params_1.at(index_likelihood[3])<<" pprob: "<<params_1.at(index_likelihood[4])<<" hprob: "<<params_1.at(index_likelihood[5])<<std::endl;
     }
+    
+    const ParticleID& pid_dedx = pidh_2.getParticleID(component,pid_2);
+    vector<float> params_2 = pid_dedx.getParameters();
+    streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pid_dedx.getPDG()<<std::endl;
+    _stats._pfo_piddedx[pfo_recorded] = pid_dedx.getPDG();
+    _stats._pfo_piddedx_likelihood[pfo_recorded]=pid_dedx.getLikelihood();
+    if(params_2.size()>0) {
+      _stats._pfo_piddedx_eprob[pfo_recorded]=params_2.at(index_dedx[0]);
+      _stats._pfo_piddedx_muprob[pfo_recorded]=params_2.at(index_dedx[1]);
+      _stats._pfo_piddedx_piprob[pfo_recorded]=params_2.at(index_dedx[2]);
+      _stats._pfo_piddedx_kprob[pfo_recorded]=params_2.at(index_dedx[3]);
+      _stats._pfo_piddedx_pprob[pfo_recorded]=params_2.at(index_dedx[4]);
+      _stats._pfo_piddedx_hprob[pfo_recorded]=params_2.at(index_dedx[5]);
+      streamlog_out(DEBUG)<<" eprob: "<<params_2.at(index_dedx[0])<<" muprob: "<<params_2.at(index_dedx[1])<<" piprob: "<<params_2.at(index_dedx[2])<<" kprob: "<<params_2.at(index_dedx[3])<<" pprob: "<<params_2.at(index_dedx[4])<<" hprob: "<<params_2.at(index_dedx[5])<<std::endl;
+    }
+
 
     if(ijet==0) _stats._pfo_n_j1++;
     if(ijet==1) _stats._pfo_n_j2++;
@@ -455,15 +417,13 @@ namespace QQbarProcessor
 
   void QQbarAnalysis::AnalyseQQbar(LCEvent * evt,
 				   bool _boolDBDanalysis,
-				   bool _newPandoraPFO,
 				   std::string _colName ,
-				   std::string _newcolName ,
 				   std::string _colRelName,
 				   std::string _initialJetsColName,
 				   std::string _JetsColName ,
 				   std::string _JetsRelColName ,
 				   std::string _MCColName,
-				   std::string _Old2NewPandoraPFOsLink,
+				   std::string _versionPID,
 				   float _Rparam_jet_ps, 
 				   float _pparam_jet_ps
 				   )
@@ -631,7 +591,7 @@ namespace QQbarProcessor
 	    if(record_pfo==true) {
 	      streamlog_out(DEBUG)<<" IS not a secondary TRACK: ssave info " <<std::endl;
 	      bool write=false;
-	      write=WritePFOInfo(evt,component,pfo_recorded,ijet,0,_newPandoraPFO,_colName,_Old2NewPandoraPFOsLink);
+	      write=WritePFOInfo(evt,component,pfo_recorded,ijet,0,_colName, _versionPID);
 	      PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
 
@@ -655,7 +615,6 @@ namespace QQbarProcessor
 	  
 	  for( int ivtx=0; ivtx<vertices->size(); ivtx++) {
 
-
 	    streamlog_out(DEBUG)<<"   ivtx = "<<ivtx<<std::endl;
 	    int ntrack = vertices->at(ivtx)->getAssociatedParticle()->getParticles().size();
 	    streamlog_out(DEBUG)<<"   ntracks = "<<ntrack<<std::endl;
@@ -663,7 +622,7 @@ namespace QQbarProcessor
 
               ReconstructedParticle * found_track_particle = vertices->at(ivtx)->getAssociatedParticle()->getParticles().at(itr);
 	      bool write=false;
-	      write=WritePFOInfo(evt,found_track_particle,pfo_recorded,ijet,ivtx+1,_newPandoraPFO,_colName,_Old2NewPandoraPFOsLink);
+	      write=WritePFOInfo(evt,found_track_particle,pfo_recorded,ijet,ivtx+1,_colName, _versionPID);
 	      
 	      PFOCheatInfo(found_track_particle,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
@@ -701,7 +660,7 @@ namespace QQbarProcessor
 	    streamlog_out(DEBUG)<<" PFO not clustered in one of the jets, obj.id(): " <<obj->id()<<std::endl;
 	    ReconstructedParticle* component= dynamic_cast< ReconstructedParticle* >(obj);
 	    bool write=false;
-	    write=WritePFOInfo(evt,component,pfo_recorded,2,0,_newPandoraPFO,_colName,_Old2NewPandoraPFOsLink);
+	    write=WritePFOInfo(evt,component,pfo_recorded,2,0,_colName, _versionPID);
 	    PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	    pfo_recorded++;
 	  }

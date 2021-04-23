@@ -55,19 +55,17 @@ namespace QQbarProcessor
     void AnalyseGeneratorISR(QQbarMCOperator & opera);
     void AnalyseGeneratorQQbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
     void AnalyseGeneratorQQbar_Stable(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
-    bool WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, int pfo_recorded, int ijet, int ivtx, bool _newPandoraPFO, std::string _colName, std::string _Old2NewPandoraPFOsLink);
+    bool WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, int pfo_recorded, int ijet, int ivtx, std::string _colName, std::string _versionPID);
     void PFOCheatInfo(ReconstructedParticle * component, QQbarMCOperator& operaMC, std::vector<MCParticle*> isr_stable, int npfo_recorded);
     void AnalyseQQbar(LCEvent * evt,
 		      bool _boolDBDanalysis,
-		      bool _newPandoraPFO,
 		      std::string _colName ,
-                      std::string _newcolName ,
 		      std::string _colRelName,
 		      std::string _initialJetsColName,
 		      std::string _JetsColName ,
 		      std::string _JetsRelColName ,
 		      std::string _MCColName,
-		      std::string _Old2NewPandoraPFOsLink,
+		      std::string _versionPID,
 		      float _Rparam_jet_ps,
 		      float _pparam_jet_ps
 		      ) ;

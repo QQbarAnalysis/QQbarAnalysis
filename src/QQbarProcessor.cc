@@ -41,29 +41,12 @@ namespace QQbarProcessor
 				_boolDBDanalysis,
 				true
 				);
-    registerProcessorParameter( "newPandoraPFO",
-                                "Has a PandoraPFO collection been duplicarted? i.e. for dEdx reprocessinn?",
-				_newPandoraPFO,
-                                false
-                                );
-    registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE , 
+     registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE , 
 			     "PFOCollection",
 			     "PFO collection name"  ,
 			     _colName ,
 			     string("PandoraPFOs")
 			     ) ;
-    registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE ,
-                             "newPFOCollection",
-                             "new PFO collection name, only used in the case of some highlevel preprocessing as dEdx Likelihood",
-                             _newcolName ,
-                             string("NewPandoraPFOs")
-                             ) ;
-    registerInputCollection( LCIO::LCRELATION,
-			    "Old2NewPandoraPFOsLink" ,
-			     "link between old and new Pandora PFO (only used if _newPandoraPFO==true" ,
-			     _Old2NewPandoraPFOsLink,
-			    std::string("Old2NewPandoraPFOsLink")
-			    );
     registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			     "JetCollectionName",
                              "Name of the Jet collection",
@@ -95,6 +78,10 @@ namespace QQbarProcessor
 			     _initialJetsColName ,
 			     std::string("InitialJets")
 			     );
+    registerProcessorParameter( "PIDVersionTag",
+				"version of the PID Method to use (v1, v2, ...) , empty by default.",
+				_versionPID,
+				std::string("") );
     
     registerProcessorParameter( "Rparam_jet_ps",
 				"R parameter of the ee_gentkt algorithm (for parton + shower analysis)",
@@ -141,15 +128,13 @@ namespace QQbarProcessor
 	{ 
 	  _qqbaranalysis.AnalyseQQbar(evt,
 				      _boolDBDanalysis,
-				      _newPandoraPFO,
 				      _colName ,
-				      _newcolName ,
 				      _colRelName,
 				      _initialJetsColName,
 				      _JetsColName ,
 				      _JetsRelColName ,
 				      _MCColName,
-				      _Old2NewPandoraPFOsLink,
+				      _versionPID,
 				      _Rparam_jet_ps,
 				      _pparam_jet_ps
 				      );

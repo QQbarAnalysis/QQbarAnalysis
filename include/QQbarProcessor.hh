@@ -77,15 +77,13 @@ namespace QQbarProcessor
     std::string _hfilename;
     ANALYSIS_TYPE _analysisType ;
     std::string _colName ;
-    std::string _newcolName ; //only used if we reprocess dEdx
     std::string _MCColName ;
     std::string _JetsColName ;
     std::string _JetsRelColName ;
     std::string _colRelName;
     std::string _initialJetsColName;
+    std::string _versionPID;
     bool _boolDBDanalysis;
-    bool _newPandoraPFO;
-    std::string _Old2NewPandoraPFOsLink;
 
     float _Rparam_jet_ps;
     float _pparam_jet_ps;
