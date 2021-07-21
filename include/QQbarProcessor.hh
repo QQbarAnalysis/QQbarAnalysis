@@ -24,6 +24,9 @@
 #include <TFile.h>
 #include <TTree.h>
 
+//TrueJet stuff
+//#include "TrueJet_Parser.h"
+
 #include "QQbarAnalysis.hh"
 
 
@@ -35,9 +38,10 @@ namespace QQbarProcessor
 {
   enum ANALYSIS_TYPE
     {
-      QQbar = 0
+      QQbar = 0,
+      BKG = -1      
     };
-  class QQbarProcessor : public Processor 
+  class QQbarProcessor : public Processor
   {
 	  
   public:
@@ -89,6 +93,8 @@ namespace QQbarProcessor
     float _pparam_jet_ps;
 
     int _nRun ;
+
+    //    std::string get_recoMCTruthLink(){ return _colRelName; } ;
 
   } ;
 		

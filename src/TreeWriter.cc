@@ -69,6 +69,15 @@ namespace QQbarProcessor
     _hTree->Branch("mc_stable_jet_pz", data._mc_stable_jet_pz, "mc_stable_jet_pz[2]/F");
     
 
+    // true jets properties 
+    _hTree->Branch("truejet_E", data._truejet_E, "truejet_E[5]/F");
+    _hTree->Branch("truejet_px", data._truejet_px, "truejet_px[5]/F");
+    _hTree->Branch("truejet_py", data._truejet_py, "truejet_py[5]/F");
+    _hTree->Branch("truejet_pz", data._truejet_pz, "truejet_pz[5]/F");
+    _hTree->Branch("truejet_type", data._truejet_type, "truejet_type[5]/I");
+    _hTree->Branch("truejet_pdg", data._truejet_pdg, "truejet_pdg[5]/I");
+
+
     // jets properties
     _hTree->Branch("jet_E", data._jet_E, "jet_E[2]/F");
     _hTree->Branch("jet_px", data._jet_px, "jet_px[2]/F");
@@ -100,6 +109,9 @@ namespace QQbarProcessor
     _hTree->Branch("jet_nvtx_j2", &data._nvtx_j2, "jet_nvtx_j2/I");
 
     _hTree->Branch("pfo_match", data._pfo_jet_match, "pfo_match[pfo_n]/I");
+    _hTree->Branch("pfo_truejet_pdg", data._pfo_truejet_pdg, "pfo_truejet_pdg[pfo_n]/I");
+    _hTree->Branch("pfo_truejet_type", data._pfo_truejet_type, "pfo_truejet_type[pfo_n]/I");
+
     _hTree->Branch("pfo_pdgcheat", data._pfo_pdgcheat, "pfo_pdgcheat[pfo_n]/I");
     _hTree->Branch("pfo_E", data._pfo_E, "pfo_E[pfo_n]/F");
     _hTree->Branch("pfo_px", data._pfo_px, "pfo_px[pfo_n]/F");

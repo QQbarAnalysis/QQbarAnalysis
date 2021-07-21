@@ -261,7 +261,7 @@ namespace QQbarProcessor
 
 
   
-  bool QQbarAnalysis::WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, int pfo_recorded, int ijet, int ivtx, std::string _colName, std::string _versionPID){
+  bool QQbarAnalysis::WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, ReconstructedParticle *truejet, int pfo_recorded, int ijet, int ivtx, std::string _colName, std::string _versionPID){
     
     streamlog_out(DEBUG)<<" _stats._pfo_E="<<component->getEnergy();
     streamlog_out(DEBUG)<<" _stats._pfo_px="<<component->getMomentum()[0];
@@ -281,6 +281,10 @@ namespace QQbarProcessor
     _stats._pfo_ntracks[pfo_recorded]=component->getTracks().size();
 
     _stats._pfo_jet_match[pfo_recorded]=ijet;
+
+    _stats._pfo_truejet_pdg[pfo_recorded]=truejet->getParticleIDs()[0]->getPDG();
+    _stats._pfo_truejet_type[pfo_recorded]=truejet->getParticleIDs()[0]->getType();
+
 
     //cheat info               
     streamlog_out(DEBUG)<<" ntracks associated to this PFO: "<<component->getTracks().size()<<std::endl;
@@ -400,10 +404,12 @@ namespace QQbarProcessor
     MCParticle * mctrack=operaMC.getMCParticle(component);
     _stats._pfo_pdgcheat[pfo_recorded]=operaMC.getPDG(mctrack);
     streamlog_out(DEBUG)<<" PDG CHEAT " <<_stats._pfo_pdgcheat[pfo_recorded]<<std::endl;
+
     _stats._pfo_isoverlay[pfo_recorded]=operaMC.isOverlay(mctrack);
     if(_stats._pfo_isoverlay[pfo_recorded]==1) 
       streamlog_out(DEBUG)<<" PFO is related to overlay "<<std::endl;
     _stats._pfo_isisr[pfo_recorded]=0;
+
 
     for(int iisr=0; iisr<isr_stable.size();iisr++) {
       if(mctrack==isr_stable.at(iisr)) {
@@ -425,7 +431,8 @@ namespace QQbarProcessor
 				   std::string _MCColName,
 				   std::string _versionPID,
 				   float _Rparam_jet_ps, 
-				   float _pparam_jet_ps
+				   float _pparam_jet_ps,
+				   int _typeAnalysis
 				   )
   {
     LCCollection * mcvtxcol = NULL;
@@ -464,12 +471,14 @@ namespace QQbarProcessor
         }  
 
 	//MC bbbar Analysis
-	QQbarMCOperator operaMC(mccol,evt->getCollection(_colRelName));    
-	//if(opera.IsEvent()==true) {
-	vector < MCParticle * > mcbs = AnalyseGeneratorQQbar(operaMC);//Hard Process
-	AnalyseGeneratorISR(operaMC); 
-	AnalyseGeneratorQQbar_PS(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
-	AnalyseGeneratorQQbar_Stable(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
+	QQbarMCOperator operaMC(mccol,evt->getCollection(_colRelName));
+	if(_typeAnalysis == 0) 	{
+	  //if(opera.IsEvent()==true) {
+	  vector < MCParticle * > mcbs = AnalyseGeneratorQQbar(operaMC);//Hard Process
+	  AnalyseGeneratorISR(operaMC); 
+	  AnalyseGeneratorQQbar_PS(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
+	  AnalyseGeneratorQQbar_Stable(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
+	} 
 
 	// get jet reconstruction variables (merging distances)
 	if(_boolDBDanalysis==true) {
@@ -491,55 +500,58 @@ namespace QQbarProcessor
 	    _stats._d23 = params[pidh.getParameterIndex(alid,"y23")];
 	    _stats._d12 = params[pidh.getParameterIndex(alid,"y12")];
 	    streamlog_out(DEBUG) << "not DBD d23 (reco)= "<<_stats._d23<<"\n";
+	    
+	   
+	    //get the event shape variables. Needs that we run before the following processors
+	    //<!-- ========== EventShapes ========================== -->
+	    //  <processor name="MySphere"/>
+	    //<processor name="MyThrustReconstruction"/>
+	    _stats._oblateness = jetcol->getParameters().getFloatVal("Oblateness");
+	    _stats._major_thrust_value = jetcol->getParameters().getFloatVal("majorThrustValue");
+	    _stats._minor_thrust_value = jetcol->getParameters().getFloatVal("minorThrustValue");
+	    _stats._principle_thrust_value = jetcol->getParameters().getFloatVal("principleThrustValue");
+	    std::vector<float> minoraxis;
+	    jetcol->getParameters().getFloatVals( "minorThrustAxis" , minoraxis) ;
+	    _stats._minor_thrust_axis[0]=minoraxis[0];
+	    _stats._minor_thrust_axis[1]=minoraxis[1];
+	    _stats._minor_thrust_axis[2]=minoraxis[2];
+	    std::vector<float> majoraxis;
+	    jetcol->getParameters().getFloatVals( "majorThrustAxis" , majoraxis) ;
+	    _stats._major_thrust_axis[0]=majoraxis[0];
+	    _stats._major_thrust_axis[1]=majoraxis[1];
+	    _stats._major_thrust_axis[2]=majoraxis[2];
+	    std::vector<float> principleaxis;
+	    jetcol->getParameters().getFloatVals( "principleThrustAxis" , principleaxis) ;
+	    _stats._principle_thrust_axis[0]=principleaxis[0];
+	    _stats._principle_thrust_axis[1]=principleaxis[1];
+	    _stats._principle_thrust_axis[2]=principleaxis[2];
+	    
+	    _stats._aplanarity = jetcol->getParameters().getFloatVal("aplanarity");
+	    _stats._sphericity = jetcol->getParameters().getFloatVal("sphericity");
+	    std::vector<float> sphericitytensor;
+	    jetcol->getParameters().getFloatVals( "sphericity_tensor_eigenvalues" , sphericitytensor) ;
+	    _stats._sphericity_tensor[0]=sphericitytensor[0];
+	    _stats._sphericity_tensor[1]=sphericitytensor[1];
+	    _stats._sphericity_tensor[2]=sphericitytensor[2];
 
-	  } catch(UTIL::UnknownAlgorithm &e){ 
-	    streamlog_out(DEBUG) << "No algorithm yth!\n"; 
+	  } catch( lcio::DataNotAvailableException e ){
+	    streamlog_out(DEBUG) << "Problem getting the event shape variables"; 
 	    streamlog_out(WARNING)<< e.what() << "\n";
 	  }
 	}
-	
-	
-	//get the event shape variables. Needs that we run before the following processors
-	//<!-- ========== EventShapes ========================== -->
-	//  <processor name="MySphere"/>
-	//<processor name="MyThrustReconstruction"/>
-	_stats._oblateness = pfocol->getParameters().getFloatVal("Oblateness");
-	_stats._major_thrust_value = pfocol->getParameters().getFloatVal("majorThrustValue");
-	_stats._minor_thrust_value = pfocol->getParameters().getFloatVal("minorThrustValue");
-	_stats._principle_thrust_value = pfocol->getParameters().getFloatVal("principleThrustValue");
-	std::vector<float> minoraxis;
-	pfocol->getParameters().getFloatVals( "minorThrustAxis" , minoraxis) ;
-	_stats._minor_thrust_axis[0]=minoraxis[0];
-	_stats._minor_thrust_axis[1]=minoraxis[1];
-	_stats._minor_thrust_axis[2]=minoraxis[2];
-	std::vector<float> majoraxis;
-	pfocol->getParameters().getFloatVals( "majorThrustAxis" , majoraxis) ;
-	_stats._major_thrust_axis[0]=majoraxis[0];
-	_stats._major_thrust_axis[1]=majoraxis[1];
-	_stats._major_thrust_axis[2]=majoraxis[2];
-	std::vector<float> principleaxis;
-	pfocol->getParameters().getFloatVals( "principleThrustAxis" , principleaxis) ;
-	_stats._principle_thrust_axis[0]=principleaxis[0];
-	_stats._principle_thrust_axis[1]=principleaxis[1];
-	_stats._principle_thrust_axis[2]=principleaxis[2];
-	
-        _stats._aplanarity = jetcol->getParameters().getFloatVal("aplanarity");
-	_stats._sphericity = jetcol->getParameters().getFloatVal("sphericity");
-	std::vector<float> sphericitytensor;
-	jetcol->getParameters().getFloatVals( "sphericity_tensor_eigenvalues" , sphericitytensor) ;
-	_stats._sphericity_tensor[0]=sphericitytensor[0];
-	_stats._sphericity_tensor[1]=sphericitytensor[1];
-	_stats._sphericity_tensor[2]=sphericitytensor[2];
+
+	vector<vector<MCParticle*> > all_stable;
+	vector<MCParticle*> isr_stable;
+	if(_typeAnalysis == 0)  { 
+	  //Obtain particles which are appeared after intermediate particle,
+	  // all the particles with zero daughters in the MCParticleSkimmed (stable particles)
+	  all_stable = operaMC.GetQQbarStables();
+	  isr_stable = all_stable.at(1);
+	}
 
 
-	//Obtain particles which are appeared after intermediate particle                                                                                                                                      
-	vector<vector<MCParticle*> > all_stable = operaMC.GetQQbarStables();
-	vector<MCParticle*> isr_stable = all_stable.at(1);
-
-	//get the pfO object identified as photon with the maximum energy
-	// get pFo + type per jet
+	// get the pFos that are associated to secondary vertices
 	int pfo_recorded=0;
-
 	std::vector<int> pfo_id_vtx;
         for(int ip=0; ip<2; ip++) {
 	  vector< Vertex * > * vertices = jets->at(ip)->GetRecoVertices();
@@ -551,6 +563,37 @@ namespace QQbarProcessor
 	    }
 	  }
 	}
+
+	
+	//TrueJets
+	try {
+
+	  LCCollection * truejetscol = evt->getCollection("TrueJets");
+	  
+	  for(int itruejet=0;itruejet<truejetscol->getNumberOfElements(); itruejet++) {
+
+	    ReconstructedParticle * truejet = dynamic_cast< ReconstructedParticle * >(truejetscol->getElementAt(itruejet));
+	    
+	    streamlog_out(DEBUG)<<" TRUEJETS "<<itruejet<<"\n";
+	    streamlog_out(DEBUG)<<" _stats._truejet_E="<<truejet->getEnergy();
+	    streamlog_out(DEBUG)<<" _stats._truejet_px="<<truejet->getMomentum()[0];
+	    streamlog_out(DEBUG)<<" _stats._truejet_py="<<truejet->getMomentum()[1];
+	    streamlog_out(DEBUG)<<" _stats._truejet_pz="<<truejet->getMomentum()[2];
+	    streamlog_out(DEBUG)<<" _stats._truejet_type="<<truejet->getParticleIDs()[0]->getType();
+	    streamlog_out(DEBUG)<<" _stats._truejet_pdg="<<truejet->getParticleIDs()[0]->getPDG()<<"\n";
+	    
+	    _stats._truejet_E[itruejet]=truejet->getEnergy();
+	    _stats._truejet_px[itruejet]=truejet->getMomentum()[0];
+	    _stats._truejet_py[itruejet]=truejet->getMomentum()[1];
+	    _stats._truejet_pz[itruejet]=truejet->getMomentum()[2];
+	    _stats._truejet_type[itruejet]=truejet->getParticleIDs()[0]->getType();
+	    _stats._truejet_pdg[itruejet]=truejet->getParticleIDs()[0]->getPDG();
+	  }
+	}catch( lcio::DataNotAvailableException e ){
+	  streamlog_out(DEBUG) << "TrueJets collection not found \n"; 
+	  streamlog_out(WARNING)<< e.what() << "\n";
+	}
+
 
 
 	for(int ijet=0;ijet<2; ijet++) {
@@ -587,12 +630,17 @@ namespace QQbarProcessor
 	      if(obj->id()==pfo_id_vtx.at(ip)) record_pfo=false;
 	    }
 
-	    //	    if( (component->getStartVertex()!=NULL && component->getStartVertex()->isPrimary()) || component->getStartVertex()==NULL) {
+	    //	  FIRST WE STORE ONLY THE info on the PFOs that are not int he list of secondary vtx
 	    if(record_pfo==true) {
 	      streamlog_out(DEBUG)<<" IS not a secondary TRACK: ssave info " <<std::endl;
+	      LCCollection *tjmcplcol  = evt->getCollection(  "TrueJetPFOLink" );
+	      LCRelationNavigator navigator( tjmcplcol );
+	      vector< LCObject * > true_obj= navigator.getRelatedFromObjects( component );
+	      streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
+
 	      bool write=false;
-	      write=WritePFOInfo(evt,component,pfo_recorded,ijet,0,_colName, _versionPID);
-	      PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
+	      write=WritePFOInfo(evt,component,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,ijet,0,_colName, _versionPID);
+	      if(_typeAnalysis == 0) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
 
 	      if(write==false) break;
@@ -621,10 +669,13 @@ namespace QQbarProcessor
 	    for(int itr=0; itr< ntrack; itr++) {
 
               ReconstructedParticle * found_track_particle = vertices->at(ivtx)->getAssociatedParticle()->getParticles().at(itr);
+	      LCCollection *tjmcplcol  = evt->getCollection(  "TrueJetPFOLink" );
+	      LCRelationNavigator navigator( tjmcplcol );
+	      vector< LCObject * > true_obj= navigator.getRelatedFromObjects( found_track_particle );
+	      streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
 	      bool write=false;
-	      write=WritePFOInfo(evt,found_track_particle,pfo_recorded,ijet,ivtx+1,_colName, _versionPID);
-	      
-	      PFOCheatInfo(found_track_particle,operaMC,isr_stable,pfo_recorded);
+	      write=WritePFOInfo(evt,found_track_particle,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,ijet,ivtx+1,_colName, _versionPID);
+	      if(_typeAnalysis == 0) PFOCheatInfo(found_track_particle,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
 
               if(write==false) break;
@@ -659,9 +710,13 @@ namespace QQbarProcessor
 	  if(stored==false) {
 	    streamlog_out(DEBUG)<<" PFO not clustered in one of the jets, obj.id(): " <<obj->id()<<std::endl;
 	    ReconstructedParticle* component= dynamic_cast< ReconstructedParticle* >(obj);
+	    LCCollection *tjmcplcol  = evt->getCollection(  "TrueJetPFOLink" );
+	    LCRelationNavigator navigator( tjmcplcol );
+	    vector< LCObject * > true_obj= navigator.getRelatedFromObjects( component );
+	    streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
 	    bool write=false;
-	    write=WritePFOInfo(evt,component,pfo_recorded,2,0,_colName, _versionPID);
-	    PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
+	    write=WritePFOInfo(evt,component,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,2,0,_colName, _versionPID);
+	    if(_typeAnalysis == 0) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	    pfo_recorded++;
 	  }
 	}

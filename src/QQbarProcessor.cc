@@ -33,7 +33,7 @@ namespace QQbarProcessor
 				_hfilename,
 				string("QQbarProcessor.root") );
     registerProcessorParameter( "AnalysisType",
-				"Analysis Type (0= default qqbar -started by A. Irles)",
+				"Analysis Type (0= default qqbar, -1 backgrounds -started by A. Irles)",
 				_type,
 				_type );
     registerProcessorParameter( "DBDanalysis",
@@ -112,6 +112,10 @@ namespace QQbarProcessor
 	std::cout << "Initialize QQbarTree, _analysisType= " << _analysisType << "\n";
 	_qqbaranalysis.Init(_hfilename);
 	break;
+      case BKG:
+	std::cout << "Initialize QQbarTree, _analysisType= " << _analysisType << "\n";
+        _qqbaranalysis.Init(_hfilename);                                              
+        break; 
       }
 
   }
@@ -136,11 +140,27 @@ namespace QQbarProcessor
 				      _MCColName,
 				      _versionPID,
 				      _Rparam_jet_ps,
-				      _pparam_jet_ps
+				      _pparam_jet_ps,
+				      0
 				      );
 	}
+      case BKG:
+	{                                                                                                                                                                                                   
+          _qqbaranalysis.AnalyseQQbar(evt, 
+                                      _boolDBDanalysis,
+                                      _colName ,       
+                                      _colRelName,     
+                                      _initialJetsColName,
+                                      _JetsColName ,      
+                                      _JetsRelColName ,   
+                                      _MCColName,         
+                                      _versionPID,        
+                                      _Rparam_jet_ps,     
+                                      _pparam_jet_ps,
+				      -1
+                                      );
+        }
 	break;
-       	break;
       }
   }
 
@@ -152,14 +172,16 @@ namespace QQbarProcessor
   void QQbarProcessor::end()
   {   
 
-    switch(_analysisType)
+    _qqbaranalysis.End();                                                                                                                                                                               
+    //break;  
+    /*    switch(_analysisType)
       {
 
       case QQbar:
+      case BKG:
 	_qqbaranalysis.End();
 	break;
-
-      }
+	}*/
   }
   
 }

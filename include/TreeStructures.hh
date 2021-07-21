@@ -59,6 +59,14 @@ namespace QQbarProcessor
     float _mc_stable_jet_py[2];
     float _mc_stable_jet_pz[2];
 
+    //truejets stuff
+    float _truejet_E[5]={0};
+    float _truejet_px[5]={0};
+    float _truejet_py[5]={0};
+    float _truejet_pz[5]={0};
+    int _truejet_type[5]={0};
+    int _truejet_pdg[5]={0};
+
     //jet stuff
     float _y23;
     float _y12;
@@ -75,15 +83,17 @@ namespace QQbarProcessor
     float _principle_thrust_axis[3];
     float _sphericity_tensor[3];
 
-    float _jet_E[2];
-    float _jet_px[2];
-    float _jet_py[2];
-    float _jet_pz[2];
-    float _jet_btag[2];
-    float _jet_ctag[2];
+    float _jet_E[2]={0};
+    float _jet_px[2]={0};
+    float _jet_py[2]={0};
+    float _jet_pz[2]={0};
+    float _jet_btag[2]={0};
+    float _jet_ctag[2]={0};
 
     //pfo stuff
     int _pfo_jet_match[1000];
+    int _pfo_truejet_pdg[1000];
+    int _pfo_truejet_type[1000];
     float _pfo_E[1000];
     float _pfo_px[1000];
     float _pfo_py[1000];
@@ -234,6 +244,8 @@ namespace QQbarProcessor
       for(int ipfo=0; ipfo<1000; ipfo++) {  
 
 	_pfo_jet_match[ipfo]=-1;
+        _pfo_truejet_pdg[ipfo]=0;
+        _pfo_truejet_type[ipfo]=0;
 
 	_pfo_E[ipfo]=0; 
 	_pfo_px[ipfo]=0;
