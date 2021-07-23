@@ -469,13 +469,3 @@ void observable::dEdx(int n_entries=-1, TString process="",bool secondary=false,
   
    
 
-
-bool observable::PreSelection(int type=0,float Kvcut=25) {
-  
-  if(jet_E[0]<0.5 || jet_E[1]<0.5) return false;
-  if(type == 0 ) return true;
-
-
-  return false;
-}
-
