@@ -178,7 +178,7 @@ namespace QQbarProcessor
 
     bool recorded=false;
     int j=0;
-    for (int i = 0; i < number; i++) {
+    for (int i = 0; i < 11; i++) {
       if(pdg==22) {
 	MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
 	if (particle->getPDG() == 22 && particle->getGeneratorStatus()==1) {
@@ -188,7 +188,7 @@ namespace QQbarProcessor
 	
       } else {      
 	MCParticle * particle = dynamic_cast<MCParticle*>( myCollection->getElementAt(i) );
-	if(fabs(particle->getPDG())<6) {
+	if(fabs(particle->getPDG())==pdg) {
 	  if(particle->getPDG()>0) b=particle;
 	  else bbar=particle;
 	  bool_bbbar[j]=true;
