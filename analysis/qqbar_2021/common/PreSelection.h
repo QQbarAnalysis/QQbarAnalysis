@@ -61,6 +61,14 @@ double  photonjet_costheta[2]={-2};
 
 void PFOphotonQuantities() {
 
+  for(int i_=0; i_<2; i_++) {
+    npfo[i_]=-1;
+    npfo_photon[i_]=-1;
+    npfo_charge[i_]=-1;
+    photonjet_E[i_]=0;
+    photonjet_costheta[i_]=-2;
+  }
+
   float costheta=-2;
   float energy=0;
     
@@ -132,7 +140,6 @@ bool PreSelection(int type=0,float Kvcut=25) {
   //Radiative return cuts, photon INSIDE the detector //NUEVO ADRIAN 2021 04 21
   //---------------------
    PFOphotonQuantities();
-
       
   //----------------------------------------------------------
    bool cut_[10]={false};
@@ -154,7 +161,6 @@ bool PreSelection(int type=0,float Kvcut=25) {
        photonjet_e_max=photonjet_E[1];
        photonjet_cos_max=photonjet_costheta[1];
      }
-
      cut_[5]=(cut_[4] &&  fabs(photonjet_cos_max)<costheta_isr && photonjet_e_max<energy_isr_cut ) ;
      cut_[6]=(cut_[5] && d23/pow(bbmass,2)<y23cut );
      cut_[7]=(cut_[6] && jet_btag[0]>btag1 && jet_btag[1]>btag2);

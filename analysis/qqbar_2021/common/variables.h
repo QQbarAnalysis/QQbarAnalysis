@@ -1,4 +1,5 @@
-   // Declaration of leaf types
+
+// Declaration of leaf types
    Float_t         mc_quark_E[2];
    Float_t         mc_quark_px[2];
    Float_t         mc_quark_py[2];
