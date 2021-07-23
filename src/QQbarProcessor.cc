@@ -34,8 +34,8 @@ namespace QQbarProcessor
 				string("QQbarProcessor.root") );
     registerProcessorParameter( "AnalysisType",
 				"Analysis Type (0= default qqbar, -1 backgrounds -started by A. Irles)",
-				_type,
-				_type );
+				_analysisType,
+				0 );
     registerProcessorParameter( "DBDanalysis",
 				"It is a DBD analysis?",
 				_boolDBDanalysis,
@@ -97,27 +97,13 @@ namespace QQbarProcessor
   { 
     // usually a good idea to
 
-    std::cout << "Type: " <<  _type << "\n";
-    _analysisType = static_cast<ANALYSIS_TYPE>(_type);
-    std::cout << "Type: " <<  _analysisType << "\n";
-
     printParameters() ;
-    std::cout << "_analysisType: " << _analysisType << "\n";
     _nRun = 0 ;
-
+    
     // Initialize sum
-    switch(_analysisType)
-      {
-      case QQbar:
-	std::cout << "Initialize QQbarTree, _analysisType= " << _analysisType << "\n";
-	_qqbaranalysis.Init(_hfilename);
-	break;
-      case BKG:
-	std::cout << "Initialize QQbarTree, _analysisType= " << _analysisType << "\n";
-        _qqbaranalysis.Init(_hfilename);                                              
-        break; 
-      }
-
+    std::cout << "Initialize QQbarTree, _analysisType= " << _analysisType << "\n";
+    _qqbaranalysis.Init(_hfilename);
+    
   }
   void QQbarProcessor::processRunHeader( LCRunHeader* run) 
   { 
@@ -126,42 +112,19 @@ namespace QQbarProcessor
 
   void QQbarProcessor::processEvent( LCEvent * evt )
   {
-    switch(_analysisType)
-      {
-      case QQbar: 
-	{ 
-	  _qqbaranalysis.AnalyseQQbar(evt,
-				      _boolDBDanalysis,
-				      _colName ,
-				      _colRelName,
-				      _initialJetsColName,
-				      _JetsColName ,
-				      _JetsRelColName ,
-				      _MCColName,
-				      _versionPID,
-				      _Rparam_jet_ps,
-				      _pparam_jet_ps,
-				      0
-				      );
-	}
-      case BKG:
-	{                                                                                                                                                                                                   
-          _qqbaranalysis.AnalyseQQbar(evt, 
-                                      _boolDBDanalysis,
-                                      _colName ,       
-                                      _colRelName,     
-                                      _initialJetsColName,
-                                      _JetsColName ,      
-                                      _JetsRelColName ,   
-                                      _MCColName,         
-                                      _versionPID,        
-                                      _Rparam_jet_ps,     
-                                      _pparam_jet_ps,
-				      -1
-                                      );
-        }
-	break;
-      }
+    _qqbaranalysis.AnalyseQQbar(evt,
+				_boolDBDanalysis,
+				_colName ,
+				_colRelName,
+				_initialJetsColName,
+				_JetsColName ,
+				_JetsRelColName ,
+				_MCColName,
+				_versionPID,
+				_Rparam_jet_ps,
+				_pparam_jet_ps,
+				_analysisType
+				);
   }
 
   void QQbarProcessor::check( LCEvent * evt ) 
@@ -173,15 +136,6 @@ namespace QQbarProcessor
   {   
 
     _qqbaranalysis.End();                                                                                                                                                                               
-    //break;  
-    /*    switch(_analysisType)
-      {
-
-      case QQbar:
-      case BKG:
-	_qqbaranalysis.End();
-	break;
-	}*/
   }
   
 }

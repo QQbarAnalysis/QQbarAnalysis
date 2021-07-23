@@ -36,11 +36,6 @@ using namespace marlin ;
 
 namespace QQbarProcessor 
 {
-  enum ANALYSIS_TYPE
-    {
-      QQbar = 0,
-      BKG = -1      
-    };
   class QQbarProcessor : public Processor
   {
 	  
@@ -79,7 +74,7 @@ namespace QQbarProcessor
      */
     int _type;
     std::string _hfilename;
-    ANALYSIS_TYPE _analysisType ;
+    int _analysisType ;
     std::string _colName ;
     std::string _MCColName ;
     std::string _JetsColName ;

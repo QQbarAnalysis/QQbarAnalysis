@@ -726,6 +726,8 @@ namespace QQbarProcessor
 	  streamlog_out(DEBUG)<<"ERROR - pfo_recorded =0 "<<std::endl;
 	
 	_hTree->Fill();	
+	streamlog_out(DEBUG)<<" Fill Histo "<<std::endl;
+
 	
 	delete jets;
 	ClearVariables();
