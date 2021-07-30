@@ -472,12 +472,19 @@ namespace QQbarProcessor
 
 	//MC bbbar Analysis
 	QQbarMCOperator operaMC(mccol,evt->getCollection(_colRelName));
-	if(_typeAnalysis == 0) 	{
+	if(_typeAnalysis != -1) 	{
 	  //if(opera.IsEvent()==true) {
 	  vector < MCParticle * > mcbs = AnalyseGeneratorQQbar(operaMC);//Hard Process
 	  AnalyseGeneratorISR(operaMC); 
 	  AnalyseGeneratorQQbar_PS(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
 	  AnalyseGeneratorQQbar_Stable(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
+
+	  if(_typeAnalysis == 1) 
+	    if( (_stats._mc_ISR_E[0] + _stats._mc_ISR_E[1])>35) {
+	      streamlog_out(DEBUG) << "Event is ISR, E[0]="<<_stats._mc_ISR_E[0]<<" E[1]="<<_stats._mc_ISR_E[1]<<"\n";
+	      return;
+	    }
+	  
 	} 
 
 	// get jet reconstruction variables (merging distances)
@@ -542,7 +549,7 @@ namespace QQbarProcessor
 
 	vector<vector<MCParticle*> > all_stable;
 	vector<MCParticle*> isr_stable;
-	if(_typeAnalysis == 0)  { 
+	if(_typeAnalysis != -1)  { 
 	  //Obtain particles which are appeared after intermediate particle,
 	  // all the particles with zero daughters in the MCParticleSkimmed (stable particles)
 	  all_stable = operaMC.GetQQbarStables();
@@ -640,7 +647,7 @@ namespace QQbarProcessor
 
 	      bool write=false;
 	      write=WritePFOInfo(evt,component,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,ijet,0,_colName, _versionPID);
-	      if(_typeAnalysis == 0) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
+	      if(_typeAnalysis != -1) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
 
 	      if(write==false) break;
@@ -675,7 +682,7 @@ namespace QQbarProcessor
 	      streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
 	      bool write=false;
 	      write=WritePFOInfo(evt,found_track_particle,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,ijet,ivtx+1,_colName, _versionPID);
-	      if(_typeAnalysis == 0) PFOCheatInfo(found_track_particle,operaMC,isr_stable,pfo_recorded);
+	      if(_typeAnalysis != -1) PFOCheatInfo(found_track_particle,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
 
               if(write==false) break;
@@ -716,7 +723,7 @@ namespace QQbarProcessor
 	    streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
 	    bool write=false;
 	    write=WritePFOInfo(evt,component,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,2,0,_colName, _versionPID);
-	    if(_typeAnalysis == 0) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
+	    if(_typeAnalysis != -1) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	    pfo_recorded++;
 	  }
 	}
