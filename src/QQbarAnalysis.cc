@@ -1,4 +1,5 @@
 #include "QQbarAnalysis.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 
 using namespace lcio ;
 using namespace marlin ;
@@ -336,30 +337,40 @@ namespace QQbarProcessor
     _stats._pfo_omegaerror[pfo_recorded]=cov[5];
     _stats._pfo_tanlambdaerror[pfo_recorded]=cov[14];
     
-    PIDHandler pidh_1(evt->getCollection(_colName));
-    int pid_1 = pidh_1.getAlgorithmID("LikelihoodPID"+_versionPID);
+    PIDHandler pidh(evt->getCollection(_colName));
+    int pid_1 = pidh.getAlgorithmID("LikelihoodPID"+_versionPID);
     int index_likelihood[6];
-    index_likelihood[0]=pidh_1.getParameterIndex(pid_1, "electronProbability");
-    index_likelihood[1]=pidh_1.getParameterIndex(pid_1, "muonProbability");
-    index_likelihood[2]=pidh_1.getParameterIndex(pid_1, "pionProbability");
-    index_likelihood[3]=pidh_1.getParameterIndex(pid_1, "kaonProbability");
-    index_likelihood[4]=pidh_1.getParameterIndex(pid_1, "protonProbability");
-    index_likelihood[5]=pidh_1.getParameterIndex(pid_1, "hadronProbability");
+    index_likelihood[0]=pidh.getParameterIndex(pid_1, "electronProbability");
+    index_likelihood[1]=pidh.getParameterIndex(pid_1, "muonProbability");
+    index_likelihood[2]=pidh.getParameterIndex(pid_1, "pionProbability");
+    index_likelihood[3]=pidh.getParameterIndex(pid_1, "kaonProbability");
+    index_likelihood[4]=pidh.getParameterIndex(pid_1, "protonProbability");
+    index_likelihood[5]=pidh.getParameterIndex(pid_1, "hadronProbability");
 
 
-    PIDHandler pidh_2(evt->getCollection(_colName));
-    int pid_2 = pidh_2.getAlgorithmID("dEdxPID"+_versionPID);
-    int index_dedx[6];
-    index_dedx[0]=pidh_2.getParameterIndex(pid_2, "electronProbability"); 
-    index_dedx[1]=pidh_2.getParameterIndex(pid_2, "muonProbability");
-    index_dedx[2]=pidh_2.getParameterIndex(pid_2, "pionProbability");
-    index_dedx[3]=pidh_2.getParameterIndex(pid_2, "kaonProbability");
-    index_dedx[4]=pidh_2.getParameterIndex(pid_2, "protonProbability");
-    index_dedx[5]=pidh_2.getParameterIndex(pid_2, "hadronProbability");
+    int pid_2 = pidh.getAlgorithmID("dEdxPID"+_versionPID);
+    int index_dedx[16];
+    index_dedx[0]=pidh.getParameterIndex(pid_2, "electronProbability"); 
+    index_dedx[1]=pidh.getParameterIndex(pid_2, "muonProbability");
+    index_dedx[2]=pidh.getParameterIndex(pid_2, "pionProbability");
+    index_dedx[3]=pidh.getParameterIndex(pid_2, "kaonProbability");
+    index_dedx[4]=pidh.getParameterIndex(pid_2, "protonProbability");
+    index_dedx[5]=pidh.getParameterIndex(pid_2, "hadronProbability");
 
+    index_dedx[6]=pidh.getParameterIndex(pid_2, "electron_dEdxdistance"); 
+    index_dedx[7]=pidh.getParameterIndex(pid_2, "muon_dEdxdistance");
+    index_dedx[8]=pidh.getParameterIndex(pid_2, "pion_dEdxdistance");
+    index_dedx[9]=pidh.getParameterIndex(pid_2, "kaon_dEdxdistance");
+    index_dedx[10]=pidh.getParameterIndex(pid_2, "proton_dEdxdistance");
+
+    index_dedx[11]=pidh.getParameterIndex(pid_2, "electronLikelihood"); 
+    index_dedx[12]=pidh.getParameterIndex(pid_2, "muonLikelihood");
+    index_dedx[13]=pidh.getParameterIndex(pid_2, "pionLikelihood");
+    index_dedx[14]=pidh.getParameterIndex(pid_2, "kaonLikelihood");
+    index_dedx[15]=pidh.getParameterIndex(pid_2, "protonLikelihood");
 
     
-    const ParticleID& pid_likelihood = pidh_1.getParticleID(component,pid_1);
+    const ParticleID& pid_likelihood = pidh.getParticleID(component,pid_1);
     vector<float> params_1 = pid_likelihood.getParameters();
     streamlog_out(DEBUG)<<" PDG with LikelihoodPID " <<pid_1<<" "<<pid_likelihood.getPDG()<<std::endl;
     _stats._pfo_pid[pfo_recorded] = pid_likelihood.getPDG();
@@ -371,10 +382,12 @@ namespace QQbarProcessor
       _stats._pfo_pid_kprob[pfo_recorded]=params_1.at(index_likelihood[3]);
       _stats._pfo_pid_pprob[pfo_recorded]=params_1.at(index_likelihood[4]);
       _stats._pfo_pid_hprob[pfo_recorded]=params_1.at(index_likelihood[5]);
+
+
       streamlog_out(DEBUG)<<" eprob: "<<params_1.at(index_likelihood[0])<<" muprob: "<<params_1.at(index_likelihood[1])<<" piprob: "<<params_1.at(index_likelihood[2])<<" kprob: "<<params_1.at(index_likelihood[3])<<" pprob: "<<params_1.at(index_likelihood[4])<<" hprob: "<<params_1.at(index_likelihood[5])<<std::endl;
     }
     
-    const ParticleID& pid_dedx = pidh_2.getParticleID(component,pid_2);
+    const ParticleID& pid_dedx = pidh.getParticleID(component,pid_2);
     vector<float> params_2 = pid_dedx.getParameters();
     streamlog_out(DEBUG)<<" PDG with LikelihoodPID-dEdx1 " <<pid_2<<" "<<pid_dedx.getPDG()<<std::endl;
     _stats._pfo_piddedx[pfo_recorded] = pid_dedx.getPDG();
@@ -386,8 +399,95 @@ namespace QQbarProcessor
       _stats._pfo_piddedx_kprob[pfo_recorded]=params_2.at(index_dedx[3]);
       _stats._pfo_piddedx_pprob[pfo_recorded]=params_2.at(index_dedx[4]);
       _stats._pfo_piddedx_hprob[pfo_recorded]=params_2.at(index_dedx[5]);
+
+      _stats._pfo_piddedx_e_dedxdist[pfo_recorded]=params_2.at(index_dedx[6]);
+      _stats._pfo_piddedx_mu_dedxdist[pfo_recorded]=params_2.at(index_dedx[7]);
+      _stats._pfo_piddedx_pi_dedxdist[pfo_recorded]=params_2.at(index_dedx[8]);
+      _stats._pfo_piddedx_k_dedxdist[pfo_recorded]=params_2.at(index_dedx[9]);
+      _stats._pfo_piddedx_p_dedxdist[pfo_recorded]=params_2.at(index_dedx[10]);
+
+      _stats._pfo_piddedx_e_lkhood[pfo_recorded]=params_2.at(index_dedx[11]);
+      _stats._pfo_piddedx_mu_lkhood[pfo_recorded]=params_2.at(index_dedx[12]);
+      _stats._pfo_piddedx_pi_lkhood[pfo_recorded]=params_2.at(index_dedx[13]);
+      _stats._pfo_piddedx_k_lkhood[pfo_recorded]=params_2.at(index_dedx[14]);
+      _stats._pfo_piddedx_p_lkhood[pfo_recorded]=params_2.at(index_dedx[15]);
+
+
       streamlog_out(DEBUG)<<" eprob: "<<params_2.at(index_dedx[0])<<" muprob: "<<params_2.at(index_dedx[1])<<" piprob: "<<params_2.at(index_dedx[2])<<" kprob: "<<params_2.at(index_dedx[3])<<" pprob: "<<params_2.at(index_dedx[4])<<" hprob: "<<params_2.at(index_dedx[5])<<std::endl;
     }
+
+    // TOF stuff
+    try {
+      float _smearTimevec[4]={0,10,50,100};//in ps
+  
+      for(int ismear=0; ismear<4; ismear++) {
+	TString method=TString::Format("myTOFEstimators_%ips",int(_smearTimevec[ismear]));
+	streamlog_out(DEBUG)<<" TOF-Algorithm "<<method<<std::endl;
+	int pid_tof_ = pidh.getAlgorithmID(method.Data());
+	streamlog_out(DEBUG)<<" TOF-Algorithm: pid_tof_:"<< pid_tof_<<std::endl;
+	const ParticleID& pid_tof = pidh.getParticleID(component,pid_tof_);
+	vector<float> params_tof = pid_tof.getParameters();
+	streamlog_out(DEBUG)<<" TOF-Algorithm: params_tof.size():"<< params_tof.size()<<std::endl;
+	if(params_tof.size()==0) continue;
+	if(component->getClusters().size() != 1) {
+	  streamlog_out( DEBUG ) << " ignore particle w/ cluster number other than one:  " <<  component->getClusters().size()  << std::endl ;
+	  continue ;
+
+	}
+	
+	int i_tof[4];
+	i_tof[0]= pidh.getParameterIndex(pid_tof_, "TOFClosest");
+	i_tof[1]= pidh.getParameterIndex(pid_tof_, "TOFFastest");
+	i_tof[2]= pidh.getParameterIndex(pid_tof_, "TOFCylFit");
+	i_tof[3]= pidh.getParameterIndex(pid_tof_, "TOFClosestFit");
+
+	int i_trklength  = pidh.getParameterIndex(pid_tof_, "FlightLength");
+	int i_p  = pidh.getParameterIndex(pid_tof_, "MomAtCalo");
+
+	float tof[4]={0.};
+	for(int itof=0; itof<4; itof++)  tof[itof]=params_tof.at(i_tof[itof]);
+	float trklength=params_tof.at(i_trklength);
+        float p_calo=params_tof.at(i_p);
+
+	float beta[4]={0.};
+	for(int itof=0; itof<4; itof++) beta[itof]=(trklength / tof[itof]) / CLHEP::c_light;
+
+	for(int itof=0; itof<4; itof++)	streamlog_out(DEBUG)<<itof<<" tof:"<<i_tof[itof]<<" "<<tof[itof]<<" beta:"<<beta[itof]<<" ";
+	streamlog_out(DEBUG)<<" length:"<<" "<<trklength<<" "<<CLHEP::c_light<<std::endl;
+
+	_stats._pfo_pidtof_p_at_calo[pfo_recorded]=p_calo;
+	if(ismear==0) {
+	  _stats._pfo_pidtof_closest_beta_0ps[pfo_recorded]=beta[0];
+	  _stats._pfo_pidtof_fastest_beta_0ps[pfo_recorded]=beta[1];
+	  _stats._pfo_pidtof_cylfit_beta_0ps[pfo_recorded]=beta[2];
+	  _stats._pfo_pidtof_closestfit_beta_0ps[pfo_recorded]=beta[3];
+	}
+	if(ismear==1) {
+	    _stats._pfo_pidtof_closest_beta_10ps[pfo_recorded]=beta[0];
+	    _stats._pfo_pidtof_fastest_beta_10ps[pfo_recorded]=beta[1];
+	    _stats._pfo_pidtof_cylfit_beta_10ps[pfo_recorded]=beta[2];
+	    _stats._pfo_pidtof_closestfit_beta_10ps[pfo_recorded]=beta[3];
+	}
+	if(ismear==2) {
+	  _stats._pfo_pidtof_closest_beta_50ps[pfo_recorded]=beta[0];
+	  _stats._pfo_pidtof_fastest_beta_50ps[pfo_recorded]=beta[1];
+	  _stats._pfo_pidtof_cylfit_beta_50ps[pfo_recorded]=beta[2];
+	    _stats._pfo_pidtof_closestfit_beta_50ps[pfo_recorded]=beta[3];
+	}
+	if(ismear==3) {
+	  _stats._pfo_pidtof_closest_beta_100ps[pfo_recorded]=beta[0];
+	  _stats._pfo_pidtof_fastest_beta_100ps[pfo_recorded]=beta[1];
+	  _stats._pfo_pidtof_cylfit_beta_100ps[pfo_recorded]=beta[2];
+	  _stats._pfo_pidtof_closestfit_beta_100ps[pfo_recorded]=beta[3];
+	}
+	
+      }//ismear
+    } catch( lcio::UnknownAlgorithm e ){
+      streamlog_out(DEBUG) << "TOF PIDHandler algorithm not existing "; 
+      streamlog_out(WARNING)<< e.what() << "\n";
+    }
+      
+
 
 
     if(ijet==0) _stats._pfo_n_j1++;
@@ -472,12 +572,23 @@ namespace QQbarProcessor
 
 	//MC bbbar Analysis
 	QQbarMCOperator operaMC(mccol,evt->getCollection(_colRelName));
+<<<<<<< HEAD
+	if(_typeAnalysis != -1)         {
+=======
 	if(_typeAnalysis != -1) 	{
+>>>>>>> e0c06a03dd368ff628708380febf8feb514a87e8
 	  //if(opera.IsEvent()==true) {
 	  vector < MCParticle * > mcbs = AnalyseGeneratorQQbar(operaMC);//Hard Process
 	  AnalyseGeneratorISR(operaMC); 
 	  AnalyseGeneratorQQbar_PS(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
 	  AnalyseGeneratorQQbar_Stable(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
+<<<<<<< HEAD
+	  if(_typeAnalysis == 1)  
+            if( (_stats._mc_ISR_E[0] + _stats._mc_ISR_E[1])>35) {
+              streamlog_out(DEBUG) << "Event is ISR, E[0]="<<_stats._mc_ISR_E[0]<<" E[1]="<<_stats._mc_ISR_E[1]<<"\n";
+	      return;
+            }  
+=======
 
 	  if(_typeAnalysis == 1) 
 	    if( (_stats._mc_ISR_E[0] + _stats._mc_ISR_E[1])>35) {
@@ -485,6 +596,7 @@ namespace QQbarProcessor
 	      return;
 	    }
 	  
+>>>>>>> e0c06a03dd368ff628708380febf8feb514a87e8
 	} 
 
 	// get jet reconstruction variables (merging distances)

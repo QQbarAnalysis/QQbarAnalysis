@@ -156,8 +156,38 @@ namespace QQbarProcessor
     _hTree->Branch("pfo_piddedx_kprob", data._pfo_piddedx_kprob, "pfo_piddedx_kprob[pfo_n]/F");
     _hTree->Branch("pfo_piddedx_pprob", data._pfo_piddedx_pprob, "pfo_piddedx_pprob[pfo_n]/F");
     _hTree->Branch("pfo_piddedx_hprob", data._pfo_piddedx_hprob, "pfo_piddedx_hprob[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_e_dedxdist", data._pfo_piddedx_e_dedxdist, "pfo_piddedx_e_dedxdist[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_mu_dedxdist", data._pfo_piddedx_mu_dedxdist, "pfo_piddedx_mu_dedxdist[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_pi_dedxdist", data._pfo_piddedx_pi_dedxdist, "pfo_piddedx_pi_dedxdist[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_k_dedxdist", data._pfo_piddedx_k_dedxdist, "pfo_piddedx_k_dedxdist[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_p_dedxdist", data._pfo_piddedx_p_dedxdist, "pfo_piddedx_p_dedxdist[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_e_lkhood", data._pfo_piddedx_e_lkhood, "pfo_piddedx_e_lkhood[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_mu_lkhood", data._pfo_piddedx_mu_lkhood, "pfo_piddedx_mu_lkhood[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_pi_lkhood", data._pfo_piddedx_pi_lkhood, "pfo_piddedx_pi_lkhood[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_k_lkhood", data._pfo_piddedx_k_lkhood, "pfo_piddedx_k_lkhood[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_p_lkhood", data._pfo_piddedx_p_lkhood, "pfo_piddedx_p_lkhood[pfo_n]/F");
 
+    _hTree->Branch("pfo_pidtof_p_at_calo", data._pfo_pidtof_p_at_calo, "pfo_pidtof_p_at_calo[pfo_n]/F");
 
+    _hTree->Branch("pfo_pidtof_closest_beta_0ps", data._pfo_pidtof_closest_beta_0ps, "pfo_pidtof_closest_beta_0ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_closest_beta_10ps", data._pfo_pidtof_closest_beta_10ps, "pfo_pidtof_closest_beta_10ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_closest_beta_50ps", data._pfo_pidtof_closest_beta_50ps, "pfo_pidtof_closest_beta_50ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_closest_beta_100ps", data._pfo_pidtof_closest_beta_100ps, "pfo_pidtof_closest_beta_100ps[pfo_n]/F");
+
+    _hTree->Branch("pfo_pidtof_fastest_beta_0ps", data._pfo_pidtof_fastest_beta_0ps, "pfo_pidtof_fastest_beta_0ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_fastest_beta_10ps", data._pfo_pidtof_fastest_beta_10ps, "pfo_pidtof_fastest_beta_10ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_fastest_beta_50ps", data._pfo_pidtof_fastest_beta_50ps, "pfo_pidtof_fastest_beta_50ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_fastest_beta_100ps", data._pfo_pidtof_fastest_beta_100ps, "pfo_pidtof_fastest_beta_100ps[pfo_n]/F");
+
+    _hTree->Branch("pfo_pidtof_cylfit_beta_0ps", data._pfo_pidtof_cylfit_beta_0ps, "pfo_pidtof_cylfit_beta_0ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_cylfit_beta_10ps", data._pfo_pidtof_cylfit_beta_10ps, "pfo_pidtof_cylfit_beta_10ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_cylfit_beta_50ps", data._pfo_pidtof_cylfit_beta_50ps, "pfo_pidtof_cylfit_beta_50ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_cylfit_beta_100ps", data._pfo_pidtof_cylfit_beta_100ps, "pfo_pidtof_cylfit_beta_100ps[pfo_n]/F");
+
+    _hTree->Branch("pfo_pidtof_closestfit_beta_0ps", data._pfo_pidtof_closestfit_beta_0ps, "pfo_pidtof_closestfit_beta_0ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_closestfit_beta_10ps", data._pfo_pidtof_closestfit_beta_10ps, "pfo_pidtof_closestfit_beta_10ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_closestfit_beta_50ps", data._pfo_pidtof_closestfit_beta_50ps, "pfo_pidtof_closestfit_beta_50ps[pfo_n]/F");
+    _hTree->Branch("pfo_pidtof_closestfit_beta_100ps", data._pfo_pidtof_closestfit_beta_100ps, "pfo_pidtof_closestfit_beta_100ps[pfo_n]/F");
 
 
   }

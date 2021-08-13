@@ -138,6 +138,38 @@ namespace QQbarProcessor
     float _pfo_piddedx_kprob[1000];
     float _pfo_piddedx_pprob[1000];
     float _pfo_piddedx_hprob[1000];
+    float _pfo_piddedx_e_dedxdist[1000];
+    float _pfo_piddedx_mu_dedxdist[1000];
+    float _pfo_piddedx_pi_dedxdist[1000];
+    float _pfo_piddedx_k_dedxdist[1000];
+    float _pfo_piddedx_p_dedxdist[1000];
+    float _pfo_piddedx_e_lkhood[1000];
+    float _pfo_piddedx_mu_lkhood[1000];
+    float _pfo_piddedx_pi_lkhood[1000];
+    float _pfo_piddedx_k_lkhood[1000];
+    float _pfo_piddedx_p_lkhood[1000];
+
+    float _pfo_pidtof_p_at_calo[1000];
+
+    float _pfo_pidtof_closest_beta_0ps[1000];
+    float _pfo_pidtof_closest_beta_10ps[1000];
+    float _pfo_pidtof_closest_beta_50ps[1000];
+    float _pfo_pidtof_closest_beta_100ps[1000];
+    
+    float _pfo_pidtof_fastest_beta_0ps[1000];
+    float _pfo_pidtof_fastest_beta_10ps[1000];
+    float _pfo_pidtof_fastest_beta_50ps[1000];
+    float _pfo_pidtof_fastest_beta_100ps[1000];
+
+    float _pfo_pidtof_cylfit_beta_0ps[1000];
+    float _pfo_pidtof_cylfit_beta_10ps[1000];
+    float _pfo_pidtof_cylfit_beta_50ps[1000];
+    float _pfo_pidtof_cylfit_beta_100ps[1000];
+
+    float _pfo_pidtof_closestfit_beta_0ps[1000];
+    float _pfo_pidtof_closestfit_beta_10ps[1000];
+    float _pfo_pidtof_closestfit_beta_50ps[1000];
+    float _pfo_pidtof_closestfit_beta_100ps[1000];
 
     int _pfo_n;
     int _nvtx;
@@ -293,7 +325,41 @@ namespace QQbarProcessor
         _pfo_piddedx_kprob[ipfo]=0;
         _pfo_piddedx_pprob[ipfo]=0;
         _pfo_piddedx_hprob[ipfo]=0;
+
+	_pfo_piddedx_e_dedxdist[ipfo]=0;
+        _pfo_piddedx_mu_dedxdist[ipfo]=0;
+        _pfo_piddedx_pi_dedxdist[ipfo]=0;
+        _pfo_piddedx_k_dedxdist[ipfo]=0;
+        _pfo_piddedx_p_dedxdist[ipfo]=0;
+
+	_pfo_piddedx_e_lkhood[ipfo]=0;
+        _pfo_piddedx_mu_lkhood[ipfo]=0;
+        _pfo_piddedx_pi_lkhood[ipfo]=0;
+        _pfo_piddedx_k_lkhood[ipfo]=0;
+        _pfo_piddedx_p_lkhood[ipfo]=0;
+
+	_pfo_pidtof_p_at_calo[ipfo]=-1;
+
+	_pfo_pidtof_closest_beta_0ps[ipfo]=-1.;
+	_pfo_pidtof_closest_beta_10ps[ipfo]=-1.;
+	_pfo_pidtof_closest_beta_50ps[ipfo]=-1.;
+	_pfo_pidtof_closest_beta_100ps[ipfo]=-1.;
 	
+	_pfo_pidtof_fastest_beta_0ps[ipfo]=-1.;
+	_pfo_pidtof_fastest_beta_10ps[ipfo]=-1.;
+	_pfo_pidtof_fastest_beta_50ps[ipfo]=-1.;
+	_pfo_pidtof_fastest_beta_100ps[ipfo]=-1.;
+	
+	_pfo_pidtof_cylfit_beta_0ps[ipfo]=-1.;
+	_pfo_pidtof_cylfit_beta_10ps[ipfo]=-1.;
+	_pfo_pidtof_cylfit_beta_50ps[ipfo]=-1.;
+	_pfo_pidtof_cylfit_beta_100ps[ipfo]=-1.;
+	
+	_pfo_pidtof_closestfit_beta_0ps[ipfo]=-1.;
+	_pfo_pidtof_closestfit_beta_10ps[ipfo]=-1.;
+	_pfo_pidtof_closestfit_beta_50ps[ipfo]=-1.;
+	_pfo_pidtof_closestfit_beta_100ps[ipfo]=-1.;
+
       }
       
     }//end clear
