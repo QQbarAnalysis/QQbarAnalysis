@@ -1,4 +1,4 @@
-#include "variables.h"
+#include "variables_dedx_tof.h"
 
 //Optimized cuts by Jesus
 //----------------------------------------------------------  
@@ -18,11 +18,11 @@ double y23cut=0.015;
 
 
 //flavour tagging
-float btag1=0.8;
-float btag2=0.8;
+float btag1=0.85;
+float btag2=0.85;
 
-float ctag1=0.75;
-float ctag2=0.75;
+float ctag1=0.875;
+float ctag2=0.875;
 
 
 //K-reco
@@ -162,8 +162,10 @@ bool PreSelection(int type=0,float Kvcut=25) {
        photonjet_cos_max=photonjet_costheta[1];
      }
      cut_[5]=(cut_[4] &&  fabs(photonjet_cos_max)<costheta_isr && photonjet_e_max<energy_isr_cut ) ;
-     cut_[6]=(cut_[5] && d23/pow(bbmass,2)<y23cut );
+     cut_[6]=(cut_[5] && d23>0.5 && d23/pow(bbmass,2)<y23cut );
+     
      cut_[7]=(cut_[6] && jet_btag[0]>btag1 && jet_btag[1]>btag2);
+     cut_[8]=(cut_[6] && jet_ctag[0]>ctag1 && jet_ctag[1]>ctag2);
      return cut_[type];
    }
        
