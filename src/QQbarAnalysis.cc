@@ -572,31 +572,17 @@ namespace QQbarProcessor
 
 	//MC bbbar Analysis
 	QQbarMCOperator operaMC(mccol,evt->getCollection(_colRelName));
-<<<<<<< HEAD
-	if(_typeAnalysis != -1)         {
-=======
 	if(_typeAnalysis != -1) 	{
->>>>>>> e0c06a03dd368ff628708380febf8feb514a87e8
 	  //if(opera.IsEvent()==true) {
 	  vector < MCParticle * > mcbs = AnalyseGeneratorQQbar(operaMC);//Hard Process
 	  AnalyseGeneratorISR(operaMC); 
 	  AnalyseGeneratorQQbar_PS(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
 	  AnalyseGeneratorQQbar_Stable(operaMC,_Rparam_jet_ps,_pparam_jet_ps);
-<<<<<<< HEAD
 	  if(_typeAnalysis == 1)  
             if( (_stats._mc_ISR_E[0] + _stats._mc_ISR_E[1])>35) {
               streamlog_out(DEBUG) << "Event is ISR, E[0]="<<_stats._mc_ISR_E[0]<<" E[1]="<<_stats._mc_ISR_E[1]<<"\n";
 	      return;
             }  
-=======
-
-	  if(_typeAnalysis == 1) 
-	    if( (_stats._mc_ISR_E[0] + _stats._mc_ISR_E[1])>35) {
-	      streamlog_out(DEBUG) << "Event is ISR, E[0]="<<_stats._mc_ISR_E[0]<<" E[1]="<<_stats._mc_ISR_E[1]<<"\n";
-	      return;
-	    }
-	  
->>>>>>> e0c06a03dd368ff628708380febf8feb514a87e8
 	} 
 
 	// get jet reconstruction variables (merging distances)
