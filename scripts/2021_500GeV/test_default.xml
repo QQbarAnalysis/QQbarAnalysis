@@ -32,7 +32,7 @@
       /lustre/ific.uv.es/prj/ific/flc/mc-opt-3/xPROD/NFile
     </parameter>
     <parameter name="AllowToModifyEvent" value="true" />  
-    <!--parameter name="MaxRecordNumber" value="100"/-->  
+    <parameter name="MaxRecordNumber" value="100"/>  
     <!--parameter name="GearXMLFile" value="GearOutput.xml"/-->
     <parameter name="SkipNEvents" value="0"/>
     <parameter name="SupressCheck" value="false"/>
