@@ -16,7 +16,7 @@
     <processor name="JetClusteringAndFlavorTag"/>
     <processor name="MySphere"/>
     <processor name="MyThrustReconstruction"/>
-    <processor name="MyTrueJet"/>
+    <!--processor name="MyTrueJet"/-->
     <processor name="MyLikelihoodPID" />
     <!--processor name="myTOFEstimators_0ps"/>
     <processor name="myTOFEstimators_10ps"/>
@@ -286,7 +286,7 @@
   <processor name="MyQQbarProcessor" type="QQbarProcessor">
     <parameter name="JetCollectionName" type="string" lcioInType="Vertex"> RefinedJets </parameter>
     <parameter name="JetRelCollectionName" type="string" lcioInType="Vertex"> RefinedJets_rel </parameter>
-    <parameter name="MCCollectionName" type="string" lcioInType="MCParticle"> MCParticlesSkimmed</parameter>
+    <parameter name="MCCollectionName" type="string" lcioInType="MCParticle"> MCParticle</parameter>
     <parameter name="PFOCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>  
     <parameter name="ROOTFileName" type="string">xPROD_newFileN.root</parameter>
     <parameter name="Rparam_jet_ps" type="float">1.5708</parameter>                                                                                                                        
