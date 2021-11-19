@@ -262,7 +262,7 @@ namespace QQbarProcessor
 
 
   
-  bool QQbarAnalysis::WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, ReconstructedParticle *truejet, int pfo_recorded, int ijet, int ivtx, std::string _colName, std::string _versionPID){
+  bool QQbarAnalysis::WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, int pfo_recorded, int ijet, int ivtx, std::string _colName, std::string _versionPID){
     
     streamlog_out(DEBUG)<<" _stats._pfo_E="<<component->getEnergy();
     streamlog_out(DEBUG)<<" _stats._pfo_px="<<component->getMomentum()[0];
@@ -283,10 +283,22 @@ namespace QQbarProcessor
 
     _stats._pfo_jet_match[pfo_recorded]=ijet;
 
-    _stats._pfo_truejet_pdg[pfo_recorded]=truejet->getParticleIDs()[0]->getPDG();
-    _stats._pfo_truejet_type[pfo_recorded]=truejet->getParticleIDs()[0]->getType();
-
-
+    try {
+      LCCollection *tjmcplcol  = evt->getCollection(  "TrueJetPFOLink" );
+      LCRelationNavigator navigator( tjmcplcol );
+      vector< LCObject * > true_obj= navigator.getRelatedFromObjects( component );
+      streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
+      if(true_obj.size()>0) {
+	ReconstructedParticle * truejet=dynamic_cast< ReconstructedParticle * >(true_obj[0]);
+	_stats._pfo_truejet_pdg[pfo_recorded]=truejet->getParticleIDs()[0]->getPDG();
+	_stats._pfo_truejet_type[pfo_recorded]=truejet->getParticleIDs()[0]->getType();
+      }
+    }catch( lcio::DataNotAvailableException e ){
+      streamlog_out(DEBUG) << "TrueJets collection not found \n";
+      streamlog_out(WARNING)<< e.what() << "\n";
+    }
+  
+      
     //cheat info               
     streamlog_out(DEBUG)<<" ntracks associated to this PFO: "<<component->getTracks().size()<<std::endl;
     streamlog_out(DEBUG)<<" Input vtx: "<<ivtx<<std::endl;
@@ -738,13 +750,8 @@ namespace QQbarProcessor
 	    //	  FIRST WE STORE ONLY THE info on the PFOs that are not int he list of secondary vtx
 	    if(record_pfo==true) {
 	      streamlog_out(DEBUG)<<" IS not a secondary TRACK: ssave info " <<std::endl;
-	      LCCollection *tjmcplcol  = evt->getCollection(  "TrueJetPFOLink" );
-	      LCRelationNavigator navigator( tjmcplcol );
-	      vector< LCObject * > true_obj= navigator.getRelatedFromObjects( component );
-	      streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
-
 	      bool write=false;
-	      write=WritePFOInfo(evt,component,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,ijet,0,_colName, _versionPID);
+	      write=WritePFOInfo(evt,component,pfo_recorded,ijet,0,_colName, _versionPID);
 	      if(_typeAnalysis != -1) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
 
@@ -774,12 +781,8 @@ namespace QQbarProcessor
 	    for(int itr=0; itr< ntrack; itr++) {
 
               ReconstructedParticle * found_track_particle = vertices->at(ivtx)->getAssociatedParticle()->getParticles().at(itr);
-	      LCCollection *tjmcplcol  = evt->getCollection(  "TrueJetPFOLink" );
-	      LCRelationNavigator navigator( tjmcplcol );
-	      vector< LCObject * > true_obj= navigator.getRelatedFromObjects( found_track_particle );
-	      streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
 	      bool write=false;
-	      write=WritePFOInfo(evt,found_track_particle,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,ijet,ivtx+1,_colName, _versionPID);
+	      write=WritePFOInfo(evt,found_track_particle,pfo_recorded,ijet,ivtx+1,_colName, _versionPID);
 	      if(_typeAnalysis != -1) PFOCheatInfo(found_track_particle,operaMC,isr_stable,pfo_recorded);
 	      pfo_recorded++;
 
@@ -815,12 +818,8 @@ namespace QQbarProcessor
 	  if(stored==false) {
 	    streamlog_out(DEBUG)<<" PFO not clustered in one of the jets, obj.id(): " <<obj->id()<<std::endl;
 	    ReconstructedParticle* component= dynamic_cast< ReconstructedParticle* >(obj);
-	    LCCollection *tjmcplcol  = evt->getCollection(  "TrueJetPFOLink" );
-	    LCRelationNavigator navigator( tjmcplcol );
-	    vector< LCObject * > true_obj= navigator.getRelatedFromObjects( component );
-	    streamlog_out(DEBUG)<<" TRUEJETS TEST navigator size: "<<true_obj.size()<<"\n";
 	    bool write=false;
-	    write=WritePFOInfo(evt,component,dynamic_cast< ReconstructedParticle * >(true_obj[0]),pfo_recorded,2,0,_colName, _versionPID);
+	    write=WritePFOInfo(evt,component,pfo_recorded,2,0,_colName, _versionPID);
 	    if(_typeAnalysis != -1) PFOCheatInfo(component,operaMC,isr_stable,pfo_recorded);
 	    pfo_recorded++;
 	  }

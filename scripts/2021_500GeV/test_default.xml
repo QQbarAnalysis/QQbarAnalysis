@@ -32,7 +32,7 @@
       /lustre/ific.uv.es/prj/ific/flc/mc-opt-3/xPROD/NFile
     </parameter>
     <parameter name="AllowToModifyEvent" value="true" />  
-    <parameter name="MaxRecordNumber" value="100"/>  
+    <!--parameter name="MaxRecordNumber" value="100"/-->  
     <!--parameter name="GearXMLFile" value="GearOutput.xml"/-->
     <parameter name="SkipNEvents" value="0"/>
     <parameter name="SupressCheck" value="false"/>
@@ -240,9 +240,9 @@
   </processor> 
 
   <processor name="MyTrueJet" type="TrueJet">
-    <!-- These are the defaults, probably exactly what you need.
-	 <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle">MCParticlesSkimmed</parameter>
-	 <parameter name="RecoParticleCollection" type="string"  lcioInType="ReconstructedParticle">PandoraPFOs</parameter>
+    <!-- These are the defaults, probably exactly what you need.-->
+	 <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle">MCParticle</parameter>
+	 <!--parameter name="RecoParticleCollection" type="string"  lcioInType="ReconstructedParticle">PandoraPFOs</parameter>
 	 <parameter name="RecoMCTruthLinkName" type="string" lcioInType="LCRelation"> RecoMCTruthLink </parameter>
 	 <parameter name="TrueJets" type="string"  lcioOutType="ReconstructedParticle">TrueJets</parameter>
 	 <parameter name="FinalColourNeutrals" type="string"  lcioOutType="ReconstructedParticle">FinalColourNeutrals</parameter>
