@@ -115,6 +115,7 @@ namespace QQbarProcessor
 
 	particles.push_back(PseudoJet(bbbar_ps.at(i)->getMomentum()[0],bbbar_ps.at(i)->getMomentum()[1],bbbar_ps.at(i)->getMomentum()[2],bbbar_ps.at(i)->getEnergy()));
 
+	streamlog_out(DEBUG) << "Print bbbar_ps "<<bbbar_ps.size()<<" "<<i<<"\n";
 	QQbarTools::PrintParticle(bbbar_ps.at(i));
       } else {
         _stats._mc_quark_ps_n=0;                                                                                                                                                                        
@@ -175,7 +176,9 @@ namespace QQbarProcessor
     
     int nstables=qqbar_stable.size();
     for(int i=0; i<nstables; i++) {
-      if(qqbar_stable.at(i)!=NULL) {
+      streamlog_out(DEBUG) <<i<< " \n";
+      if(qqbar_stable.at(i)!=NULL && qqbar_stable.at(i)->getEnergy()>0) {
+        streamlog_out(DEBUG) << "test0 \n";
         //They are filled at line:587
 	_stats._mc_stable_E[_stats._mc_stable_n]=qqbar_stable.at(i)->getEnergy();
 	_stats._mc_stable_px[_stats._mc_stable_n]=qqbar_stable.at(i)->getMomentum()[0];
@@ -188,12 +191,17 @@ namespace QQbarProcessor
         _stats._mc_stable_isoverlay[_stats._mc_stable_n]=0;	
 	_stats._mc_stable_n++;
         //Consists particle object which has 4-momentum
+	streamlog_out(DEBUG) << "test \n";
 	particles.push_back(PseudoJet(qqbar_stable.at(i)->getMomentum()[0], qqbar_stable.at(i)->getMomentum()[1], qqbar_stable.at(i)->getMomentum()[2], qqbar_stable.at(i)->getEnergy()));
 	
+	streamlog_out(DEBUG) << "Print Stables "<<qqbar_stable.size()<<" "<<i<<"\n";
 	QQbarTools::PrintParticle(qqbar_stable.at(i));
-      } else { //If qqbar_stable is empty(stables nothing), entry just zero
-	_stats._mc_stable_n=0;
-      }
+        streamlog_out(DEBUG) << "Ok \n";
+
+
+      } //else { //If qqbar_stable is empty(stables nothing), entry just zero
+	//_stats._mc_stable_n=0;
+      //}
     }
 
     int nisr=isr_stable.size();
@@ -210,6 +218,7 @@ namespace QQbarProcessor
         _stats._mc_stable_isisr[_stats._mc_stable_n]=1;
         _stats._mc_stable_isoverlay[_stats._mc_stable_n]=0;
         _stats._mc_stable_n++;
+	streamlog_out(DEBUG) << "Print ISR stables "<<isr_stable.size()<<" "<<i<<"\n";
 	QQbarTools::PrintParticle(isr_stable.at(i));
       } 
     }
@@ -226,6 +235,7 @@ namespace QQbarProcessor
         _stats._mc_stable_isisr[_stats._mc_stable_n]=0;
         _stats._mc_stable_isoverlay[_stats._mc_stable_n]=1;
         _stats._mc_stable_n++;
+	streamlog_out(DEBUG) << "Print OVERLAY stables "<<overlay_stable.size()<<" "<<i<<"\n";
 	QQbarTools::PrintParticle(overlay_stable.at(i)); 
       }
     }

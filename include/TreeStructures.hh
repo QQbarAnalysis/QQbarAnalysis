@@ -22,13 +22,13 @@ namespace QQbarProcessor
     float _mc_ISR_pdg[2];
     float _mc_ISR_charge[2]; 
 
-    float _mc_quark_ps_E[1000];
-    float _mc_quark_ps_px[1000];
-    float _mc_quark_ps_py[1000];
-    float _mc_quark_ps_pz[1000];
-    float _mc_quark_ps_m[1000];
-    float _mc_quark_ps_pdg[1000];
-    float _mc_quark_ps_charge[1000];
+    float _mc_quark_ps_E[100000];
+    float _mc_quark_ps_px[100000];
+    float _mc_quark_ps_py[100000];
+    float _mc_quark_ps_pz[100000];
+    float _mc_quark_ps_m[100000];
+    float _mc_quark_ps_pdg[100000];
+    float _mc_quark_ps_charge[100000];
     int  _mc_quark_ps_n;
     float _mc_quark_ps_y12;
     float _mc_quark_ps_y23;
@@ -40,15 +40,15 @@ namespace QQbarProcessor
     float _mc_quark_ps_jet_pz[2];
 
     //Member for Stable (Added by Seidai in 2020.Sep.17)
-    float _mc_stable_E[1000];
-    float _mc_stable_px[1000];
-    float _mc_stable_py[1000];
-    float _mc_stable_pz[1000];
-    float _mc_stable_m[1000];
-    int _mc_stable_pdg[1000];
-    float _mc_stable_charge[1000];
-    int _mc_stable_isoverlay[1000];
-    int _mc_stable_isisr[1000];
+    float _mc_stable_E[100000];
+    float _mc_stable_px[100000];
+    float _mc_stable_py[100000];
+    float _mc_stable_pz[100000];
+    float _mc_stable_m[100000];
+    int _mc_stable_pdg[100000];
+    float _mc_stable_charge[100000];
+    int _mc_stable_isoverlay[100000];
+    int _mc_stable_isisr[100000];
     int _mc_stable_n;
     float _mc_stable_y12;
     float _mc_stable_y23;
@@ -91,85 +91,85 @@ namespace QQbarProcessor
     float _jet_ctag[2]={0};
 
     //pfo stuff
-    int _pfo_jet_match[1000];
-    int _pfo_truejet_pdg[1000];
-    int _pfo_truejet_type[1000];
-    float _pfo_E[1000];
-    float _pfo_px[1000];
-    float _pfo_py[1000];
-    float _pfo_pz[1000];
-    float _pfo_m[1000];
-    int _pfo_type[1000]; 
-    int _pfo_charge[1000];
-    int _pfo_ntracks[1000];
-    int _pfo_pdgcheat[1000];
-    int _pfo_isoverlay[1000];
-    int _pfo_isisr[1000];
-    int _pfo_vtx[1000];
+    int _pfo_jet_match[100000];
+    int _pfo_truejet_pdg[100000];
+    int _pfo_truejet_type[100000];
+    float _pfo_E[100000];
+    float _pfo_px[100000];
+    float _pfo_py[100000];
+    float _pfo_pz[100000];
+    float _pfo_m[100000];
+    int _pfo_type[100000]; 
+    int _pfo_charge[100000];
+    int _pfo_ntracks[100000];
+    int _pfo_pdgcheat[100000];
+    int _pfo_isoverlay[100000];
+    int _pfo_isisr[100000];
+    int _pfo_vtx[100000];
 
-    int _pfo_tpc_hits[1000];
-    float _pfo_dedx[1000];
-    float _pfo_dedxerror[1000];
-    float _pfo_d0[1000];
-    float _pfo_d0error[1000];
-    float _pfo_z0[1000];
-    float _pfo_z0error[1000];
-    float _pfo_phi[1000];
-    float _pfo_phierror[1000];
-    float _pfo_omega[1000];
-    float _pfo_omegaerror[1000];
-    float _pfo_tanlambda[1000];
-    float _pfo_tanlambdaerror[1000];
-    float _pfo_chi2[1000];
-    float _pfo_ndf[1000];
-    int _pfo_pid[1000];
-    float _pfo_pid_likelihood[1000];
-    float _pfo_pid_eprob[1000];
-    float _pfo_pid_muprob[1000];
-    float _pfo_pid_piprob[1000];
-    float _pfo_pid_kprob[1000];
-    float _pfo_pid_pprob[1000];
-    float _pfo_pid_hprob[1000];
-    int _pfo_piddedx[1000];
-    float _pfo_piddedx_likelihood[1000];
-    float _pfo_piddedx_eprob[1000];
-    float _pfo_piddedx_muprob[1000];
-    float _pfo_piddedx_piprob[1000];
-    float _pfo_piddedx_kprob[1000];
-    float _pfo_piddedx_pprob[1000];
-    float _pfo_piddedx_hprob[1000];
-    float _pfo_piddedx_e_dedxdist[1000];
-    float _pfo_piddedx_mu_dedxdist[1000];
-    float _pfo_piddedx_pi_dedxdist[1000];
-    float _pfo_piddedx_k_dedxdist[1000];
-    float _pfo_piddedx_p_dedxdist[1000];
-    float _pfo_piddedx_e_lkhood[1000];
-    float _pfo_piddedx_mu_lkhood[1000];
-    float _pfo_piddedx_pi_lkhood[1000];
-    float _pfo_piddedx_k_lkhood[1000];
-    float _pfo_piddedx_p_lkhood[1000];
+    int _pfo_tpc_hits[100000];
+    float _pfo_dedx[100000];
+    float _pfo_dedxerror[100000];
+    float _pfo_d0[100000];
+    float _pfo_d0error[100000];
+    float _pfo_z0[100000];
+    float _pfo_z0error[100000];
+    float _pfo_phi[100000];
+    float _pfo_phierror[100000];
+    float _pfo_omega[100000];
+    float _pfo_omegaerror[100000];
+    float _pfo_tanlambda[100000];
+    float _pfo_tanlambdaerror[100000];
+    float _pfo_chi2[100000];
+    float _pfo_ndf[100000];
+    int _pfo_pid[100000];
+    float _pfo_pid_likelihood[100000];
+    float _pfo_pid_eprob[100000];
+    float _pfo_pid_muprob[100000];
+    float _pfo_pid_piprob[100000];
+    float _pfo_pid_kprob[100000];
+    float _pfo_pid_pprob[100000];
+    float _pfo_pid_hprob[100000];
+    int _pfo_piddedx[100000];
+    float _pfo_piddedx_likelihood[100000];
+    float _pfo_piddedx_eprob[100000];
+    float _pfo_piddedx_muprob[100000];
+    float _pfo_piddedx_piprob[100000];
+    float _pfo_piddedx_kprob[100000];
+    float _pfo_piddedx_pprob[100000];
+    float _pfo_piddedx_hprob[100000];
+    float _pfo_piddedx_e_dedxdist[100000];
+    float _pfo_piddedx_mu_dedxdist[100000];
+    float _pfo_piddedx_pi_dedxdist[100000];
+    float _pfo_piddedx_k_dedxdist[100000];
+    float _pfo_piddedx_p_dedxdist[100000];
+    float _pfo_piddedx_e_lkhood[100000];
+    float _pfo_piddedx_mu_lkhood[100000];
+    float _pfo_piddedx_pi_lkhood[100000];
+    float _pfo_piddedx_k_lkhood[100000];
+    float _pfo_piddedx_p_lkhood[100000];
 
-    float _pfo_pidtof_p_at_calo[1000];
+    float _pfo_pidtof_p_at_calo[100000];
 
-    float _pfo_pidtof_closest_beta_0ps[1000];
-    float _pfo_pidtof_closest_beta_10ps[1000];
-    float _pfo_pidtof_closest_beta_50ps[1000];
-    float _pfo_pidtof_closest_beta_100ps[1000];
+    float _pfo_pidtof_closest_beta_0ps[100000];
+    float _pfo_pidtof_closest_beta_10ps[100000];
+    float _pfo_pidtof_closest_beta_50ps[100000];
+    float _pfo_pidtof_closest_beta_100ps[100000];
     
-    float _pfo_pidtof_fastest_beta_0ps[1000];
-    float _pfo_pidtof_fastest_beta_10ps[1000];
-    float _pfo_pidtof_fastest_beta_50ps[1000];
-    float _pfo_pidtof_fastest_beta_100ps[1000];
+    float _pfo_pidtof_fastest_beta_0ps[100000];
+    float _pfo_pidtof_fastest_beta_10ps[100000];
+    float _pfo_pidtof_fastest_beta_50ps[100000];
+    float _pfo_pidtof_fastest_beta_100ps[100000];
 
-    float _pfo_pidtof_cylfit_beta_0ps[1000];
-    float _pfo_pidtof_cylfit_beta_10ps[1000];
-    float _pfo_pidtof_cylfit_beta_50ps[1000];
-    float _pfo_pidtof_cylfit_beta_100ps[1000];
+    float _pfo_pidtof_cylfit_beta_0ps[100000];
+    float _pfo_pidtof_cylfit_beta_10ps[100000];
+    float _pfo_pidtof_cylfit_beta_50ps[100000];
+    float _pfo_pidtof_cylfit_beta_100ps[100000];
 
-    float _pfo_pidtof_closestfit_beta_0ps[1000];
-    float _pfo_pidtof_closestfit_beta_10ps[1000];
-    float _pfo_pidtof_closestfit_beta_50ps[1000];
-    float _pfo_pidtof_closestfit_beta_100ps[1000];
+    float _pfo_pidtof_closestfit_beta_0ps[100000];
+    float _pfo_pidtof_closestfit_beta_10ps[100000];
+    float _pfo_pidtof_closestfit_beta_50ps[100000];
+    float _pfo_pidtof_closestfit_beta_100ps[100000];
 
     int _pfo_n;
     int _nvtx;
@@ -182,7 +182,7 @@ namespace QQbarProcessor
 
     void Clear()  {
 
-      for (unsigned int i = 0; i < 1000; i++) {
+      for (unsigned int i = 0; i < 100000; i++) {
 	_mc_quark_ps_E[i]=0;
 	_mc_quark_ps_px[i]=0;
 	_mc_quark_ps_py[i]=0;
@@ -222,7 +222,7 @@ namespace QQbarProcessor
       }
       
       //Added by Seidai 2020.Sep.21
-      for(int i=0; i<1000; i++) {
+      for(int i=0; i<100000; i++) {
         _mc_stable_E[i]=0;
         _mc_stable_pdg[i]=0;
         _mc_stable_px[i]=0;
@@ -273,7 +273,7 @@ namespace QQbarProcessor
       _pfo_n_j2=0;
       _nvtx_j2=0;
 
-      for(int ipfo=0; ipfo<1000; ipfo++) {  
+      for(int ipfo=0; ipfo<100000; ipfo++) {  
 
 	_pfo_jet_match[ipfo]=-1;
         _pfo_truejet_pdg[ipfo]=0;
