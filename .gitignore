@@ -1,3 +1,9 @@
 build.sh
 build/
-src/QQbarProcessor.cc
+*xml
+*~
+*sh
+*log
+*sub
+*root
+*txt
