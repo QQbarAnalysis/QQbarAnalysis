@@ -67,6 +67,12 @@ namespace QQbarProcessor
     _hTree->Branch("mc_stable_jet_px", data._mc_stable_jet_px, "mc_stable_jet_px[2]/F");
     _hTree->Branch("mc_stable_jet_py", data._mc_stable_jet_py, "mc_stable_jet_py[2]/F");
     _hTree->Branch("mc_stable_jet_pz", data._mc_stable_jet_pz, "mc_stable_jet_pz[2]/F");
+    _hTree->Branch("mc_major_thrust_value", &data._mc_major_thrust_value, "mc_major_thrust_value/F");
+    _hTree->Branch("mc_major_thrust_axis", data._mc_major_thrust_axis, "mc_major_thrust_axis[3]/F");
+    _hTree->Branch("mc_minor_thrust_value", &data._mc_minor_thrust_value, "mc_minor_thrust_value/F");
+    _hTree->Branch("mc_minor_thrust_axis", data._mc_minor_thrust_axis, "mc_minor_thrust_axis[3]/F");
+    _hTree->Branch("mc_principle_thrust_value", &data._mc_principle_thrust_value, "mc_principle_thrust_value/F");
+    _hTree->Branch("mc_principle_thrust_axis", data._mc_principle_thrust_axis, "mc_principle_thrust_axis[3]/F");
     
 
     // true jets properties 

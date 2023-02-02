@@ -66,6 +66,7 @@ namespace QQbarProcessor
 		      std::string _JetsRelColName ,
 		      std::string _MCColName,
 		      std::string _versionPID,
+          std::string __stablePartCol,
 		      float _Rparam_jet_ps,
 		      float _pparam_jet_ps,
 		      int _typeAnalysis

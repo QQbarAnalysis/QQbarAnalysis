@@ -579,6 +579,7 @@ namespace QQbarProcessor
 									 std::string _JetsRelColName,
 									 std::string _MCColName,
 									 std::string _versionPID,
+									 std::string _stablePartCol,
 									 float _Rparam_jet_ps,
 									 float _pparam_jet_ps,
 									 int _typeAnalysis)
@@ -635,7 +636,34 @@ namespace QQbarProcessor
 						return;
 					}
 			}
+			try
+			{
 
+				LCCollection *stablepartcol = evt->getCollection(_stablePartCol);
+				_stats._mc_major_thrust_value = stablepartcol->getParameters().getFloatVal("majorThrustValue");
+				_stats._mc_minor_thrust_value = stablepartcol->getParameters().getFloatVal("minorThrustValue");
+				_stats._mc_principle_thrust_value = stablepartcol->getParameters().getFloatVal("principleThrustValue");
+				std::vector<float> minoraxis;
+				stablepartcol->getParameters().getFloatVals("minorThrustAxis", minoraxis);
+				_stats._mc_minor_thrust_axis[0] = minoraxis[0];
+				_stats._mc_minor_thrust_axis[1] = minoraxis[1];
+				_stats._mc_minor_thrust_axis[2] = minoraxis[2];
+				std::vector<float> majoraxis;
+				stablepartcol->getParameters().getFloatVals("majorThrustAxis", majoraxis);
+				_stats._mc_major_thrust_axis[0] = majoraxis[0];
+				_stats._mc_major_thrust_axis[1] = majoraxis[1];
+				_stats._mc_major_thrust_axis[2] = majoraxis[2];
+				std::vector<float> principleaxis;
+				stablepartcol->getParameters().getFloatVals("principleThrustAxis", principleaxis);
+				_stats._mc_principle_thrust_axis[0] = principleaxis[0];
+				_stats._mc_principle_thrust_axis[1] = principleaxis[1];
+				_stats._mc_principle_thrust_axis[2] = principleaxis[2];
+			}
+			catch (lcio::DataNotAvailableException e)
+			{
+
+				streamlog_out(ERROR) << " No Stable Particle Collection found with thrust info. colname: " << _stablePartCol << "\n";
+			}
 			// get jet reconstruction variables (merging distances)
 			if (_boolDBDanalysis == true)
 			{
@@ -665,22 +693,22 @@ namespace QQbarProcessor
 					//<!-- ========== EventShapes ========================== -->
 					//   <processor name="MySphere"/>
 					//<processor name="MyThrustReconstruction"/>
-					_stats._oblateness = jetcol->getParameters().getFloatVal("Oblateness");
-					_stats._major_thrust_value = jetcol->getParameters().getFloatVal("majorThrustValue");
-					_stats._minor_thrust_value = jetcol->getParameters().getFloatVal("minorThrustValue");
-					_stats._principle_thrust_value = jetcol->getParameters().getFloatVal("principleThrustValue");
+					_stats._oblateness = pfocol->getParameters().getFloatVal("Oblateness");
+					_stats._major_thrust_value = pfocol->getParameters().getFloatVal("majorThrustValue");
+					_stats._minor_thrust_value = pfocol->getParameters().getFloatVal("minorThrustValue");
+					_stats._principle_thrust_value = pfocol->getParameters().getFloatVal("principleThrustValue");
 					std::vector<float> minoraxis;
-					jetcol->getParameters().getFloatVals("minorThrustAxis", minoraxis);
+					pfocol->getParameters().getFloatVals("minorThrustAxis", minoraxis);
 					_stats._minor_thrust_axis[0] = minoraxis[0];
 					_stats._minor_thrust_axis[1] = minoraxis[1];
 					_stats._minor_thrust_axis[2] = minoraxis[2];
 					std::vector<float> majoraxis;
-					jetcol->getParameters().getFloatVals("majorThrustAxis", majoraxis);
+					pfocol->getParameters().getFloatVals("majorThrustAxis", majoraxis);
 					_stats._major_thrust_axis[0] = majoraxis[0];
 					_stats._major_thrust_axis[1] = majoraxis[1];
 					_stats._major_thrust_axis[2] = majoraxis[2];
 					std::vector<float> principleaxis;
-					jetcol->getParameters().getFloatVals("principleThrustAxis", principleaxis);
+					pfocol->getParameters().getFloatVals("principleThrustAxis", principleaxis);
 					_stats._principle_thrust_axis[0] = principleaxis[0];
 					_stats._principle_thrust_axis[1] = principleaxis[1];
 					_stats._principle_thrust_axis[2] = principleaxis[2];

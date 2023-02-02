@@ -74,7 +74,10 @@ namespace QQbarProcessor
 								   "version of the PID Method to use (v1, v2, ...) , empty by default.",
 								   _versionPID,
 								   std::string(""));
-
+		registerProcessorParameter("StableParticlesCollectionName",
+								   "name of the stable particle collection, which is supossed to be used for thrust calculation at particle level",
+								   _stablePartCol,
+									std::string("StableParticles"));
 		registerProcessorParameter("Rparam_jet_ps",
 								   "R parameter of the ee_gentkt algorithm (for parton + shower analysis)",
 								   _Rparam_jet_ps,
@@ -112,6 +115,7 @@ namespace QQbarProcessor
 									_JetsRelColName,
 									_MCColName,
 									_versionPID,
+									_stablePartCol,
 									_Rparam_jet_ps,
 									_pparam_jet_ps,
 									_analysisType);
