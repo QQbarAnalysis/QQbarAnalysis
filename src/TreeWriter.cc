@@ -105,6 +105,10 @@ namespace QQbarProcessor
     _hTree->Branch("principle_thrust_axis", data._principle_thrust_axis, "principle_thrust_axis[3]/F");
     _hTree->Branch("sphericity", &data._sphericity, "sphericity/F");
     _hTree->Branch("sphericity_tensor", data._sphericity_tensor, "sphericity_tensor[3]/F");
+    _hTree->Branch("fourjet_E", data._fourjet_E, "fourjet_E[4]/F");
+    _hTree->Branch("fourjet_px", data._fourjet_px, "fourjet_px[4]/F");
+    _hTree->Branch("fourjet_py", data._fourjet_py, "fourjet_py[4]/F");
+    _hTree->Branch("fourjet_pz", data._fourjet_pz, "fourjet_pz[4]/F");
 
   // pfo inside the jets
     _hTree->Branch("pfo_n", &data._pfo_n, "pfo_n/I");

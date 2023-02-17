@@ -96,6 +96,11 @@ namespace QQbarProcessor
                 float _jet_btag[2] = {0};
                 float _jet_ctag[2] = {0};
 
+                float _fourjet_E[4] = {0};
+                float _fourjet_px[4] = {0};
+                float _fourjet_py[4] = {0};
+                float _fourjet_pz[4] = {0};
+
                 // pfo stuff
                 int _pfo_jet_match[1000];
                 int _pfo_truejet_pdg[1000];

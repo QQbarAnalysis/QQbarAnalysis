@@ -788,6 +788,36 @@ namespace QQbarProcessor
 				streamlog_out(WARNING) << e.what() << "\n";
 			}
 
+			// DiBoson Jets (4 jet reconstruction, for posterior jet removal using mjj-mW for the 4 jets)
+			try
+			{
+
+				LCCollection *fourjetscol = evt->getCollection("FourJets");
+
+				for (int ifourjet = 0; ifourjet < fourjetscol->getNumberOfElements(); ifourjet++)
+				{
+
+					ReconstructedParticle *fourjet = dynamic_cast<ReconstructedParticle *>(fourjetscol->getElementAt(ifourjet));
+
+					streamlog_out(DEBUG) << " fourJETS " << ifourjet << "\n";
+					streamlog_out(DEBUG) << " _stats._fourjet_E=" << fourjet->getEnergy();
+					streamlog_out(DEBUG) << " _stats._fourjet_px=" << fourjet->getMomentum()[0];
+					streamlog_out(DEBUG) << " _stats._fourjet_py=" << fourjet->getMomentum()[1];
+					streamlog_out(DEBUG) << " _stats._fourjet_pz=" << fourjet->getMomentum()[2];
+
+					_stats._fourjet_E[ifourjet] = fourjet->getEnergy();
+					_stats._fourjet_px[ifourjet] = fourjet->getMomentum()[0];
+					_stats._fourjet_py[ifourjet] = fourjet->getMomentum()[1];
+					_stats._fourjet_pz[ifourjet] = fourjet->getMomentum()[2];
+
+				}
+			}
+			catch (lcio::DataNotAvailableException e)
+			{
+				streamlog_out(DEBUG) << "4Jets collection not found \n";
+				streamlog_out(WARNING) << e.what() << "\n";
+			}
+
 			for (int ijet = 0; ijet < 2; ijet++)
 			{
 
