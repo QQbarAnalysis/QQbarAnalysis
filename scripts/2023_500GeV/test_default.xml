@@ -13,6 +13,9 @@
     <!--processor name="MyAIDAProcessor"/-->
     <processor name="InitDD4hep"/>
     <processor name="MyCorrect_Compute_dEdxProcessor"/>  
+    <processor name="myCheatdEdxDist0perc"/>
+    <processor name="myCheatdEdxDist30perc"/>
+
     <processor name="JetClusteringAndFlavorTag"/>
     <processor name="MySphere"/>
     <processor name="MyThrustReconstruction"/>
@@ -194,7 +197,7 @@
     <parameter name="inputCollectionName" type="string"> RefinedJets </parameter>
   </processor>
   <processor name="MyThrustReconstruction" type="ThrustReconstruction">  
-    <parameter name="inputCollectionName" type="string"> RefinedJets </parameter> 
+    <parameter name="inputCollectionName" type="string"> PandoraPFOs </parameter> 
   </processor>
 
   <processor name="MyCorrect_Compute_dEdxProcessor" type="AngularCorrection_dEdxProcessor">
@@ -281,6 +284,14 @@
     <parameter name="ProcessorVersion" value="dev"/>
     <parameter name="MaxLayerNumber" type="int">10</parameter>
     <parameter name="TimeResolution" type="float">100.</parameter>
+  </processor>
+
+  <processor name="myCheatdEdxDist0perc" type="CheatdEdxDist">  
+  </processor>
+
+  <processor name="myCheatdEdxDist30perc" type="CheatdEdxDist">  
+    <parameter name="improvement" type="float">0.3</parameter>
+    <parameter name="_methodstorun_version" type="string"> _v4 </parameter>                                                                                                                             
   </processor>
 
   <processor name="MyQQbarProcessor" type="QQbarProcessor">

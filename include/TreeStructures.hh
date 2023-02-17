@@ -160,6 +160,10 @@ namespace QQbarProcessor
                 float _pfo_piddedx_k_lkhood[1000];
                 float _pfo_piddedx_p_lkhood[1000];
 
+                float _pfo_piddedx_k_dedxdist_improved_1[1000];
+                float _pfo_piddedx_k_dedxdist_improved_2[1000];
+
+
                 float _pfo_pidtof_p_at_calo[1000];
 
                 float _pfo_pidtof_closest_beta_0ps[1000];
@@ -351,17 +355,21 @@ namespace QQbarProcessor
                                 _pfo_piddedx_pprob[ipfo] = 0;
                                 _pfo_piddedx_hprob[ipfo] = 0;
 
-                                _pfo_piddedx_e_dedxdist[ipfo] = 0;
-                                _pfo_piddedx_mu_dedxdist[ipfo] = 0;
-                                _pfo_piddedx_pi_dedxdist[ipfo] = 0;
-                                _pfo_piddedx_k_dedxdist[ipfo] = 0;
-                                _pfo_piddedx_p_dedxdist[ipfo] = 0;
+                                _pfo_piddedx_e_dedxdist[ipfo] = -9999;
+                                _pfo_piddedx_mu_dedxdist[ipfo] = -9999;
+                                _pfo_piddedx_pi_dedxdist[ipfo] = -9999;
+                                _pfo_piddedx_k_dedxdist[ipfo] = -9999;
+                                _pfo_piddedx_p_dedxdist[ipfo] = -9999;
+
+                                _pfo_piddedx_k_dedxdist_improved_1[ipfo] = -99999;
+                                _pfo_piddedx_k_dedxdist_improved_2[ipfo] = -99999;
 
                                 _pfo_piddedx_e_lkhood[ipfo] = 0;
                                 _pfo_piddedx_mu_lkhood[ipfo] = 0;
                                 _pfo_piddedx_pi_lkhood[ipfo] = 0;
                                 _pfo_piddedx_k_lkhood[ipfo] = 0;
                                 _pfo_piddedx_p_lkhood[ipfo] = 0;
+
 
                                 _pfo_pidtof_p_at_calo[ipfo] = -1;
 

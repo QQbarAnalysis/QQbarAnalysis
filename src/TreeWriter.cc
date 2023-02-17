@@ -171,6 +171,10 @@ namespace QQbarProcessor
     _hTree->Branch("pfo_piddedx_pi_dedxdist", data._pfo_piddedx_pi_dedxdist, "pfo_piddedx_pi_dedxdist[pfo_n]/F");
     _hTree->Branch("pfo_piddedx_k_dedxdist", data._pfo_piddedx_k_dedxdist, "pfo_piddedx_k_dedxdist[pfo_n]/F");
     _hTree->Branch("pfo_piddedx_p_dedxdist", data._pfo_piddedx_p_dedxdist, "pfo_piddedx_p_dedxdist[pfo_n]/F");
+
+    _hTree->Branch("pfo_piddedx_k_dedxdist_improved_1", data._pfo_piddedx_k_dedxdist_improved_1, "pfo_piddedx_k_dedxdist_improved_1[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_k_dedxdist_improved_2", data._pfo_piddedx_k_dedxdist_improved_2, "pfo_piddedx_k_dedxdist_improved_2[pfo_n]/F");
+
     _hTree->Branch("pfo_piddedx_e_lkhood", data._pfo_piddedx_e_lkhood, "pfo_piddedx_e_lkhood[pfo_n]/F");
     _hTree->Branch("pfo_piddedx_mu_lkhood", data._pfo_piddedx_mu_lkhood, "pfo_piddedx_mu_lkhood[pfo_n]/F");
     _hTree->Branch("pfo_piddedx_pi_lkhood", data._pfo_piddedx_pi_lkhood, "pfo_piddedx_pi_lkhood[pfo_n]/F");

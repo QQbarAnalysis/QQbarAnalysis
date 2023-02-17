@@ -451,6 +451,31 @@ namespace QQbarProcessor
 			streamlog_out(DEBUG) << " eprob: " << params_2.at(index_dedx[0]) << " muprob: " << params_2.at(index_dedx[1]) << " piprob: " << params_2.at(index_dedx[2]) << " kprob: " << params_2.at(index_dedx[3]) << " pprob: " << params_2.at(index_dedx[4]) << " hprob: " << params_2.at(index_dedx[5]) << std::endl;
 		}
 
+		try {
+			int _pid_v3 = pidh.getAlgorithmID("dEdxPID_v3");
+			const ParticleID &pid_v3 = pidh.getParticleID(component, _pid_v3);
+			int index_v3= pidh.getParameterIndex(_pid_v3, "kaon_dEdxdistance");
+			vector<float> params_v3 = pid_v3.getParameters();
+			if(params_v3.size()>0) _stats._pfo_piddedx_k_dedxdist_improved_1[pfo_recorded] = params_v3.at(index_v3);
+		}	catch (lcio::UnknownAlgorithm e)
+		{
+			streamlog_out(DEBUG) << "dEdxPID_v3 PIDHandler algorithm not existing ";
+			streamlog_out(WARNING) << e.what() << "\n";
+		}
+
+		try {
+			int _pid_v4 = pidh.getAlgorithmID("dEdxPID_v4");
+			const ParticleID &pid_v4 = pidh.getParticleID(component, _pid_v4);
+			int index_v4= pidh.getParameterIndex(_pid_v4, "kaon_dEdxdistance");
+			vector<float> params_v4 = pid_v4.getParameters();
+			if(params_v4.size()>0) _stats._pfo_piddedx_k_dedxdist_improved_2[pfo_recorded] = params_v4.at(index_v4);
+		}	catch (lcio::UnknownAlgorithm e)
+		{
+			streamlog_out(DEBUG) << "dEdxPID_v4 PIDHandler algorithm not existing ";
+			streamlog_out(WARNING) << e.what() << "\n";
+		}
+
+
 		// TOF stuff
 		try
 		{
