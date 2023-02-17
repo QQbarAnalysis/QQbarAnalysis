@@ -90,7 +90,7 @@ namespace QQbarProcessor
       streamlog_out(DEBUG) << " m=" << particle->getMass();
       streamlog_out(DEBUG) << " charge=" << particle->getCharge();
 
-      int satus= particle->getGeneratorStatus();
+      int status= particle->getGeneratorStatus();
       if (status==1 && particle->isOverlay() == true)
       {
         overlay_stables.push_back(particle);
