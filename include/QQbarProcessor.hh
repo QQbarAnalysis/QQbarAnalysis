@@ -78,10 +78,14 @@ namespace QQbarProcessor
     std::string _colName ;
     std::string _MCColName ;
     std::string _JetsColName ;
+    std::string _JetsColName2 ;
+    std::string _FourJetsColName ;
     std::string _JetsRelColName ;
+    std::string _JetsRelColName2 ;    
     std::string _colRelName;
     std::string _initialJetsColName;
     std::string _versionPID;
+    std::string _versionPID2;
     std::string _stablePartCol;
     bool _boolDBDanalysis;
 

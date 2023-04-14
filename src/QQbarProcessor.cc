@@ -48,13 +48,31 @@ namespace QQbarProcessor
 								"JetCollectionName",
 								"Name of the Jet collection",
 								_JetsColName,
-								std::string("FinalJets"));
-
+								std::string("RefinedJets"));
 		registerInputCollection(LCIO::LCRELATION,
 								"JetRelCollectionName",
 								"Name of the PrimaryVertex collection",
 								_JetsRelColName,
 								std::string("FinalJets_rel"));
+
+		registerInputCollection(LCIO::RECONSTRUCTEDPARTICLE,
+								"SecondJetCollectionName",
+								"Name of the second Jet collection created by LCFIPlus, with improved weights",
+								_JetsColName2,
+								std::string("RefinedJets2"));
+		registerInputCollection(LCIO::LCRELATION,
+								"JetRelCollectionNames",
+								"Name of the PrimaryVertex collection, for second set of jets",
+								_JetsRelColName2,
+								std::string("RefinedJets2_rel"));								
+
+		registerInputCollection(LCIO::RECONSTRUCTEDPARTICLE,
+								"FourJetCollectionName",
+								"Name of the 4 Jet collection",
+								_FourJetsColName,
+								std::string("FourJets"));						
+
+		
 		registerInputCollection(LCIO::MCPARTICLE,
 								"MCCollectionName",
 								"Name of the MC collection",
@@ -71,9 +89,13 @@ namespace QQbarProcessor
 								_initialJetsColName,
 								std::string("InitialJets"));
 		registerProcessorParameter("PIDVersionTag",
-								   "version of the PID Method to use (v1, v2, ...) , empty by default.",
+								   "version of the PID Method to use (v1, v2, ...)",
 								   _versionPID,
-								   std::string(""));
+								   std::string("_v2"));
+		registerProcessorParameter("PIDVersionTag2",
+								   "version of the improved PID Method to use (v1, v2, ...) ,.",
+								   _versionPID,
+								   std::string("_v3"));
 		registerProcessorParameter("StableParticlesCollectionName",
 								   "name of the stable particle collection, which is supossed to be used for thrust calculation at particle level",
 								   _stablePartCol,
@@ -112,9 +134,13 @@ namespace QQbarProcessor
 									_colRelName,
 									_initialJetsColName,
 									_JetsColName,
+									_JetsColName2,
+									_FourJetsColName,
 									_JetsRelColName,
+									_JetsRelColName2,
 									_MCColName,
 									_versionPID,
+									_versionPID2,
 									_stablePartCol,
 									_Rparam_jet_ps,
 									_pparam_jet_ps,
