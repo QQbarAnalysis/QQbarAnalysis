@@ -375,189 +375,82 @@ namespace QQbarProcessor
 		_stats._pfo_tanlambdaerror[pfo_recorded] = cov[14];
 
 		PIDHandler pidh(evt->getCollection(_colName));
-		// int pid_1 = pidh.getAlgorithmID("LikelihoodPID" + _versionPID);
-		// int index_likelihood[6];
-		// index_likelihood[0] = pidh.getParameterIndex(pid_1, "electronProbability");
-		// index_likelihood[1] = pidh.getParameterIndex(pid_1, "muonProbability");
-		// index_likelihood[2] = pidh.getParameterIndex(pid_1, "pionProbability");
-		// index_likelihood[3] = pidh.getParameterIndex(pid_1, "kaonProbability");
-		// index_likelihood[4] = pidh.getParameterIndex(pid_1, "protonProbability");
-		// index_likelihood[5] = pidh.getParameterIndex(pid_1, "hadronProbability");
 
-		int pid_2 = pidh.getAlgorithmID("dEdxPID" + _versionPID);
-		int index_dedx[16];
-		// index_dedx[0] = pidh.getParameterIndex(pid_2, "electronProbability");
-		// index_dedx[1] = pidh.getParameterIndex(pid_2, "muonProbability");
-		// index_dedx[2] = pidh.getParameterIndex(pid_2, "pionProbability");
-		// index_dedx[3] = pidh.getParameterIndex(pid_2, "kaonProbability");
-		// index_dedx[4] = pidh.getParameterIndex(pid_2, "protonProbability");
-		// index_dedx[5] = pidh.getParameterIndex(pid_2, "hadronProbability");
 
-		index_dedx[6] = pidh.getParameterIndex(pid_2, "electron_dEdxdistance");
-		index_dedx[7] = pidh.getParameterIndex(pid_2, "muon_dEdxdistance");
-		index_dedx[8] = pidh.getParameterIndex(pid_2, "pion_dEdxdistance");
-		index_dedx[9] = pidh.getParameterIndex(pid_2, "kaon_dEdxdistance");
-		index_dedx[10] = pidh.getParameterIndex(pid_2, "proton_dEdxdistance");
-
-		// index_dedx[11] = pidh.getParameterIndex(pid_2, "electronLikelihood");
-		// index_dedx[12] = pidh.getParameterIndex(pid_2, "muonLikelihood");
-		// index_dedx[13] = pidh.getParameterIndex(pid_2, "pionLikelihood");
-		// index_dedx[14] = pidh.getParameterIndex(pid_2, "kaonLikelihood");
-		// index_dedx[15] = pidh.getParameterIndex(pid_2, "protonLikelihood");
-
-		//const ParticleID &pid_likelihood = pidh.getParticleID(component, pid_1);
-		//vector<float> params_1 = pid_likelihood.getParameters();
-		//streamlog_out(DEBUG) << " PDG with LikelihoodPID " << pid_1 << " " << pid_likelihood.getPDG() << std::endl;
-		//_stats._pfo_pid[pfo_recorded] = pid_likelihood.getPDG();
-		//_stats._pfo_pid_likelihood[pfo_recorded] = pid_likelihood.getLikelihood();
-		// if (params_1.size() > 0)
-		// {
-		// 	_stats._pfo_pid_eprob[pfo_recorded] = params_1.at(index_likelihood[0]);
-		// 	_stats._pfo_pid_muprob[pfo_recorded] = params_1.at(index_likelihood[1]);
-		// 	_stats._pfo_pid_piprob[pfo_recorded] = params_1.at(index_likelihood[2]);
-		// 	_stats._pfo_pid_kprob[pfo_recorded] = params_1.at(index_likelihood[3]);
-		// 	_stats._pfo_pid_pprob[pfo_recorded] = params_1.at(index_likelihood[4]);
-		// 	_stats._pfo_pid_hprob[pfo_recorded] = params_1.at(index_likelihood[5]);
-
-		// 	streamlog_out(DEBUG) << " eprob: " << params_1.at(index_likelihood[0]) << " muprob: " << params_1.at(index_likelihood[1]) << " piprob: " << params_1.at(index_likelihood[2]) << " kprob: " << params_1.at(index_likelihood[3]) << " pprob: " << params_1.at(index_likelihood[4]) << " hprob: " << params_1.at(index_likelihood[5]) << std::endl;
-		// }
-
-		const ParticleID &pid_dedx = pidh.getParticleID(component, pid_2);
-		vector<float> params_2 = pid_dedx.getParameters();
-		streamlog_out(DEBUG) << " PDG with LikelihoodPID-dEdx1 " << pid_2 << " " << pid_dedx.getPDG() << std::endl;
-		//_stats._pfo_piddedx[pfo_recorded] = pid_dedx.getPDG();
-		//_stats._pfo_piddedx_likelihood[pfo_recorded] = pid_dedx.getLikelihood();
-		if (params_2.size() > 0)
+		try
 		{
-			// _stats._pfo_piddedx_eprob[pfo_recorded] = params_2.at(index_dedx[0]);
-			// _stats._pfo_piddedx_muprob[pfo_recorded] = params_2.at(index_dedx[1]);
-			// _stats._pfo_piddedx_piprob[pfo_recorded] = params_2.at(index_dedx[2]);
-			// _stats._pfo_piddedx_kprob[pfo_recorded] = params_2.at(index_dedx[3]);
-			// _stats._pfo_piddedx_pprob[pfo_recorded] = params_2.at(index_dedx[4]);
-			// _stats._pfo_piddedx_hprob[pfo_recorded] = params_2.at(index_dedx[5]);
+			int pid_2 = pidh.getAlgorithmID("dEdxPID" + _versionPID);
+			int index_dedx[16];
 
-			_stats._pfo_piddedx_e_dedxdist[pfo_recorded] = params_2.at(index_dedx[6]);
-			_stats._pfo_piddedx_mu_dedxdist[pfo_recorded] = params_2.at(index_dedx[7]);
-			_stats._pfo_piddedx_pi_dedxdist[pfo_recorded] = params_2.at(index_dedx[8]);
-			_stats._pfo_piddedx_k_dedxdist[pfo_recorded] = params_2.at(index_dedx[9]);
-			_stats._pfo_piddedx_p_dedxdist[pfo_recorded] = params_2.at(index_dedx[10]);
 
-			// _stats._pfo_piddedx_e_lkhood[pfo_recorded] = params_2.at(index_dedx[11]);
-			// _stats._pfo_piddedx_mu_lkhood[pfo_recorded] = params_2.at(index_dedx[12]);
-			// _stats._pfo_piddedx_pi_lkhood[pfo_recorded] = params_2.at(index_dedx[13]);
-			// _stats._pfo_piddedx_k_lkhood[pfo_recorded] = params_2.at(index_dedx[14]);
-			// _stats._pfo_piddedx_p_lkhood[pfo_recorded] = params_2.at(index_dedx[15]);
+			index_dedx[6] = pidh.getParameterIndex(pid_2, "electron_dEdxdistance");
+			index_dedx[7] = pidh.getParameterIndex(pid_2, "muon_dEdxdistance");
+			index_dedx[8] = pidh.getParameterIndex(pid_2, "pion_dEdxdistance");
+			index_dedx[9] = pidh.getParameterIndex(pid_2, "kaon_dEdxdistance");
+			index_dedx[10] = pidh.getParameterIndex(pid_2, "proton_dEdxdistance");
 
-			//streamlog_out(DEBUG) << " eprob: " << params_2.at(index_dedx[0]) << " muprob: " << params_2.at(index_dedx[1]) << " piprob: " << params_2.at(index_dedx[2]) << " kprob: " << params_2.at(index_dedx[3]) << " pprob: " << params_2.at(index_dedx[4]) << " hprob: " << params_2.at(index_dedx[5]) << std::endl;
+	
+			const ParticleID &pid_dedx = pidh.getParticleID(component, pid_2);
+			vector<float> params_2 = pid_dedx.getParameters();
+
+			streamlog_out(DEBUG) << " PDG with -dEdx1 " << "dEdxPID" + _versionPID << pid_2 << " " << pid_dedx.getPDG() << std::endl;
+
+			streamlog_out(DEBUG) << params_2.size()<< std::endl;
+			for(int ii=0; ii<16;ii++) 				streamlog_out(DEBUG) << ii<< " "<<index_dedx[ii]<< std::endl;
+
+
+
+			if (params_2.size() > 0)
+			{
+
+				_stats._pfo_piddedx_e_dedxdist[pfo_recorded] = params_2.at(index_dedx[6]);
+				_stats._pfo_piddedx_mu_dedxdist[pfo_recorded] = params_2.at(index_dedx[7]); 
+				_stats._pfo_piddedx_pi_dedxdist[pfo_recorded] = params_2.at(index_dedx[8]);
+				_stats._pfo_piddedx_k_dedxdist[pfo_recorded] = params_2.at(index_dedx[9]);
+				_stats._pfo_piddedx_p_dedxdist[pfo_recorded] = params_2.at(index_dedx[10]);
+
+				streamlog_out(DEBUG) << params_2.at(index_dedx[8])<<" "<<params_2.at(index_dedx[9])<< std::endl;
+			}
+		}
+		catch (lcio::UnknownAlgorithm e)
+		{
+			streamlog_out(DEBUG) << "dEdxPID_v2 PIDHandler algorithm not existing ";
+			streamlog_out(WARNING) << e.what() << "\n";
 		}
 
-		try {
+		try
+		{
 			int _pid_v3 = pidh.getAlgorithmID("dEdxPID" + _versionPID2);
 			const ParticleID &pid_v3 = pidh.getParticleID(component, _pid_v3);
 
+			streamlog_out(DEBUG) << " PDG with -dEdx1 " << "dEdxPID" + _versionPID2 << _pid_v3 << " " << pid_v3.getPDG() << std::endl;
+
+
 			int index_v3[6];
-			index_v3[0] = pidh.getParameterIndex(_pid_v3, "electron_dEdxdistance");
-			index_v3[1] = pidh.getParameterIndex(_pid_v3, "muon_dEdxdistance");
+			//index_v3[0] = pidh.getParameterIndex(_pid_v3, "electron_dEdxdistance");
+			//index_v3[1] = pidh.getParameterIndex(_pid_v3, "muon_dEdxdistance");
 			index_v3[2] = pidh.getParameterIndex(_pid_v3, "pion_dEdxdistance");
 			index_v3[3] = pidh.getParameterIndex(_pid_v3, "kaon_dEdxdistance");
 			index_v3[4] = pidh.getParameterIndex(_pid_v3, "proton_dEdxdistance");
 			vector<float> params_v3 = pid_v3.getParameters();
-			if(params_v3.size()>0) {
-				_stats._pfo_piddedx_e_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[0]);
-				_stats._pfo_piddedx_mu_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[1]);
+			streamlog_out(DEBUG) << params_v3.size()<< std::endl;
+
+			if (params_v3.size() > 0)
+			{
+				//_stats._pfo_piddedx_e_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[0]);
+				//_stats._pfo_piddedx_mu_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[1]);
 				_stats._pfo_piddedx_pi_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[2]);
 				_stats._pfo_piddedx_k_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[3]);
-				_stats._pfo_piddedx_p_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[4]);	
+				_stats._pfo_piddedx_p_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[4]);
+				streamlog_out(DEBUG) << params_v3.at(index_v3[2])<<" "<<params_v3.at(index_v3[3])<< std::endl;
+
 			}
-		}	catch (lcio::UnknownAlgorithm e)
+		}
+		catch (lcio::UnknownAlgorithm e)
 		{
 			streamlog_out(DEBUG) << "dEdxPID_v3 PIDHandler algorithm not existing ";
 			streamlog_out(WARNING) << e.what() << "\n";
 		}
-
-		// // TOF stuff
-		// try
-		// {
-		// 	float _smearTimevec[4] = {0, 10, 50, 100}; // in ps
-
-		// 	for (int ismear = 0; ismear < 4; ismear++)
-		// 	{
-		// 		TString method = TString::Format("myTOFEstimators_%ips", int(_smearTimevec[ismear]));
-		// 		streamlog_out(DEBUG) << " TOF-Algorithm " << method << std::endl;
-		// 		int pid_tof_ = pidh.getAlgorithmID(method.Data());
-		// 		streamlog_out(DEBUG) << " TOF-Algorithm: pid_tof_:" << pid_tof_ << std::endl;
-		// 		const ParticleID &pid_tof = pidh.getParticleID(component, pid_tof_);
-		// 		vector<float> params_tof = pid_tof.getParameters();
-		// 		streamlog_out(DEBUG) << " TOF-Algorithm: params_tof.size():" << params_tof.size() << std::endl;
-		// 		if (params_tof.size() == 0)
-		// 			continue;
-		// 		if (component->getClusters().size() != 1)
-		// 		{
-		// 			streamlog_out(DEBUG) << " ignore particle w/ cluster number other than one:  " << component->getClusters().size() << std::endl;
-		// 			continue;
-		// 		}
-
-		// 		int i_tof[4];
-		// 		i_tof[0] = pidh.getParameterIndex(pid_tof_, "TOFClosest");
-		// 		i_tof[1] = pidh.getParameterIndex(pid_tof_, "TOFFastest");
-		// 		i_tof[2] = pidh.getParameterIndex(pid_tof_, "TOFCylFit");
-		// 		i_tof[3] = pidh.getParameterIndex(pid_tof_, "TOFClosestFit");
-
-		// 		int i_trklength = pidh.getParameterIndex(pid_tof_, "FlightLength");
-		// 		int i_p = pidh.getParameterIndex(pid_tof_, "MomAtCalo");
-
-		// 		float tof[4] = {0.};
-		// 		for (int itof = 0; itof < 4; itof++)
-		// 			tof[itof] = params_tof.at(i_tof[itof]);
-		// 		float trklength = params_tof.at(i_trklength);
-		// 		float p_calo = params_tof.at(i_p);
-
-		// 		float beta[4] = {0.};
-		// 		for (int itof = 0; itof < 4; itof++)
-		// 			beta[itof] = (trklength / tof[itof]) / CLHEP::c_light;
-
-		// 		for (int itof = 0; itof < 4; itof++)
-		// 			streamlog_out(DEBUG) << itof << " tof:" << i_tof[itof] << " " << tof[itof] << " beta:" << beta[itof] << " ";
-		// 		streamlog_out(DEBUG) << " length:"
-		// 							 << " " << trklength << " " << CLHEP::c_light << std::endl;
-
-		// 		_stats._pfo_pidtof_p_at_calo[pfo_recorded] = p_calo;
-		// 		if (ismear == 0)
-		// 		{
-		// 			_stats._pfo_pidtof_closest_beta_0ps[pfo_recorded] = beta[0];
-		// 			_stats._pfo_pidtof_fastest_beta_0ps[pfo_recorded] = beta[1];
-		// 			_stats._pfo_pidtof_cylfit_beta_0ps[pfo_recorded] = beta[2];
-		// 			_stats._pfo_pidtof_closestfit_beta_0ps[pfo_recorded] = beta[3];
-		// 		}
-		// 		if (ismear == 1)
-		// 		{
-		// 			_stats._pfo_pidtof_closest_beta_10ps[pfo_recorded] = beta[0];
-		// 			_stats._pfo_pidtof_fastest_beta_10ps[pfo_recorded] = beta[1];
-		// 			_stats._pfo_pidtof_cylfit_beta_10ps[pfo_recorded] = beta[2];
-		// 			_stats._pfo_pidtof_closestfit_beta_10ps[pfo_recorded] = beta[3];
-		// 		}
-		// 		if (ismear == 2)
-		// 		{
-		// 			_stats._pfo_pidtof_closest_beta_50ps[pfo_recorded] = beta[0];
-		// 			_stats._pfo_pidtof_fastest_beta_50ps[pfo_recorded] = beta[1];
-		// 			_stats._pfo_pidtof_cylfit_beta_50ps[pfo_recorded] = beta[2];
-		// 			_stats._pfo_pidtof_closestfit_beta_50ps[pfo_recorded] = beta[3];
-		// 		}
-		// 		if (ismear == 3)
-		// 		{
-		// 			_stats._pfo_pidtof_closest_beta_100ps[pfo_recorded] = beta[0];
-		// 			_stats._pfo_pidtof_fastest_beta_100ps[pfo_recorded] = beta[1];
-		// 			_stats._pfo_pidtof_cylfit_beta_100ps[pfo_recorded] = beta[2];
-		// 			_stats._pfo_pidtof_closestfit_beta_100ps[pfo_recorded] = beta[3];
-		// 		}
-
-		// 	} // ismear
-		// }
-		// catch (lcio::UnknownAlgorithm e)
-		// {
-		// 	streamlog_out(DEBUG) << "TOF PIDHandler algorithm not existing ";
-		// 	streamlog_out(WARNING) << e.what() << "\n";
-		// }
 
 		if (ijet == 0)
 			_stats._pfo_n_j1++;
@@ -595,22 +488,22 @@ namespace QQbarProcessor
 	}
 
 	void QQbarAnalysis::AnalyseQQbar(LCEvent *evt,
-									bool _boolDBDanalysis,
-									std::string _colName,
-									std::string _colRelName,
-									std::string _initialJetsColName,
-									std::string _JetsColName,
-									std::string _JetsColName2,
-									std::string _FourJetsColName,
-									std::string _JetsRelColName,
-									std::string _JetsRelColName2,
-									std::string _MCColName,									
-									std::string _versionPID,
-									std::string _versionPID2,							
-									std::string _stablePartCol,
-									float _Rparam_jet_ps,
-									float _pparam_jet_ps,
-									int _typeAnalysis)
+									 bool _boolDBDanalysis,
+									 std::string _colName,
+									 std::string _colRelName,
+									 std::string _initialJetsColName,
+									 std::string _JetsColName,
+									 std::string _JetsColName2,
+									 std::string _FourJetsColName,
+									 std::string _JetsRelColName,
+									 std::string _JetsRelColName2,
+									 std::string _MCColName,
+									 std::string _versionPID,
+									 std::string _versionPID2,
+									 std::string _stablePartCol,
+									 float _Rparam_jet_ps,
+									 float _pparam_jet_ps,
+									 int _typeAnalysis)
 	{
 		LCCollection *mcvtxcol = NULL;
 		try
@@ -826,7 +719,6 @@ namespace QQbarProcessor
 				vector<RecoJet *> *secondjets = QQbarTools::getJets(secondjetcol, secondjetrelcol);
 				std::sort(secondjets->begin(), secondjets->end(), QQbarTools::sortByBtag);
 
-
 				for (int ijet = 0; ijet < secondjets->size(); ijet++)
 				{
 
@@ -869,7 +761,6 @@ namespace QQbarProcessor
 					_stats._fourjet_px[ifourjet] = fourjet->getMomentum()[0];
 					_stats._fourjet_py[ifourjet] = fourjet->getMomentum()[1];
 					_stats._fourjet_pz[ifourjet] = fourjet->getMomentum()[2];
-
 				}
 			}
 			catch (lcio::DataNotAvailableException e)
@@ -960,7 +851,7 @@ namespace QQbarProcessor
 
 						ReconstructedParticle *found_track_particle = vertices->at(ivtx)->getAssociatedParticle()->getParticles().at(itr);
 						bool write = false;
-						write = WritePFOInfo(evt, found_track_particle, pfo_recorded, ijet, ivtx + 1, _colName, _versionPID,_versionPID2);
+						write = WritePFOInfo(evt, found_track_particle, pfo_recorded, ijet, ivtx + 1, _colName, _versionPID, _versionPID2);
 						if (_typeAnalysis != -1)
 							PFOCheatInfo(found_track_particle, operaMC, isr_stable, pfo_recorded);
 						pfo_recorded++;
@@ -1004,7 +895,7 @@ namespace QQbarProcessor
 					streamlog_out(DEBUG) << " PFO not clustered in one of the jets, obj.id(): " << obj->id() << std::endl;
 					ReconstructedParticle *component = dynamic_cast<ReconstructedParticle *>(obj);
 					bool write = false;
-					write = WritePFOInfo(evt, component, pfo_recorded, 2, 0, _colName, _versionPID,_versionPID2);
+					write = WritePFOInfo(evt, component, pfo_recorded, 2, 0, _colName, _versionPID, _versionPID2);
 					if (_typeAnalysis != -1)
 						PFOCheatInfo(component, operaMC, isr_stable, pfo_recorded);
 					pfo_recorded++;

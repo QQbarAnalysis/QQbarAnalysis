@@ -94,7 +94,7 @@ namespace QQbarProcessor
 								   std::string("_v2"));
 		registerProcessorParameter("PIDVersionTag2",
 								   "version of the improved PID Method to use (v1, v2, ...) ,.",
-								   _versionPID,
+								   _versionPID2,
 								   std::string("_v3"));
 		registerProcessorParameter("StableParticlesCollectionName",
 								   "name of the stable particle collection, which is supossed to be used for thrust calculation at particle level",

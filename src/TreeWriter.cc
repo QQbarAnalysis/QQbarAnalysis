@@ -174,11 +174,11 @@ namespace QQbarProcessor
     _hTree->Branch("pfo_piddedx_k_dedxdist", data._pfo_piddedx_k_dedxdist, "pfo_piddedx_k_dedxdist[pfo_n]/F");
     _hTree->Branch("pfo_piddedx_p_dedxdist", data._pfo_piddedx_p_dedxdist, "pfo_piddedx_p_dedxdist[pfo_n]/F");
 
-    _hTree->Branch("pfo_piddedx_e_dedxdist_2 ", data._pfo_piddedx_e_dedxdist_2 , "pfo_piddedx_e_dedxdist_2 [pfo_n]/F");
-    _hTree->Branch("pfo_piddedx_mu_dedxdist_2 ", data._pfo_piddedx_mu_dedxdist_2 , "pfo_piddedx_mu_dedxdist_2 [pfo_n]/F");
-    _hTree->Branch("pfo_piddedx_pi_dedxdist_2 ", data._pfo_piddedx_pi_dedxdist_2 , "pfo_piddedx_pi_dedxdist_2 [pfo_n]/F");
-    _hTree->Branch("pfo_piddedx_k_dedxdist_2 ", data._pfo_piddedx_k_dedxdist_2 , "pfo_piddedx_k_dedxdist_2 [pfo_n]/F");
-    _hTree->Branch("pfo_piddedx_p_dedxdist_2 ", data._pfo_piddedx_p_dedxdist_2 , "pfo_piddedx_p_dedxdist_2 [pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_e_dedxdist_2", data._pfo_piddedx_e_dedxdist_2, "pfo_piddedx_e_dedxdist_2[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_mu_dedxdist_2", data._pfo_piddedx_mu_dedxdist_2, "pfo_piddedx_mu_dedxdist_2[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_pi_dedxdist_2", data._pfo_piddedx_pi_dedxdist_2, "pfo_piddedx_pi_dedxdist_2[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_k_dedxdist_2", data._pfo_piddedx_k_dedxdist_2, "pfo_piddedx_k_dedxdist_2[pfo_n]/F");
+    _hTree->Branch("pfo_piddedx_p_dedxdist_2", data._pfo_piddedx_p_dedxdist_2, "pfo_piddedx_p_dedxdist_2[pfo_n]/F");
 
     //_hTree->Branch("pfo_piddedx_k_dedxdist_improved_2", data._pfo_piddedx_k_dedxdist_improved_2, "pfo_piddedx_k_dedxdist_improved_2[pfo_n]/F");
 
