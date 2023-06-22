@@ -43,6 +43,62 @@ namespace QQbarProcessor
     return bbbar_ps;
   }
 
+
+  // 
+  vector<vector<MCParticle *>> QQbarMCOperator::GetQQbarStablesNOISR()
+  {
+    // std::cout << "##################################" << std::endl;
+    // std::cout << "##         Stable level         ##" << std::endl;
+    // std::cout << "##################################" << std::endl;
+
+    int number = myCollection->getNumberOfElements();
+    vector<vector<MCParticle *>> stables;
+    if (number < 3)
+      return stables; // return empty
+    vector<MCParticle *> stable_stables;
+    vector<MCParticle *> isr_stables;
+    vector<MCParticle *> overlay_stables;
+
+    for (int i = 0; i < number; i++)
+    {
+
+      MCParticle *particle = dynamic_cast<MCParticle *>(myCollection->getElementAt(i));
+      vector<MCParticle *> daughters = particle->getDaughters();
+
+      streamlog_out(DEBUG) << "\n MCCollection, particle:" << i;
+      streamlog_out(DEBUG) << " pdg=" << particle->getPDG();
+      streamlog_out(DEBUG) << " satus=" << particle->getGeneratorStatus();
+      streamlog_out(DEBUG) << " Ndaughters=" << daughters.size();
+      streamlog_out(DEBUG) << " E=" << particle->getEnergy();
+      streamlog_out(DEBUG) << " px=" << particle->getMomentum()[0];
+      streamlog_out(DEBUG) << " py=" << particle->getMomentum()[1];
+      streamlog_out(DEBUG) << " pz=" << particle->getMomentum()[2];
+      streamlog_out(DEBUG) << " m=" << particle->getMass();
+      streamlog_out(DEBUG) << " charge=" << particle->getCharge();
+
+      int status= particle->getGeneratorStatus();
+      int left= particle->hasLeftDetector();
+      if(left==1 && fabs(particle->getPDG())!=13) status=0;// this should exclude neutrinos and HiddenValley particles from the analysis
+
+      if (status==1 && particle->isOverlay() == true)
+      {
+        overlay_stables.push_back(particle);
+        streamlog_out(DEBUG) << " ----> IS OVERLAY";
+      }
+
+      if (status==1 && particle->isOverlay() == false)
+      {
+          stable_stables.push_back(particle);
+          streamlog_out(DEBUG) << " ----> IS STABLE";
+      }
+    }
+
+    stables.push_back(stable_stables);
+    stables.push_back(isr_stables);
+    stables.push_back(overlay_stables);
+    return stables;
+  } // GetQQbarStables()
+
   // Added by Seidai in 2020.Sep.16
   vector<vector<MCParticle *>> QQbarMCOperator::GetQQbarStables()
   {
@@ -91,6 +147,9 @@ namespace QQbarProcessor
       streamlog_out(DEBUG) << " charge=" << particle->getCharge();
 
       int status= particle->getGeneratorStatus();
+      int left= particle->hasLeftDetector();
+      if(left==1 && fabs(particle->getPDG())!=13) status=0;// this should exclude neutrinos and HiddenValley particles from the analysis
+
       if (status==1 && particle->isOverlay() == true)
       {
         overlay_stables.push_back(particle);

@@ -35,6 +35,8 @@ namespace QQbarProcessor
     std::vector< EVENT::MCParticle * > GetQQbarQuarksPS();
     std::vector< EVENT::MCParticle * > GetPairParticles(int pdg);
     std::vector< std::vector<EVENT::MCParticle*> > GetQQbarStables();
+    std::vector< std::vector<EVENT::MCParticle*> > GetQQbarStablesNOISR();
+
     bool IsEvent();//function to check that the event is not gamma gamma overlay bkg
     // Relation between PFO and MC
     EVENT::MCParticle* getMCParticle(EVENT::ReconstructedParticle *particle);

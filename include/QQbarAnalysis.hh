@@ -54,7 +54,7 @@ namespace QQbarProcessor
     std::vector< MCParticle * > AnalyseGeneratorQQbar(QQbarMCOperator & opera);
     void AnalyseGeneratorISR(QQbarMCOperator & opera);
     void AnalyseGeneratorQQbar_PS(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
-    void AnalyseGeneratorQQbar_Stable(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps);
+    void AnalyseGeneratorQQbar_Stable(QQbarMCOperator & opera, float _Rparam_jet_ps, float _pparam_jet_ps, int analysistype);
     bool WritePFOInfo(LCEvent * evt, ReconstructedParticle *component, int pfo_recorded, int ijet, int ivtx, std::string _colName, std::string _versionPID, std::string _versionPID2);
     void PFOCheatInfo(ReconstructedParticle * component, QQbarMCOperator& operaMC, std::vector<MCParticle*> isr_stable, int npfo_recorded);
     void AnalyseQQbar(LCEvent * evt,

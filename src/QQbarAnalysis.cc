@@ -168,13 +168,15 @@ namespace QQbarProcessor
 
 	// Added by Seidai in 2020.Sep.17
 	// MC stable particle information provider
-	void QQbarAnalysis::AnalyseGeneratorQQbar_Stable(QQbarMCOperator &opera, float _Rparam_jet_ps, float _pparam_jet_ps)
+	void QQbarAnalysis::AnalyseGeneratorQQbar_Stable(QQbarMCOperator &opera, float _Rparam_jet_ps, float _pparam_jet_ps, int analysistype)
 	{
 		vector<PseudoJet> particles;
 		JetDefinition jet_def(ee_genkt_algorithm, _Rparam_jet_ps, _pparam_jet_ps);
 
 		// Obtain particles which are appeared after intermediate particle
-		vector<vector<MCParticle *>> all_stable = opera.GetQQbarStables();
+		vector<vector<MCParticle *>> all_stable;
+		if(analysistype!=-1) all_stable= opera.GetQQbarStables();
+		else all_stable= opera.GetQQbarStablesNOISR();
 		vector<MCParticle *> qqbar_stable = all_stable.at(0);
 		vector<MCParticle *> isr_stable = all_stable.at(1);
 		vector<MCParticle *> overlay_stable = all_stable.at(2);
@@ -376,12 +378,10 @@ namespace QQbarProcessor
 
 		PIDHandler pidh(evt->getCollection(_colName));
 
-
 		try
 		{
 			int pid_2 = pidh.getAlgorithmID("dEdxPID" + _versionPID);
 			int index_dedx[16];
-
 
 			index_dedx[6] = pidh.getParameterIndex(pid_2, "electron_dEdxdistance");
 			index_dedx[7] = pidh.getParameterIndex(pid_2, "muon_dEdxdistance");
@@ -389,27 +389,26 @@ namespace QQbarProcessor
 			index_dedx[9] = pidh.getParameterIndex(pid_2, "kaon_dEdxdistance");
 			index_dedx[10] = pidh.getParameterIndex(pid_2, "proton_dEdxdistance");
 
-	
 			const ParticleID &pid_dedx = pidh.getParticleID(component, pid_2);
 			vector<float> params_2 = pid_dedx.getParameters();
 
-			streamlog_out(DEBUG) << " PDG with -dEdx1 " << "dEdxPID" + _versionPID << pid_2 << " " << pid_dedx.getPDG() << std::endl;
+			streamlog_out(DEBUG) << " PDG with -dEdx1 "
+								 << "dEdxPID" + _versionPID << pid_2 << " " << pid_dedx.getPDG() << std::endl;
 
-			streamlog_out(DEBUG) << params_2.size()<< std::endl;
-			for(int ii=0; ii<16;ii++) 				streamlog_out(DEBUG) << ii<< " "<<index_dedx[ii]<< std::endl;
-
-
+			streamlog_out(DEBUG) << params_2.size() << std::endl;
+			for (int ii = 0; ii < 16; ii++)
+				streamlog_out(DEBUG) << ii << " " << index_dedx[ii] << std::endl;
 
 			if (params_2.size() > 0)
 			{
 
 				_stats._pfo_piddedx_e_dedxdist[pfo_recorded] = params_2.at(index_dedx[6]);
-				_stats._pfo_piddedx_mu_dedxdist[pfo_recorded] = params_2.at(index_dedx[7]); 
+				_stats._pfo_piddedx_mu_dedxdist[pfo_recorded] = params_2.at(index_dedx[7]);
 				_stats._pfo_piddedx_pi_dedxdist[pfo_recorded] = params_2.at(index_dedx[8]);
 				_stats._pfo_piddedx_k_dedxdist[pfo_recorded] = params_2.at(index_dedx[9]);
 				_stats._pfo_piddedx_p_dedxdist[pfo_recorded] = params_2.at(index_dedx[10]);
 
-				streamlog_out(DEBUG) << params_2.at(index_dedx[8])<<" "<<params_2.at(index_dedx[9])<< std::endl;
+				streamlog_out(DEBUG) << params_2.at(index_dedx[8]) << " " << params_2.at(index_dedx[9]) << std::endl;
 			}
 		}
 		catch (lcio::UnknownAlgorithm e)
@@ -423,17 +422,17 @@ namespace QQbarProcessor
 			int _pid_v3 = pidh.getAlgorithmID("dEdxPID" + _versionPID2);
 			const ParticleID &pid_v3 = pidh.getParticleID(component, _pid_v3);
 
-			streamlog_out(DEBUG) << " PDG with -dEdx1 " << "dEdxPID" + _versionPID2 << _pid_v3 << " " << pid_v3.getPDG() << std::endl;
-
+			streamlog_out(DEBUG) << " PDG with -dEdx1 "
+								 << "dEdxPID" + _versionPID2 << _pid_v3 << " " << pid_v3.getPDG() << std::endl;
 
 			int index_v3[6];
-			//index_v3[0] = pidh.getParameterIndex(_pid_v3, "electron_dEdxdistance");
-			//index_v3[1] = pidh.getParameterIndex(_pid_v3, "muon_dEdxdistance");
+			// index_v3[0] = pidh.getParameterIndex(_pid_v3, "electron_dEdxdistance");
+			// index_v3[1] = pidh.getParameterIndex(_pid_v3, "muon_dEdxdistance");
 			index_v3[2] = pidh.getParameterIndex(_pid_v3, "pion_dEdxdistance");
 			index_v3[3] = pidh.getParameterIndex(_pid_v3, "kaon_dEdxdistance");
 			index_v3[4] = pidh.getParameterIndex(_pid_v3, "proton_dEdxdistance");
 			vector<float> params_v3 = pid_v3.getParameters();
-			streamlog_out(DEBUG) << params_v3.size()<< std::endl;
+			streamlog_out(DEBUG) << params_v3.size() << std::endl;
 
 			if (params_v3.size() > 0)
 			{
@@ -442,8 +441,7 @@ namespace QQbarProcessor
 				_stats._pfo_piddedx_pi_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[2]);
 				_stats._pfo_piddedx_k_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[3]);
 				_stats._pfo_piddedx_p_dedxdist_2[pfo_recorded] = params_v3.at(index_v3[4]);
-				streamlog_out(DEBUG) << params_v3.at(index_v3[2])<<" "<<params_v3.at(index_v3[3])<< std::endl;
-
+				streamlog_out(DEBUG) << params_v3.at(index_v3[2]) << " " << params_v3.at(index_v3[3]) << std::endl;
 			}
 		}
 		catch (lcio::UnknownAlgorithm e)
@@ -529,6 +527,8 @@ namespace QQbarProcessor
 			LCCollection *pfocol = evt->getCollection(_colName);
 			//        VertexChargeOperator vtxOperator(evt->getCollection(_colName),evt->getCollection(_colRelName));
 			vector<RecoJet *> *jets = QQbarTools::getJets(jetcol, jetrelcol);
+			streamlog_out(DEBUG) << "jets size ";
+			streamlog_out(DEBUG) << jets->size() << "\n";
 
 			ClearVariables();
 
@@ -549,7 +549,7 @@ namespace QQbarProcessor
 				vector<MCParticle *> mcbs = AnalyseGeneratorQQbar(operaMC); // Hard Process
 				AnalyseGeneratorISR(operaMC);
 				AnalyseGeneratorQQbar_PS(operaMC, _Rparam_jet_ps, _pparam_jet_ps);
-				AnalyseGeneratorQQbar_Stable(operaMC, _Rparam_jet_ps, _pparam_jet_ps);
+				AnalyseGeneratorQQbar_Stable(operaMC, _Rparam_jet_ps, _pparam_jet_ps,_typeAnalysis);
 				if (_typeAnalysis == 1)
 					if ((_stats._mc_ISR_E[0] + _stats._mc_ISR_E[1]) > 50)
 					{
@@ -557,6 +557,10 @@ namespace QQbarProcessor
 						return;
 					}
 			}
+
+			if (_typeAnalysis == -1)
+				AnalyseGeneratorQQbar_Stable(operaMC, _Rparam_jet_ps, _pparam_jet_ps,_typeAnalysis);
+
 			try
 			{
 
