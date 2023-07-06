@@ -189,7 +189,8 @@ namespace QQbarProcessor
 			if (qqbar_stable.at(i) != NULL)
 			{
 				// They are filled at line:587
-				_stats._mc_stable_E[_stats._mc_stable_n] = qqbar_stable.at(i)->getEnergy();
+				streamlog_out(DEBUG) << " Stable-Stable= " << i << std::endl;
+				_stats._mc_stable_E[_stats._mc_stable_n] =qqbar_stable.at(i)->getEnergy();
 				_stats._mc_stable_px[_stats._mc_stable_n] = qqbar_stable.at(i)->getMomentum()[0];
 				_stats._mc_stable_py[_stats._mc_stable_n] = qqbar_stable.at(i)->getMomentum()[1];
 				_stats._mc_stable_pz[_stats._mc_stable_n] = qqbar_stable.at(i)->getMomentum()[2];
@@ -198,10 +199,21 @@ namespace QQbarProcessor
 				_stats._mc_stable_m[_stats._mc_stable_n] = qqbar_stable.at(i)->getMass();
 				_stats._mc_stable_isisr[_stats._mc_stable_n] = 0;
 				_stats._mc_stable_isoverlay[_stats._mc_stable_n] = 0;
-				_stats._mc_stable_n++;
 				// Consists particle object which has 4-momentum
 				particles.push_back(PseudoJet(qqbar_stable.at(i)->getMomentum()[0], qqbar_stable.at(i)->getMomentum()[1], qqbar_stable.at(i)->getMomentum()[2], qqbar_stable.at(i)->getEnergy()));
 
+				
+				streamlog_out(DEBUG) <<  _stats._mc_stable_E[_stats._mc_stable_n] <<" "<<
+				_stats._mc_stable_px[_stats._mc_stable_n] <<" "<<
+				_stats._mc_stable_py[_stats._mc_stable_n] <<" "<<
+				_stats._mc_stable_pz[_stats._mc_stable_n] <<" "<<
+				_stats._mc_stable_pdg[_stats._mc_stable_n]<<" "<<
+				_stats._mc_stable_charge[_stats._mc_stable_n] <<" "<<
+				_stats._mc_stable_m[_stats._mc_stable_n] <<" "<<
+				_stats._mc_stable_isisr[_stats._mc_stable_n] <<" "<<
+				_stats._mc_stable_isoverlay[_stats._mc_stable_n] <<" "<<std::endl;
+
+				_stats._mc_stable_n++;
 				QQbarTools::PrintParticle(qqbar_stable.at(i));
 			}
 			else
@@ -215,6 +227,9 @@ namespace QQbarProcessor
 		{
 			if (isr_stable.at(i) != NULL)
 			{
+
+				streamlog_out(DEBUG) << " ISR-Stable= " << i << std::endl;
+
 				// They are filled at line:587
 				_stats._mc_stable_E[_stats._mc_stable_n] = isr_stable.at(i)->getEnergy();
 				_stats._mc_stable_px[_stats._mc_stable_n] = isr_stable.at(i)->getMomentum()[0];
@@ -234,6 +249,8 @@ namespace QQbarProcessor
 		{
 			if (overlay_stable.at(i) != NULL)
 			{
+				streamlog_out(DEBUG) << " OVERLAY-Stable= " << i << std::endl;
+
 				_stats._mc_stable_E[_stats._mc_stable_n] = overlay_stable.at(i)->getEnergy();
 				_stats._mc_stable_px[_stats._mc_stable_n] = overlay_stable.at(i)->getMomentum()[0];
 				_stats._mc_stable_py[_stats._mc_stable_n] = overlay_stable.at(i)->getMomentum()[1];

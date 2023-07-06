@@ -67,6 +67,7 @@ namespace QQbarProcessor
 
       streamlog_out(DEBUG) << "\n MCCollection, particle:" << i;
       streamlog_out(DEBUG) << " pdg=" << particle->getPDG();
+      streamlog_out(DEBUG) << " left=" << particle->hasLeftDetector();
       streamlog_out(DEBUG) << " satus=" << particle->getGeneratorStatus();
       streamlog_out(DEBUG) << " Ndaughters=" << daughters.size();
       streamlog_out(DEBUG) << " E=" << particle->getEnergy();
