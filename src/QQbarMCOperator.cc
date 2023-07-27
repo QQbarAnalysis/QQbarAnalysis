@@ -68,7 +68,8 @@ namespace QQbarProcessor
       streamlog_out(DEBUG) << "\n MCCollection, particle:" << i;
       streamlog_out(DEBUG) << " pdg=" << particle->getPDG();
       streamlog_out(DEBUG) << " left=" << particle->hasLeftDetector();
-      streamlog_out(DEBUG) << " satus=" << particle->getGeneratorStatus();
+      streamlog_out(DEBUG) << " GenStatus=" << particle->getGeneratorStatus();
+      streamlog_out(DEBUG) << " SimStatus=" << particle->getSimulatorStatus();
       streamlog_out(DEBUG) << " Ndaughters=" << daughters.size();
       streamlog_out(DEBUG) << " E=" << particle->getEnergy();
       streamlog_out(DEBUG) << " px=" << particle->getMomentum()[0];
@@ -80,6 +81,8 @@ namespace QQbarProcessor
       int status= particle->getGeneratorStatus();
       int left= particle->hasLeftDetector();
       if(left==1 && fabs(particle->getPDG())!=13) status=0;// this should exclude neutrinos and HiddenValley particles from the analysis
+      int simstatus=particle->getSimulatorStatus();
+      if(simstatus==0) status=0;
 
       if (status==1 && particle->isOverlay() == true)
       {
@@ -150,6 +153,8 @@ namespace QQbarProcessor
       int status= particle->getGeneratorStatus();
       int left= particle->hasLeftDetector();
       if(left==1 && fabs(particle->getPDG())!=13) status=0;// this should exclude neutrinos and HiddenValley particles from the analysis
+      int simstatus=particle->getSimulatorStatus();
+      if(simstatus==0) status=0;
 
       if (status==1 && particle->isOverlay() == true)
       {
